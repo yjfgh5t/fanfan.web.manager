@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="wyx.sharesale.manager:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="wyx.sharesale.manager.war">
+      <element id="artifact" artifact-name="wyx.sharesale.manager:war exploded" />
+    </root>
+  </artifact>
+</component>
