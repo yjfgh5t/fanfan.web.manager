@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bootdo.fanfan.dao.CommoditDao">
+
+	<select id="get" resultType="com.bootdo.fanfan.domain.CommoditDO">
+		select `id`,`commodit_title`,`commodit_img`,`commodit_price`,`commodit_sale_price`,`commodit_remark`,`commodit_fiex_num`,`status`,`update_by`,`update_time`,`create_time` from ff_commodit where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.bootdo.fanfan.domain.CommoditDO">
+		select `id`,`commodit_title`,`commodit_img`,`commodit_price`,`commodit_sale_price`,`commodit_remark`,`commodit_fiex_num`,`status`,`update_by`,`update_time`,`create_time` from ff_commodit
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="commoditTitle != null and commoditTitle != ''"> and commodit_title = #{commoditTitle} </if>
+		  		  <if test="commoditImg != null and commoditImg != ''"> and commodit_img = #{commoditImg} </if>
+		  		  <if test="commoditPrice != null and commoditPrice != ''"> and commodit_price = #{commoditPrice} </if>
+		  		  <if test="commoditSalePrice != null and commoditSalePrice != ''"> and commodit_sale_price = #{commoditSalePrice} </if>
+		  		  <if test="commoditRemark != null and commoditRemark != ''"> and commodit_remark = #{commoditRemark} </if>
+		  		  <if test="commoditFiexNum != null and commoditFiexNum != ''"> and commodit_fiex_num = #{commoditFiexNum} </if>
+		  		  <if test="status != null and status != ''"> and status = #{status} </if>
+		  		  <if test="updateBy != null and updateBy != ''"> and update_by = #{updateBy} </if>
+		  		  <if test="updateTime != null and updateTime != ''"> and update_time = #{updateTime} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from ff_commodit
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="commoditTitle != null and commoditTitle != ''"> and commodit_title = #{commoditTitle} </if>
+		  		  <if test="commoditImg != null and commoditImg != ''"> and commodit_img = #{commoditImg} </if>
+		  		  <if test="commoditPrice != null and commoditPrice != ''"> and commodit_price = #{commoditPrice} </if>
+		  		  <if test="commoditSalePrice != null and commoditSalePrice != ''"> and commodit_sale_price = #{commoditSalePrice} </if>
+		  		  <if test="commoditRemark != null and commoditRemark != ''"> and commodit_remark = #{commoditRemark} </if>
+		  		  <if test="commoditFiexNum != null and commoditFiexNum != ''"> and commodit_fiex_num = #{commoditFiexNum} </if>
+		  		  <if test="status != null and status != ''"> and status = #{status} </if>
+		  		  <if test="updateBy != null and updateBy != ''"> and update_by = #{updateBy} </if>
+		  		  <if test="updateTime != null and updateTime != ''"> and update_time = #{updateTime} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.bootdo.fanfan.domain.CommoditDO">
+		insert into ff_commodit
+		(
+			`id`, 
+			`commodit_title`, 
+			`commodit_img`, 
+			`commodit_price`, 
+			`commodit_sale_price`, 
+			`commodit_remark`, 
+			`commodit_fiex_num`, 
+			`status`, 
+			`update_by`, 
+			`update_time`, 
+			`create_time`
+		)
+		values
+		(
+			#{id}, 
+			#{commoditTitle}, 
+			#{commoditImg}, 
+			#{commoditPrice}, 
+			#{commoditSalePrice}, 
+			#{commoditRemark}, 
+			#{commoditFiexNum}, 
+			#{status}, 
+			#{updateBy}, 
+			#{updateTime}, 
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.bootdo.fanfan.domain.CommoditDO">
+		update ff_commodit 
+		<set>
+			<if test="commoditTitle != null">`commodit_title` = #{commoditTitle}, </if>
+			<if test="commoditImg != null">`commodit_img` = #{commoditImg}, </if>
+			<if test="commoditPrice != null">`commodit_price` = #{commoditPrice}, </if>
+			<if test="commoditSalePrice != null">`commodit_sale_price` = #{commoditSalePrice}, </if>
+			<if test="commoditRemark != null">`commodit_remark` = #{commoditRemark}, </if>
+			<if test="commoditFiexNum != null">`commodit_fiex_num` = #{commoditFiexNum}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="updateBy != null">`update_by` = #{updateBy}, </if>
+			<if test="updateTime != null">`update_time` = #{updateTime}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from ff_commodit where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from ff_commodit where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

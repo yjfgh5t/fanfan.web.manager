@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+
+<style type="text/css">
+    input.layui-upload-file{
+        display: none;
+    }
+</style>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <form class="form-horizontal m-t" id="signupForm">
+                        <input id="id" name="id" th:value="${commodit.id}" type="hidden">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">商品标题：</label>
+                            <div class="col-sm-8">
+                                <input id="commoditTitle" name="commoditTitle" th:value="${commodit.commoditTitle}"
+                                       class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">商品图片：</label>
+                            <div class="col-sm-8">
+                                <input type="hidden" id="commoditImg" name="commoditImg" th:value="${commodit.commoditImg}" />
+                                <img id="img-commoditImg" style="width: 40px;" src="" th:src="${commodit.commoditImg}" class="img-rounded" />
+                                <button type="button" class="btn btn-def" id="uploadImg">上传</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">商品原价：</label>
+                            <div class="col-sm-8">
+                                <input id="commoditPrice" name="commoditPrice"  th:value="${commodit.commoditPrice}"
+                                       class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">商品售价：</label>
+                            <div class="col-sm-8">
+                                <input id="commoditSalePrice" name="commoditSalePrice"
+                                       th:value="${commodit.commoditSalePrice}" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">最大日销量：</label>
+                            <div class="col-sm-8">
+                                <input id="commoditFiexNum" name="commoditFiexNum"
+                                       th:value="${commodit.commoditFiexNum}" class="form-control" type="number" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">商品描述：</label>
+                            <div class="col-sm-8">
+                                <textarea id="commoditRemark" name="commoditRemark" th:value="${commodit.commoditRemark}"
+                                       class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">商品状态</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="status" name="status" th:value="${commodit.status}">
+                                    <option value="1">有效</option>
+                                    <option value="2">失效</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-3">
+                                <button type="submit" class="btn btn-primary">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:include="include::footer"></div>
+<script src="/js/layui.js"></script>
+<script type="text/javascript" src="/js/appjs/fanfan/commodit/edit.js?v=5">
+</script>
+</body>
+</html>
