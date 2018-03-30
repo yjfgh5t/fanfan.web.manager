@@ -22,5 +22,5 @@
 hs_err_pid*
 target/
 fanfan.web.manager.iml
-.idea/
+.idea/*
 yjfgh5t.iml

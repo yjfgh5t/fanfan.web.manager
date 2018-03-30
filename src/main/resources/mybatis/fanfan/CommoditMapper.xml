@@ -4,11 +4,11 @@
 <mapper namespace="com.bootdo.fanfan.dao.CommoditDao">
 
 	<select id="get" resultType="com.bootdo.fanfan.domain.CommoditDO">
-		select `id`,`commodit_title`,`commodit_img`,`commodit_price`,`commodit_sale_price`,`commodit_remark`,`commodit_fiex_num`,`status`,`update_by`,`update_time`,`create_time` from ff_commodit where id = #{value}
+		select `id`,`commodit_title`,`commodit_img`,`commodit_price`,`commodit_sale_price`,`commodit_remark`,`commodit_fiex_num`,`status`,`create_time`,`create_id`,`order`,`commodit_type`,`delete` from ff_commodit where id = #{value}
 	</select>
 
 	<select id="list" resultType="com.bootdo.fanfan.domain.CommoditDO">
-		select `id`,`commodit_title`,`commodit_img`,`commodit_price`,`commodit_sale_price`,`commodit_remark`,`commodit_fiex_num`,`status`,`update_by`,`update_time`,`create_time` from ff_commodit
+		select `id`,`commodit_title`,`commodit_img`,`commodit_price`,`commodit_sale_price`,`commodit_remark`,`commodit_fiex_num`,`status`,`create_time`,`create_id`,`order`,`commodit_type`,`delete` from ff_commodit
         <where>  
 		  		  <if test="id != null and id != ''"> and id = #{id} </if>
 		  		  <if test="commoditTitle != null and commoditTitle != ''"> and commodit_title = #{commoditTitle} </if>
@@ -18,9 +18,11 @@
 		  		  <if test="commoditRemark != null and commoditRemark != ''"> and commodit_remark = #{commoditRemark} </if>
 		  		  <if test="commoditFiexNum != null and commoditFiexNum != ''"> and commodit_fiex_num = #{commoditFiexNum} </if>
 		  		  <if test="status != null and status != ''"> and status = #{status} </if>
-		  		  <if test="updateBy != null and updateBy != ''"> and update_by = #{updateBy} </if>
-		  		  <if test="updateTime != null and updateTime != ''"> and update_time = #{updateTime} </if>
 		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		  <if test="createId != null and createId != ''"> and create_id = #{createId} </if>
+		  		  <if test="order != null and order != ''"> and order = #{order} </if>
+		  		  <if test="commoditType != null and commoditType != ''"> and commodit_type = #{commoditType} </if>
+		  		  <if test="delete != null and delete != ''"> and delete = #{delete} </if>
 		  		</where>
         <choose>
             <when test="sort != null and sort.trim() != ''">
@@ -46,16 +48,17 @@
 		  		  <if test="commoditRemark != null and commoditRemark != ''"> and commodit_remark = #{commoditRemark} </if>
 		  		  <if test="commoditFiexNum != null and commoditFiexNum != ''"> and commodit_fiex_num = #{commoditFiexNum} </if>
 		  		  <if test="status != null and status != ''"> and status = #{status} </if>
-		  		  <if test="updateBy != null and updateBy != ''"> and update_by = #{updateBy} </if>
-		  		  <if test="updateTime != null and updateTime != ''"> and update_time = #{updateTime} </if>
 		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		  <if test="createId != null and createId != ''"> and create_id = #{createId} </if>
+		  		  <if test="order != null and order != ''"> and order = #{order} </if>
+		  		  <if test="commoditType != null and commoditType != ''"> and commodit_type = #{commoditType} </if>
+		  		  <if test="delete != null and delete != ''"> and delete = #{delete} </if>
 		  		</where>
 	</select>
 	 
-	<insert id="save" parameterType="com.bootdo.fanfan.domain.CommoditDO">
+	<insert id="save" parameterType="com.bootdo.fanfan.domain.CommoditDO" useGeneratedKeys="true" keyProperty="id">
 		insert into ff_commodit
 		(
-			`id`, 
 			`commodit_title`, 
 			`commodit_img`, 
 			`commodit_price`, 
@@ -63,13 +66,14 @@
 			`commodit_remark`, 
 			`commodit_fiex_num`, 
 			`status`, 
-			`update_by`, 
-			`update_time`, 
-			`create_time`
+			`create_time`, 
+			`create_id`, 
+			`order`, 
+			`commodit_type`, 
+			`delete`
 		)
 		values
 		(
-			#{id}, 
 			#{commoditTitle}, 
 			#{commoditImg}, 
 			#{commoditPrice}, 
@@ -77,9 +81,11 @@
 			#{commoditRemark}, 
 			#{commoditFiexNum}, 
 			#{status}, 
-			#{updateBy}, 
-			#{updateTime}, 
-			#{createTime}
+			#{createTime}, 
+			#{createId}, 
+			#{order}, 
+			#{commoditType}, 
+			#{delete}
 		)
 	</insert>
 	 
@@ -93,9 +99,11 @@
 			<if test="commoditRemark != null">`commodit_remark` = #{commoditRemark}, </if>
 			<if test="commoditFiexNum != null">`commodit_fiex_num` = #{commoditFiexNum}, </if>
 			<if test="status != null">`status` = #{status}, </if>
-			<if test="updateBy != null">`update_by` = #{updateBy}, </if>
-			<if test="updateTime != null">`update_time` = #{updateTime}, </if>
-			<if test="createTime != null">`create_time` = #{createTime}</if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="createId != null">`create_id` = #{createId}, </if>
+			<if test="order != null">`order` = #{order}, </if>
+			<if test="commoditType != null">`commodit_type` = #{commoditType}, </if>
+			<if test="delete != null">`delete` = #{delete}</if>
 		</set>
 		where id = #{id}
 	</update>

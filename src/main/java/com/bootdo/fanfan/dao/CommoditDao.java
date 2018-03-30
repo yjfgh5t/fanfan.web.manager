@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.Mapper;
  * 
  * @author jy
  * @email 1992lcg@163.com
- * @date 2018-03-20 16:13:33
+ * @date 2018-03-30 22:53:17
  */
 @Mapper
 public interface CommoditDao {
