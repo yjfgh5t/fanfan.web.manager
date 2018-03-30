@@ -12,7 +12,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="fanfan.web.manager" target="1.7" />
+      <module name="fanfan.web.manager" target="1.8" />
       <module name="wyx" target="1.7" />
       <module name="wyx.sharesale.manager" target="1.7" />
     </bytecodeTargetLevel>
