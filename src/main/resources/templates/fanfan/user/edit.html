@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+						<input id="id" name="id" th:value="${user.id}"  type="hidden">
+							<div class="form-group">	
+								<label class="col-sm-3 control-label">用户昵称：</label>
+								<div class="col-sm-8">
+									<input id="userNick" name="userNick" th:value="${user.userNick}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">手机号：</label>
+								<div class="col-sm-8">
+									<input id="userMobile" name="userMobile" th:value="${user.userMobile}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">头像：</label>
+								<div class="col-sm-8">
+									<input id="userIcon" name="userIcon" th:value="${user.userIcon}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">1:未知、2：男、3：女：</label>
+								<div class="col-sm-8">
+									<input id="userSex" name="userSex" th:value="${user.userSex}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">1:有效、2：禁用：</label>
+								<div class="col-sm-8">
+									<input id="userState" name="userState" th:value="${user.userState}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">是否删除 0：否 1：是：</label>
+								<div class="col-sm-8">
+									<input id="delete" name="delete" th:value="${user.delete}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">创建时间 ：</label>
+								<div class="col-sm-8">
+									<input id="createTime" name="createTime" th:value="${user.createTime}" class="form-control" type="text">
+								</div>
+							</div>
+																					<div class="form-group">
+								<div class="col-sm-8 col-sm-offset-3">
+									<button type="submit" class="btn btn-primary">提交</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+	</div>
+	</div>
+	<div th:include="include::footer"></div>
+	<script type="text/javascript" src="/js/appjs/fanfan/user/edit.js">
+	</script>
+</body>
+</html>

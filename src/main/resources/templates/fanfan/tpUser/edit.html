@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+						<input id="id" name="id" th:value="${tpUser.id}"  type="hidden">
+							<div class="form-group">	
+								<label class="col-sm-3 control-label">用户id主键：</label>
+								<div class="col-sm-8">
+									<input id="userId" name="userId" th:value="${tpUser.userId}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">1:支付宝 2:微信：</label>
+								<div class="col-sm-8">
+									<input id="tpType" name="tpType" th:value="${tpUser.tpType}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">用户昵称：</label>
+								<div class="col-sm-8">
+									<input id="tpNick" name="tpNick" th:value="${tpUser.tpNick}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">用户头像：</label>
+								<div class="col-sm-8">
+									<input id="tpIcon" name="tpIcon" th:value="${tpUser.tpIcon}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">1:未知、2:男、3:女：</label>
+								<div class="col-sm-8">
+									<input id="tpSex" name="tpSex" th:value="${tpUser.tpSex}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">用户地址：</label>
+								<div class="col-sm-8">
+									<input id="tpAddr" name="tpAddr" th:value="${tpUser.tpAddr}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">第三方主键：</label>
+								<div class="col-sm-8">
+									<input id="tpId" name="tpId" th:value="${tpUser.tpId}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">所在省份：</label>
+								<div class="col-sm-8">
+									<input id="tpProvince" name="tpProvince" th:value="${tpUser.tpProvince}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">所在城市：</label>
+								<div class="col-sm-8">
+									<input id="tpCity" name="tpCity" th:value="${tpUser.tpCity}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">创建时间：</label>
+								<div class="col-sm-8">
+									<input id="createTime" name="createTime" th:value="${tpUser.createTime}" class="form-control" type="text">
+								</div>
+							</div>
+																					<div class="form-group">
+								<div class="col-sm-8 col-sm-offset-3">
+									<button type="submit" class="btn btn-primary">提交</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+	</div>
+	</div>
+	<div th:include="include::footer"></div>
+	<script type="text/javascript" src="/js/appjs/fanfan/tpUser/edit.js">
+	</script>
+</body>
+</html>

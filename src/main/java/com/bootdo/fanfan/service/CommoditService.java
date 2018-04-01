@@ -27,4 +27,11 @@ public interface CommoditService {
 	int remove(Integer id);
 	
 	int batchRemove(Integer[] ids);
+
+	/**
+	 * 根据Id集合查询商品
+	 * @param idArry
+	 * @return
+	 */
+	List<CommoditDO> queryByIdarry(List<Integer> idArry);
 }

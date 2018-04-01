@@ -46,15 +46,16 @@ function load() {
 						columns : [
 								{
 									checkbox : true
-								},
-																{
+								},{
 									field : 'commoditImg', 
 									title : '商品图片',
 									formatter:function (val) {
 										return '<img src="'+val+'"  class="img-rounded" style="width:40px;"/>';
 									}
-								},
-								{
+								},{
+                                    field : 'order',
+                                    title : '排序号'
+                                },{
 									field : 'commoditTitle',
 									title : '商品标题'
 								},{
@@ -64,7 +65,7 @@ function load() {
 									field : 'commoditSalePrice', 
 									title : '商品售价' 
 								},						{
-									field : 'commoditRemark', 
+									field : 'commoditRemark',
 									title : '商品描述'
 								},{
 									field : 'commoditFiexNum', 
@@ -76,9 +77,12 @@ function load() {
 										return val==1?"有效":"下架";
                                     }
 								},{
-									field : 'createTime', 
-									title : '创建时间'
-								},{
+                                    field : 'commoditType',
+                                    title : '商品类型',
+                                    formatter:function (val) {
+                                        return val==1?"可售商品":"非卖品";
+                                     }
+                                },{
 									title : '操作',
 									field : 'id',
 									align : 'center',

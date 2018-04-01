@@ -49,7 +49,7 @@ function validateRule() {
 		rules : {
             commoditTitle : {
 				required : true,
-                rangelength:[2,12]
+                rangelength:[2,30]
 			},
             commoditImg:{
 				required:true,
@@ -73,7 +73,7 @@ function validateRule() {
 		messages : {
             commoditTitle : {
 				required :"请输入商品名称",
-                rangelength:"名称长度在2-12之间"
+                rangelength:"名称长度在2-30之间"
 			},
             commoditImg:{
                 required:"请上传商品图片",
@@ -94,14 +94,13 @@ function validateRule() {
 }
 
 function upload() {
-
     layui.use('upload', function () {
         var upload = layui.upload;
         //执行实例
         var uploadInst = upload.render({
             elem: '#uploadImg', //绑定元素
             url: '/common/sysFile/upload', //上传接口
-            size: 1000,
+            size: 10000,
             accept: 'file',
             done: function (r) {
                 layer.msg(r.msg);

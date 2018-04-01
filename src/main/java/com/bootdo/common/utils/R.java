@@ -9,6 +9,7 @@ public class R extends HashMap<String, Object> {
 	public R() {
 		put("code", 0);
 		put("msg", "操作成功");
+		put("data","");
 	}
 
 	public static R error() {

@@ -22,6 +22,17 @@ public class TestDemo {
     @Test
     public void jTestDemo() {
 
+        int [] userId = new int[]{1,4587954,123,32,98,234,435834,234,9843,239487,98234,92834};
+
+        for(int  i=0;i<userId.length;i++)
+        {
+            Long time = System.currentTimeMillis();
+            System.out.println(userId[i]*875431%100000);
+            String _num = time+""+(userId[i]*875431%100000);
+
+            System.out.println("订单号："+_num+" 长度:"+_num.length());
+        }
+
     }
 
     @GetMapping("/test/demo")

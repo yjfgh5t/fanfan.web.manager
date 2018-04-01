@@ -30,7 +30,7 @@ public class CommoditDO implements Serializable {
 	private String commoditRemark;
 	//每天/每餐 商品库存量
 	private Integer commoditFiexNum;
-	//1:有效 2:下架 3:删除
+	//1:有效 2:下架
 	private Integer status;
 	//创建时间
 	private Date createTime;

@@ -9,7 +9,7 @@
 
 	<select id="list" resultType="com.bootdo.fanfan.domain.CommoditDO">
 		select `id`,`commodit_title`,`commodit_img`,`commodit_price`,`commodit_sale_price`,`commodit_remark`,`commodit_fiex_num`,`status`,`create_time`,`create_id`,`order`,`commodit_type`,`delete` from ff_commodit
-        <where>  
+        <where> `delete` = 0
 		  		  <if test="id != null and id != ''"> and id = #{id} </if>
 		  		  <if test="commoditTitle != null and commoditTitle != ''"> and commodit_title = #{commoditTitle} </if>
 		  		  <if test="commoditImg != null and commoditImg != ''"> and commodit_img = #{commoditImg} </if>
@@ -20,10 +20,8 @@
 		  		  <if test="status != null and status != ''"> and status = #{status} </if>
 		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
 		  		  <if test="createId != null and createId != ''"> and create_id = #{createId} </if>
-		  		  <if test="order != null and order != ''"> and order = #{order} </if>
 		  		  <if test="commoditType != null and commoditType != ''"> and commodit_type = #{commoditType} </if>
-		  		  <if test="delete != null and delete != ''"> and delete = #{delete} </if>
-		  		</where>
+	  </where>
         <choose>
             <when test="sort != null and sort.trim() != ''">
                 order by ${sort} ${order}
@@ -50,7 +48,6 @@
 		  		  <if test="status != null and status != ''"> and status = #{status} </if>
 		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
 		  		  <if test="createId != null and createId != ''"> and create_id = #{createId} </if>
-		  		  <if test="order != null and order != ''"> and order = #{order} </if>
 		  		  <if test="commoditType != null and commoditType != ''"> and commodit_type = #{commoditType} </if>
 		  		  <if test="delete != null and delete != ''"> and delete = #{delete} </if>
 		  		</where>
@@ -109,7 +106,7 @@
 	</update>
 	
 	<delete id="remove">
-		delete from ff_commodit where id = #{value}
+		update ff_commodit set delete=1 where id = #{value}
 	</delete>
 	
 	<delete id="batchRemove">

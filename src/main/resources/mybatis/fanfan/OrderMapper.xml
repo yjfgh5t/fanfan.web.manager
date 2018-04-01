@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bootdo.fanfan.dao.OrderDao">
+
+	<select id="get" resultType="com.bootdo.fanfan.domain.OrderDO">
+		select `id`,`order_num`,`order_state`,`order_total`,`order_pay`,`order_discount_total`,`order_pay_type`,`order_meals_num`,`order_remark`,`order_invoice`,`receive_name`,`receive_sex`,`receive_addr`,`receive_lat`,`receive_lng`,`create_id`,`create_time` from ff_order where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.bootdo.fanfan.domain.OrderDO">
+		select `id`,`order_num`,`order_state`,`order_total`,`order_discount_total`,`order_pay_type`,`order_meals_num`,`order_remark`,`order_invoice`,`receive_name`,`receive_sex`,`receive_addr`,`receive_lat`,`receive_lng`,`create_id`,`create_time` from ff_order
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="orderNum != null and orderNum != ''"> and order_num = #{orderNum} </if>
+		  		  <if test="orderState != null and orderState != ''"> and order_state = #{orderState} </if>
+		  		  <if test="orderTotal != null and orderTotal != ''"> and order_total = #{orderTotal} </if>
+		  		  <if test="orderDiscountTotal != null and orderDiscountTotal != ''"> and order_discount_total = #{orderDiscountTotal} </if>
+		  		  <if test="orderPayType != null and orderPayType != ''"> and order_pay_type = #{orderPayType} </if>
+		  		  <if test="orderMealsNum != null and orderMealsNum != ''"> and order_meals_num = #{orderMealsNum} </if>
+		  		  <if test="orderRemark != null and orderRemark != ''"> and order_remark = #{orderRemark} </if>
+		  		  <if test="orderInvoice != null and orderInvoice != ''"> and order_invoice = #{orderInvoice} </if>
+		  		  <if test="receiveName != null and receiveName != ''"> and receive_name = #{receiveName} </if>
+		  		  <if test="receiveSex != null and receiveSex != ''"> and receive_sex = #{receiveSex} </if>
+		  		  <if test="receiveAddr != null and receiveAddr != ''"> and receive_addr = #{receiveAddr} </if>
+		  		  <if test="receiveLat != null and receiveLat != ''"> and receive_lat = #{receiveLat} </if>
+		  		  <if test="receiveLng != null and receiveLng != ''"> and receive_lng = #{receiveLng} </if>
+		  		  <if test="createId != null and createId != ''"> and create_id = #{createId} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from ff_order
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="orderNum != null and orderNum != ''"> and order_num = #{orderNum} </if>
+		  		  <if test="orderState != null and orderState != ''"> and order_state = #{orderState} </if>
+		  		  <if test="orderTotal != null and orderTotal != ''"> and order_total = #{orderTotal} </if>
+		  		  <if test="orderDiscountTotal != null and orderDiscountTotal != ''"> and order_discount_total = #{orderDiscountTotal} </if>
+		  		  <if test="orderPayType != null and orderPayType != ''"> and order_pay_type = #{orderPayType} </if>
+		  		  <if test="orderMealsNum != null and orderMealsNum != ''"> and order_meals_num = #{orderMealsNum} </if>
+		  		  <if test="orderRemark != null and orderRemark != ''"> and order_remark = #{orderRemark} </if>
+		  		  <if test="orderInvoice != null and orderInvoice != ''"> and order_invoice = #{orderInvoice} </if>
+		  		  <if test="receiveName != null and receiveName != ''"> and receive_name = #{receiveName} </if>
+		  		  <if test="receiveSex != null and receiveSex != ''"> and receive_sex = #{receiveSex} </if>
+		  		  <if test="receiveAddr != null and receiveAddr != ''"> and receive_addr = #{receiveAddr} </if>
+		  		  <if test="receiveLat != null and receiveLat != ''"> and receive_lat = #{receiveLat} </if>
+		  		  <if test="receiveLng != null and receiveLng != ''"> and receive_lng = #{receiveLng} </if>
+		  		  <if test="createId != null and createId != ''"> and create_id = #{createId} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.bootdo.fanfan.domain.OrderDO" useGeneratedKeys="true" keyProperty="id">
+		insert into ff_order
+		(
+			`order_num`, 
+			`order_state`, 
+			`order_total`,
+			`order_pay`,
+			`order_discount_total`,
+			`order_commodity_total`,
+			`order_pay_type`,
+			`order_meals_num`, 
+			`order_remark`, 
+			`order_invoice`, 
+			`receive_name`, 
+			`receive_sex`, 
+			`receive_addr`, 
+			`receive_lat`, 
+			`receive_lng`, 
+			`create_id`, 
+			`create_time`
+		)
+		values
+		(
+			#{orderNum}, 
+			#{orderState}, 
+			#{orderTotal},
+			#{orderPay},
+			#{orderDiscountTotal},
+			#{orderCommodityTotal},
+			#{orderPayType},
+			#{orderMealsNum}, 
+			#{orderRemark}, 
+			#{orderInvoice}, 
+			#{receiveName}, 
+			#{receiveSex}, 
+			#{receiveAddr}, 
+			#{receiveLat}, 
+			#{receiveLng}, 
+			#{createId}, 
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.bootdo.fanfan.domain.OrderDO">
+		update ff_order 
+		<set>
+			<if test="orderNum != null">`order_num` = #{orderNum}, </if>
+			<if test="orderState != null">`order_state` = #{orderState}, </if>
+			<if test="orderTotal != null">`order_total` = #{orderTotal}, </if>
+			<if test="orderPay != null">`order_pay` = #{orderPay}, </if>
+			<if test="orderDiscountTotal != null">`order_discount_total` = #{orderDiscountTotal}, </if>
+			<if test="orderCommodityTotal != null">`order_commodity_total` = #{orderCommodityTotal}, </if>
+			<if test="orderPayType != null">`order_pay_type` = #{orderPayType}, </if>
+			<if test="orderMealsNum != null">`order_meals_num` = #{orderMealsNum}, </if>
+			<if test="orderRemark != null">`order_remark` = #{orderRemark}, </if>
+			<if test="orderInvoice != null">`order_invoice` = #{orderInvoice}, </if>
+			<if test="receiveName != null">`receive_name` = #{receiveName}, </if>
+			<if test="receiveSex != null">`receive_sex` = #{receiveSex}, </if>
+			<if test="receiveAddr != null">`receive_addr` = #{receiveAddr}, </if>
+			<if test="receiveLat != null">`receive_lat` = #{receiveLat}, </if>
+			<if test="receiveLng != null">`receive_lng` = #{receiveLng}, </if>
+			<if test="createId != null">`create_id` = #{createId}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from ff_order where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from ff_order where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

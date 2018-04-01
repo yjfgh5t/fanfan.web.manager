@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+    <!--商品DO VO转换-->
+    <mapping>
+        <class-a>com.bootdo.fanfan.domain.CommoditDO</class-a>
+        <class-b>com.bootdo.fanfan.vo.APICommodityVO</class-b>
+        <field>
+            <a>commoditTitle</a>
+            <b>title</b>
+        </field>
+
+        <field>
+            <a>commoditImg</a>
+            <b>icon</b>
+        </field>
+
+        <field>
+            <a>commoditPrice</a>
+            <b>price</b>
+        </field>
+
+        <field>
+            <a>commoditSalePrice</a>
+            <b>salePrice</b>
+        </field>
+
+        <field>
+            <a>commoditRemark</a>
+            <b>desc</b>
+        </field>
+    </mapping>
+    
+    <!-- 支付宝用户信息转换-->
+    <mapping>
+            <class-a>com.alipay.api.response.AlipayUserInfoShareResponse</class-a>
+            <class-b>com.bootdo.fanfan.domain.TpUserDO</class-b>
+            <field>
+                <a>nickName</a>
+                <b>tpNick</b>
+            </field>
+            <field>
+                <a>avatar</a>
+                <b>tpIcon</b>
+            </field>
+        <field>
+            <a>province</a>
+            <b>tpProvince</b>
+        </field>
+        <field>
+            <a>city</a>
+            <b>tpCity</b>
+        </field>
+        <field>
+            <a>userId</a>
+            <b>tpId</b>
+        </field>
+        
+    </mapping>
+    
+    <!--UserDO 转TPUserDO-->
+    <mapping>
+        <class-a>com.bootdo.fanfan.domain.TpUserDO</class-a>
+        <class-b>com.bootdo.fanfan.domain.UserDO</class-b>
+        <field>
+            <a>tpNick</a>
+            <b>userNick</b>
+        </field>
+        <field>
+            <a>tpIcon</a>
+            <b>userIcon</b>
+        </field>
+        <field>
+            <a>tpSex</a>
+            <b>userSex</b>
+        </field>
+        <field>
+            <a>userId</a>
+            <b>id</b>
+        </field>
+    </mapping>
+</mappings>

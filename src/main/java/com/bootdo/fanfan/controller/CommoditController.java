@@ -3,6 +3,7 @@ package com.bootdo.fanfan.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.bootdo.common.controller.BaseController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -31,7 +32,7 @@ import com.bootdo.common.utils.R;
  
 @Controller
 @RequestMapping("/fanfan/commodit")
-public class CommoditController {
+public class CommoditController extends BaseController {
 	@Autowired
 	private CommoditService commoditService;
 	
@@ -45,6 +46,9 @@ public class CommoditController {
 	@GetMapping("/list")
 	@RequiresPermissions("fanfan:commodit:commodit")
 	public PageUtils list(@RequestParam Map<String, Object> params){
+
+		params.put("sort","`order`");
+		params.put("order","asc");
 		//查询列表数据
         Query query = new Query(params);
 		List<CommoditDO> commoditList = commoditService.list(query);
@@ -62,7 +66,11 @@ public class CommoditController {
 	@GetMapping("/edit/{id}")
 	@RequiresPermissions("fanfan:commodit:edit")
 	String edit(@PathVariable("id") Integer id,Model model){
-		CommoditDO commodit = commoditService.get(id);
+		CommoditDO commodit = new CommoditDO();
+		commodit.setId(id);
+		if(id>0) {
+			commodit = commoditService.get(id);
+		}
 		model.addAttribute("commodit", commodit);
 	    return "fanfan/commodit/edit";
 	}
@@ -86,7 +94,13 @@ public class CommoditController {
 	@RequestMapping("/update")
 	@RequiresPermissions("fanfan:commodit:edit")
 	public R update( CommoditDO commodit){
-		commoditService.update(commodit);
+		if(commodit.getId()==0) {
+			commodit.setCreateId(getUserId().intValue());
+			commodit.setDelete(0);
+			commoditService.save(commodit);
+		}else {
+			commoditService.update(commodit);
+		}
 		return R.ok();
 	}
 	
