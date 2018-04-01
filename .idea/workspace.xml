@@ -7,101 +7,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e880594f-86f3-4636-93b4-677e30e5ef71" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/common/config/AlipayConfig.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/common/config/DozerConfig.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/common/extend/EMapper.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/common/extend/impl/EMapperImpl.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/common/utils/RedisUtils.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/api/CommoditRestController.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/api/OrderRestController.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/api/UserRestController.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/controller/FFUserController.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/controller/OrderController.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/controller/OrderDetialController.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/controller/OrderStateController.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/controller/TpUserController.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/dao/FFUserDao.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/dao/OrderDao.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/dao/OrderDetialDao.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/dao/OrderStateDao.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/dao/TpUserDao.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/domain/OrderChainDO.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/domain/OrderDO.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/domain/OrderDetialDO.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/domain/OrderStateDO.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/domain/TpUserDO.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/domain/UserDO.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/manager/AlipayManager.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/manager/order/ChainStart.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/manager/order/MainOrderOption.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/manager/order/OrderChain.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/manager/order/ValidateOrderOption.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/service/OrderDetialService.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/service/OrderService.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/service/OrderStateService.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/service/TpUserService.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/service/UserService.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/service/impl/OrderDetialServiceImpl.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/service/impl/OrderServiceImpl.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/service/impl/OrderStateServiceImpl.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/service/impl/TpUserServiceImpl.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/service/impl/UserServiceImpl.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/vo/APICommodityVO.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/vo/APIOrderDetail.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/vo/APIOrderRequVO.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/vo/APIOrderRespVO.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/vo/APIResponse.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/config/dozer-mapper.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/config/spring-dozer.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/mybatis/fanfan/OrderDetialMapper.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/mybatis/fanfan/OrderMapper.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/mybatis/fanfan/OrderStateMapper.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/mybatis/fanfan/TpUserMapper.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/mybatis/fanfan/UserMapper.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/static/js/appjs/fanfan/order/add.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/static/js/appjs/fanfan/order/edit.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/static/js/appjs/fanfan/order/order.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/static/js/appjs/fanfan/orderDetial/add.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/static/js/appjs/fanfan/orderDetial/edit.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/static/js/appjs/fanfan/orderDetial/orderDetial.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/static/js/appjs/fanfan/orderState/add.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/static/js/appjs/fanfan/orderState/edit.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/static/js/appjs/fanfan/orderState/orderState.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/static/js/appjs/fanfan/tpUser/add.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/static/js/appjs/fanfan/tpUser/edit.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/static/js/appjs/fanfan/tpUser/tpUser.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/static/js/appjs/fanfan/user/edit.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/static/js/appjs/fanfan/user/user.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/templates/fanfan/order/add.html" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/templates/fanfan/order/edit.html" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/templates/fanfan/order/order.html" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/templates/fanfan/orderDetial/add.html" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/templates/fanfan/orderDetial/edit.html" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/templates/fanfan/orderDetial/orderDetial.html" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/templates/fanfan/orderState/add.html" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/templates/fanfan/orderState/edit.html" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/templates/fanfan/orderState/orderState.html" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/templates/fanfan/tpUser/add.html" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/templates/fanfan/tpUser/edit.html" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/templates/fanfan/tpUser/tpUser.html" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/templates/fanfan/user/add.html" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/templates/fanfan/user/edit.html" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/templates/fanfan/user/user.html" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bootdo/common/utils/R.java" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/common/utils/R.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/controller/CommoditController.java" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/controller/CommoditController.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/dao/CommoditDao.java" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/dao/CommoditDao.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/domain/CommoditDO.java" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/domain/CommoditDO.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/service/CommoditService.java" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/service/CommoditService.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/service/impl/CommoditServiceImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/fanfan/service/impl/CommoditServiceImpl.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bootdo/system/config/ShiroConfig.java" afterPath="$PROJECT_DIR$/src/main/java/com/bootdo/system/config/ShiroConfig.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/mybatis/fanfan/CommoditMapper.xml" afterPath="$PROJECT_DIR$/src/main/resources/mybatis/fanfan/CommoditMapper.xml" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/appjs/fanfan/commodit/commodit.js" afterPath="$PROJECT_DIR$/src/main/resources/static/js/appjs/fanfan/commodit/commodit.js" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/appjs/fanfan/commodit/edit.js" afterPath="$PROJECT_DIR$/src/main/resources/static/js/appjs/fanfan/commodit/edit.js" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/fanfan/commodit/edit.html" afterPath="$PROJECT_DIR$/src/main/resources/templates/fanfan/commodit/edit.html" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/bootdo/testDemo/TestDemo.java" afterPath="$PROJECT_DIR$/src/test/java/com/bootdo/testDemo/TestDemo.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/appjs/fanfan/commodit/order/add.js" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/appjs/fanfan/commodit/order/edit.js" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/appjs/fanfan/commodit/order/order.js" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/appjs/fanfan/commodit/orderDetial/add.js" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/appjs/fanfan/commodit/orderDetial/edit.js" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/appjs/fanfan/commodit/orderDetial/orderDetial.js" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/appjs/fanfan/commodit/orderState/add.js" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/appjs/fanfan/commodit/orderState/edit.js" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/appjs/fanfan/commodit/orderState/orderState.js" afterPath="" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -844,7 +759,14 @@
       <option name="project" value="LOCAL" />
       <updated>1522422100535</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="编辑--2">
+      <created>1522596230097</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1522596230097</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -957,7 +879,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="商品页面生成" />
-    <option name="LAST_COMMIT_MESSAGE" value="商品页面生成" />
+    <MESSAGE value="编辑--2" />
+    <option name="LAST_COMMIT_MESSAGE" value="编辑--2" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
