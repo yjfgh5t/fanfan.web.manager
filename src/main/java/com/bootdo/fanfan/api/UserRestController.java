@@ -8,6 +8,7 @@ import com.bootdo.fanfan.domain.UserDO;
 import com.bootdo.fanfan.manager.AlipayManager;
 import com.bootdo.fanfan.service.TpUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +25,7 @@ public class UserRestController {
     EMapper eMapper;
 
     @PostMapping("/")
-    public R getUser(String code,Integer type){
+    public R getUser(@Param("code") String code,@Param("type") Integer type){
 
         TpUserDO tpUserDO = tpUserService.getTPInfo(code,type);
 

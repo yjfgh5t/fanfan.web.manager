@@ -218,7 +218,7 @@ public class OrderServiceImpl implements OrderService {
 			for (CommoditDO itemDo : commoditDOList) {
 				if (itemDo.getId().equals(detail.getOutId())) {
 					//总额 加 商品价格 乘 商品数量
-					orderTotail.add(itemDo.getCommoditSalePrice().multiply(new BigDecimal(detail.getOutSize())));
+					orderTotail = orderTotail.add(itemDo.getCommoditSalePrice().multiply(new BigDecimal(detail.getOutSize())));
 					detail.setOutTitle(itemDo.getCommoditTitle());
 					detail.setOutPrice(itemDo.getCommoditSalePrice());
 				}

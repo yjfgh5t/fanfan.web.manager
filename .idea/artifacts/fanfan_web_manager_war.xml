@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="fanfan.web.manager:war">
-    <output-path>$PROJECT_DIR$/target</output-path>
-    <root id="archive" name="fanfan.web.manager.war">
-      <element id="artifact" artifact-name="fanfan.web.manager:war exploded" />
-    </root>
-  </artifact>
-</component>
