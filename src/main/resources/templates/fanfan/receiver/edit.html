@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+						<input id="id" name="id" th:value="${receiver.id}"  type="hidden">
+							<div class="form-group">	
+								<label class="col-sm-3 control-label">用户主键：</label>
+								<div class="col-sm-8">
+									<input id="userId" name="userId" th:value="${receiver.userId}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">收货人电话：</label>
+								<div class="col-sm-8">
+									<input id="tel" name="tel" th:value="${receiver.tel}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">收货人名称：</label>
+								<div class="col-sm-8">
+									<input id="name" name="name" th:value="${receiver.name}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">收货人性别：</label>
+								<div class="col-sm-8">
+									<input id="sex" name="sex" th:value="${receiver.sex}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">区域：</label>
+								<div class="col-sm-8">
+									<input id="district" name="district" th:value="${receiver.district}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">街道：</label>
+								<div class="col-sm-8">
+									<input id="street" name="street" th:value="${receiver.street}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">详细地址：</label>
+								<div class="col-sm-8">
+									<input id="detail" name="detail" th:value="${receiver.detail}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">精度：</label>
+								<div class="col-sm-8">
+									<input id="lat" name="lat" th:value="${receiver.lat}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">纬度：</label>
+								<div class="col-sm-8">
+									<input id="lng" name="lng" th:value="${receiver.lng}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">是否删除：</label>
+								<div class="col-sm-8">
+									<input id="delete" name="delete" th:value="${receiver.delete}" class="form-control" type="text">
+								</div>
+							</div>
+																					<div class="form-group">
+								<div class="col-sm-8 col-sm-offset-3">
+									<button type="submit" class="btn btn-primary">提交</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+	</div>
+	</div>
+	<div th:include="include::footer"></div>
+	<script type="text/javascript" src="/js/appjs/fanfan/receiver/edit.js">
+	</script>
+</body>
+</html>

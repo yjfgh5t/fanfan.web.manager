@@ -2,14 +2,10 @@ package com.bootdo.fanfan.service.impl;
 
 import com.bootdo.common.extend.EMapper;
 import com.bootdo.common.utils.StringUtils;
-import com.bootdo.fanfan.domain.CommoditDO;
-import com.bootdo.fanfan.domain.OrderDetialDO;
-import com.bootdo.fanfan.domain.OrderStateDO;
+import com.bootdo.fanfan.domain.*;
 import com.bootdo.fanfan.manager.order.OrderChain;
 import com.bootdo.fanfan.manager.order.ValidateOrderOption;
-import com.bootdo.fanfan.service.CommoditService;
-import com.bootdo.fanfan.service.OrderDetialService;
-import com.bootdo.fanfan.service.OrderStateService;
+import com.bootdo.fanfan.service.*;
 import com.bootdo.fanfan.vo.APIOrderDetail;
 import com.bootdo.fanfan.vo.APIOrderRequVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +18,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.bootdo.fanfan.dao.OrderDao;
-import com.bootdo.fanfan.domain.OrderDO;
-import com.bootdo.fanfan.service.OrderService;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -44,6 +38,9 @@ public class OrderServiceImpl implements OrderService {
 	@Autowired
 	private CommoditService commoditService;
 
+	@Autowired
+	private OrderReceiverService  orderReceiverService;
+
 	/**
 	 * 创建订单
 	 */
@@ -61,6 +58,9 @@ public class OrderServiceImpl implements OrderService {
 
 		//订单商品明细
 		List<OrderDetialDO> orderDetialDOList =eMapper.mapArray(orderVO.getDetailList(),OrderDetialDO.class);
+
+		//收货人地址
+		OrderReceiverDO orderReceiverDO = eMapper.map(orderVO.getReceiver(),OrderReceiverDO.class);
 
 		//1.订单是否创建
 		if(StringUtils.isEmpty(orderVO.getOrderNum()))
@@ -82,6 +82,10 @@ public class OrderServiceImpl implements OrderService {
 
 		//保存订单状态
 		orderStateService.save(new OrderStateDO(orderDO.getId(),orderDO.getOrderState(),orderDO.getCreateId()));
+
+		//保存订单收货人信息
+		orderReceiverDO.setId(orderDO.getId());
+		orderReceiverService.save(orderReceiverDO);
 
 		return orderDO.getOrderNum();
 	}

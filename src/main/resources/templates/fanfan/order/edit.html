@@ -29,9 +29,21 @@
 								</div>
 							</div>
 														<div class="form-group">	
+								<label class="col-sm-3 control-label">支付金额：</label>
+								<div class="col-sm-8">
+									<input id="orderPay" name="orderPay" th:value="${order.orderPay}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
 								<label class="col-sm-3 control-label">订单优惠总额：</label>
 								<div class="col-sm-8">
 									<input id="orderDiscountTotal" name="orderDiscountTotal" th:value="${order.orderDiscountTotal}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">订单商品总数量：</label>
+								<div class="col-sm-8">
+									<input id="orderCommodityTotal" name="orderCommodityTotal" th:value="${order.orderCommodityTotal}" class="form-control" type="text">
 								</div>
 							</div>
 														<div class="form-group">	
@@ -56,36 +68,6 @@
 								<label class="col-sm-3 control-label">订单发票信息：</label>
 								<div class="col-sm-8">
 									<input id="orderInvoice" name="orderInvoice" th:value="${order.orderInvoice}" class="form-control" type="text">
-								</div>
-							</div>
-														<div class="form-group">	
-								<label class="col-sm-3 control-label">收货人：</label>
-								<div class="col-sm-8">
-									<input id="receiveName" name="receiveName" th:value="${order.receiveName}" class="form-control" type="text">
-								</div>
-							</div>
-														<div class="form-group">	
-								<label class="col-sm-3 control-label">收货人性别 先生/女士：</label>
-								<div class="col-sm-8">
-									<input id="receiveSex" name="receiveSex" th:value="${order.receiveSex}" class="form-control" type="text">
-								</div>
-							</div>
-														<div class="form-group">	
-								<label class="col-sm-3 control-label">收货人地址：</label>
-								<div class="col-sm-8">
-									<input id="receiveAddr" name="receiveAddr" th:value="${order.receiveAddr}" class="form-control" type="text">
-								</div>
-							</div>
-														<div class="form-group">	
-								<label class="col-sm-3 control-label">地图纬度：</label>
-								<div class="col-sm-8">
-									<input id="receiveLat" name="receiveLat" th:value="${order.receiveLat}" class="form-control" type="text">
-								</div>
-							</div>
-														<div class="form-group">	
-								<label class="col-sm-3 control-label">地图纬度：</label>
-								<div class="col-sm-8">
-									<input id="receiveLng" name="receiveLng" th:value="${order.receiveLng}" class="form-control" type="text">
 								</div>
 							</div>
 														<div class="form-group">	

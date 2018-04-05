@@ -25,19 +25,10 @@ public class APIOrderRequVO {
     private String orderRemark;
     //订单发票信息
     private String orderInvoice;
-    //收货人
-    private String receiveName;
-    //收货人性别 先生/女士
-    private String receiveSex;
-    //收货人地址
-    private String receiveAddr;
-    //地图纬度
-    private String receiveLat;
-    //地图纬度
-    private String receiveLng;
     //用户主键
     private Integer createId;
-
+    //收货人信息
+    private APIOrderReceiverVO receiver;
     //订单详情
     private List<APIOrderDetail> detailList;
 

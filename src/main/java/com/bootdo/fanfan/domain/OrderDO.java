@@ -11,7 +11,7 @@ import java.util.Date;
  * 
  * @author jy
  * @email 1992lcg@163.com
- * @date 2018-03-31 20:31:20
+ * @date 2018-04-05 14:05:16
  */
 public class OrderDO implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -24,13 +24,13 @@ public class OrderDO implements Serializable {
 	private Integer orderState;
 	//订单总额
 	private BigDecimal orderTotal;
-	//订单支付总额
+	//支付金额
 	private BigDecimal orderPay;
 	//订单优惠总额
 	private BigDecimal orderDiscountTotal;
 	//订单商品总数量
 	private Integer orderCommodityTotal;
-	//订单支付类型  1:支付宝  2：微信 3：现金
+	//订单支付类型  1:支付宝  2：微信 3：现金 
 	private Integer orderPayType;
 	//用餐人数
 	private String orderMealsNum;
@@ -38,16 +38,6 @@ public class OrderDO implements Serializable {
 	private String orderRemark;
 	//订单发票信息
 	private String orderInvoice;
-	//收货人
-	private String receiveName;
-	//收货人性别 先生/女士
-	private String receiveSex;
-	//收货人地址
-	private String receiveAddr;
-	//地图纬度
-	private String receiveLat;
-	//地图纬度
-	private String receiveLng;
 	//用户主键
 	private Integer createId;
 	//创建时间
@@ -77,19 +67,6 @@ public class OrderDO implements Serializable {
 	public String getOrderNum() {
 		return orderNum;
 	}
-
-	public Integer getOrderCommodityTotal() { return orderCommodityTotal; }
-
-	public void setOrderCommodityTotal(Integer orderCommodityTotal) { this.orderCommodityTotal = orderCommodityTotal; }
-
-	public BigDecimal getOrderPay() {
-		return orderPay;
-	}
-
-	public void setOrderPay(BigDecimal orderPay) {
-		this.orderPay = orderPay;
-	}
-
 	/**
 	 * 设置：订单状态：101：创建订单  102：待支付 103：已支付 104:超时未支付 105：确认收单 106：异常订单反馈 201：确认收单 202:取消收单-退款 203:开始派单
 	 */
@@ -115,6 +92,18 @@ public class OrderDO implements Serializable {
 		return orderTotal;
 	}
 	/**
+	 * 设置：支付金额
+	 */
+	public void setOrderPay(BigDecimal orderPay) {
+		this.orderPay = orderPay;
+	}
+	/**
+	 * 获取：支付金额
+	 */
+	public BigDecimal getOrderPay() {
+		return orderPay;
+	}
+	/**
 	 * 设置：订单优惠总额
 	 */
 	public void setOrderDiscountTotal(BigDecimal orderDiscountTotal) {
@@ -125,6 +114,18 @@ public class OrderDO implements Serializable {
 	 */
 	public BigDecimal getOrderDiscountTotal() {
 		return orderDiscountTotal;
+	}
+	/**
+	 * 设置：订单商品总数量
+	 */
+	public void setOrderCommodityTotal(Integer orderCommodityTotal) {
+		this.orderCommodityTotal = orderCommodityTotal;
+	}
+	/**
+	 * 获取：订单商品总数量
+	 */
+	public Integer getOrderCommodityTotal() {
+		return orderCommodityTotal;
 	}
 	/**
 	 * 设置：订单支付类型  1:支付宝  2：微信 3：现金 
@@ -173,66 +174,6 @@ public class OrderDO implements Serializable {
 	 */
 	public String getOrderInvoice() {
 		return orderInvoice;
-	}
-	/**
-	 * 设置：收货人
-	 */
-	public void setReceiveName(String receiveName) {
-		this.receiveName = receiveName;
-	}
-	/**
-	 * 获取：收货人
-	 */
-	public String getReceiveName() {
-		return receiveName;
-	}
-	/**
-	 * 设置：收货人性别 先生/女士
-	 */
-	public void setReceiveSex(String receiveSex) {
-		this.receiveSex = receiveSex;
-	}
-	/**
-	 * 获取：收货人性别 先生/女士
-	 */
-	public String getReceiveSex() {
-		return receiveSex;
-	}
-	/**
-	 * 设置：收货人地址
-	 */
-	public void setReceiveAddr(String receiveAddr) {
-		this.receiveAddr = receiveAddr;
-	}
-	/**
-	 * 获取：收货人地址
-	 */
-	public String getReceiveAddr() {
-		return receiveAddr;
-	}
-	/**
-	 * 设置：地图纬度
-	 */
-	public void setReceiveLat(String receiveLat) {
-		this.receiveLat = receiveLat;
-	}
-	/**
-	 * 获取：地图纬度
-	 */
-	public String getReceiveLat() {
-		return receiveLat;
-	}
-	/**
-	 * 设置：地图纬度
-	 */
-	public void setReceiveLng(String receiveLng) {
-		this.receiveLng = receiveLng;
-	}
-	/**
-	 * 获取：地图纬度
-	 */
-	public String getReceiveLng() {
-		return receiveLng;
 	}
 	/**
 	 * 设置：用户主键

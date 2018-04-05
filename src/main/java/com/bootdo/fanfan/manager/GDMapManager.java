@@ -22,7 +22,7 @@ public class GDMapManager {
      * 查询地理位置
      * @param keyWord
      * @param lat
-     * @param lng
+     * @param log
      * @return
      */
     public List<APIGDMapTip> queryAddr(String keyWord, String lat, String log){

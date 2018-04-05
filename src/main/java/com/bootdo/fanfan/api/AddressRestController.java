@@ -2,15 +2,19 @@ package com.bootdo.fanfan.api;
 
 import com.bootdo.common.extend.EMapper;
 import com.bootdo.common.utils.R;
+import com.bootdo.fanfan.domain.ReceiverDO;
 import com.bootdo.fanfan.manager.GDMapManager;
+import com.bootdo.fanfan.service.ReceiverService;
 import com.bootdo.fanfan.vo.APIAddressVO;
 import com.bootdo.fanfan.vo.APIGDMapTip;
+import com.bootdo.fanfan.vo.APIReceiverVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api/address")
@@ -21,6 +25,9 @@ public class AddressRestController {
 
     @Autowired
     EMapper  eMapper;
+
+    @Autowired
+    ReceiverService  receiverService;
 
     /**
      * 查询地理位置
@@ -34,6 +41,41 @@ public class AddressRestController {
         List<APIGDMapTip> list = gdMapManager.queryAddr(keyWord,lat,log);
 
         return R.ok().put("data",eMapper.mapArray(list,APIAddressVO.class));
+    }
+
+    /**
+     * 保存收货地址
+     * @param receiverModel
+     * @return
+     */
+    @PostMapping("/")
+    public R save(@RequestBody APIReceiverVO receiverModel){
+
+        ReceiverDO receiverDO  = eMapper.map(receiverModel,ReceiverDO.class);
+
+        receiverService.save(receiverDO);
+
+        return R.ok();
+    }
+
+    @GetMapping("/")
+    public R getList(Integer userId){
+
+        if(userId==null)
+            return R.error(1,"无效的userid");
+
+        Map<String,Object> params =  new HashMap<>();
+
+        params.put("userId",userId);
+
+        List<ReceiverDO> list = receiverService.list(params);
+
+        List<APIReceiverVO> renList=new ArrayList<>();
+
+        if(list!=null &&  list.size()>0)
+            renList = eMapper.mapArray(list,APIReceiverVO.class);
+
+        return R.ok().put("data",renList);
     }
 
 }

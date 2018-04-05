@@ -36,6 +36,8 @@ public class EMapperImpl implements EMapper {
 
     @Override
     public <T> T map(Object var1, Class<T> var2) throws MappingException {
+        if(var1==null)
+            return null;
         return dozerMapper.map(var1,var2);
     }
 

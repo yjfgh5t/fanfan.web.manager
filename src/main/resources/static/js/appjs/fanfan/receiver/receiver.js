@@ -1,5 +1,5 @@
 
-var prefix = "/fanfan/order"
+var prefix = "/fanfan/receiver"
 $(function() {
 	load();
 });
@@ -52,52 +52,44 @@ function load() {
 									title : '主键' 
 								},
 																{
-									field : 'orderNum', 
-									title : '订单号' 
-								},
-																{
-									field : 'orderState', 
-									title : '订单状态：101：创建订单  102：待支付 103：已支付 104:超时未支付 105：确认收单 106：异常订单反馈 201：确认收单 202:取消收单-退款 203:开始派单' 
-								},
-																{
-									field : 'orderTotal', 
-									title : '订单总额' 
-								},
-																{
-									field : 'orderPay', 
-									title : '支付金额' 
-								},
-																{
-									field : 'orderDiscountTotal', 
-									title : '订单优惠总额' 
-								},
-																{
-									field : 'orderCommodityTotal', 
-									title : '订单商品总数量' 
-								},
-																{
-									field : 'orderPayType', 
-									title : '订单支付类型  1:支付宝  2：微信 3：现金 ' 
-								},
-																{
-									field : 'orderMealsNum', 
-									title : '用餐人数' 
-								},
-																{
-									field : 'orderRemark', 
-									title : '描述' 
-								},
-																{
-									field : 'orderInvoice', 
-									title : '订单发票信息' 
-								},
-																{
-									field : 'createId', 
+									field : 'userId', 
 									title : '用户主键' 
 								},
 																{
-									field : 'createTime', 
-									title : '创建时间' 
+									field : 'tel', 
+									title : '收货人电话' 
+								},
+																{
+									field : 'name', 
+									title : '收货人名称' 
+								},
+																{
+									field : 'sex', 
+									title : '收货人性别' 
+								},
+																{
+									field : 'district', 
+									title : '区域' 
+								},
+																{
+									field : 'street', 
+									title : '街道' 
+								},
+																{
+									field : 'detail', 
+									title : '详细地址' 
+								},
+																{
+									field : 'lat', 
+									title : '精度' 
+								},
+																{
+									field : 'lng', 
+									title : '纬度' 
+								},
+																{
+									field : 'delete', 
+									title : '是否删除' 
 								},
 																{
 									title : '操作',
