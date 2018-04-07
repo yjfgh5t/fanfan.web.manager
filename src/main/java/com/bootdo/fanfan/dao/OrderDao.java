@@ -5,6 +5,7 @@ import com.bootdo.fanfan.domain.OrderDO;
 import java.util.List;
 import java.util.Map;
 
+import com.bootdo.fanfan.vo.APIOrderListVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -34,4 +35,14 @@ public interface OrderDao {
 
 	@Select("select  * from  ff_order  where order_num=${orderNum}")
 	OrderDO getByOrderNum(@Param("orderNum") String orderNum);
+
+	@Select("select id from  ff_order  where order_num=${orderNum}")
+	Integer getIdByOrderNum(@Param("orderNum") String orderNum);
+
+	/**
+	 * 查询订单列表
+	 * @param map
+	 * @return
+	 */
+	List<APIOrderListVO> queryOrderByUser(Map<String,Object> map);
 }

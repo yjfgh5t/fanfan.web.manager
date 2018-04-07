@@ -7,6 +7,7 @@ import com.bootdo.fanfan.manager.order.OrderChain;
 import com.bootdo.fanfan.manager.order.ValidateOrderOption;
 import com.bootdo.fanfan.service.*;
 import com.bootdo.fanfan.vo.APIOrderDetail;
+import com.bootdo.fanfan.vo.APIOrderListVO;
 import com.bootdo.fanfan.vo.APIOrderRequVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -72,6 +73,9 @@ public class OrderServiceImpl implements OrderService {
 			orderDO.setCreateTime(Calendar.getInstance().getTime());
 			//保存订单
 			save(orderDO);
+		}else{
+			//修改订单
+			update(orderDO);
 		}
 
 		//设置订单号
@@ -111,6 +115,11 @@ public class OrderServiceImpl implements OrderService {
 		apiOrderRequVO.setDetailList(eMapper.mapArray(orderDetialDOList,APIOrderDetail.class));
 
 		return  apiOrderRequVO;
+	}
+
+	@Override
+	public List<APIOrderListVO> queryOrderByUser(Map<String, Object> map) {
+		return orderDao.queryOrderByUser(map);
 	}
 
 	@Override
@@ -171,6 +180,17 @@ public class OrderServiceImpl implements OrderService {
 		if(orderRequVO.getOrderState()==null || orderRequVO.getOrderState()==101 ){
 			return;
 		}
+
+		if(orderRequVO.getOrderState()>101  && StringUtils.isEmpty(orderRequVO.getOrderNum())){
+			throw new SecurityException("无效的订单状态");
+		}
+
+		orderRequVO.setId(orderDao.getIdByOrderNum(orderRequVO.getOrderNum()));
+
+		if(orderRequVO.getId()==null) {
+			throw new SecurityException("无效的订单号");
+		}
+
 	}
 
 	/**

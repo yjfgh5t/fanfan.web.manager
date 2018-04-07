@@ -1,6 +1,7 @@
 package com.bootdo.fanfan.service;
 
 import com.bootdo.fanfan.domain.OrderDO;
+import com.bootdo.fanfan.vo.APIOrderListVO;
 import com.bootdo.fanfan.vo.APIOrderRequVO;
 
 import java.util.List;
@@ -41,4 +42,6 @@ public interface OrderService {
 	 * @return
 	 */
 	APIOrderRequVO queryOrder(String orderNum);
+
+	List<APIOrderListVO> queryOrderByUser(Map<String,Object> map);
 }
