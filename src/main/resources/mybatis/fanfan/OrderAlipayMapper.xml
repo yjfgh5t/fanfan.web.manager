@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bootdo.fanfan.dao.OrderAlipayDao">
+
+	<select id="get" resultType="com.bootdo.fanfan.domain.OrderAlipayDO">
+		select `id`,`body`,`subject`,`trade_no`,`timeout_express`,`total_amount`,`product_code`,`goods_type`,`passback_params`,`store_id`,`create_back_body`,`create_time`,`back_time` from ff_order_alipay where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.bootdo.fanfan.domain.OrderAlipayDO">
+		select `id`,`body`,`subject`,`trade_no`,`timeout_express`,`total_amount`,`product_code`,`goods_type`,`passback_params`,`store_id`,`create_back_body`,`create_time`,`back_time` from ff_order_alipay
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="body != null and body != ''"> and body = #{body} </if>
+		  		  <if test="subject != null and subject != ''"> and subject = #{subject} </if>
+		  		  <if test="tradeNo != null and tradeNo != ''"> and trade_no = #{tradeNo} </if>
+		  		  <if test="timeoutExpress != null and timeoutExpress != ''"> and timeout_express = #{timeoutExpress} </if>
+		  		  <if test="totalAmount != null and totalAmount != ''"> and total_amount = #{totalAmount} </if>
+		  		  <if test="productCode != null and productCode != ''"> and product_code = #{productCode} </if>
+		  		  <if test="goodsType != null and goodsType != ''"> and goods_type = #{goodsType} </if>
+		  		  <if test="passbackParams != null and passbackParams != ''"> and passback_params = #{passbackParams} </if>
+		  		  <if test="storeId != null and storeId != ''"> and store_id = #{storeId} </if>
+		  		  <if test="createBackBody != null and createBackBody != ''"> and create_back_body = #{createBackBody} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		  <if test="backTime != null and backTime != ''"> and back_time = #{backTime} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from ff_order_alipay
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="body != null and body != ''"> and body = #{body} </if>
+		  		  <if test="subject != null and subject != ''"> and subject = #{subject} </if>
+		  		  <if test="tradeNo != null and tradeNo != ''"> and trade_no = #{tradeNo} </if>
+		  		  <if test="timeoutExpress != null and timeoutExpress != ''"> and timeout_express = #{timeoutExpress} </if>
+		  		  <if test="totalAmount != null and totalAmount != ''"> and total_amount = #{totalAmount} </if>
+		  		  <if test="productCode != null and productCode != ''"> and product_code = #{productCode} </if>
+		  		  <if test="goodsType != null and goodsType != ''"> and goods_type = #{goodsType} </if>
+		  		  <if test="passbackParams != null and passbackParams != ''"> and passback_params = #{passbackParams} </if>
+		  		  <if test="storeId != null and storeId != ''"> and store_id = #{storeId} </if>
+		  		  <if test="createBackBody != null and createBackBody != ''"> and create_back_body = #{createBackBody} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		  <if test="backTime != null and backTime != ''"> and back_time = #{backTime} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.bootdo.fanfan.domain.OrderAlipayDO">
+		insert into ff_order_alipay
+		(
+			`id`, 
+			`body`, 
+			`subject`, 
+			`trade_no`, 
+			`timeout_express`, 
+			`total_amount`, 
+			`product_code`, 
+			`goods_type`, 
+			`passback_params`, 
+			`store_id`, 
+			`create_back_body`, 
+			`create_time`, 
+			`back_time`
+		)
+		values
+		(
+			#{id}, 
+			#{body}, 
+			#{subject}, 
+			#{tradeNo}, 
+			#{timeoutExpress}, 
+			#{totalAmount}, 
+			#{productCode}, 
+			#{goodsType}, 
+			#{passbackParams}, 
+			#{storeId}, 
+			#{createBackBody}, 
+			#{createTime}, 
+			#{backTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.bootdo.fanfan.domain.OrderAlipayDO">
+		update ff_order_alipay 
+		<set>
+			<if test="body != null">`body` = #{body}, </if>
+			<if test="subject != null">`subject` = #{subject}, </if>
+			<if test="tradeNo != null">`trade_no` = #{tradeNo}, </if>
+			<if test="timeoutExpress != null">`timeout_express` = #{timeoutExpress}, </if>
+			<if test="totalAmount != null">`total_amount` = #{totalAmount}, </if>
+			<if test="productCode != null">`product_code` = #{productCode}, </if>
+			<if test="goodsType != null">`goods_type` = #{goodsType}, </if>
+			<if test="passbackParams != null">`passback_params` = #{passbackParams}, </if>
+			<if test="storeId != null">`store_id` = #{storeId}, </if>
+			<if test="createBackBody != null">`create_back_body` = #{createBackBody}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="backTime != null">`back_time` = #{backTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from ff_order_alipay where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from ff_order_alipay where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

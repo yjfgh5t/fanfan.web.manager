@@ -19,6 +19,8 @@ public class OrderRestController {
     @Autowired
     OrderService orderService;
 
+
+
     /**
      * 创建订单
      * @return
@@ -63,4 +65,20 @@ public class OrderRestController {
 
        return R.ok().put("data",list);
     }
+
+    @GetMapping("/{orderNum}")
+    public R orderDetail(@PathVariable("orderNum") String orderNum){
+
+        //查询订单
+        APIOrderRequVO requVO = orderService.queryOrder(orderNum);
+
+        if(requVO==null)
+            return R.error("订单不存在");
+
+        //设置状态文本
+        requVO.setOrderStateText(OrderStateEnum.get(requVO.getOrderState()).getText());
+
+        return R.ok().put("data",requVO);
+    }
+
 }

@@ -36,8 +36,8 @@ public interface OrderDao {
 	@Select("select  * from  ff_order  where order_num=${orderNum}")
 	OrderDO getByOrderNum(@Param("orderNum") String orderNum);
 
-	@Select("select id from  ff_order  where order_num=${orderNum}")
-	Integer getIdByOrderNum(@Param("orderNum") String orderNum);
+	@Select("select id,order_state from  ff_order  where order_num=${orderNum}")
+	OrderDO getIdByOrderNum(@Param("orderNum") String orderNum);
 
 	/**
 	 * 查询订单列表

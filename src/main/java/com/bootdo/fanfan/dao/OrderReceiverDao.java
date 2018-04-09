@@ -34,4 +34,7 @@ public interface OrderReceiverDao {
 
 	@Select("select count(id) from ff_order_receiver where id=#{id}")
 	Integer hasSave(@Param("id") Integer id);
+
+	@Select("select * from ff_order_receiver where id=#{id}")
+	OrderReceiverDO queryById(@Param("id") Integer id);
 }

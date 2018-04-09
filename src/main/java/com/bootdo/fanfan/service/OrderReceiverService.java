@@ -27,4 +27,6 @@ public interface OrderReceiverService {
 	int remove(Integer id);
 	
 	int batchRemove(Integer[] ids);
+
+	OrderReceiverDO queryById(Integer id);
 }

@@ -54,5 +54,8 @@ public class OrderReceiverServiceImpl implements OrderReceiverService {
 	public int batchRemove(Integer[] ids){
 		return orderReceiverDao.batchRemove(ids);
 	}
-	
+
+	public OrderReceiverDO queryById(Integer id){
+		return orderReceiverDao.queryById(id);
+	}
 }

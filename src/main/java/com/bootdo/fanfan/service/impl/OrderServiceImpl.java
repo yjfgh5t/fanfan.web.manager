@@ -3,16 +3,19 @@ package com.bootdo.fanfan.service.impl;
 import com.bootdo.common.extend.EMapper;
 import com.bootdo.common.utils.StringUtils;
 import com.bootdo.fanfan.domain.*;
-import com.bootdo.fanfan.manager.order.OrderChain;
-import com.bootdo.fanfan.manager.order.ValidateOrderOption;
+import com.bootdo.fanfan.domain.enumDO.OrderStateEnum;
+import com.bootdo.fanfan.manager.AlipayManager;
 import com.bootdo.fanfan.service.*;
 import com.bootdo.fanfan.vo.APIOrderDetail;
 import com.bootdo.fanfan.vo.APIOrderListVO;
+import com.bootdo.fanfan.vo.APIOrderReceiverVO;
 import com.bootdo.fanfan.vo.APIOrderRequVO;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +44,12 @@ public class OrderServiceImpl implements OrderService {
 
 	@Autowired
 	private OrderReceiverService  orderReceiverService;
+
+	@Autowired
+	private AlipayManager alipayManager;
+
+	@Autowired
+	private OrderAlipayService  orderAlipayService;
 
 	/**
 	 * 创建订单
@@ -91,6 +100,11 @@ public class OrderServiceImpl implements OrderService {
 		orderReceiverDO.setId(orderDO.getId());
 		orderReceiverService.save(orderReceiverDO);
 
+		//创建支付宝预付单
+        if(orderDO.getOrderState()==OrderStateEnum.userWaitPay.getVal()) {
+            createAlipayOrder(orderVO, orderDO);
+        }
+
 		return orderDO.getOrderNum();
 	}
 
@@ -113,6 +127,17 @@ public class OrderServiceImpl implements OrderService {
 
 		//订单详情转换
 		apiOrderRequVO.setDetailList(eMapper.mapArray(orderDetialDOList,APIOrderDetail.class));
+
+		//订单收货人信息
+		OrderReceiverDO receiverDO = orderReceiverService.queryById(orderDO.getId());
+		if(receiverDO!=null){
+			apiOrderRequVO.setReceiver(eMapper.map(receiverDO, APIOrderReceiverVO.class));
+		}
+
+		//支付宝预付单
+       if(orderDO.getOrderState()==OrderStateEnum.userWaitPay.getVal()){
+		    apiOrderRequVO.setAlipayOrderStr(orderAlipayService.getOrderStrById(orderDO.getId()));
+       }
 
 		return  apiOrderRequVO;
 	}
@@ -185,11 +210,25 @@ public class OrderServiceImpl implements OrderService {
 			throw new SecurityException("无效的订单状态");
 		}
 
-		orderRequVO.setId(orderDao.getIdByOrderNum(orderRequVO.getOrderNum()));
+		//查询订单
+		OrderDO orderDO =orderDao.getIdByOrderNum(orderRequVO.getOrderNum());
 
-		if(orderRequVO.getId()==null) {
-			throw new SecurityException("无效的订单号");
-		}
+        if(orderDO==null) {
+            throw new SecurityException("无效的订单号");
+        }
+
+        //设置Id
+		orderRequVO.setId(orderDO.getId());
+
+        //判断状态是否可已修改
+        int [] notModifyState= new int[]{
+                OrderStateEnum.orderSuccess.getVal(),
+                OrderStateEnum.userPayOvertime.getVal(),
+        };
+
+        if(Arrays.asList(notModifyState).contains(orderRequVO.getOrderState())) {
+            throw new SecurityException(OrderStateEnum.get(orderRequVO.getOrderState()).getText());
+        }
 
 	}
 
@@ -258,6 +297,42 @@ public class OrderServiceImpl implements OrderService {
 		orderDO.setOrderPay(orderDO.getOrderTotal().subtract(orderDO.getOrderDiscountTotal()));
 	}
 
+    /**
+     * 创建支付宝预付单
+     * @param orderRequVO
+     * @param orderDO
+     */
+	private void createAlipayOrder(APIOrderRequVO orderRequVO,OrderDO  orderDO){
+
+	    OrderAlipayDO alipayDO =  new OrderAlipayDO();
+	    alipayDO.setId(orderDO.getId());
+	    alipayDO.setBody(ArrayUtils.toString(orderRequVO.getDetailList().stream().map(m->m.getOutTitle()).toArray()));
+        alipayDO.setCreateBackBody("");
+        alipayDO.setGoodsType("1");
+        alipayDO.setCreateTime(Calendar.getInstance().getTime());
+        alipayDO.setPassbackParams(orderDO.getOrderNum());
+        alipayDO.setProductCode("QUICK_MSECURITY_PAY");
+        alipayDO.setStoreId("");
+        alipayDO.setSubject("饭饭点餐");
+        alipayDO.setTimeoutExpress("15m");
+        alipayDO.setTotalAmount(orderDO.getOrderTotal().toString());
+        alipayDO.setTradeNo(orderDO.getOrderNum());
+
+        String backStr = alipayManager.CreateTradePay(alipayDO);
+        if(backStr==""){
+            throw  new  SecurityException("创建支付宝预付单失败");
+        }
+        alipayDO.setCreateBackBody(backStr);
+
+        //保存
+        orderAlipayService.save(alipayDO);
+    }
+
+    /**
+     * 获取订单号
+     * @param userId
+     * @return
+     */
 	private String getOrderNum(Integer userId){
 		Long time = System.currentTimeMillis();
 

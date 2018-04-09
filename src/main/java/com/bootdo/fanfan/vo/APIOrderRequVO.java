@@ -3,6 +3,7 @@ package com.bootdo.fanfan.vo;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -12,6 +13,8 @@ public class APIOrderRequVO {
     private String orderNum;
     //订单状态：101：创建订单  102：待支付 103：已支付 104:超时未支付 105：确认收单 106：异常订单反馈 201：确认收单 202:取消收单-退款 203:开始派单
     private Integer orderState;
+    //订单状态文本
+    private String orderStateText;
     //订单总额
     private BigDecimal orderTotal;
     //支付总额
@@ -32,4 +35,8 @@ public class APIOrderRequVO {
     private APIOrderReceiverVO receiver;
     //订单详情
     private List<APIOrderDetail> detailList;
+    //创建时间
+    private Date createTime;
+    //支付宝预付单Str
+    private String alipayOrderStr;
 }
