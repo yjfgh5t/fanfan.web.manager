@@ -318,7 +318,7 @@ public class OrderServiceImpl implements OrderService {
         alipayDO.setTotalAmount(orderDO.getOrderTotal().toString());
         alipayDO.setTradeNo(orderDO.getOrderNum());
 
-        String backStr = alipayManager.CreateTradePay(alipayDO);
+        String backStr = alipayManager.createTradePay(alipayDO);
         if(backStr==""){
             throw  new  SecurityException("创建支付宝预付单失败");
         }
