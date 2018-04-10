@@ -5,9 +5,11 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.request.AlipaySystemOauthTokenRequest;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
+import com.alipay.api.request.AlipayTradeCloseRequest;
 import com.alipay.api.request.AlipayUserInfoShareRequest;
 import com.alipay.api.response.AlipaySystemOauthTokenResponse;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
+import com.alipay.api.response.AlipayTradeCloseResponse;
 import com.alipay.api.response.AlipayUserInfoShareResponse;
 import com.bootdo.common.config.AlipayConfig;
 import com.bootdo.fanfan.domain.OrderAlipayDO;
@@ -103,5 +105,31 @@ public class AlipayManager {
             e.printStackTrace();
         }
         return "";
+    }
+
+
+    /**
+     * 关闭支付交易
+     * @return
+     */
+    private boolean closeTradePay(String tradeNo,String outTradeNo){
+
+        AlipayClient alipayClient = AlipayConfig.getDefaultClient();
+        AlipayTradeCloseRequest request = new AlipayTradeCloseRequest();
+        request.setBizContent("{" +
+                "\"trade_no\":\""+tradeNo+"\"," +
+                "\"out_trade_no\":\""+outTradeNo+"\"," +
+                //"\"operator_id\":\"YX01\"" + 操作人id
+                "  }");
+        AlipayTradeCloseResponse response = null;
+        try {
+            response = alipayClient.execute(request);
+
+            return response.isSuccess();
+        } catch (AlipayApiException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 }
