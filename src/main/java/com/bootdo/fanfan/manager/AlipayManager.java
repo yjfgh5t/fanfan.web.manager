@@ -5,9 +5,11 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.request.AlipaySystemOauthTokenRequest;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
+import com.alipay.api.request.AlipayTradeCloseRequest;
 import com.alipay.api.request.AlipayUserInfoShareRequest;
 import com.alipay.api.response.AlipaySystemOauthTokenResponse;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
+import com.alipay.api.response.AlipayTradeCloseResponse;
 import com.alipay.api.response.AlipayUserInfoShareResponse;
 import com.bootdo.common.config.AlipayConfig;
 import com.bootdo.fanfan.domain.OrderAlipayDO;
@@ -75,12 +77,17 @@ public class AlipayManager {
         return null;
     }
 
-    public String  CreateTradePay(OrderAlipayDO alipayDO){
+    /**
+     * 创建支付预付单
+     * @param alipayDO
+     * @return
+     */
+    public String  createTradePay(OrderAlipayDO alipayDO){
         //实例化客户端
         AlipayClient alipayClient = AlipayConfig.getDefaultClient();
-//实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.trade.app.pay
+        //实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.trade.app.pay
         AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
-//SDK已经封装掉了公共参数，这里只需要传入业务参数。以下方法为sdk的model入参方式(model和biz_content同时存在的情况下取biz_content)。
+        //SDK已经封装掉了公共参数，这里只需要传入业务参数。以下方法为sdk的model入参方式(model和biz_content同时存在的情况下取biz_content)。
         AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
         model.setBody(alipayDO.getBody());
         model.setSubject(alipayDO.getSubject());
@@ -98,5 +105,31 @@ public class AlipayManager {
             e.printStackTrace();
         }
         return "";
+    }
+
+
+    /**
+     * 关闭支付交易
+     * @return
+     */
+    private boolean closeTradePay(String tradeNo,String outTradeNo){
+
+        AlipayClient alipayClient = AlipayConfig.getDefaultClient();
+        AlipayTradeCloseRequest request = new AlipayTradeCloseRequest();
+        request.setBizContent("{" +
+                "\"trade_no\":\""+tradeNo+"\"," +
+                "\"out_trade_no\":\""+outTradeNo+"\"," +
+                //"\"operator_id\":\"YX01\"" + 操作人id
+                "  }");
+        AlipayTradeCloseResponse response = null;
+        try {
+            response = alipayClient.execute(request);
+
+            return response.isSuccess();
+        } catch (AlipayApiException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 }

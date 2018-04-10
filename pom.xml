@@ -240,6 +240,13 @@
             <version>4.5.3</version>
         </dependency>
 
+        <!--alipay 接口-->
+        <dependency>
+            <groupId>com.alipay.sdk</groupId>
+            <artifactId>alipay-sdk-java</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+
 
         <!--war包部署需要-->
         <!--<dependency>-->
