@@ -19,8 +19,6 @@ public class OrderRestController {
     @Autowired
     OrderService orderService;
 
-
-
     /**
      * 创建订单
      * @return
@@ -40,6 +38,12 @@ public class OrderRestController {
         }
     }
 
+    /**
+     * 查询用户订单列表
+     * @param userId
+     * @param pageIndex
+     * @return
+     */
     @GetMapping("/")
     public R order(Integer userId,Integer pageIndex){
 
@@ -66,6 +70,11 @@ public class OrderRestController {
        return R.ok().put("data",list);
     }
 
+    /**
+     * 查询单个订单详情
+     * @param orderNum
+     * @return
+     */
     @GetMapping("/{orderNum}")
     public R orderDetail(@PathVariable("orderNum") String orderNum){
 

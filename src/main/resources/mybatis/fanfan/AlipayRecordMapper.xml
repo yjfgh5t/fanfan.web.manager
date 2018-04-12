@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bootdo.fanfan.dao.AlipayRecordDao">
+
+	<select id="get" resultType="com.bootdo.fanfan.domain.AlipayRecordDO">
+		select `id`,`trade_no`,`notify_time`,`notify_type`,`notify_id`,`app_id`,`charset`,`version`,`sign_type`,`out_trade_no`,`out_biz_no`,`buyer_id`,`buyer_logon_id`,`seller_id`,`seller_email`,`trade_status`,`total_amount`,`receipt_amount`,`invoice_amount`,`buyer_pay_amount`,`point_amount`,`refund_fee`,`subject`,`body`,`gmt_create`,`gmt_payment`,`gmt_refund`,`gmt_close`,`fund_bill_list`,`passback_params`,`voucher_detail_list` from ff_alipay_record where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.bootdo.fanfan.domain.AlipayRecordDO">
+		select `id`,`trade_no`,`notify_time`,`notify_type`,`notify_id`,`app_id`,`charset`,`version`,`sign_type`,`out_trade_no`,`out_biz_no`,`buyer_id`,`buyer_logon_id`,`seller_id`,`seller_email`,`trade_status`,`total_amount`,`receipt_amount`,`invoice_amount`,`buyer_pay_amount`,`point_amount`,`refund_fee`,`subject`,`body`,`gmt_create`,`gmt_payment`,`gmt_refund`,`gmt_close`,`fund_bill_list`,`passback_params`,`voucher_detail_list` from ff_alipay_record
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="tradeNo != null and tradeNo != ''"> and trade_no = #{tradeNo} </if>
+		  		  <if test="notifyTime != null and notifyTime != ''"> and notify_time = #{notifyTime} </if>
+		  		  <if test="notifyType != null and notifyType != ''"> and notify_type = #{notifyType} </if>
+		  		  <if test="notifyId != null and notifyId != ''"> and notify_id = #{notifyId} </if>
+		  		  <if test="appId != null and appId != ''"> and app_id = #{appId} </if>
+		  		  <if test="charset != null and charset != ''"> and charset = #{charset} </if>
+		  		  <if test="version != null and version != ''"> and version = #{version} </if>
+		  		  <if test="signType != null and signType != ''"> and sign_type = #{signType} </if>
+		  		  <if test="outTradeNo != null and outTradeNo != ''"> and out_trade_no = #{outTradeNo} </if>
+		  		  <if test="outBizNo != null and outBizNo != ''"> and out_biz_no = #{outBizNo} </if>
+		  		  <if test="buyerId != null and buyerId != ''"> and buyer_id = #{buyerId} </if>
+		  		  <if test="buyerLogonId != null and buyerLogonId != ''"> and buyer_logon_id = #{buyerLogonId} </if>
+		  		  <if test="sellerId != null and sellerId != ''"> and seller_id = #{sellerId} </if>
+		  		  <if test="sellerEmail != null and sellerEmail != ''"> and seller_email = #{sellerEmail} </if>
+		  		  <if test="tradeStatus != null and tradeStatus != ''"> and trade_status = #{tradeStatus} </if>
+		  		  <if test="totalAmount != null and totalAmount != ''"> and total_amount = #{totalAmount} </if>
+		  		  <if test="receiptAmount != null and receiptAmount != ''"> and receipt_amount = #{receiptAmount} </if>
+		  		  <if test="invoiceAmount != null and invoiceAmount != ''"> and invoice_amount = #{invoiceAmount} </if>
+		  		  <if test="buyerPayAmount != null and buyerPayAmount != ''"> and buyer_pay_amount = #{buyerPayAmount} </if>
+		  		  <if test="pointAmount != null and pointAmount != ''"> and point_amount = #{pointAmount} </if>
+		  		  <if test="refundFee != null and refundFee != ''"> and refund_fee = #{refundFee} </if>
+		  		  <if test="subject != null and subject != ''"> and subject = #{subject} </if>
+		  		  <if test="body != null and body != ''"> and body = #{body} </if>
+		  		  <if test="gmtCreate != null and gmtCreate != ''"> and gmt_create = #{gmtCreate} </if>
+		  		  <if test="gmtPayment != null and gmtPayment != ''"> and gmt_payment = #{gmtPayment} </if>
+		  		  <if test="gmtRefund != null and gmtRefund != ''"> and gmt_refund = #{gmtRefund} </if>
+		  		  <if test="gmtClose != null and gmtClose != ''"> and gmt_close = #{gmtClose} </if>
+		  		  <if test="fundBillList != null and fundBillList != ''"> and fund_bill_list = #{fundBillList} </if>
+		  		  <if test="passbackParams != null and passbackParams != ''"> and passback_params = #{passbackParams} </if>
+		  		  <if test="voucherDetailList != null and voucherDetailList != ''"> and voucher_detail_list = #{voucherDetailList} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from ff_alipay_record
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="tradeNo != null and tradeNo != ''"> and trade_no = #{tradeNo} </if>
+		  		  <if test="notifyTime != null and notifyTime != ''"> and notify_time = #{notifyTime} </if>
+		  		  <if test="notifyType != null and notifyType != ''"> and notify_type = #{notifyType} </if>
+		  		  <if test="notifyId != null and notifyId != ''"> and notify_id = #{notifyId} </if>
+		  		  <if test="appId != null and appId != ''"> and app_id = #{appId} </if>
+		  		  <if test="charset != null and charset != ''"> and charset = #{charset} </if>
+		  		  <if test="version != null and version != ''"> and version = #{version} </if>
+		  		  <if test="signType != null and signType != ''"> and sign_type = #{signType} </if>
+		  		  <if test="outTradeNo != null and outTradeNo != ''"> and out_trade_no = #{outTradeNo} </if>
+		  		  <if test="outBizNo != null and outBizNo != ''"> and out_biz_no = #{outBizNo} </if>
+		  		  <if test="buyerId != null and buyerId != ''"> and buyer_id = #{buyerId} </if>
+		  		  <if test="buyerLogonId != null and buyerLogonId != ''"> and buyer_logon_id = #{buyerLogonId} </if>
+		  		  <if test="sellerId != null and sellerId != ''"> and seller_id = #{sellerId} </if>
+		  		  <if test="sellerEmail != null and sellerEmail != ''"> and seller_email = #{sellerEmail} </if>
+		  		  <if test="tradeStatus != null and tradeStatus != ''"> and trade_status = #{tradeStatus} </if>
+		  		  <if test="totalAmount != null and totalAmount != ''"> and total_amount = #{totalAmount} </if>
+		  		  <if test="receiptAmount != null and receiptAmount != ''"> and receipt_amount = #{receiptAmount} </if>
+		  		  <if test="invoiceAmount != null and invoiceAmount != ''"> and invoice_amount = #{invoiceAmount} </if>
+		  		  <if test="buyerPayAmount != null and buyerPayAmount != ''"> and buyer_pay_amount = #{buyerPayAmount} </if>
+		  		  <if test="pointAmount != null and pointAmount != ''"> and point_amount = #{pointAmount} </if>
+		  		  <if test="refundFee != null and refundFee != ''"> and refund_fee = #{refundFee} </if>
+		  		  <if test="subject != null and subject != ''"> and subject = #{subject} </if>
+		  		  <if test="body != null and body != ''"> and body = #{body} </if>
+		  		  <if test="gmtCreate != null and gmtCreate != ''"> and gmt_create = #{gmtCreate} </if>
+		  		  <if test="gmtPayment != null and gmtPayment != ''"> and gmt_payment = #{gmtPayment} </if>
+		  		  <if test="gmtRefund != null and gmtRefund != ''"> and gmt_refund = #{gmtRefund} </if>
+		  		  <if test="gmtClose != null and gmtClose != ''"> and gmt_close = #{gmtClose} </if>
+		  		  <if test="fundBillList != null and fundBillList != ''"> and fund_bill_list = #{fundBillList} </if>
+		  		  <if test="passbackParams != null and passbackParams != ''"> and passback_params = #{passbackParams} </if>
+		  		  <if test="voucherDetailList != null and voucherDetailList != ''"> and voucher_detail_list = #{voucherDetailList} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.bootdo.fanfan.domain.AlipayRecordDO" useGeneratedKeys="true" keyProperty="id">
+		insert into ff_alipay_record
+		(
+			`trade_no`, 
+			`notify_time`, 
+			`notify_type`, 
+			`notify_id`, 
+			`app_id`, 
+			`charset`, 
+			`version`, 
+			`sign_type`, 
+			`out_trade_no`, 
+			`out_biz_no`, 
+			`buyer_id`, 
+			`buyer_logon_id`, 
+			`seller_id`, 
+			`seller_email`, 
+			`trade_status`, 
+			`total_amount`, 
+			`receipt_amount`, 
+			`invoice_amount`, 
+			`buyer_pay_amount`, 
+			`point_amount`, 
+			`refund_fee`, 
+			`subject`, 
+			`body`, 
+			`gmt_create`, 
+			`gmt_payment`, 
+			`gmt_refund`, 
+			`gmt_close`, 
+			`fund_bill_list`, 
+			`passback_params`, 
+			`voucher_detail_list`
+		)
+		values
+		(
+			#{tradeNo}, 
+			#{notifyTime}, 
+			#{notifyType}, 
+			#{notifyId}, 
+			#{appId}, 
+			#{charset}, 
+			#{version}, 
+			#{signType}, 
+			#{outTradeNo}, 
+			#{outBizNo}, 
+			#{buyerId}, 
+			#{buyerLogonId}, 
+			#{sellerId}, 
+			#{sellerEmail}, 
+			#{tradeStatus}, 
+			#{totalAmount}, 
+			#{receiptAmount}, 
+			#{invoiceAmount}, 
+			#{buyerPayAmount}, 
+			#{pointAmount}, 
+			#{refundFee}, 
+			#{subject}, 
+			#{body}, 
+			#{gmtCreate}, 
+			#{gmtPayment}, 
+			#{gmtRefund}, 
+			#{gmtClose}, 
+			#{fundBillList}, 
+			#{passbackParams}, 
+			#{voucherDetailList}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.bootdo.fanfan.domain.AlipayRecordDO">
+		update ff_alipay_record 
+		<set>
+			<if test="tradeNo != null">`trade_no` = #{tradeNo}, </if>
+			<if test="notifyTime != null">`notify_time` = #{notifyTime}, </if>
+			<if test="notifyType != null">`notify_type` = #{notifyType}, </if>
+			<if test="notifyId != null">`notify_id` = #{notifyId}, </if>
+			<if test="appId != null">`app_id` = #{appId}, </if>
+			<if test="charset != null">`charset` = #{charset}, </if>
+			<if test="version != null">`version` = #{version}, </if>
+			<if test="signType != null">`sign_type` = #{signType}, </if>
+			<if test="outTradeNo != null">`out_trade_no` = #{outTradeNo}, </if>
+			<if test="outBizNo != null">`out_biz_no` = #{outBizNo}, </if>
+			<if test="buyerId != null">`buyer_id` = #{buyerId}, </if>
+			<if test="buyerLogonId != null">`buyer_logon_id` = #{buyerLogonId}, </if>
+			<if test="sellerId != null">`seller_id` = #{sellerId}, </if>
+			<if test="sellerEmail != null">`seller_email` = #{sellerEmail}, </if>
+			<if test="tradeStatus != null">`trade_status` = #{tradeStatus}, </if>
+			<if test="totalAmount != null">`total_amount` = #{totalAmount}, </if>
+			<if test="receiptAmount != null">`receipt_amount` = #{receiptAmount}, </if>
+			<if test="invoiceAmount != null">`invoice_amount` = #{invoiceAmount}, </if>
+			<if test="buyerPayAmount != null">`buyer_pay_amount` = #{buyerPayAmount}, </if>
+			<if test="pointAmount != null">`point_amount` = #{pointAmount}, </if>
+			<if test="refundFee != null">`refund_fee` = #{refundFee}, </if>
+			<if test="subject != null">`subject` = #{subject}, </if>
+			<if test="body != null">`body` = #{body}, </if>
+			<if test="gmtCreate != null">`gmt_create` = #{gmtCreate}, </if>
+			<if test="gmtPayment != null">`gmt_payment` = #{gmtPayment}, </if>
+			<if test="gmtRefund != null">`gmt_refund` = #{gmtRefund}, </if>
+			<if test="gmtClose != null">`gmt_close` = #{gmtClose}, </if>
+			<if test="fundBillList != null">`fund_bill_list` = #{fundBillList}, </if>
+			<if test="passbackParams != null">`passback_params` = #{passbackParams}, </if>
+			<if test="voucherDetailList != null">`voucher_detail_list` = #{voucherDetailList}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from ff_alipay_record where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from ff_alipay_record where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

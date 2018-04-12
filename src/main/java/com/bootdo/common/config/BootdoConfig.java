@@ -9,6 +9,19 @@ public class BootdoConfig {
 	//上传路径
 	private String uploadPath;
 
+	/**
+	 * 静态资源所在地址
+	 */
+	private String staticUrl;
+
+	public String getStaticUrl() {
+		return staticUrl;
+	}
+
+	public void setStaticUrl(String staticUrl) {
+		this.staticUrl = staticUrl;
+	}
+
 	public String getUploadPath() {
 		return uploadPath;
 	}

@@ -3,6 +3,7 @@ package com.bootdo.fanfan.manager;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
+import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipaySystemOauthTokenRequest;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.request.AlipayTradeCloseRequest;
@@ -14,6 +15,8 @@ import com.alipay.api.response.AlipayUserInfoShareResponse;
 import com.bootdo.common.config.AlipayConfig;
 import com.bootdo.fanfan.domain.OrderAlipayDO;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 @Component
 public class AlipayManager {
@@ -112,7 +115,7 @@ public class AlipayManager {
      * 关闭支付交易
      * @return
      */
-    private boolean closeTradePay(String tradeNo,String outTradeNo){
+    public boolean closeTradePay(String tradeNo,String outTradeNo){
 
         AlipayClient alipayClient = AlipayConfig.getDefaultClient();
         AlipayTradeCloseRequest request = new AlipayTradeCloseRequest();
@@ -126,6 +129,22 @@ public class AlipayManager {
             response = alipayClient.execute(request);
 
             return response.isSuccess();
+        } catch (AlipayApiException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    /**
+     * 验证签名
+     * @param params
+     * @return
+     */
+    public boolean checkSign(Map<String,String> params){
+
+        try {
+            return AlipaySignature.rsaCheckV1(params,AlipayConfig.publicKey,"GBK");
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }

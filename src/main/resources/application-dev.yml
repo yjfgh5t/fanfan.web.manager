@@ -1,5 +1,6 @@
 bootdo:
   uploadPath: D:/var/uploaded_files/
+  staticUrl: http://static.wxcard.com.cn
 logging:
   level:
     root: error
