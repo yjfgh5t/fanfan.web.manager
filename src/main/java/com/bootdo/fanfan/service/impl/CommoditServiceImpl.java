@@ -1,5 +1,6 @@
 package com.bootdo.fanfan.service.impl;
 
+import com.bootdo.common.config.BootdoConfig;
 import com.bootdo.common.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,8 @@ import org.springframework.util.CollectionUtils;
 public class CommoditServiceImpl implements CommoditService {
 	@Autowired
 	private CommoditDao commoditDao;
+	@Autowired
+	private BootdoConfig bootdoConfig;
 	
 	@Override
 	public CommoditDO get(Integer id){
@@ -26,7 +29,16 @@ public class CommoditServiceImpl implements CommoditService {
 	
 	@Override
 	public List<CommoditDO> list(Map<String, Object> map){
-		return commoditDao.list(map);
+
+		List<CommoditDO> list = commoditDao.list(map);
+
+		if(list!=null){
+			list.forEach((item)->{
+				item.setCommoditImg(bootdoConfig.getStaticUrl()+item.getCommoditImg());
+			});
+		}
+
+		return list;
 	}
 	
 	@Override

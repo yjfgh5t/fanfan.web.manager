@@ -6,11 +6,12 @@ import java.util.Map;
 public enum  OrderStateEnum {
 
     userCreate(101,"创建订单"),
-    userWaitPay(102,"待支付"),
-    userPaid(103,"已支付"),
-    userPayOvertime(104,"超时未支付"),
-    userConfirm(105,"用户确认收单"),
-    userException(106,"订单异常反馈"),
+    userRequestPay(102,"请求支付"),
+    userWaitPay(103,"待支付"),
+    userPaid(104,"已支付"),
+    userPayOvertime(105,"超时未支付"),
+    userConfirm(106,"用户确认收单"),
+    userException(107,"订单异常反馈"),
 
     //商家确认收单
     businessConfirm(201,"商家正在备货"),

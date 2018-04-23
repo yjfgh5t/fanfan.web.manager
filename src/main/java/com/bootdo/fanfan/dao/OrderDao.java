@@ -9,6 +9,7 @@ import com.bootdo.fanfan.vo.APIOrderListVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 /**
  * 
@@ -33,11 +34,20 @@ public interface OrderDao {
 	
 	int batchRemove(Integer[] ids);
 
-	@Select("select  * from  ff_order  where order_num=${orderNum}")
+	@Select("select  * from  ff_order  where order_num=#{orderNum}")
 	OrderDO getByOrderNum(@Param("orderNum") String orderNum);
 
-	@Select("select id,order_state from  ff_order  where order_num=${orderNum}")
+	@Select("select id,order_state from  ff_order  where order_num=#{orderNum}")
 	OrderDO getIdByOrderNum(@Param("orderNum") String orderNum);
+
+	/**
+	 * 更新订单状态
+	 * @param orderState
+	 * @param orderNum
+	 * @return
+	 */
+	@Update("update ff_order set order_state=#{orderState} where order_num=#{orderNum}")
+	int updateOrderState(@Param("orderState") Integer orderState, @Param("orderNum") String orderNum);
 
 	/**
 	 * 查询订单列表

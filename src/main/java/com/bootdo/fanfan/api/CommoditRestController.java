@@ -44,9 +44,6 @@ public class CommoditRestController {
         _map.put("offset","0");
         Query query =new Query(_map);
         List<APICommodityVO> list = mapper.mapArray(commoditService.list(query), APICommodityVO.class);
-        list.forEach(f->{
-            f.setIcon("http://m.wxcard.com.cn/"+f.getIcon());
-        });
         return R.ok().put("data", list);
     }
 

@@ -101,8 +101,16 @@ public class OrderServiceImpl implements OrderService {
 		orderReceiverService.save(orderReceiverDO);
 
 		//创建支付宝预付单
-        if(orderDO.getOrderState()==OrderStateEnum.userWaitPay.getVal()) {
-            createAlipayOrder(orderVO, orderDO);
+        if(orderDO.getOrderState().equals(OrderStateEnum.userRequestPay.getVal())) {
+        	//创建预付单成功
+            if(createAlipayOrder(orderVO, orderDO)){
+            	//订单状态
+            	orderDO.setOrderState(OrderStateEnum.userWaitPay.getVal());
+				//保存订单状态
+				orderStateService.save(new OrderStateDO(orderDO.getId(),orderDO.getOrderState(),orderDO.getCreateId()));
+				//修改订单状态
+				orderDao.updateOrderState(orderDO.getOrderState(),orderDO.getOrderNum());
+			}
         }
 
 		return orderDO.getOrderNum();
@@ -134,8 +142,8 @@ public class OrderServiceImpl implements OrderService {
 			apiOrderRequVO.setReceiver(eMapper.map(receiverDO, APIOrderReceiverVO.class));
 		}
 
-		//支付宝预付单
-       if(orderDO.getOrderState()==OrderStateEnum.userWaitPay.getVal()){
+		//请求支付时--创建支付宝预付单
+       if(orderDO.getOrderState().equals(OrderStateEnum.userWaitPay.getVal())){
 		    apiOrderRequVO.setAlipayOrderStr(orderAlipayService.getOrderStrById(orderDO.getId()));
        }
 
@@ -216,6 +224,11 @@ public class OrderServiceImpl implements OrderService {
         if(orderDO==null) {
             throw new SecurityException("无效的订单号");
         }
+
+        //设置订单状态
+		if(orderRequVO.getOrderState()<orderDO.getOrderState()){
+        	throw new SecurityException("无效的订单状态");
+		}
 
         //设置Id
 		orderRequVO.setId(orderDO.getId());
@@ -302,12 +315,11 @@ public class OrderServiceImpl implements OrderService {
      * @param orderRequVO
      * @param orderDO
      */
-	private void createAlipayOrder(APIOrderRequVO orderRequVO,OrderDO  orderDO){
+	private boolean createAlipayOrder(APIOrderRequVO orderRequVO,OrderDO  orderDO){
 
 	    OrderAlipayDO alipayDO =  new OrderAlipayDO();
 	    alipayDO.setId(orderDO.getId());
 	    alipayDO.setBody(ArrayUtils.toString(orderRequVO.getDetailList().stream().map(m->m.getOutTitle()).toArray()));
-        alipayDO.setCreateBackBody("");
         alipayDO.setGoodsType("1");
         alipayDO.setCreateTime(Calendar.getInstance().getTime());
         alipayDO.setPassbackParams(orderDO.getOrderNum());
@@ -325,7 +337,7 @@ public class OrderServiceImpl implements OrderService {
         alipayDO.setCreateBackBody(backStr);
 
         //保存
-        orderAlipayService.save(alipayDO);
+        return orderAlipayService.save(alipayDO)>0;
     }
 
     /**

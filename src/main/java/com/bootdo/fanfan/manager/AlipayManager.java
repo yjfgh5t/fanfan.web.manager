@@ -99,7 +99,7 @@ public class AlipayManager {
         model.setTotalAmount(alipayDO.getTotalAmount());
         model.setProductCode(alipayDO.getProductCode());
         request.setBizModel(model);
-        request.setNotifyUrl("http://m.wxcard.com.cn/");
+        request.setNotifyUrl("http://wxcard.com.cn/api/alipay/alipayReceiver");
         try {
             //这里和普通的接口调用不同，使用的是sdkExecute
             AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);

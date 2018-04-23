@@ -1,5 +1,6 @@
 bootdo:
   uploadPath: /usr/local/app/static
+  staticUrl: http://static.wxcard.com.cn
 logging:
   level:
     root: error
