@@ -1,5 +1,6 @@
 package com.bootdo.fanfan.api;
 
+import com.bootdo.common.config.BootdoConfig;
 import com.bootdo.common.utils.R;
 import com.bootdo.fanfan.domain.enumDO.OrderStateEnum;
 import com.bootdo.fanfan.service.OrderService;
@@ -18,6 +19,9 @@ public class OrderRestController extends ApiBaseRestController {
 
     @Autowired
     OrderService orderService;
+
+    @Autowired
+    private BootdoConfig bootdoConfig;
 
     /**
      * 创建订单
@@ -62,7 +66,7 @@ public class OrderRestController extends ApiBaseRestController {
         if(list!=null && list.size()>0){
             list.forEach((item)->{
                 item.setOrderStateText(OrderStateEnum.get(item.getOrderState()).getText());
-                item.setCommoditImg("http://m.wxcard.com.cn/"+item.getCommoditImg());
+                item.setCommoditImg(bootdoConfig.getStaticUrl()+item.getCommoditImg());
             });
         }
 
