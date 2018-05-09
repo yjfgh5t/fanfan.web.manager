@@ -18,7 +18,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api/address")
-public class AddressRestController {
+public class AddressRestController extends ApiBaseRestController {
 
     @Autowired
     GDMapManager gdMapManager;
@@ -59,14 +59,11 @@ public class AddressRestController {
     }
 
     @GetMapping("/")
-    public R getList(Integer userId){
-
-        if(userId==null)
-            return R.error(1,"无效的userid");
+    public R getList(){
 
         Map<String,Object> params =  new HashMap<>();
 
-        params.put("userId",userId);
+        params.put("userId",baseModel.getUserId());
 
         List<ReceiverDO> list = receiverService.list(params);
 

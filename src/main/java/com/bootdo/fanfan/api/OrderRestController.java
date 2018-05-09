@@ -14,7 +14,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api/order")
-public class OrderRestController {
+public class OrderRestController extends ApiBaseRestController {
 
     @Autowired
     OrderService orderService;
@@ -24,7 +24,7 @@ public class OrderRestController {
      * @return
      */
     @PostMapping("/")
-    public R order(@RequestBody APIOrderRequVO orderModel){
+    public R createOrder(@RequestBody APIOrderRequVO orderModel){
         try {
             //创建订单
             String  orderNum = orderService.createOrder(orderModel);
@@ -40,21 +40,20 @@ public class OrderRestController {
 
     /**
      * 查询用户订单列表
-     * @param userId
      * @param pageIndex
      * @return
      */
     @GetMapping("/")
-    public R order(Integer userId,Integer pageIndex){
+    public R queryOrder(Integer pageIndex){
 
-        if(userId==null ||  pageIndex==null)
+        if(pageIndex==null)
             return R.error("参数不能未空");
 
         int page =  pageIndex*10;
 
         //设置参数
         Map<String,Object> params = new HashMap<>();
-        params.put("createId",userId);
+        params.put("createId",baseModel.getUserId());
         params.put("offset",page-10);
         params.put("limit",page);
 

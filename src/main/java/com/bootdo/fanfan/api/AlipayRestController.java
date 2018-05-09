@@ -13,11 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/api/alipay")
-public class AlipayRestController {
+public class AlipayRestController extends ApiBaseRestController {
 
     @Autowired
     AlipayManager alipayManager;

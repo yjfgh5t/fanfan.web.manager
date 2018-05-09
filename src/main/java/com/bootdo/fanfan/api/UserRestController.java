@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/user")
-public class UserRestController {
+public class UserRestController extends ApiBaseRestController {
 
     @Autowired
     TpUserService tpUserService;
