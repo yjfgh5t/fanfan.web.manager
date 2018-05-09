@@ -39,4 +39,6 @@ public class APIOrderRequVO {
     private Date createTime;
     //支付宝预付单Str
     private String alipayOrderStr;
+    //详情图片
+    private String mainImg;
 }

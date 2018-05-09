@@ -1,6 +1,6 @@
 bootdo:
   uploadPath: D:/var/uploaded_files/
-  staticUrl: http://static.wxcard.com.cn
+  staticUrl: http://static.qingxixi.com
 logging:
   level:
     root: error

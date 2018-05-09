@@ -89,4 +89,8 @@
 		</foreach>
 	</delete>
 
+	<select id="queryCommodityImgByOrderId" resultType="java.lang.String">
+		select commodit_img  from ff_commodit where id= (select min(out_id) from ff_order_detial where order_id=#{orderId} and out_type=1)
+	</select>
+
 </mapper>

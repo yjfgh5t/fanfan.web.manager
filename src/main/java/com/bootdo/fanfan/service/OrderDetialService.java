@@ -41,4 +41,11 @@ public interface OrderDetialService {
 	int remove(Integer id);
 	
 	int batchRemove(Integer[] ids);
+
+	/**
+	 * 根据订单id  查询商品图片
+	 * @param orderId
+	 * @return
+	 */
+	String queryCommodityImgByOrderId(Integer orderId);
 }

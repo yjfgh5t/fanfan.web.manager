@@ -5,8 +5,8 @@ import java.util.Map;
 
 public enum  OrderStateEnum {
 
-    userCreate(101,"创建订单"),
-    userRequestPay(102,"请求支付"),
+    userCreate(101,"临时订单"),
+    userRequestPay(102,"提交订单"),
     userWaitPay(103,"待支付"),
     userPaid(104,"已支付"),
     userPayOvertime(105,"超时未支付"),

@@ -37,4 +37,12 @@ public interface OrderDetialDao {
 	List<OrderDetialDO> queryByOrderId(@Param("orderId") Integer orderId);
 
 	int batchRemove(Integer[] ids);
+
+
+	/**
+	 * 根据订单id  查询商品图片
+	 * @param orderId
+	 * @return
+	 */
+	String queryCommodityImgByOrderId(@Param("orderId") Integer orderId);
 }

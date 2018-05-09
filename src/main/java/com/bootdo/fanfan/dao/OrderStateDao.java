@@ -2,6 +2,7 @@ package com.bootdo.fanfan.dao;
 
 import com.bootdo.fanfan.domain.OrderStateDO;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -34,5 +35,8 @@ public interface OrderStateDao {
 
 	@Select("SELECT id from ff_order_state where order_id =${orderId} and order_state=${orderState}")
 	Integer queryHasSave(@Param("orderId") Integer orderId,@Param("orderState") Integer orderState);
+
+	@Select("SELECT create_time from ff_order_state where order_id =${orderId} and order_state=${orderState}")
+	Date queryStateDate(@Param("orderId") Integer orderId,@Param("orderState") Integer orderState);
 
 }

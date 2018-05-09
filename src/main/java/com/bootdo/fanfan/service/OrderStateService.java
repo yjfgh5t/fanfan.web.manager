@@ -1,7 +1,9 @@
 package com.bootdo.fanfan.service;
 
 import com.bootdo.fanfan.domain.OrderStateDO;
+import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -27,4 +29,6 @@ public interface OrderStateService {
 	int remove(Integer id);
 	
 	int batchRemove(Integer[] ids);
+
+	Date queryStateDate(Integer orderId,Integer orderState);
 }

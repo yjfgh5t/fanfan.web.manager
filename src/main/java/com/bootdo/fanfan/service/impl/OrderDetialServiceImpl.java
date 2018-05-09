@@ -69,5 +69,10 @@ public class OrderDetialServiceImpl implements OrderDetialService {
 	public int batchRemove(Integer[] ids){
 		return orderDetialDao.batchRemove(ids);
 	}
-	
+
+	@Override
+	public String queryCommodityImgByOrderId(Integer orderId) {
+		return orderDetialDao.queryCommodityImgByOrderId(orderId);
+	}
+
 }

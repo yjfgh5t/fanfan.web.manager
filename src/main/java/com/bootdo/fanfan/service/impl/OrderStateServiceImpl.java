@@ -3,6 +3,8 @@ package com.bootdo.fanfan.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -38,11 +40,16 @@ public class OrderStateServiceImpl implements OrderStateService {
 		if(orderState.getOrderId()!=null) {
 			id = orderStateDao.queryHasSave(orderState.getOrderId(), orderState.getOrderState());
 		}
-		if (id == null)
+		if (id == null) {
+			//设置当前时间
+			orderState.setCreateTime(Calendar.getInstance().getTime());
 			return orderStateDao.save(orderState);
+		}
 		return id;
 	}
-	
+
+
+
 	@Override
 	public int update(OrderStateDO orderState){
 		return orderStateDao.update(orderState);
@@ -57,5 +64,10 @@ public class OrderStateServiceImpl implements OrderStateService {
 	public int batchRemove(Integer[] ids){
 		return orderStateDao.batchRemove(ids);
 	}
-	
+
+	@Override
+	public Date queryStateDate(Integer orderId, Integer orderState) {
+		return orderStateDao.queryStateDate(orderId,orderState);
+	}
+
 }

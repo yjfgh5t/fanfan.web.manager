@@ -1,5 +1,6 @@
 package com.bootdo.fanfan.service.impl;
 
+import com.bootdo.common.config.BootdoConfig;
 import com.bootdo.common.extend.EMapper;
 import com.bootdo.common.utils.StringUtils;
 import com.bootdo.fanfan.domain.*;
@@ -50,6 +51,9 @@ public class OrderServiceImpl implements OrderService {
 
 	@Autowired
 	private OrderAlipayService  orderAlipayService;
+
+	@Autowired
+	private BootdoConfig bootdoConfig;
 
 	/**
 	 * 创建订单
@@ -145,7 +149,12 @@ public class OrderServiceImpl implements OrderService {
 		//请求支付时--创建支付宝预付单
        if(orderDO.getOrderState().equals(OrderStateEnum.userWaitPay.getVal())){
 		    apiOrderRequVO.setAlipayOrderStr(orderAlipayService.getOrderStrById(orderDO.getId()));
+		    //设置时间
+		   apiOrderRequVO.setCreateTime(orderStateService.queryStateDate(orderDO.getId(),OrderStateEnum.userRequestPay.getVal()));
        }
+
+       //主体图片
+       apiOrderRequVO.setMainImg(bootdoConfig.getStaticUrl()+orderDetialService.queryCommodityImgByOrderId(orderDO.getId()));
 
 		return  apiOrderRequVO;
 	}
