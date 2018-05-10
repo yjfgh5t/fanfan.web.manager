@@ -16,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.bootdo.fanfan.dao.OrderDao;
@@ -110,10 +107,8 @@ public class OrderServiceImpl implements OrderService {
             if(createAlipayOrder(orderVO, orderDO)){
             	//订单状态
             	orderDO.setOrderState(OrderStateEnum.userWaitPay.getVal());
-				//保存订单状态
-				orderStateService.save(new OrderStateDO(orderDO.getId(),orderDO.getOrderState(),orderDO.getCreateId()));
-				//修改订单状态
-				orderDao.updateOrderState(orderDO.getOrderState(),orderDO.getOrderNum());
+            	//更新订单状态
+				updateOrderState(orderDO);
 			}
         }
 
@@ -149,8 +144,13 @@ public class OrderServiceImpl implements OrderService {
 		//请求支付时--创建支付宝预付单
        if(orderDO.getOrderState().equals(OrderStateEnum.userWaitPay.getVal())){
 		    apiOrderRequVO.setAlipayOrderStr(orderAlipayService.getOrderStrById(orderDO.getId()));
-		    //设置时间
-		   apiOrderRequVO.setCreateTime(orderStateService.queryStateDate(orderDO.getId(),OrderStateEnum.userRequestPay.getVal()));
+		    //提交预付单时间
+		    Date submitOrderTime = orderStateService.queryStateDate(orderDO.getId(),OrderStateEnum.userRequestPay.getVal());
+		    //加15分钟
+		    submitOrderTime.setMinutes(submitOrderTime.getMinutes()+15);
+		    //最后付款剩余秒数
+		    Long lastPayTime = (submitOrderTime.getTime() - System.currentTimeMillis())/1000;
+			apiOrderRequVO.setLastPayTime(lastPayTime);
        }
 
        //主体图片
@@ -158,6 +158,20 @@ public class OrderServiceImpl implements OrderService {
 
 		return  apiOrderRequVO;
 	}
+
+	/**
+	 * 修改订单状态
+	 * @param orderDO
+	 */
+	@Transactional(rollbackFor = {SecurityException.class})
+	public void updateOrderState(OrderDO orderDO){
+
+		//保存订单状态
+		orderStateService.save(new OrderStateDO(orderDO.getId(),orderDO.getOrderState(),orderDO.getCreateId()));
+		//修改订单状态
+		orderDao.updateOrderState(orderDO.getOrderState(),orderDO.getId());
+	}
+
 
 	@Override
 	public List<APIOrderListVO> queryOrderByUser(Map<String, Object> map) {
@@ -361,5 +375,6 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 
+	//endregion
 
 }

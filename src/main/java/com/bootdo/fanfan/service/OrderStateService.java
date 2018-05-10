@@ -24,11 +24,21 @@ public interface OrderStateService {
 	
 	int save(OrderStateDO orderState);
 	
-	int update(OrderStateDO orderState);
-	
 	int remove(Integer id);
 	
 	int batchRemove(Integer[] ids);
 
+	/**
+	 * 查询订单某状态下的时间
+	 * @param orderId
+	 * @param orderState
+	 * @return
+	 */
 	Date queryStateDate(Integer orderId,Integer orderState);
+
+	/**
+	 * 获取超时未支付的订单
+	 * @return
+	 */
+	Map<Integer,Date> getAwaitPayOrder();
 }

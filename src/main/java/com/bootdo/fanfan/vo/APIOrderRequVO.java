@@ -41,4 +41,6 @@ public class APIOrderRequVO {
     private String alipayOrderStr;
     //详情图片
     private String mainImg;
+    //最后付款剩余秒数
+    private Long lastPayTime;
 }

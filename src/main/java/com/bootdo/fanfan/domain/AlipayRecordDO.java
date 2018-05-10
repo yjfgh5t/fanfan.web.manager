@@ -1,5 +1,7 @@
 package com.bootdo.fanfan.domain;
 
+import lombok.ToString;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -13,6 +15,7 @@ import java.util.Date;
  * @email 1992lcg@163.com
  * @date 2018-04-11 15:33:59
  */
+@ToString
 public class AlipayRecordDO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

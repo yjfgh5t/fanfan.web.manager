@@ -43,11 +43,11 @@ public interface OrderDao {
 	/**
 	 * 更新订单状态
 	 * @param orderState
-	 * @param orderNum
+	 * @param id
 	 * @return
 	 */
-	@Update("update ff_order set order_state=#{orderState} where order_num=#{orderNum}")
-	int updateOrderState(@Param("orderState") Integer orderState, @Param("orderNum") String orderNum);
+	@Update("update ff_order set order_state=#{orderState} where id=#{id}")
+	int updateOrderState(@Param("orderState") Integer orderState, @Param("id") Integer id);
 
 	/**
 	 * 查询订单列表

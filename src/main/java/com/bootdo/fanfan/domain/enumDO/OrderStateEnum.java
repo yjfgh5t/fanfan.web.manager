@@ -10,8 +10,9 @@ public enum  OrderStateEnum {
     userWaitPay(103,"待支付"),
     userPaid(104,"已支付"),
     userPayOvertime(105,"超时未支付"),
-    userConfirm(106,"用户确认收单"),
-    userException(107,"订单异常反馈"),
+    userCancel(106,"订单已取消"),
+    userConfirm(107,"已确认收单"),
+    userException(108,"订单异常反馈"),
 
     //商家确认收单
     businessConfirm(201,"商家正在备货"),

@@ -86,7 +86,7 @@ public class OrderStateController {
 	@RequestMapping("/update")
 	@RequiresPermissions("fanfan:orderState:edit")
 	public R update( OrderStateDO orderState){
-		orderStateService.update(orderState);
+		//orderStateService.update(orderState);
 		return R.ok();
 	}
 	

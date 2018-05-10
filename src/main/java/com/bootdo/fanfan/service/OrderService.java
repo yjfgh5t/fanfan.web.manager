@@ -44,4 +44,10 @@ public interface OrderService {
 	APIOrderRequVO queryOrder(String orderNum);
 
 	List<APIOrderListVO> queryOrderByUser(Map<String,Object> map);
+
+	/**
+	 * 更新订单状态
+	 * @param orderDO
+	 */
+	void updateOrderState(OrderDO orderDO);
 }
