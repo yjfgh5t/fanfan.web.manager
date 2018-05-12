@@ -32,6 +32,6 @@ public interface OrderAlipayDao {
 	
 	int batchRemove(Integer[] ids);
 
-	@Select("select create_back_body from ff_order_alipay where id=#{id}")
+	@Select("select trade_no from ff_order_alipay where id=#{id}")
 	String getOrderStrById(@Param("id") Integer id);
 }

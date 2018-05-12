@@ -35,6 +35,8 @@ public class AlipayConfig {
     public static final String publicKey="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApADzsVMQ5zogiKyPNbtOpENv18EtLHrFsUx2hwmeOLfuHDyLBYJaxcieo2KQpFyzp/Az/DUEIMe3+0BU401Ajklqx791Xd3/yml3Qm7ohJPyCHGUt+hDgEFs+kbllg2VFc7DKXSKzCre3UW6+iZsulDTCJXegdJKiDSd9hZeH70X9554Qi5dyhXTpwwlILQG/D65/frLXaujdRZ5L7sMrNMgc3FV8cOLAucnfT3ViHHNbAALv/ROHK0IF2ddsKrLByvVqP2zSMCnDooyWBdU69dBptwiD1jDcv9DdxoGmqC2JOD8XwQXIGCy2wKNRbIoaheNaf6Myi0FTgQwn3kozQIDAQAB";
     //"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA8ieHLdP9T+13hwtmOVUbl1CaUuqi6ZtjsybhBzQpD2bsbl+IQXWfrfnqtLIXAOy5Fr5c/V6wUhhC3NsBWWszbDgHLkBEn5H7FtReaU7xjaCNbHlNj/kEg2y0m15I3oXEMQukcelxCBCsNhoJ60ADFaMMGd1tBLrWM1yB+rjTWgbYaShdDc4FPKYSv/fEHVpm+cma+UslELcHGduYeFo5TbmLPa7f1V6Loir5Xqt3lMuaJisfHPua/CERVeM9MJXasSLIejZWyvD/AKpgGKo3tPUnARaUo7WtDQfjX+agmEAXiJRN/tuJlvzkXUDa2wO+CIqK52xEke2PFJauVcXTnwIDAQAB";
 
+    public static final String aliPayPublicKey="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApADzsVMQ5zogiKyPNbtOpENv18EtLHrFsUx2hwmeOLfuHDyLBYJaxcieo2KQpFyzp/Az/DUEIMe3+0BU401Ajklqx791Xd3/yml3Qm7ohJPyCHGUt+hDgEFs+kbllg2VFc7DKXSKzCre3UW6+iZsulDTCJXegdJKiDSd9hZeH70X9554Qi5dyhXTpwwlILQG/D65/frLXaujdRZ5L7sMrNMgc3FV8cOLAucnfT3ViHHNbAALv/ROHK0IF2ddsKrLByvVqP2zSMCnDooyWBdU69dBptwiD1jDcv9DdxoGmqC2JOD8XwQXIGCy2wKNRbIoaheNaf6Myi0FTgQwn3kozQIDAQAB";
+
     public static final String appId="2018033102482725";
 
     public static final String alipayUrl="https://openapi.alipay.com/gateway.do";
@@ -51,6 +53,21 @@ public class AlipayConfig {
                 "JSON",
                 "GBK",
                 AlipayConfig.publicKey,
+                "RSA2");
+    }
+
+    /**
+     * 获取默认对象
+     * @return
+     */
+    public static AlipayClient getAliPayDefaultClient(){
+        return new DefaultAlipayClient(
+                AlipayConfig.alipayUrl,
+                AlipayConfig.appId,
+                AlipayConfig.privateKey,
+                "JSON",
+                "GBK",
+                AlipayConfig.aliPayPublicKey,
                 "RSA2");
     }
 }
