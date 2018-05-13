@@ -34,14 +34,14 @@ public interface OrderService {
 	 * 创建订单
 	 * @param orderVO
 	 */
-	String createOrder(APIOrderRequVO orderVO);
+	Integer createOrder(APIOrderRequVO orderVO);
 
 	/**
 	 * 查询当个订单
-	 * @param orderNum
+	 * @param orderId
 	 * @return
 	 */
-	APIOrderRequVO queryOrder(String orderNum);
+	APIOrderRequVO queryOrder(Integer orderId);
 
 	List<APIOrderListVO> queryOrderByUser(Map<String,Object> map);
 

@@ -1,6 +1,7 @@
 bootdo:
   uploadPath: D:/var/uploaded_files/
   staticUrl: http://static.qingxixi.com
+  aliPayTest: false
 logging:
   level:
     root: error

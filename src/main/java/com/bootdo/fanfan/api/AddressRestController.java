@@ -36,7 +36,6 @@ public class AddressRestController extends ApiBaseRestController {
      */
     @GetMapping("/search")
     public R querAddress(String keyWord,String lat,String log){
-
         //地址列表
         List<APIGDMapTip> list = gdMapManager.queryAddr(keyWord,lat,log);
 

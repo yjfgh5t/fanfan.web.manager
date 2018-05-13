@@ -120,7 +120,7 @@
 	</delete>
 
 	<select id="queryOrderByUser" resultType="com.bootdo.fanfan.vo.APIOrderListVO">
-		select A.`order_num`,A.`order_state`,A.`order_pay`,A.`order_commodity_total` as `commodity_total`,B.`out_title` as `title`,A.`create_time`,C.commodit_img    from
+		select A.id, A.`order_num`,A.`order_state`,A.`order_pay`,A.`order_commodity_total` as `commodity_total`,B.`out_title` as `title`,A.`create_time`,C.commodit_img    from
 		(select `id`,`order_num`,`order_state`,`order_pay`,`order_commodity_total`,`create_time`  from ff_order
 		<where>
 			<if test="createId != null and createId != ''"> and create_id = #{createId} </if>

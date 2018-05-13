@@ -14,6 +14,19 @@ public class BootdoConfig {
 	 */
 	private String staticUrl;
 
+	/**
+	 * 测试环境
+	 */
+	private Boolean aliPayTest;
+
+	public Boolean getAliPayTest() {
+		return aliPayTest;
+	}
+
+	public void setAliPayTest(Boolean aliPayTest) {
+		this.aliPayTest = aliPayTest;
+	}
+
 	public String getStaticUrl() {
 		return staticUrl;
 	}

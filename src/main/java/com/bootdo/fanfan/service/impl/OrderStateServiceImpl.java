@@ -31,7 +31,7 @@ public class OrderStateServiceImpl implements OrderStateService {
 	private void init(){
 		//加载待支付的订单
 		List<OrderStateDO> listOrder= orderStateDao.queryAwaitPayOrder(OrderStateEnum.userWaitPay.getVal());
-		if(listOrder==null) {
+		if(listOrder!=null) {
 			listOrder.forEach((item)->{
 				awaitPayOrders.put(item.getOrderId(),item.getCreateTime());
 			});

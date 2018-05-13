@@ -52,11 +52,49 @@ public class OrderServiceImpl implements OrderService {
 	@Autowired
 	private BootdoConfig bootdoConfig;
 
+	//region 默认方法
+	@Override
+	public OrderDO get(Integer id){
+		return orderDao.get(id);
+	}
+
+	@Override
+	public List<OrderDO> list(Map<String, Object> map){
+		return orderDao.list(map);
+	}
+
+	@Override
+	public int count(Map<String, Object> map){
+		return orderDao.count(map);
+	}
+
+	@Override
+	public int save(OrderDO order){
+		return orderDao.save(order);
+	}
+
+	@Override
+	public int update(OrderDO order){
+		return orderDao.update(order);
+	}
+
+	@Override
+	public int remove(Integer id){
+		return orderDao.remove(id);
+	}
+
+	@Override
+	public int batchRemove(Integer[] ids){
+		return orderDao.batchRemove(ids);
+	}
+
+	//endregion
+
 	/**
 	 * 创建订单
 	 */
 	@Transactional(rollbackFor = {SecurityException.class})
-	public String createOrder(APIOrderRequVO orderVO){
+	public Integer createOrder(APIOrderRequVO orderVO){
 
 		//验证
 		validateOrder(orderVO);
@@ -112,16 +150,16 @@ public class OrderServiceImpl implements OrderService {
 			}
         }
 
-		return orderDO.getOrderNum();
+		return orderDO.getId();
 	}
 
 	/**
 	 * 查询订单
-	 * @param orderNum
+	 * @param orderId
 	 */
-	public APIOrderRequVO queryOrder(String orderNum){
+	public APIOrderRequVO queryOrder(Integer orderId){
 
-		OrderDO orderDO  =  orderDao.getByOrderNum(orderNum);
+		OrderDO orderDO  =  orderDao.get(orderId);
 
 		if(orderDO==null)
 			return null;
@@ -143,14 +181,8 @@ public class OrderServiceImpl implements OrderService {
 
 		//请求支付时--创建支付宝预付单
        if(orderDO.getOrderState().equals(OrderStateEnum.userWaitPay.getVal())){
-		    apiOrderRequVO.setAlipayOrderStr(orderAlipayService.getOrderStrById(orderDO.getId()));
-		    //提交预付单时间
-		    Date submitOrderTime = orderStateService.queryStateDate(orderDO.getId(),OrderStateEnum.userRequestPay.getVal());
-		    //加15分钟
-		    submitOrderTime.setMinutes(submitOrderTime.getMinutes()+15);
-		    //最后付款剩余秒数
-		    Long lastPayTime = (submitOrderTime.getTime() - System.currentTimeMillis())/1000;
-			apiOrderRequVO.setLastPayTime(lastPayTime);
+			apiOrderRequVO.setAlipayOrderStr(orderAlipayService.getOrderStrById(orderDO.getId()));
+		    apiOrderRequVO.setLastPayTime(getLastPaySecond(orderDO.getId()));
        }
 
        //主体图片
@@ -158,6 +190,7 @@ public class OrderServiceImpl implements OrderService {
 
 		return  apiOrderRequVO;
 	}
+
 
 	/**
 	 * 修改订单状态
@@ -173,45 +206,35 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 
+	/**
+	 * 查询用户订单
+	 * @param map
+	 * @return
+	 */
 	@Override
 	public List<APIOrderListVO> queryOrderByUser(Map<String, Object> map) {
-		return orderDao.queryOrderByUser(map);
+
+		List<APIOrderListVO> list = orderDao.queryOrderByUser(map);
+
+		if(list!=null && list.size()>0){
+			list.forEach((item)->{
+				//设置文本
+				item.setOrderStateText(OrderStateEnum.get(item.getOrderState()).getText());
+				item.setCommoditImg(bootdoConfig.getStaticUrl()+item.getCommoditImg());
+				//待支付状态
+				if(item.getOrderState()==OrderStateEnum.userWaitPay.getVal()){
+					//剩余支付秒数
+					item.setLastPayTime(getLastPaySecond(item.getId()));
+					//支付宝支付字符串
+					item.setAlipayOrderStr(orderAlipayService.getOrderStrById(item.getId()));
+				}
+			});
+		}
+
+		return list;
 	}
 
-	@Override
-	public OrderDO get(Integer id){
-		return orderDao.get(id);
-	}
-	
-	@Override
-	public List<OrderDO> list(Map<String, Object> map){
-		return orderDao.list(map);
-	}
-	
-	@Override
-	public int count(Map<String, Object> map){
-		return orderDao.count(map);
-	}
-	
-	@Override
-	public int save(OrderDO order){
-		return orderDao.save(order);
-	}
-	
-	@Override
-	public int update(OrderDO order){
-		return orderDao.update(order);
-	}
-	
-	@Override
-	public int remove(Integer id){
-		return orderDao.remove(id);
-	}
-	
-	@Override
-	public int batchRemove(Integer[] ids){
-		return orderDao.batchRemove(ids);
-	}
+
 
 
 	//region  私有方法
@@ -342,7 +365,7 @@ public class OrderServiceImpl implements OrderService {
 
 	    OrderAlipayDO alipayDO =  new OrderAlipayDO();
 	    alipayDO.setId(orderDO.getId());
-	    alipayDO.setBody(ArrayUtils.toString(orderRequVO.getDetailList().stream().map(m->m.getOutTitle()).toArray()));
+	    alipayDO.setBody(StringUtils.join(orderRequVO.getDetailList().stream().map(m->m.getOutTitle()).toArray()));
         alipayDO.setGoodsType("1");
         alipayDO.setCreateTime(Calendar.getInstance().getTime());
         alipayDO.setPassbackParams(orderDO.getOrderNum());
@@ -374,6 +397,19 @@ public class OrderServiceImpl implements OrderService {
 		return time+""+(userId*100231%100000);
 	}
 
+
+	/**
+	 * 获取剩余支付秒数
+	 * @return
+	 */
+	private Long getLastPaySecond(Integer orderId) {
+		//提交预付单时间
+		Date submitOrderTime = orderStateService.queryStateDate(orderId, OrderStateEnum.userRequestPay.getVal());
+		//加15分钟
+		submitOrderTime.setMinutes(submitOrderTime.getMinutes()+15);
+		//最后付款剩余秒数
+		return (submitOrderTime.getTime() - System.currentTimeMillis())/1000;
+	}
 
 	//endregion
 

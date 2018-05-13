@@ -12,10 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author: JY
@@ -38,23 +35,28 @@ public class RefshOrderJob implements Job {
 
         //将时间提前14分50秒
         nowTime.set(Calendar.MINUTE,nowTime.get(Calendar.MINUTE)-15);
-        nowTime.set(Calendar.SECOND,nowTime.get(Calendar.SECOND)+10);
 
         //查询失效的订单
         Map<Integer,Date> awaitPayOrder = orderStateService.getAwaitPayOrder();
 
         if(awaitPayOrder.size()>0) {
 
-            //遍历数据
-            awaitPayOrder.forEach((key, val) -> {
+            Iterator<Map.Entry<Integer, Date>> iterator = awaitPayOrder.entrySet().iterator();
 
-                OrderDO orderDO = new OrderDO();
-                orderDO.setOrderState(OrderStateEnum.userPayOvertime.getVal());
-                orderDO.setId(key);
+            //读取数据
+            while(iterator.hasNext()){
+                Map.Entry<Integer, Date> entry=iterator.next();
 
-                //设置订单超时未支付
-                orderService.updateOrderState(orderDO);
-            });
+                //判断是否 超时
+                if(entry.getValue().getTime()<nowTime.getTime().getTime()) {
+                    OrderDO orderDO = new OrderDO();
+                    orderDO.setOrderState(OrderStateEnum.userPayOvertime.getVal());
+                    orderDO.setId(entry.getKey());
+
+                    //设置订单超时未支付
+                    orderService.updateOrderState(orderDO);
+                }
+            }
         }
     }
 }

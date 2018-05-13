@@ -2,6 +2,7 @@ package com.bootdo.fanfan.api;
 
 import com.bootdo.common.config.BootdoConfig;
 import com.bootdo.common.utils.R;
+import com.bootdo.fanfan.domain.OrderDO;
 import com.bootdo.fanfan.domain.enumDO.OrderStateEnum;
 import com.bootdo.fanfan.service.OrderService;
 import com.bootdo.fanfan.vo.APIOrderListVO;
@@ -31,10 +32,10 @@ public class OrderRestController extends ApiBaseRestController {
     public R createOrder(@RequestBody APIOrderRequVO orderModel){
         try {
             //创建订单
-            String  orderNum = orderService.createOrder(orderModel);
+            Integer  orderId = orderService.createOrder(orderModel);
 
             //查询订单
-            APIOrderRequVO requVO = orderService.queryOrder(orderNum);
+            APIOrderRequVO requVO = orderService.queryOrder(orderId);
 
             return R.ok().put("data",requVO);
         }catch (SecurityException ex){
@@ -63,26 +64,20 @@ public class OrderRestController extends ApiBaseRestController {
 
         List<APIOrderListVO> list = orderService.queryOrderByUser(params);
 
-        if(list!=null && list.size()>0){
-            list.forEach((item)->{
-                item.setOrderStateText(OrderStateEnum.get(item.getOrderState()).getText());
-                item.setCommoditImg(bootdoConfig.getStaticUrl()+item.getCommoditImg());
-            });
-        }
 
        return R.ok().put("data",list);
     }
 
     /**
      * 查询单个订单详情
-     * @param orderNum
+     * @param orderId
      * @return
      */
-    @GetMapping("/{orderNum}")
-    public R orderDetail(@PathVariable("orderNum") String orderNum){
+    @GetMapping("/{orderId}")
+    public R orderDetail(@PathVariable("orderId") Integer orderId){
 
         //查询订单
-        APIOrderRequVO requVO = orderService.queryOrder(orderNum);
+        APIOrderRequVO requVO = orderService.queryOrder(orderId);
 
         if(requVO==null)
             return R.error("订单不存在");
@@ -91,6 +86,18 @@ public class OrderRestController extends ApiBaseRestController {
         requVO.setOrderStateText(OrderStateEnum.get(requVO.getOrderState()).getText());
 
         return R.ok().put("data",requVO);
+    }
+
+    @PostMapping("/cancel/{orderId}")
+    public R orderCancel(@PathVariable("orderId") Integer orderId){
+
+        OrderDO orderDO = new OrderDO();
+        orderDO.setId(orderId);
+        orderDO.setOrderState(OrderStateEnum.userCancel.getVal());
+
+        orderService.updateOrderState(orderDO);
+
+        return R.ok();
     }
 
 }
