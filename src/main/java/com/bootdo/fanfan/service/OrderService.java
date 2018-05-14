@@ -50,4 +50,11 @@ public interface OrderService {
 	 * @param orderDO
 	 */
 	void updateOrderState(OrderDO orderDO);
+
+	/**
+	 * 根据订单号查询 订单 信息
+	 * @param orderNum
+	 * @return
+	 */
+	OrderDO queryOrderByOrdernum(String orderNum);
 }

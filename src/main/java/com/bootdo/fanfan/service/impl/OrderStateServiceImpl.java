@@ -100,6 +100,16 @@ public class OrderStateServiceImpl implements OrderStateService {
 		return awaitPayOrders;
 	}
 
+	/**
+	 * 查询订单时是否已经支付
+	 * @param orderId
+	 * @return
+	 */
+	@Override
+	public boolean orderHasPay(Integer orderId) {
+		return orderStateDao.queryHasSave(orderId,OrderStateEnum.userPaid.getVal())!=null;
+	}
+
 
 	/**
 	 * 添加待支付的订单至监控集合

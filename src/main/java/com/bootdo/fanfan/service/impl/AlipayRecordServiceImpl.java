@@ -1,5 +1,8 @@
 package com.bootdo.fanfan.service.impl;
 
+import com.bootdo.fanfan.domain.OrderDO;
+import com.bootdo.fanfan.domain.enumDO.OrderStateEnum;
+import com.bootdo.fanfan.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,13 +12,16 @@ import java.util.Map;
 import com.bootdo.fanfan.dao.AlipayRecordDao;
 import com.bootdo.fanfan.domain.AlipayRecordDO;
 import com.bootdo.fanfan.service.AlipayRecordService;
-
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
 public class AlipayRecordServiceImpl implements AlipayRecordService {
 	@Autowired
 	private AlipayRecordDao alipayRecordDao;
+
+	@Autowired
+	private OrderService orderService;
 	
 	@Override
 	public AlipayRecordDO get(Integer id){
@@ -33,7 +39,14 @@ public class AlipayRecordServiceImpl implements AlipayRecordService {
 	}
 	
 	@Override
+	@Transactional
 	public int save(AlipayRecordDO alipayRecord){
+
+		OrderDO orderDO =  new OrderDO();
+		orderDO.setId(Integer.parseInt(alipayRecord.getPassbackParams()));
+		orderDO.setOrderState(OrderStateEnum.userPaid.getVal());
+		//修改订单状态
+		orderService.updateOrderState(orderDO);
 		return alipayRecordDao.save(alipayRecord);
 	}
 	

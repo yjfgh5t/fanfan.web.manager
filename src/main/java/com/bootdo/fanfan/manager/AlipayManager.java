@@ -5,17 +5,14 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.internal.util.AlipaySignature;
-import com.alipay.api.request.AlipaySystemOauthTokenRequest;
-import com.alipay.api.request.AlipayTradeAppPayRequest;
-import com.alipay.api.request.AlipayTradeCloseRequest;
-import com.alipay.api.request.AlipayUserInfoShareRequest;
-import com.alipay.api.response.AlipaySystemOauthTokenResponse;
-import com.alipay.api.response.AlipayTradeAppPayResponse;
-import com.alipay.api.response.AlipayTradeCloseResponse;
-import com.alipay.api.response.AlipayUserInfoShareResponse;
+import com.alipay.api.request.*;
+import com.alipay.api.response.*;
 import com.bootdo.common.config.AlipayConfig;
 import com.bootdo.common.config.BootdoConfig;
+import com.bootdo.common.task.RefshOrderJob;
 import com.bootdo.fanfan.domain.OrderAlipayDO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +22,8 @@ import java.util.Map;
 public class AlipayManager {
 
     private static final String alipayToken="alipay_token",accessToken="alipay_access_token",refshToken="alipay_refsh_token";
+
+    private static final Logger logger = LoggerFactory.getLogger(RefshOrderJob.class);
 
     @Autowired
     static BootdoConfig bootdoConfig;
@@ -140,6 +139,25 @@ public class AlipayManager {
         }
 
         return false;
+    }
+
+    /**
+     * 查询交易
+     * @param tradeNo
+     * @return
+     */
+    public AlipayTradeQueryResponse queryTradePay(String tradeNo){
+
+        AlipayClient alipayClient = AlipayConfig.getDefaultClient();
+        AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
+        request.setBizContent("{\"trade_no\":\""+tradeNo+"\"}");
+        AlipayTradeQueryResponse response = null;
+        try {
+            response = alipayClient.execute(request);
+        } catch (AlipayApiException e) {
+            logger.error("查询支付宝交易异常- ->{}",e);
+        }
+        return response;
     }
 
     /**

@@ -41,4 +41,10 @@ public interface OrderStateService {
 	 * @return
 	 */
 	Map<Integer,Date> getAwaitPayOrder();
+
+	/**
+	 * 查询订单是否支付
+	 * @return
+	 */
+	boolean orderHasPay(Integer OrderId);
 }

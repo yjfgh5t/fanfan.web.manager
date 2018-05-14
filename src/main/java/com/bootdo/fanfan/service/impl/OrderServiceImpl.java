@@ -205,6 +205,11 @@ public class OrderServiceImpl implements OrderService {
 		orderDao.updateOrderState(orderDO.getOrderState(),orderDO.getId());
 	}
 
+	@Override
+	public OrderDO queryOrderByOrdernum(String orderNum) {
+		return orderDao.getIdByOrderNum(orderNum);
+	}
+
 
 	/**
 	 * 查询用户订单
@@ -368,7 +373,7 @@ public class OrderServiceImpl implements OrderService {
 	    alipayDO.setBody(StringUtils.join(orderRequVO.getDetailList().stream().map(m->m.getOutTitle()).toArray()));
         alipayDO.setGoodsType("1");
         alipayDO.setCreateTime(Calendar.getInstance().getTime());
-        alipayDO.setPassbackParams(orderDO.getOrderNum());
+        alipayDO.setPassbackParams(orderDO.getId().toString());
         alipayDO.setProductCode("QUICK_MSECURITY_PAY");
         alipayDO.setStoreId("");
         alipayDO.setSubject("饭饭点餐");

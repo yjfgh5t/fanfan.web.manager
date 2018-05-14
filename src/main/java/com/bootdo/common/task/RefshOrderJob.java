@@ -20,7 +20,7 @@ import java.util.*;
  */
 public class RefshOrderJob implements Job {
 
-    private static final Logger logger = LoggerFactory.getLogger(WebLogAspect.class);
+    private static final Logger logger = LoggerFactory.getLogger(RefshOrderJob.class);
 
     @Autowired
     OrderStateService orderStateService;
@@ -28,34 +28,35 @@ public class RefshOrderJob implements Job {
     @Autowired
     OrderService orderService;
 
-
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
+
+        //查询失效的订单
+        Map<Integer, Date> awaitPayOrder = orderStateService.getAwaitPayOrder();
+
+        if (awaitPayOrder.size() == 0) {
+            return;
+        }
+
         Calendar nowTime = Calendar.getInstance();
 
         //将时间提前14分50秒
-        nowTime.set(Calendar.MINUTE,nowTime.get(Calendar.MINUTE)-15);
+        nowTime.set(Calendar.MINUTE, nowTime.get(Calendar.MINUTE) - 15);
 
-        //查询失效的订单
-        Map<Integer,Date> awaitPayOrder = orderStateService.getAwaitPayOrder();
+        Iterator<Map.Entry<Integer, Date>> iterator = awaitPayOrder.entrySet().iterator();
 
-        if(awaitPayOrder.size()>0) {
+        //读取数据
+        while (iterator.hasNext()) {
+            Map.Entry<Integer, Date> entry = iterator.next();
 
-            Iterator<Map.Entry<Integer, Date>> iterator = awaitPayOrder.entrySet().iterator();
+            //判断是否 超时
+            if (entry.getValue().getTime() < nowTime.getTime().getTime()) {
+                OrderDO orderDO = new OrderDO();
+                orderDO.setOrderState(OrderStateEnum.userPayOvertime.getVal());
+                orderDO.setId(entry.getKey());
 
-            //读取数据
-            while(iterator.hasNext()){
-                Map.Entry<Integer, Date> entry=iterator.next();
-
-                //判断是否 超时
-                if(entry.getValue().getTime()<nowTime.getTime().getTime()) {
-                    OrderDO orderDO = new OrderDO();
-                    orderDO.setOrderState(OrderStateEnum.userPayOvertime.getVal());
-                    orderDO.setId(entry.getKey());
-
-                    //设置订单超时未支付
-                    orderService.updateOrderState(orderDO);
-                }
+                //设置订单超时未支付
+                orderService.updateOrderState(orderDO);
             }
         }
     }

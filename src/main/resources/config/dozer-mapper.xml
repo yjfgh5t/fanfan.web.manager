@@ -80,4 +80,11 @@
             <b>id</b>
         </field>
     </mapping>
+
+    <!--订单数据转换 -->
+    <mapping>
+        <class-a>com.alipay.api.response.AlipayTradeQueryResponse</class-a>
+        <class-b>com.bootdo.fanfan.domain.AlipayRecordDO</class-b>
+    </mapping>
+
 </mappings>
