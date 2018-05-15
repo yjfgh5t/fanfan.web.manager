@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bootdo.fanfan.dao.DictionaryDao">
+
+	<select id="get" resultType="com.bootdo.fanfan.domain.DictionaryDO">
+		select `id`,`key`,`val`,`create_id` from ff_dictionary where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.bootdo.fanfan.domain.DictionaryDO">
+		select `id`,`key`,`val`,`create_id` from ff_dictionary
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="key != null and key != ''"> and key = #{key} </if>
+		  		  <if test="val != null and val != ''"> and val = #{val} </if>
+		  		  <if test="createId != null and createId != ''"> and create_id = #{createId} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from ff_dictionary
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="key != null and key != ''"> and key = #{key} </if>
+		  		  <if test="val != null and val != ''"> and val = #{val} </if>
+		  		  <if test="createId != null and createId != ''"> and create_id = #{createId} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.bootdo.fanfan.domain.DictionaryDO" useGeneratedKeys="true" keyProperty="id">
+		insert into ff_dictionary
+		(
+			`key`, 
+			`val`, 
+			`create_id`
+		)
+		values
+		(
+			#{key}, 
+			#{val}, 
+			#{createId}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.bootdo.fanfan.domain.DictionaryDO">
+		update ff_dictionary 
+		<set>
+			<if test="key != null">`key` = #{key}, </if>
+			<if test="val != null">`val` = #{val}, </if>
+			<if test="createId != null">`create_id` = #{createId}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from ff_dictionary where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from ff_dictionary where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<select id="queryByKeys" resultType="com.bootdo.fanfan.domain.DictionaryDO">
+		select `key`,`val` from ff_dictionary where `create_id`=#{appCustomerId}
+		<if test="keys!=null">
+			and `key` in
+			<foreach collection="keys" open="(" close=")" separator="," item="key">
+				#{key}
+			</foreach>
+		</if>
+	</select>
+
+</mapper>
