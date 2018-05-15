@@ -1,6 +1,7 @@
 package com.bootdo.fanfan.domain;
 
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -24,6 +25,7 @@ public class AlipayRecordDO implements Serializable {
 	//
 	private String tradeNo;
 	//
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date notifyTime;
 	//
 	private String notifyType;
@@ -68,12 +70,16 @@ public class AlipayRecordDO implements Serializable {
 	//
 	private String body;
 	//
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date gmtCreate;
 	//
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date gmtPayment;
 	//
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date gmtRefund;
 	//
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date gmtClose;
 	//
 	private String fundBillList;

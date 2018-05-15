@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * 
@@ -29,4 +31,12 @@ public interface AlipayRecordDao {
 	int remove(Integer id);
 	
 	int batchRemove(Integer[] ids);
+
+	/**
+	 * 根据外部订单号 查询是否存在
+	 * @param tradeNo
+	 * @return
+	 */
+	@Select("SELECT count(1) from ff_alipay_record where trade_no=#{tradeNo}")
+	int queryByTradeNo(@Param("tradeNo") String tradeNo);
 }

@@ -6,6 +6,7 @@ import com.bootdo.fanfan.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,15 +40,23 @@ public class AlipayRecordServiceImpl implements AlipayRecordService {
 	}
 	
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = {SecurityException.class} )
 	public int save(AlipayRecordDO alipayRecord){
 
-		OrderDO orderDO =  new OrderDO();
-		orderDO.setId(Integer.parseInt(alipayRecord.getPassbackParams()));
-		orderDO.setOrderState(OrderStateEnum.userPaid.getVal());
-		//修改订单状态
-		orderService.updateOrderState(orderDO);
-		return alipayRecordDao.save(alipayRecord);
+		//支付宝信息是否保存
+		int count = alipayRecordDao.queryByTradeNo(alipayRecord.getTradeNo());
+
+		//判断添加或修改 支付宝同步和异步通知时
+		if(count==0) {
+			OrderDO orderDO = new OrderDO();
+			orderDO.setId(Integer.parseInt(alipayRecord.getPassbackParams()));
+			orderDO.setOrderState(OrderStateEnum.userPaid.getVal());
+			//修改订单状态
+			orderService.updateOrderState(orderDO);
+			return alipayRecordDao.save(alipayRecord);
+		}else {
+			return alipayRecordDao.update(alipayRecord);
+		}
 	}
 	
 	@Override

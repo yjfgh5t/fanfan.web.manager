@@ -103,6 +103,7 @@ public class AlipayManager {
         model.setTimeoutExpress(alipayDO.getTimeoutExpress());
         model.setTotalAmount(alipayDO.getTotalAmount());
         model.setProductCode(alipayDO.getProductCode());
+        model.setPassbackParams(alipayDO.getPassbackParams());
         request.setBizModel(model);
         request.setNotifyUrl("http://wxcard.com.cn/api/alipay/alipayReceiver");
         try {
@@ -168,7 +169,7 @@ public class AlipayManager {
     public boolean checkSign(Map<String,String> params){
 
         try {
-            return AlipaySignature.rsaCheckV1(params,AlipayConfig.publicKey,"GBK");
+            return AlipaySignature.rsaCheckV1(params,AlipayConfig.publicKey,"utf-8","RSA2");
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
