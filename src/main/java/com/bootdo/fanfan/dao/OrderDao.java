@@ -41,6 +41,13 @@ public interface OrderDao {
 	OrderDO getIdByOrderNum(@Param("orderNum") String orderNum);
 
 	/**
+	 * 查询订单状态
+	 * @param idArray
+	 * @return
+	 */
+	List<OrderDO> getStateById(@Param("idArray") List<Integer> idArray);
+
+	/**
 	 * 更新订单状态
 	 * @param orderState
 	 * @param id

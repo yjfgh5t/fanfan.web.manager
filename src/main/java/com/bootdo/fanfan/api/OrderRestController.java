@@ -2,6 +2,7 @@ package com.bootdo.fanfan.api;
 
 import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.bootdo.common.config.BootdoConfig;
+import com.bootdo.common.extend.EMapper;
 import com.bootdo.common.utils.R;
 import com.bootdo.fanfan.domain.AlipayRecordDO;
 import com.bootdo.fanfan.domain.OrderDO;
@@ -34,6 +35,9 @@ public class OrderRestController extends ApiBaseRestController {
 
     @Autowired
     AlipayRecordService alipayRecordService;
+
+    @Autowired
+    private EMapper mapper;
 
     @Autowired
     private BootdoConfig bootdoConfig;
@@ -147,4 +151,27 @@ public class OrderRestController extends ApiBaseRestController {
         return R.ok().put("data",false);
     }
 
+    /**
+     * 获取订单状态
+     * @param idArry
+     * @return
+     */
+    @GetMapping("/states")
+    public R getState(List<Integer> idArry){
+
+        List<OrderDO>  orderDoArray = orderService.getStateById(idArry);
+
+        if(orderDoArray!=null && orderDoArray.size()>0) {
+            List<APIOrderListVO> orderArray = mapper.mapArray(orderDoArray, APIOrderListVO.class);
+
+            if (orderArray != null && orderArray.size() > 0) {
+                orderArray.forEach((item) -> {
+                    //设置订单状态字符
+                    item.setOrderStateText(OrderStateEnum.get(item.getId()).getText());
+                });
+                return R.ok().put("data", orderArray);
+            }
+        }
+        return R.ok().put("data","");
+    }
 }

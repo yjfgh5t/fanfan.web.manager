@@ -135,4 +135,11 @@
         on C.id  = B.out_id
 	</select>
 
+	<select id="getStateById">
+		select id,order_state from ff_order where id in
+		<foreach collection="idArray" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</select>
+
 </mapper>

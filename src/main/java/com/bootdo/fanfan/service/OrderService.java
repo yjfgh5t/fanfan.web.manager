@@ -1,6 +1,7 @@
 package com.bootdo.fanfan.service;
 
 import com.bootdo.fanfan.domain.OrderDO;
+import com.bootdo.fanfan.domain.enumDO.OrderStateEnum;
 import com.bootdo.fanfan.vo.APIOrderListVO;
 import com.bootdo.fanfan.vo.APIOrderRequVO;
 
@@ -43,6 +44,11 @@ public interface OrderService {
 	 */
 	APIOrderRequVO queryOrder(Integer orderId);
 
+	/**
+	 * 查询用户订单
+	 * @param map
+	 * @return
+	 */
 	List<APIOrderListVO> queryOrderByUser(Map<String,Object> map);
 
 	/**
@@ -57,4 +63,11 @@ public interface OrderService {
 	 * @return
 	 */
 	OrderDO queryOrderByOrdernum(String orderNum);
+
+	/**
+	 * 查询订单状态
+	 * @param idArray
+	 * @return
+	 */
+    List<OrderDO> getStateById(List<Integer> idArray);
 }

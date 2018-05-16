@@ -210,6 +210,16 @@ public class OrderServiceImpl implements OrderService {
 		return orderDao.getIdByOrderNum(orderNum);
 	}
 
+	/**
+	 * 查询订单状态
+	 * @param idArray
+	 * @return
+	 */
+	@Override
+	public List<OrderDO> getStateById(List<Integer> idArray) {
+		return orderDao.getStateById(idArray);
+	}
+
 
 	/**
 	 * 查询用户订单
