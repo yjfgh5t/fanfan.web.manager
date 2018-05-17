@@ -46,24 +46,16 @@ function load() {
 						columns : [
 								{
 									checkbox : true
-								},
-																{
+								},{
 									field : 'id', 
-									title : '' 
-								},
-																{
-									field : 'key', 
-									title : '1011:营业开始时间  1012:营业结束时间   1021:店铺名称  1022:最低起送价  ' 
-								},
-																{
-									field : 'val', 
-									title : '' 
-								},
-																{
-									field : 'createId', 
-									title : '' 
-								},
-																{
+									title : '序号'
+								},{
+									field : 'keyText',
+									title : '标题'
+								},{
+									field : 'val',
+									title : '对应值'
+								},{
 									title : '操作',
 									field : 'id',
 									align : 'center',
@@ -79,7 +71,7 @@ function load() {
 												+ '\')"><i class="fa fa-key"></i></a> ';
 										return e + d ;
 									}
-								} ]
+								}]
 					});
 }
 function reLoad() {

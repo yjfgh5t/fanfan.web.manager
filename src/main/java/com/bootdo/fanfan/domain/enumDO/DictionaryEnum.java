@@ -8,7 +8,7 @@ import java.util.Map;
 public enum  DictionaryEnum {
 
     businessStartTime(1011,"营业开始时间"),
-    businessEndTime(1012,"营业开始时间"),
+    businessEndTime(1012,"营业结束时间"),
     shopName(1021,"店铺名称"),
     minOrderPrice(1022,"最低起送价");
 

@@ -37,6 +37,7 @@
 				var s_edit_h = 'hidden';
 				var s_remove_h = 'hidden';
 				var s_resetPwd_h = 'hidden';
+                var s_detail_h = 'hidden';
 			</script>
 		</div>
 		<div shiro:hasPermission="fanfan:order:edit">
@@ -54,6 +55,11 @@
 				var s_resetPwd_h = '';
 			</script>
 		</div>
+	<div shiro:hasPermission="fanfan:order:detail">
+		<script type="text/javascript">
+            var s_detail_h = '';
+		</script>
+	</div>
 	</div>
 	<div th:include="include :: footer"></div>
 	<script type="text/javascript" src="/js/appjs/fanfan/order/order.js"></script>

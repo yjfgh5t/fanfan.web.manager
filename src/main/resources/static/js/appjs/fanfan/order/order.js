@@ -46,125 +46,80 @@ function load() {
 						columns : [
 								{
 									checkbox : true
-								},
-																{
-									field : 'id', 
-									title : '主键' 
-								},
-																{
+								},{
 									field : 'orderNum', 
 									title : '订单号' 
-								},
-																{
-									field : 'orderState', 
-									title : '订单状态：101：创建订单  102：待支付 103：已支付 104:超时未支付 105：确认收单 106：异常订单反馈 201：确认收单 202:取消收单-退款 203:开始派单' 
-								},
-																{
+								},{
+									field : 'orderStateText',
+									title : '订单状态'
+								},{
 									field : 'orderTotal', 
-									title : '订单总额' 
-								},
-																{
-									field : 'orderPay', 
-									title : '支付金额' 
-								},
-																{
+									title : '订单金额'
+								},{
+									field : 'orderPay',
+									title : '支付金额'
+								},{
 									field : 'orderDiscountTotal', 
-									title : '订单优惠总额' 
-								},
-																{
+									title : '优惠金额'
+								},{
 									field : 'orderCommodityTotal', 
-									title : '订单商品总数量' 
-								},
-																{
+									title : '商品总数'
+								},{
 									field : 'orderPayType', 
-									title : '订单支付类型  1:支付宝  2：微信 3：现金 ' 
-								},
-																{
+									title : '支付类型  ',
+									formatter:function (val) {
+										switch (val){
+											case 1:return "支付宝";
+                                            case 2:return "微信";
+                                            case 3:return "现金";
+										}
+                                    }
+								},{
 									field : 'orderMealsNum', 
 									title : '用餐人数' 
-								},
-																{
+								},{
 									field : 'orderRemark', 
 									title : '描述' 
-								},
-																{
+								},{
 									field : 'orderInvoice', 
 									title : '订单发票信息' 
-								},
-																{
-									field : 'createId', 
-									title : '用户主键' 
-								},
-																{
+								},{
+									field : 'userNick',
+									title : '下单用户'
+								},{
 									field : 'createTime', 
-									title : '创建时间' 
-								},
-																{
+									title : '下单时间'
+								},{
 									title : '操作',
 									field : 'id',
 									align : 'center',
 									formatter : function(value, row, index) {
-										var e = '<a class="btn btn-primary btn-sm '+s_edit_h+'" href="#" mce_href="#" title="编辑" onclick="edit(\''
+										var e = '<a class="btn btn-primary btn-sm '+s_detail_h+'" href="#" mce_href="#" title="详情" onclick="detail(\''
 												+ row.id
-												+ '\')"><i class="fa fa-edit"></i></a> ';
-										var d = '<a class="btn btn-warning btn-sm '+s_remove_h+'" href="#" title="删除"  mce_href="#" onclick="remove(\''
-												+ row.id
-												+ '\')"><i class="fa fa-remove"></i></a> ';
-										var f = '<a class="btn btn-success btn-sm" href="#" title="备用"  mce_href="#" onclick="resetPwd(\''
-												+ row.id
-												+ '\')"><i class="fa fa-key"></i></a> ';
-										return e + d ;
+												+ '\')"><i class="fa fa-ellipsis-h"></i></a> ';
+										return e;
 									}
 								} ]
 					});
 }
+
 function reLoad() {
 	$('#exampleTable').bootstrapTable('refresh');
 }
-function add() {
+
+//查看详情
+function detail(id) {
+
 	layer.open({
 		type : 2,
-		title : '增加',
+		title : '详情',
 		maxmin : true,
-		shadeClose : false, // 点击遮罩关闭层
-		area : [ '800px', '520px' ],
-		content : prefix + '/add' // iframe的url
+		shadeClose : true, // 点击遮罩关闭层
+		area : [ '80%', '70%' ],
+		content : prefix + '/detail/' + id // iframe的url
 	});
-}
-function edit(id) {
-	layer.open({
-		type : 2,
-		title : '编辑',
-		maxmin : true,
-		shadeClose : false, // 点击遮罩关闭层
-		area : [ '800px', '520px' ],
-		content : prefix + '/edit/' + id // iframe的url
-	});
-}
-function remove(id) {
-	layer.confirm('确定要删除选中的记录？', {
-		btn : [ '确定', '取消' ]
-	}, function() {
-		$.ajax({
-			url : prefix+"/remove",
-			type : "post",
-			data : {
-				'id' : id
-			},
-			success : function(r) {
-				if (r.code==0) {
-					layer.msg(r.msg);
-					reLoad();
-				}else{
-					layer.msg(r.msg);
-				}
-			}
-		});
-	})
 }
 
-function resetPwd(id) {
-}
 function batchRemove() {
 	var rows = $('#exampleTable').bootstrapTable('getSelections'); // 返回所有选择的行，当没有选择的记录时，返回一个空数组
 	if (rows.length == 0) {

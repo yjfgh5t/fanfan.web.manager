@@ -3,6 +3,16 @@ package com.bootdo.fanfan.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.alipay.api.domain.OrderDetail;
+import com.bootdo.common.extend.EMapper;
+import com.bootdo.fanfan.domain.OrderDetialDO;
+import com.bootdo.fanfan.domain.OrderReceiverDO;
+import com.bootdo.fanfan.domain.UserDO;
+import com.bootdo.fanfan.domain.enumDO.OrderStateEnum;
+import com.bootdo.fanfan.service.OrderDetialService;
+import com.bootdo.fanfan.service.OrderReceiverService;
+import com.bootdo.fanfan.service.UserService;
+import com.bootdo.fanfan.vo.view.OrderVO;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -34,6 +44,18 @@ import com.bootdo.common.utils.R;
 public class OrderController {
 	@Autowired
 	private OrderService orderService;
+
+	@Autowired
+	private OrderDetialService orderDetialService;
+
+	@Autowired
+	private OrderReceiverService orderReceiverService;
+
+	@Autowired
+	private UserService userService;
+
+	@Autowired
+	private EMapper eMapper;
 	
 	@GetMapping()
 	@RequiresPermissions("fanfan:order:order")
@@ -48,8 +70,22 @@ public class OrderController {
 		//查询列表数据
         Query query = new Query(params);
 		List<OrderDO> orderList = orderService.list(query);
+
+		//转换VO
+		List<OrderVO> orderVOList = eMapper.mapArray(orderList,OrderVO.class);
+
+		//设置状态Text
+		if(orderVOList!=null){
+			orderVOList.forEach((item)->{
+				item.setOrderStateText(OrderStateEnum.get(item.getOrderState()).getText());
+			});
+		}
+
+		//查询总条数
 		int total = orderService.count(query);
-		PageUtils pageUtils = new PageUtils(orderList, total);
+
+		//返回分页
+		PageUtils pageUtils = new PageUtils(orderVOList, total);
 		return pageUtils;
 	}
 	
@@ -59,12 +95,44 @@ public class OrderController {
 	    return "fanfan/order/add";
 	}
 
-	@GetMapping("/edit/{id}")
-	@RequiresPermissions("fanfan:order:edit")
+	@GetMapping("/detail/{id}")
+	@RequiresPermissions("fanfan:order:detail")
 	String edit(@PathVariable("id") Integer id,Model model){
+
+		//订单信息
 		OrderDO order = orderService.get(id);
-		model.addAttribute("order", order);
-	    return "fanfan/order/edit";
+
+		//未找到订单信息
+		if(order==null){
+			throw new NullPointerException("未找到订单");
+		}
+
+		//订单详情
+		List<OrderDetialDO> detialDOList = orderDetialService.queryByOrderId(id);
+
+		//收件人信息
+		OrderReceiverDO receiverDO = orderReceiverService.queryById(id);
+
+		//下单人信息
+		UserDO userDO =userService.get(order.getCreateId());
+
+
+		OrderVO orderVO = eMapper.map(order,OrderVO.class);
+		//设置订单状态Text
+		orderVO.setOrderStateText(OrderStateEnum.get(orderVO.getId()).getText());
+		//订单支付类型
+		switch (orderVO.getOrderPayType()){
+			case 1: orderVO.setOrderPayTypeText("支付宝"); break;
+			case 2: orderVO.setOrderPayTypeText("微信"); break;
+			default: orderVO.setOrderPayTypeText("现金"); break;
+		}
+
+		model.addAttribute("order", orderVO);
+		model.addAttribute("detialArray",detialDOList);
+		model.addAttribute("receiver",receiverDO);
+		model.addAttribute("user",userDO);
+
+	    return "fanfan/order/detail";
 	}
 	
 	/**
