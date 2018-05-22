@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+
+						<div class="panel panel-info">
+							<div class="panel-heading">订单信息</div>
+							<div class="panel-body">
+								<table class="table table-striped">
+									<tbody>
+									<tr>
+										<th>订单号：</th>
+										<td th:text="${order.orderNum}"></td>
+									</tr>
+									<tr>
+										<th>订单状态：</th>
+										<td th:text="${order.orderStateText}"></td>
+									</tr>
+									<tr>
+										<th>订单金额：</th>
+										<td th:text="${order.orderTotal}"></td>
+									</tr>
+									<tr>
+										<th>支付金额：</th>
+										<td th:text="${order.orderPay}"></td>
+									</tr>
+									<tr>
+										<th>优惠金额：</th>
+										<td th:text="${order.orderDiscountTotal}"></td>
+									</tr>
+									<tr>
+										<th>支付类型：</th>
+										<td th:text="${order.orderPayTypeText}"></td>
+									</tr>
+									<tr>
+										<th>用餐人数：</th>
+										<td th:text="${order.orderMealsNum}"></td>
+									</tr>
+									<tr>
+										<th>描述：</th>
+										<td th:text="${order.orderRemark}"></td>
+									</tr>
+									<tr>
+										<th>订单发票信息：</th>
+										<td th:text="${order.orderInvoice}"></td>
+									</tr>
+									<tr>
+										<th>下单时间：</th>
+										<td th:text="${#dates.format(order.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+									</tr>
+
+									</tbody>
+								</table>
+
+							</div>
+						</div>
+
+						<div class="panel panel-info">
+							<div class="panel-heading">商品信息</div>
+							<div class="panel-body">
+
+								<table class="table table-striped">
+									<thead>
+									<tr>
+										<th>商品名称</th>
+										<th>商品数量</th>
+										<th>商品价格</th>
+									</tr>
+									</thead>
+									<tbody>
+										<tr th:each="item:${detialArray}">
+											<td th:text="${item.outTitle}"></td>
+											<td th:text="${item.outSize}"></td>
+											<td th:text="${item.outPrice}"></td>
+										</tr>
+									</tbody>
+								</table>
+
+							</div>
+						</div>
+
+						<div class="panel panel-info">
+							<div class="panel-heading">收货人信息</div>
+							<div class="panel-body">
+
+								<table class="table table-striped">
+									<tbody>
+									<tr>
+										<th>收货人</th>
+										<td th:text="${receiver.name}"></td>
+									</tr>
+									<tr>
+										<th>电话</th>
+										<td th:text="${receiver.tel}"></td>
+									</tr>
+									<tr>
+										<th>性别</th>
+										<td th:text="${receiver.sex}"></td>
+									</tr>
+									<tr>
+										<th>地址</th>
+										<td th:text="${receiver.addr+receiver.addrDetail}"></td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+	</div>
+	</div>
+	<div th:include="include::footer"></div>
+	<script type="text/javascript" src="/js/appjs/fanfan/order/edit.js">
+	</script>
+</body>
+</html>

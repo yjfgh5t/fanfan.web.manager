@@ -45,41 +45,39 @@ function load() {
 						// 返回false将会终止请求
 						columns : [
 								{
-									checkbox : true
-								},
-																{
-									field : 'id', 
-									title : '主键' 
-								},
-																{
+                                    title : '序号',
+                                    formatter: function (value, row, index) {
+                                        return index+1;
+                                    }
+                                },{
+									field : 'userIcon',
+									title : '头像',
+									formatter:function (val){
+										return '<img src="'+val+'"  class="img-rounded" style="width:40px;"/>';
+									}
+                            	},{
 									field : 'userNick', 
 									title : '用户昵称' 
-								},
-																{
+								},{
 									field : 'userMobile', 
 									title : '手机号' 
-								},
-																{
-									field : 'userIcon', 
-									title : '头像' 
-								},
-																{
-									field : 'userSex', 
-									title : '1:未知、2：男、3：女' 
-								},
-																{
-									field : 'userState', 
-									title : '1:有效、2：禁用' 
-								},
-																{
-									field : 'delete', 
-									title : '是否删除 0：否 1：是' 
-								},
-																{
+								},{
+									field : 'userSex',
+									title : '性别',
+									formatter:function (val) {
+										switch (val) {
+											case 2:
+												return '男';
+											case 3:
+												return '女';
+											default:
+												return "未知";
+										}
+									}
+                            	},{
 									field : 'createTime', 
-									title : '创建时间 ' 
-								},
-																{
+									title : '创建时间'
+								},{
 									title : '操作',
 									field : 'id',
 									align : 'center',

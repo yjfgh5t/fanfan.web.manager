@@ -8,33 +8,37 @@
 	</select>
 
 	<select id="list" resultType="com.bootdo.fanfan.domain.OrderDO">
-		select `id`,`order_num`,`order_state`,`order_total`,`order_pay`,`order_discount_total`,`order_commodity_total`,`order_pay_type`,`order_meals_num`,`order_remark`,`order_invoice`,`create_id`,`create_time` from ff_order
-        <where>  
-		  		  <if test="id != null and id != ''"> and id = #{id} </if>
-		  		  <if test="orderNum != null and orderNum != ''"> and order_num = #{orderNum} </if>
-		  		  <if test="orderState != null and orderState != ''"> and order_state = #{orderState} </if>
-		  		  <if test="orderTotal != null and orderTotal != ''"> and order_total = #{orderTotal} </if>
-		  		  <if test="orderPay != null and orderPay != ''"> and order_pay = #{orderPay} </if>
-		  		  <if test="orderDiscountTotal != null and orderDiscountTotal != ''"> and order_discount_total = #{orderDiscountTotal} </if>
-		  		  <if test="orderCommodityTotal != null and orderCommodityTotal != ''"> and order_commodity_total = #{orderCommodityTotal} </if>
-		  		  <if test="orderPayType != null and orderPayType != ''"> and order_pay_type = #{orderPayType} </if>
-		  		  <if test="orderMealsNum != null and orderMealsNum != ''"> and order_meals_num = #{orderMealsNum} </if>
-		  		  <if test="orderRemark != null and orderRemark != ''"> and order_remark = #{orderRemark} </if>
-		  		  <if test="orderInvoice != null and orderInvoice != ''"> and order_invoice = #{orderInvoice} </if>
-		  		  <if test="createId != null and createId != ''"> and create_id = #{createId} </if>
-		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
-		  		</where>
-        <choose>
-            <when test="sort != null and sort.trim() != ''">
-                order by ${sort} ${order}
-            </when>
-			<otherwise>
-                order by id desc
-			</otherwise>
-        </choose>
-		<if test="offset != null and limit != null">
-			limit #{offset}, #{limit}
-		</if>
+		SELECT  tab_order.*,tab_user.user_nick from (
+			select `id`,`order_num`,`order_state`,`order_total`,`order_pay`,`order_discount_total`,`order_commodity_total`,`order_pay_type`,`order_meals_num`,`order_remark`,`order_invoice`,`create_id`,`create_time` from ff_order
+			<where>
+					  <if test="id != null and id != ''"> and id = #{id} </if>
+					  <if test="orderNum != null and orderNum != ''"> and order_num = #{orderNum} </if>
+					  <if test="orderState != null and orderState != ''"> and order_state = #{orderState} </if>
+					  <if test="orderTotal != null and orderTotal != ''"> and order_total = #{orderTotal} </if>
+					  <if test="orderPay != null and orderPay != ''"> and order_pay = #{orderPay} </if>
+					  <if test="orderDiscountTotal != null and orderDiscountTotal != ''"> and order_discount_total = #{orderDiscountTotal} </if>
+					  <if test="orderCommodityTotal != null and orderCommodityTotal != ''"> and order_commodity_total = #{orderCommodityTotal} </if>
+					  <if test="orderPayType != null and orderPayType != ''"> and order_pay_type = #{orderPayType} </if>
+					  <if test="orderMealsNum != null and orderMealsNum != ''"> and order_meals_num = #{orderMealsNum} </if>
+					  <if test="orderRemark != null and orderRemark != ''"> and order_remark = #{orderRemark} </if>
+					  <if test="orderInvoice != null and orderInvoice != ''"> and order_invoice = #{orderInvoice} </if>
+					  <if test="createId != null and createId != ''"> and create_id = #{createId} </if>
+					  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+			 </where>
+			<choose>
+				<when test="sort != null and sort.trim() != ''">
+					order by ${sort} ${order}
+				</when>
+				<otherwise>
+					order by id desc
+				</otherwise>
+			</choose>
+			<if test="offset != null and limit != null">
+				limit #{offset}, #{limit}
+			</if>
+		) as tab_order
+		JOIN ff_user as tab_user
+		ON tab_order.create_id = tab_user.id
 	</select>
 	
  	<select id="count" resultType="int">

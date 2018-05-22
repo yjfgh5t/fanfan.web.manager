@@ -70,4 +70,5 @@ public interface OrderService {
 	 * @return
 	 */
     List<OrderDO> getStateById(List<Integer> idArray);
+
 }

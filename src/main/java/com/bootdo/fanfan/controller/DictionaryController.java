@@ -3,6 +3,9 @@ package com.bootdo.fanfan.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.bootdo.common.extend.EMapper;
+import com.bootdo.fanfan.domain.enumDO.DictionaryEnum;
+import com.bootdo.fanfan.vo.view.DictionaryVO;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -34,6 +37,9 @@ import com.bootdo.common.utils.R;
 public class DictionaryController {
 	@Autowired
 	private DictionaryService dictionaryService;
+
+	@Autowired
+	private EMapper eMapper;
 	
 	@GetMapping()
 	@RequiresPermissions("fanfan:dictionary:dictionary")
@@ -47,10 +53,23 @@ public class DictionaryController {
 	public PageUtils list(@RequestParam Map<String, Object> params){
 		//查询列表数据
         Query query = new Query(params);
+        //获取列表
 		List<DictionaryDO> dictionaryList = dictionaryService.list(query);
+
+		//数据转换
+		List<DictionaryVO> listDictionvary = eMapper.mapArray(dictionaryList,DictionaryVO.class);
+
+		if(listDictionvary!=null) {
+			listDictionvary.forEach((item) -> {
+				item.setKeyText(DictionaryEnum.get(item.getKey()).getText());
+			});
+		}
+
+		//总条数
 		int total = dictionaryService.count(query);
-		PageUtils pageUtils = new PageUtils(dictionaryList, total);
-		return pageUtils;
+
+		//分页对象
+		return new PageUtils(listDictionvary, total);
 	}
 	
 	@GetMapping("/add")
@@ -62,8 +81,16 @@ public class DictionaryController {
 	@GetMapping("/edit/{id}")
 	@RequiresPermissions("fanfan:dictionary:edit")
 	String edit(@PathVariable("id") Integer id,Model model){
+		//获取对象
 		DictionaryDO dictionary = dictionaryService.get(id);
-		model.addAttribute("dictionary", dictionary);
+
+		//转换
+		DictionaryVO dictionaryVO = eMapper.map(dictionary,DictionaryVO.class);
+		dictionaryVO.setKeyText(DictionaryEnum.get(dictionaryVO.getKey()).getText());
+
+		//设置model
+		model.addAttribute("dictionary", dictionaryVO);
+
 	    return "fanfan/dictionary/edit";
 	}
 	
@@ -85,7 +112,7 @@ public class DictionaryController {
 	@ResponseBody
 	@RequestMapping("/update")
 	@RequiresPermissions("fanfan:dictionary:edit")
-	public R update( DictionaryDO dictionary){
+	public R update(DictionaryDO dictionary){
 		dictionaryService.update(dictionary);
 		return R.ok();
 	}

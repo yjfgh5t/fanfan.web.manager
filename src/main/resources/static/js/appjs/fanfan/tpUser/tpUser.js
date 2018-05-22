@@ -45,58 +45,56 @@ function load() {
 						// 返回false将会终止请求
 						columns : [
 								{
-									checkbox : true
-								},
-																{
-									field : 'id', 
-									title : '主键' 
-								},
-																{
-									field : 'userId', 
-									title : '用户id主键' 
-								},
-																{
-									field : 'tpType', 
-									title : '1:支付宝 2:微信' 
-								},
-																{
+                                    title : '序号',
+                                    formatter: function (value, row, index) {
+                                        return index+1;
+                                    }
+								},{
+									field : 'tpIcon',
+									title : '用户头像',
+									formatter:function (val){
+										return '<img src="'+val+'"  class="img-rounded" style="width:40px;"/>';
+									}
+                            	},{
 									field : 'tpNick', 
 									title : '用户昵称' 
-								},
-																{
-									field : 'tpIcon', 
-									title : '用户头像' 
-								},
-																{
+								},{
+									field : 'tpType',
+									title : '用户来源',
+									formatter:function (val) {
+										return val==1?"支付宝":"微信";
+									}
+                            	},{
 									field : 'tpSex', 
-									title : '1:未知、2:男、3:女' 
-								},
-																{
+									title : '性别',
+									formatter:function (val) {
+										switch (val) {
+                                            case 2:
+                                                return '男';
+                                            case 3:
+                                                return '女';
+                                            default:
+                                                return "未知";
+                                        }
+                                    }
+								},{
 									field : 'tpAddr', 
 									title : '用户地址' 
-								},
-																{
-									field : 'tpId', 
-									title : '第三方主键' 
-								},
-																{
+								},{
 									field : 'tpProvince', 
 									title : '所在省份' 
-								},
-																{
+								},{
 									field : 'tpCity', 
 									title : '所在城市' 
-								},
-																{
+								},{
 									field : 'createTime', 
 									title : '创建时间' 
-								},
-																{
+								},{
 									title : '操作',
 									field : 'id',
 									align : 'center',
 									formatter : function(value, row, index) {
-										var e = '<a class="btn btn-primary btn-sm '+s_edit_h+'" href="#" mce_href="#" title="编辑" onclick="edit(\''
+										var e = '<a class="btn btn-primary btn-sm '+s_edit_h+'" href="#" mce_href="#" title="详情" onclick="edit(\''
 												+ row.id
 												+ '\')"><i class="fa fa-edit"></i></a> ';
 										var d = '<a class="btn btn-warning btn-sm '+s_remove_h+'" href="#" title="删除"  mce_href="#" onclick="remove(\''
@@ -107,7 +105,7 @@ function load() {
 												+ '\')"><i class="fa fa-key"></i></a> ';
 										return e + d ;
 									}
-								} ]
+								}]
 					});
 }
 function reLoad() {

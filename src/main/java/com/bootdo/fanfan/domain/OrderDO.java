@@ -43,6 +43,8 @@ public class OrderDO implements Serializable {
 	private String orderInvoice;
 	//用户主键
 	private Integer createId;
+	//创建人昵称
+	private String userNick;
 	//创建时间
 	private Date createTime;
 
@@ -190,6 +192,20 @@ public class OrderDO implements Serializable {
 	public Integer getCreateId() {
 		return createId;
 	}
+
+	/**
+	 * 获取：用户昵称
+	 */
+	public String getUserNick() {
+		return userNick;
+	}
+	/**
+	 * 设置：用户昵称
+	 */
+	public void setUserNick(String userNick) {
+		this.userNick = userNick;
+	}
+
 	/**
 	 * 设置：创建时间
 	 */
