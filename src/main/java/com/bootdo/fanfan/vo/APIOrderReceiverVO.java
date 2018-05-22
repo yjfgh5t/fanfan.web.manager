@@ -20,4 +20,10 @@ public class APIOrderReceiverVO {
     private String lat;
     //纬度
     private String lng;
+    //配送人
+    private Integer deliveryId;
+    //配送方式
+    private String  deliveryType;
+    //配送人信息
+    private APIOrderDeliveryVO  deliveryVO;
 }

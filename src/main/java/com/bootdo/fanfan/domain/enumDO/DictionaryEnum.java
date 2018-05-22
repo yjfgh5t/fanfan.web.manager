@@ -10,7 +10,10 @@ public enum  DictionaryEnum {
     businessStartTime(1011,"营业开始时间"),
     businessEndTime(1012,"营业开始时间"),
     shopName(1021,"店铺名称"),
-    minOrderPrice(1022,"最低起送价");
+    minOrderPrice(1022,"最低起送价"),
+
+    businessDelivery(1031,"商家配送"),
+    fengNiaoDelivery(1032,"蜂鸟配送");
 
     private Integer key;
 

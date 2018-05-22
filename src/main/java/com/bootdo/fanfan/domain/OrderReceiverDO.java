@@ -31,6 +31,32 @@ public class OrderReceiverDO implements Serializable {
 	private String lat;
 	//纬度
 	private String lng;
+	//配送人
+	private Integer deliveryId;
+	//配送方式
+	private String  deliveryType;
+
+	public Integer getDeliveryId() {
+		return deliveryId;
+	}
+
+	/**
+	 * 配送人
+	 */
+	public void setDeliveryId(Integer deliveryId) {
+		this.deliveryId = deliveryId;
+	}
+
+	/**
+	 * 配送类型
+	 */
+	public String getDeliveryType() {
+		return deliveryType;
+	}
+
+	public void setDeliveryType(String deliveryType) {
+		this.deliveryType = deliveryType;
+	}
 
 	/**
 	 * 设置：订单主键

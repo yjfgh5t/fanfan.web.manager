@@ -814,6 +814,22 @@ INSERT INTO `ff_dictionary` VALUES ('1', '1011', '09:00', '1');
 INSERT INTO `ff_dictionary` VALUES ('2', '1012', '21:00', '1');
 INSERT INTO `ff_dictionary` VALUES ('3', '1021', '测试店铺 ', '1');
 INSERT INTO `ff_dictionary` VALUES ('4', '1022', '21.50', '1');
+INSERT INTO `ff_dictionary` VALUES ('5', '1031', '商家配送', '1');
+INSERT INTO `ff_dictionary` VALUES ('6', '1032', '商家配送', '1');
+
+
+-- ----------------------------
+-- Records of ff_delivery
+-- ----------------------------
+CREATE TABLE `ff_delivery` (
+  `id` int(11) NOT NULL COMMENT '主键',
+  `name` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT '配送人姓名',
+  `tel` varchar(11) COLLATE utf8_bin DEFAULT NULL COMMENT '配送人电话',
+  `delete` tinyint(4) DEFAULT NULL COMMENT '是否删除',
+  `create_id` int(11) DEFAULT NULL COMMENT '创建人',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
 
 -- ----------------------------
 -- Table structure for ff_order
