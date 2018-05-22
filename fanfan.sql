@@ -1143,6 +1143,8 @@ CREATE TABLE `ff_order_receiver` (
   `addr_detail` varchar(256) COLLATE utf8_bin DEFAULT NULL COMMENT '详细地址',
   `lat` varchar(18) COLLATE utf8_bin DEFAULT NULL COMMENT '精度',
   `lng` varchar(18) COLLATE utf8_bin DEFAULT NULL COMMENT '纬度',
+  `delivery_id` int(11) COLLATE utf8_bin DEFAULT NULL COMMENT '配送人',
+  `delivery_type` varchar(36) COLLATE utf8_bin DEFAULT NULL COMMENT '配送类型'
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
