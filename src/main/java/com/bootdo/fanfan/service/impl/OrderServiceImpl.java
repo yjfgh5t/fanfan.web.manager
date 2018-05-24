@@ -6,12 +6,13 @@ import com.bootdo.common.utils.StringUtils;
 import com.bootdo.fanfan.domain.*;
 import com.bootdo.fanfan.domain.enumDO.OrderStateEnum;
 import com.bootdo.fanfan.manager.AlipayManager;
+import com.bootdo.fanfan.manager.XGPushManager;
 import com.bootdo.fanfan.service.*;
 import com.bootdo.fanfan.vo.APIOrderDetail;
 import com.bootdo.fanfan.vo.APIOrderListVO;
 import com.bootdo.fanfan.vo.APIOrderReceiverVO;
 import com.bootdo.fanfan.vo.APIOrderRequVO;
-import org.apache.commons.lang3.ArrayUtils;
+import com.bootdo.fanfan.vo.model.XGPushModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,6 +52,9 @@ public class OrderServiceImpl implements OrderService {
 
 	@Autowired
 	private BootdoConfig bootdoConfig;
+
+	@Autowired
+	XGPushManager xgPushManager;
 
 	//region 默认方法
 	@Override
@@ -93,6 +97,7 @@ public class OrderServiceImpl implements OrderService {
 	/**
 	 * 创建订单
 	 */
+	@Override
 	@Transactional(rollbackFor = {SecurityException.class})
 	public Integer createOrder(APIOrderRequVO orderVO){
 
@@ -115,7 +120,7 @@ public class OrderServiceImpl implements OrderService {
 		if(StringUtils.isEmpty(orderVO.getOrderNum()))
 		{
 			//生成订单号
-			orderDO.setOrderNum(this.getOrderNum(orderDO.getCreateId()));
+			orderDO.setOrderNum(this.getOrderNum(orderDO.getCustomerId()));
 			//获取实体
 			orderDO.setOrderState(101);
 			orderDO.setCreateTime(Calendar.getInstance().getTime());
@@ -133,7 +138,7 @@ public class OrderServiceImpl implements OrderService {
 		orderDetialService.batchSave(orderDetialDOList);
 
 		//保存订单状态
-		orderStateService.save(new OrderStateDO(orderDO.getId(),orderDO.getOrderState(),orderDO.getCreateId()));
+		orderStateService.save(new OrderStateDO(orderDO.getId(),orderDO.getOrderState(),orderDO.getCustomerId()));
 
 		//保存订单收货人信息
 		orderReceiverDO.setId(orderDO.getId());
@@ -157,6 +162,7 @@ public class OrderServiceImpl implements OrderService {
 	 * 查询订单
 	 * @param orderId
 	 */
+	@Override
 	public APIOrderRequVO queryOrder(Integer orderId){
 
 		OrderDO orderDO  =  orderDao.get(orderId);
@@ -196,11 +202,12 @@ public class OrderServiceImpl implements OrderService {
 	 * 修改订单状态
 	 * @param orderDO
 	 */
+	@Override
 	@Transactional(rollbackFor = {SecurityException.class})
 	public void updateOrderState(OrderDO orderDO){
 
 		//保存订单状态
-		orderStateService.save(new OrderStateDO(orderDO.getId(),orderDO.getOrderState(),orderDO.getCreateId()));
+		orderStateService.save(new OrderStateDO(orderDO.getId(),orderDO.getOrderState(),orderDO.getCustomerId()));
 		//修改订单状态
 		orderDao.updateOrderState(orderDO.getOrderState(),orderDO.getId());
 	}
@@ -218,6 +225,27 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public List<OrderDO> getStateById(List<Integer> idArray) {
 		return orderDao.getStateById(idArray);
+	}
+
+	/**
+	 * 发送订单消息通知
+	 * @param orderId
+	 */
+	@Override
+	public void sendOrderNotification(Integer orderId) {
+
+		OrderDO orderDO = this.get(orderId);
+		if(orderDO==null){
+			return;
+		}
+
+		XGPushModel pushModel = new XGPushModel(XGPushModel.MsgType.payOrder,1);
+		pushModel.setMsgTitle("您有新的订单");
+		pushModel.setMsgContent("订单总额："+orderDO.getOrderTotal().toString());
+		pushModel.addParams("orderId",orderId);
+
+		//推送消息
+		xgPushManager.put(pushModel);
 	}
 
 
@@ -267,7 +295,7 @@ public class OrderServiceImpl implements OrderService {
 			throw new SecurityException("订单商品信息不能为空");
 		}
 
-		if(orderRequVO.getCreateId()==null){
+		if(orderRequVO.getUserId()==null){
 			throw  new SecurityException("用户信息不能为空");
 		}
 
@@ -346,8 +374,9 @@ public class OrderServiceImpl implements OrderService {
 		//计算总数量
 		for (APIOrderDetail detail : orderRequVO.getDetailList()) {
 
-			if (detail.getOutType() == null || detail.getOutType() != 1)
+			if (detail.getOutType() == null || detail.getOutType() != 1) {
 				continue;
+			}
 
 			//计算总数量
 			commodityTotal += detail.getOutSize();

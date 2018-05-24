@@ -247,6 +247,13 @@
             <version>3.0.0</version>
         </dependency>
 
+        <!--信鸽SDK -->
+        <dependency>
+            <groupId>com.qq</groupId>
+            <artifactId>qq-xg-sdk</artifactId>
+            <version>v1.1.8</version>
+        </dependency>
+
 
         <!--war包部署需要-->
         <!--<dependency>-->

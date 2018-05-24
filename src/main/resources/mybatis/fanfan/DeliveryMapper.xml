@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bootdo.fanfan.dao.DeliveryDao">
+
+	<select id="get" resultType="com.bootdo.fanfan.domain.DeliveryDO">
+		select `id`,`name`,`tel`,`delete`,`create_id` from ff_delivery where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.bootdo.fanfan.domain.DeliveryDO">
+		select `id`,`name`,`tel`,`delete`,`create_id` from ff_delivery
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="name != null "> and `name` = #{name} </if>
+		  		  <if test="tel != null "> and tel = #{tel} </if>
+		  		  <if test="delete != null "> and `delete` = #{delete} </if>
+		  		  <if test="customerId != null and customerId != ''"> and create_id = #{customerId} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from ff_delivery
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="name != null "> and `name` = #{name} </if>
+		  		  <if test="tel != null "> and tel = #{tel} </if>
+		  		  <if test="delete != null "> and `delete` = #{delete} </if>
+		  		  <if test="customerId != null and customerId != ''"> and create_id = #{customerId} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.bootdo.fanfan.domain.DeliveryDO">
+		insert into ff_delivery
+		(
+			`id`, 
+			`name`, 
+			`tel`, 
+			`delete`, 
+			`create_id`
+		)
+		values
+		(
+			#{id}, 
+			#{name}, 
+			#{tel}, 
+			#{delete}, 
+			#{customerId}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.bootdo.fanfan.domain.DeliveryDO">
+		update ff_delivery 
+		<set>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="tel != null">`tel` = #{tel}, </if>
+			<if test="delete != null">`delete` = #{delete}, </if>
+			<if test="customerId != null">`create_id` = #{customerId}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from ff_delivery where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from ff_delivery where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

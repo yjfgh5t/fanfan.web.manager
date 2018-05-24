@@ -1,11 +1,9 @@
-package com.bootdo.fanfan.api;
+package com.bootdo.fanfan.web.api;
 
-import com.alipay.api.response.AlipayUserInfoShareResponse;
 import com.bootdo.common.extend.EMapper;
 import com.bootdo.common.utils.R;
 import com.bootdo.fanfan.domain.TpUserDO;
 import com.bootdo.fanfan.domain.UserDO;
-import com.bootdo.fanfan.manager.AlipayManager;
 import com.bootdo.fanfan.service.TpUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;

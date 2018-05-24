@@ -1,9 +1,8 @@
-package com.bootdo.fanfan.controller;
+package com.bootdo.fanfan.web.controller;
 
 import java.util.List;
 import java.util.Map;
 
-import com.bootdo.fanfan.service.UserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -15,7 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.bootdo.fanfan.domain.UserDO;
+import com.bootdo.fanfan.domain.TpUserDO;
+import com.bootdo.fanfan.service.TpUserService;
 import com.bootdo.common.utils.PageUtils;
 import com.bootdo.common.utils.Query;
 import com.bootdo.common.utils.R;
@@ -29,41 +29,41 @@ import com.bootdo.common.utils.R;
  */
  
 @Controller
-@RequestMapping("/fanfan/user")
-public class FFUserController {
+@RequestMapping("/fanfan/tpUser")
+public class TpUserController {
 	@Autowired
-	private UserService userService;
+	private TpUserService tpUserService;
 	
 	@GetMapping()
-	@RequiresPermissions("fanfan:user:user")
-	String User(){
-	    return "fanfan/user/user";
+	@RequiresPermissions("fanfan:tpUser:tpUser")
+	String TpUser(){
+	    return "fanfan/tpUser/tpUser";
 	}
 	
 	@ResponseBody
 	@GetMapping("/list")
-	@RequiresPermissions("fanfan:user:user")
+	@RequiresPermissions("fanfan:tpUser:tpUser")
 	public PageUtils list(@RequestParam Map<String, Object> params){
 		//查询列表数据
         Query query = new Query(params);
-		List<UserDO> userList = userService.list(query);
-		int total = userService.count(query);
-		PageUtils pageUtils = new PageUtils(userList, total);
+		List<TpUserDO> tpUserList = tpUserService.list(query);
+		int total = tpUserService.count(query);
+		PageUtils pageUtils = new PageUtils(tpUserList, total);
 		return pageUtils;
 	}
 	
 	@GetMapping("/add")
-	@RequiresPermissions("fanfan:user:add")
+	@RequiresPermissions("fanfan:tpUser:add")
 	String add(){
-	    return "fanfan/user/add";
+	    return "fanfan/tpUser/add";
 	}
 
 	@GetMapping("/edit/{id}")
-	@RequiresPermissions("fanfan:user:edit")
+	@RequiresPermissions("fanfan:tpUser:edit")
 	String edit(@PathVariable("id") Integer id,Model model){
-		UserDO user = userService.get(id);
-		model.addAttribute("user", user);
-	    return "fanfan/user/edit";
+		TpUserDO tpUser = tpUserService.get(id);
+		model.addAttribute("tpUser", tpUser);
+	    return "fanfan/tpUser/edit";
 	}
 	
 	/**
@@ -71,9 +71,9 @@ public class FFUserController {
 	 */
 	@ResponseBody
 	@PostMapping("/save")
-	@RequiresPermissions("fanfan:user:add")
-	public R save( UserDO user){
-		if(userService.save(user)>0){
+	@RequiresPermissions("fanfan:tpUser:add")
+	public R save( TpUserDO tpUser){
+		if(tpUserService.save(tpUser)>0){
 			return R.ok();
 		}
 		return R.error();
@@ -83,9 +83,9 @@ public class FFUserController {
 	 */
 	@ResponseBody
 	@RequestMapping("/update")
-	@RequiresPermissions("fanfan:user:edit")
-	public R update( UserDO user){
-		userService.update(user);
+	@RequiresPermissions("fanfan:tpUser:edit")
+	public R update( TpUserDO tpUser){
+		tpUserService.update(tpUser);
 		return R.ok();
 	}
 	
@@ -94,9 +94,9 @@ public class FFUserController {
 	 */
 	@PostMapping( "/remove")
 	@ResponseBody
-	@RequiresPermissions("fanfan:user:remove")
+	@RequiresPermissions("fanfan:tpUser:remove")
 	public R remove( Integer id){
-		if(userService.remove(id)>0){
+		if(tpUserService.remove(id)>0){
 		return R.ok();
 		}
 		return R.error();
@@ -107,9 +107,9 @@ public class FFUserController {
 	 */
 	@PostMapping( "/batchRemove")
 	@ResponseBody
-	@RequiresPermissions("fanfan:user:batchRemove")
+	@RequiresPermissions("fanfan:tpUser:batchRemove")
 	public R remove(@RequestParam("ids[]") Integer[] ids){
-		userService.batchRemove(ids);
+		tpUserService.batchRemove(ids);
 		return R.ok();
 	}
 	

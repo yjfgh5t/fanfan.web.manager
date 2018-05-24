@@ -1,8 +1,9 @@
-package com.bootdo.fanfan.controller;
+package com.bootdo.fanfan.web.controller;
 
 import java.util.List;
 import java.util.Map;
 
+import com.bootdo.common.controller.BaseController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -10,13 +11,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.bootdo.fanfan.domain.OrderDetialDO;
-import com.bootdo.fanfan.service.OrderDetialService;
+import com.bootdo.fanfan.domain.DeliveryDO;
+import com.bootdo.fanfan.service.DeliveryService;
 import com.bootdo.common.utils.PageUtils;
 import com.bootdo.common.utils.Query;
 import com.bootdo.common.utils.R;
@@ -26,45 +26,47 @@ import com.bootdo.common.utils.R;
  * 
  * @author jy
  * @email 1992lcg@163.com
- * @date 2018-03-31 20:31:20
+ * @date 2018-05-22 22:03:11
  */
  
 @Controller
-@RequestMapping("/fanfan/orderDetial")
-public class OrderDetialController {
+@RequestMapping("/fanfan/delivery")
+public class DeliveryController extends BaseController {
 	@Autowired
-	private OrderDetialService orderDetialService;
+	private DeliveryService deliveryService;
 	
 	@GetMapping()
-	@RequiresPermissions("fanfan:orderDetial:orderDetial")
-	String OrderDetial(){
-	    return "fanfan/orderDetial/orderDetial";
+	@RequiresPermissions("fanfan:delivery:delivery")
+	String Delivery(){
+	    return "fanfan/delivery/delivery";
 	}
 	
 	@ResponseBody
 	@GetMapping("/list")
-	@RequiresPermissions("fanfan:orderDetial:orderDetial")
+	@RequiresPermissions("fanfan:delivery:delivery")
 	public PageUtils list(@RequestParam Map<String, Object> params){
 		//查询列表数据
         Query query = new Query(params);
-		List<OrderDetialDO> orderDetialList = orderDetialService.list(query);
-		int total = orderDetialService.count(query);
-		PageUtils pageUtils = new PageUtils(orderDetialList, total);
+		query.put("delete",0);
+		query.put("create_id",getUserId());
+		List<DeliveryDO> deliveryList = deliveryService.list(query);
+		int total = deliveryService.count(query);
+		PageUtils pageUtils = new PageUtils(deliveryList, total);
 		return pageUtils;
 	}
 	
 	@GetMapping("/add")
-	@RequiresPermissions("fanfan:orderDetial:add")
+	@RequiresPermissions("fanfan:delivery:add")
 	String add(){
-	    return "fanfan/orderDetial/add";
+	    return "fanfan/delivery/add";
 	}
 
 	@GetMapping("/edit/{id}")
-	@RequiresPermissions("fanfan:orderDetial:edit")
+	@RequiresPermissions("fanfan:delivery:edit")
 	String edit(@PathVariable("id") Integer id,Model model){
-		OrderDetialDO orderDetial = orderDetialService.get(id);
-		model.addAttribute("orderDetial", orderDetial);
-	    return "fanfan/orderDetial/edit";
+		DeliveryDO delivery = deliveryService.get(id);
+		model.addAttribute("delivery", delivery);
+	    return "fanfan/delivery/edit";
 	}
 	
 	/**
@@ -72,9 +74,12 @@ public class OrderDetialController {
 	 */
 	@ResponseBody
 	@PostMapping("/save")
-	@RequiresPermissions("fanfan:orderDetial:add")
-	public R save( OrderDetialDO orderDetial){
-		if(orderDetialService.save(orderDetial)>0){
+	@RequiresPermissions("fanfan:delivery:add")
+	public R save( DeliveryDO delivery){
+		//创建人
+		delivery.setCreateId(getUserId().intValue());
+
+		if(deliveryService.save(delivery)>0){
 			return R.ok();
 		}
 		return R.error();
@@ -84,9 +89,9 @@ public class OrderDetialController {
 	 */
 	@ResponseBody
 	@RequestMapping("/update")
-	@RequiresPermissions("fanfan:orderDetial:edit")
-	public R update( OrderDetialDO orderDetial){
-		orderDetialService.update(orderDetial);
+	@RequiresPermissions("fanfan:delivery:edit")
+	public R update( DeliveryDO delivery){
+		deliveryService.update(delivery);
 		return R.ok();
 	}
 	
@@ -95,12 +100,12 @@ public class OrderDetialController {
 	 */
 	@PostMapping( "/remove")
 	@ResponseBody
-	@RequiresPermissions("fanfan:orderDetial:remove")
+	@RequiresPermissions("fanfan:delivery:remove")
 	public R remove( Integer id){
-		if(orderDetialService.remove(id)>0){
-		return R.ok();
+		if(deliveryService.remove(id)>0){
+			return R.ok();
 		}
-		return R.error();
+			return R.error();
 	}
 	
 	/**
@@ -108,9 +113,9 @@ public class OrderDetialController {
 	 */
 	@PostMapping( "/batchRemove")
 	@ResponseBody
-	@RequiresPermissions("fanfan:orderDetial:batchRemove")
+	@RequiresPermissions("fanfan:delivery:batchRemove")
 	public R remove(@RequestParam("ids[]") Integer[] ids){
-		orderDetialService.batchRemove(ids);
+		deliveryService.batchRemove(ids);
 		return R.ok();
 	}
 	

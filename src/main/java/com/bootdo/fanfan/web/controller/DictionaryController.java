@@ -1,8 +1,9 @@
-package com.bootdo.fanfan.controller;
+package com.bootdo.fanfan.web.controller;
 
 import java.util.List;
 import java.util.Map;
 
+import com.bootdo.common.controller.BaseController;
 import com.bootdo.common.extend.EMapper;
 import com.bootdo.fanfan.domain.enumDO.DictionaryEnum;
 import com.bootdo.fanfan.vo.view.DictionaryVO;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,7 +34,7 @@ import com.bootdo.common.utils.R;
  
 @Controller
 @RequestMapping("/fanfan/dictionary")
-public class DictionaryController {
+public class DictionaryController extends BaseController{
 	@Autowired
 	private DictionaryService dictionaryService;
 
@@ -53,6 +53,7 @@ public class DictionaryController {
 	public PageUtils list(@RequestParam Map<String, Object> params){
 		//查询列表数据
         Query query = new Query(params);
+        query.put("create_id",getUserId());
         //获取列表
 		List<DictionaryDO> dictionaryList = dictionaryService.list(query);
 

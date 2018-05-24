@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>登录</title>
+
+    <style type="text/css">
+
+        /**
+ * CSS Global Style
+ * @author: LangLee;
+ * @data: 2014-06-17;
+**/
+        /**
+         * 初始化浏览器默认样式
+         **/
+
+        html,body,div,ol,ul,li,dl,dt,dd,h1,h2,h3,h4,h5,h6,input,button,textarea,p,span,table,th,td,form{margin:0;padding:0}
+        body,input,button,select,textarea{font:12px/1.5 "Microsoft Yahei","Helvetica Neue","iconfont";color:#34495e;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            -moz-font-feature-settings: "liga","kern";}
+        table{border-collapse:collapse;border-spacing:0}
+        img,a img{border:0}
+        a{color:#369;outline:medium none;text-decoration:none;}
+        a:hover{text-decoration:none}
+        label{cursor:pointer}
+        ul li{list-style:none}
+        em,cite,i{font-style:normal}
+        p{  word-wrap: break-word; word-break: break-all;} /*全部英文字符下自动换行*/
+
+        /* 去除Chrome等浏览器文本框默认发光边框 */
+        input:focus, textarea:focus {outline: none;}
+        /* 去除IE10+浏览器文本框后面的小叉叉 */
+        input::-ms-clear {display: none;}
+        /* 禁止多行文本框textarea拖拽 */
+        textarea {resize: none;}
+
+        /* ==全局通用样式== */
+
+        /* 避免因子元素浮动而导致的父元素高度缺失能问题 */
+        .cl:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; } .cl { zoom: 1; }
+
+        /* 浮动 */
+        .z { float: left !important; }
+        .y { float: right !important; }
+
+        /* 鼠标样式，可以根据需要按序添加 */
+        .cur1 { cursor: pointer; }
+
+        /* 显示/隐藏 */
+        .show { display: block}
+        .hide { display: none!important;}
+
+        /* 相对定位 */
+        .pos { position: relative; }
+
+
+        @charset "utf-8";
+        .log-wp,.reg{
+            padding: 0 30px;
+            background-color: #ffffff;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+        .log-wp .icon-ui3,.reg .icon-ui3{
+            display: block;
+            width: 1.8rem;
+            margin: 0 auto;
+            font-size: 1.8rem;
+            color: #3498e9;
+        }
+        .log-box{
+            width: 100%;
+        }
+        .log-box .log-cont {
+            position: relative;
+            /* display: block; */
+            height: 0.68rem;
+            line-height: 0.68rem;
+            width: 100%;
+            margin-top: 0.3rem;
+        }
+        .log-box .log-cont label{
+            display: inline-block;
+            width: 100%;
+            height: 100%;
+        }
+        .log-box .log-cont label input {
+            font-size: 0.32rem;
+            color: #34495e;
+            border: none;
+            padding: 5px 0 5px 5px;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            border-bottom: 1px solid #e5e5e5;
+        }
+        .log-box .log-cont label input#verification{
+            width: 75%;
+            box-sizing: border-box;
+        }
+        .log-box .log-cont label input:focus{
+            border-bottom: 1px solid #3498e9;
+        }
+        ::-webkit-input-placeholder {
+            color: #cacaca;
+        }
+        :-moz-placeholder {
+            color: #cacaca;
+        }
+        ::-moz-placeholder {
+            color: #cacaca;
+        }
+        :-ms-input-placeholder {
+            color: #cacaca;
+        }
+        .log-box .lang-btn,.log-box .reg-btn,.log-box .sub-btn,.log-box .fin-btn,.log-box .email-btn{
+            margin-top: 0.6rem;
+            width: 100%;
+            border-radius: 5px;
+            display: inline-block;
+            background-color: #e5e5e5;
+            height: 1rem;
+            line-height: 1rem;
+            font-size: 0.36rem;
+            color: #b6b6b6;
+            border: none;
+            letter-spacing: 1px;
+            text-align: center;
+            margin-bottom: 0.3rem;
+            outline: none;
+        }
+        .log-box .reg-btn,.log-box .email-btn,.log-box .sub-btn,.log-box .fin-btn{
+            color: white;
+            background-color: #3498e9;
+        }
+        .log-box .lang-btn2{
+            display: none;
+            background-color: #3498e9;
+            color: #ffffff;
+        }
+        @media screen and (max-width: 320px){
+            .log-box .lang-btn,.log-box .lang-btn2,.log-box .reg-btn,.log-box .sub-btn,.log-box .fin-btn,.log-box .email-btn{
+                margin-top: 0.3rem;
+            }
+            .log-box .log-cont{
+                margin-top: 0.1rem;
+                height: 1.02rem;
+                line-height: 1.02rem;
+            }
+        }
+        .log-wp .msg a{
+            color: #cacaca;
+        }
+        .log-box .half .log-cont {
+            width: 50%;
+            margin-bottom: 10px;
+        }
+        .log-box .half span {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            float: left;
+            width: 128px;
+            height: 40px;
+        }
+        .log-box .half span img{
+            width: 100%;
+        }
+        .head{
+            display: -webkit-flex;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            width: 90%;
+            height: 2.15rem;
+            margin: 0.1rem auto 0.5rem;
+        }
+        .head p{
+            text-align: center;
+            color: #000000;
+        }
+        .head p:first-of-type{
+            font-size: 0.42rem;
+        }
+        .head p:last-of-type{
+            font-size: 0.26rem;
+        }
+        .log-box .log-cont .send,.log-box .log-cont .time{
+            position: absolute;
+            display: inline-block;
+            width: 25%;
+            height: 100%;
+            z-index: 10;
+            right: 0;
+            bottom: 0;
+            border-bottom: 1px solid #e5e5e5;
+            text-align: center;
+            font-size: 0.3rem;
+            color: #8d8d8d;
+        }
+        .log-box .log-cont .time{
+            color: #666666;
+        }
+        .reg_checkboxline{
+            font-size: 14px;
+            color: #cacaca;
+            height: 30px;
+            margin-top: 20px;
+            margin-bottom: -10px;
+            line-height: 30px;
+        }
+        .icon-ok-sign{
+            background: #cacaca;
+            border-radius: 2px;
+            margin-right: 5px;
+            cursor: pointer;
+            overflow: hidden;
+            width: 16px;
+            height: 16px;
+            font-size: 12px;
+            display: block;
+            margin-top: 7px;
+            line-height: 16px;
+            text-align: center;
+        }
+        .reg_checkboxline a{
+            color: #8d8d8d;
+        }
+        .reg_checkboxline i.boxcol {
+            background: #3498db;
+            color: #fff;
+        }
+        .pop-con{
+            width: 4.4rem;
+            height: 1.8rem;
+            text-align: center;
+            line-height: 1.8rem;
+            position: fixed;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 5px;
+            background-color: rgba(0,0,0,.7);
+            left: 50%;
+            top: 50%;
+            margin-left: -2.2rem;
+            margin-top: -3.9rem;
+            z-index: 50;
+            visibility: hidden;
+            opacity: 0;
+            -webkit-transition: all 1s;
+            -moz-transition: all 1s;
+            -o-transition: all 1s;
+            transition: all 1s;
+        }
+        .pop-con.on{
+            opacity: 1;
+            visibility: visible;
+        }
+        .tel-cont,.verify-cont{
+            display: none;
+        }
+        .findpassport{
+            width: 100%;
+            height: 2.8rem;
+            line-height: 2.8rem;
+            text-align: center;
+            color: #3498e9;
+            font-size: 0.46rem;
+        }
+
+        .con-tip{
+            font-size: 0.32rem;
+            color: #000;
+            text-align: center;
+        }
+        @media screen and (max-width: 320px){
+            .con-tip{
+                font-size: 0.3rem;
+            }
+        }
+        .email-again{
+            text-align: center;
+            font-size: 0.3rem;
+            color: #cacaca;
+        }
+        .email-again a{
+            color: #3498e9;
+        }
+        .code img{
+            width: 120px;
+            position: absolute;
+            right: 0;
+            bottom: 2px;
+        }
+
+        .icon-ui3:before {
+            content: "\e6b9";
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div id="ajax-hook"></div>
+<div class="log-wp">
+    <i class="icon-ui3"></i>
+    <div class="log-box">
+        <div class="log-cont">
+            <label for="username">
+                <input type="text" name="username" id='username' placeholder="手机号/用户名/邮箱">
+            </label>
+        </div>
+        <div class="log-cont">
+            <label for="password">
+                <input type="password" name="password" id="password" autocomplete="new-password"placeholder="请输入密码">
+            </label>
+        </div>
+        <div id="verify">
+            <div class="half pos hide">
+                <div class="log-cont">
+                    <label class="half" for="code">
+                        <input id="code" type="text" name="code" placeholder="请输入验证码">
+                    </label>
+                </div>
+                <span class="fg-code-pic">
+	                <img src="/Public/mobile/img/code.png" alt="换一张">
+                </span>
+            </div>
+        </div>
+        <button id="login-button"  class="lang-btn">登录</button>
+    </div>
+    <div class="pop-con"></div>
+    <div class="msg cl" style="display: none;">
+        <a class="z" href="http://ui.cn/reg.html">立即注册</a>
+        <a class="y" href="http://ui.cn/getpass.html">忘记密码?</a>
+    </div>
+</div>
+
+<script>
+    (function(window){
+        //根据屏幕宽度动态改变html的font-size大小
+        //获取屏幕宽度
+        var winW = document.documentElement.clientWidth||document.body.clientWidth;
+        document.documentElement.style.fontSize = winW/7.5+"px";
+        window.onresize = function(){
+            var winW = document.documentElement.clientWidth||document.body.clientWidth;
+            document.documentElement.style.fontSize = winW/7.5+"px";
+        }
+    })(window);
+</script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-package com.bootdo.fanfan.controller;
+package com.bootdo.fanfan.web.controller;
 
 import java.util.List;
 import java.util.Map;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -47,10 +46,11 @@ public class CommoditController extends BaseController {
 	@RequiresPermissions("fanfan:commodit:commodit")
 	public PageUtils list(@RequestParam Map<String, Object> params){
 
-		params.put("sort","`order`");
-		params.put("order","asc");
 		//查询列表数据
         Query query = new Query(params);
+		query.put("sort","`order`");
+		query.put("order","asc");
+		query.put("create_id",getUserId());
 		List<CommoditDO> commoditList = commoditService.list(query);
 		int total = commoditService.count(query);
 		PageUtils pageUtils = new PageUtils(commoditList, total);

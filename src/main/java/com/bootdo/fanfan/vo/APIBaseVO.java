@@ -15,9 +15,9 @@ public class APIBaseVO {
     private String clientType;
 
     /**
-     * 支付宝用户id
+     * 客户端用户id
      */
-    private String userId;
+    private Integer userId;
 
     /**
      * 店铺用户id

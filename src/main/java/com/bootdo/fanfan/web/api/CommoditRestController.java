@@ -1,18 +1,13 @@
-package com.bootdo.fanfan.api;
+package com.bootdo.fanfan.web.api;
 
-import com.alibaba.fastjson.JSON;
 import com.bootdo.common.extend.EMapper;
 import com.bootdo.common.utils.Query;
 import com.bootdo.common.utils.R;
-import com.bootdo.fanfan.domain.CommoditDO;
 import com.bootdo.fanfan.service.CommoditService;
 import com.bootdo.fanfan.vo.APICommodityVO;
-import com.bootdo.fanfan.vo.APIResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;

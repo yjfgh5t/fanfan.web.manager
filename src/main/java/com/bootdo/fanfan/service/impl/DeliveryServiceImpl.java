@@ -34,6 +34,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 	
 	@Override
 	public int save(DeliveryDO delivery){
+		delivery.setDelete(0);
 		return deliveryDao.save(delivery);
 	}
 	
@@ -44,7 +45,10 @@ public class DeliveryServiceImpl implements DeliveryService {
 	
 	@Override
 	public int remove(Integer id){
-		return deliveryDao.remove(id);
+		DeliveryDO delivery = new DeliveryDO();
+		delivery.setId(id);
+		delivery.setDelete(1);
+		return deliveryDao.update(delivery);
 	}
 	
 	@Override

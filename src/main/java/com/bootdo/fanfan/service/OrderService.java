@@ -71,4 +71,9 @@ public interface OrderService {
 	 */
     List<OrderDO> getStateById(List<Integer> idArray);
 
+	/**
+	 * 发送订单通知
+	 * @param orderId
+	 */
+	void sendOrderNotification(Integer orderId);
 }

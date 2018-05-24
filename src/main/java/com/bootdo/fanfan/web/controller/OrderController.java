@@ -1,9 +1,9 @@
-package com.bootdo.fanfan.controller;
+package com.bootdo.fanfan.web.controller;
 
 import java.util.List;
 import java.util.Map;
 
-import com.alipay.api.domain.OrderDetail;
+import com.bootdo.common.controller.BaseController;
 import com.bootdo.common.extend.EMapper;
 import com.bootdo.fanfan.domain.OrderDetialDO;
 import com.bootdo.fanfan.domain.OrderReceiverDO;
@@ -20,7 +20,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -41,7 +40,7 @@ import com.bootdo.common.utils.R;
  
 @Controller
 @RequestMapping("/fanfan/order")
-public class OrderController {
+public class OrderController extends BaseController {
 	@Autowired
 	private OrderService orderService;
 
@@ -69,6 +68,7 @@ public class OrderController {
 	public PageUtils list(@RequestParam Map<String, Object> params){
 		//查询列表数据
         Query query = new Query(params);
+		query.put("customerId",getUserId());
 		List<OrderDO> orderList = orderService.list(query);
 
 		//转换VO
@@ -114,7 +114,7 @@ public class OrderController {
 		OrderReceiverDO receiverDO = orderReceiverService.queryById(id);
 
 		//下单人信息
-		UserDO userDO =userService.get(order.getCreateId());
+		UserDO userDO =userService.get(order.getCustomerId());
 
 
 		OrderVO orderVO = eMapper.map(order,OrderVO.class);

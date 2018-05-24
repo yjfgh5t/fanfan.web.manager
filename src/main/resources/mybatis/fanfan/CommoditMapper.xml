@@ -19,7 +19,7 @@
 		  		  <if test="commoditFiexNum != null and commoditFiexNum != ''"> and commodit_fiex_num = #{commoditFiexNum} </if>
 		  		  <if test="status != null and status != ''"> and status = #{status} </if>
 		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
-		  		  <if test="createId != null and createId != ''"> and create_id = #{createId} </if>
+		  		  <if test="customerId != null and customerId != ''"> and create_id = #{customerId} </if>
 		  		  <if test="commoditType != null and commoditType != ''"> and commodit_type = #{commoditType} </if>
 	  </where>
         <choose>
@@ -47,7 +47,7 @@
 		  		  <if test="commoditFiexNum != null and commoditFiexNum != ''"> and commodit_fiex_num = #{commoditFiexNum} </if>
 		  		  <if test="status != null and status != ''"> and status = #{status} </if>
 		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
-		  		  <if test="createId != null and createId != ''"> and create_id = #{createId} </if>
+		  		  <if test="customerId != null and customerId != ''"> and create_id = #{customerId} </if>
 		  		  <if test="commoditType != null and commoditType != ''"> and commodit_type = #{commoditType} </if>
 		  		  <if test="delete != null and delete != ''"> and delete = #{delete} </if>
 		  		</where>
@@ -79,7 +79,7 @@
 			#{commoditFiexNum}, 
 			#{status}, 
 			#{createTime}, 
-			#{createId}, 
+			#{customerId},
 			#{order}, 
 			#{commoditType}, 
 			#{delete}
@@ -97,7 +97,7 @@
 			<if test="commoditFiexNum != null">`commodit_fiex_num` = #{commoditFiexNum}, </if>
 			<if test="status != null">`status` = #{status}, </if>
 			<if test="createTime != null">`create_time` = #{createTime}, </if>
-			<if test="createId != null">`create_id` = #{createId}, </if>
+			<if test="customerId != null">`create_id` = #{customerId}, </if>
 			<if test="order != null">`order` = #{order}, </if>
 			<if test="commoditType != null">`commodit_type` = #{commoditType}, </if>
 			<if test="delete != null">`delete` = #{delete}</if>

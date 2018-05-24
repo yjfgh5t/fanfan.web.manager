@@ -1,4 +1,4 @@
-package com.bootdo.fanfan.api;
+package com.bootdo.fanfan.web.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bootdo.fanfan.vo.APIBaseVO;

@@ -1,15 +1,12 @@
-package com.bootdo.fanfan.api;
+package com.bootdo.fanfan.web.api;
 
 import com.alibaba.fastjson.JSON;
-import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.bootdo.common.extend.EMapper;
-import com.bootdo.common.utils.R;
 import com.bootdo.common.utils.StringUtils;
 import com.bootdo.fanfan.domain.AlipayRecordDO;
-import com.bootdo.fanfan.domain.OrderDO;
 import com.bootdo.fanfan.manager.AlipayManager;
 import com.bootdo.fanfan.service.AlipayRecordService;
-import com.bootdo.fanfan.service.OrderStateService;
+import com.bootdo.fanfan.service.OrderService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +28,9 @@ public class AlipayRestController {
 
     @Autowired
     AlipayRecordService alipayRecordService;
+
+    @Autowired
+    OrderService orderService;
 
     Log log = LogFactory.getLog(AlipayRestController.class);
 
@@ -60,7 +60,10 @@ public class AlipayRestController {
 
        //执行保存
         try {
+            //修改订单支付状态
             alipayRecordService.save(recordDO);
+            //发送消息
+            orderService.sendOrderNotification(Integer.parseInt(recordDO.getPassbackParams()));
         }catch (SecurityException ex){
             log.error("保存支付宝异步消息异常--{}",ex);
         }

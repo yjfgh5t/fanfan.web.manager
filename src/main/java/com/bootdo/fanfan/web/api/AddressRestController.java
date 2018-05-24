@@ -1,4 +1,4 @@
-package com.bootdo.fanfan.api;
+package com.bootdo.fanfan.web.api;
 
 import com.bootdo.common.extend.EMapper;
 import com.bootdo.common.utils.R;

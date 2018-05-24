@@ -21,6 +21,8 @@ public class OrderDO implements Serializable {
 	
 	//主键
 	private Integer id;
+	//订单创建人
+	private Integer userId;
 	//订单号
 	private String orderNum;
 	//订单状态：101：创建订单  102：待支付 103：已支付 104:超时未支付 105：确认收单 106：异常订单反馈 201：确认收单 202:取消收单-退款 203:开始派单
@@ -41,8 +43,8 @@ public class OrderDO implements Serializable {
 	private String orderRemark;
 	//订单发票信息
 	private String orderInvoice;
-	//用户主键
-	private Integer createId;
+	//商户id customerId
+	private Integer customerId;
 	//创建人昵称
 	private String userNick;
 	//创建时间
@@ -183,14 +185,14 @@ public class OrderDO implements Serializable {
 	/**
 	 * 设置：用户主键
 	 */
-	public void setCreateId(Integer createId) {
-		this.createId = createId;
+	public void setCustomerId(Integer customerId) {
+		this.customerId = customerId;
 	}
 	/**
 	 * 获取：用户主键
 	 */
-	public Integer getCreateId() {
-		return createId;
+	public Integer getCustomerId() {
+		return customerId;
 	}
 
 	/**

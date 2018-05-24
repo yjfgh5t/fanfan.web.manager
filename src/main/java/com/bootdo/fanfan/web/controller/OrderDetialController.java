@@ -1,4 +1,4 @@
-package com.bootdo.fanfan.controller;
+package com.bootdo.fanfan.web.controller;
 
 import java.util.List;
 import java.util.Map;
@@ -10,13 +10,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.bootdo.fanfan.domain.TpUserDO;
-import com.bootdo.fanfan.service.TpUserService;
+import com.bootdo.fanfan.domain.OrderDetialDO;
+import com.bootdo.fanfan.service.OrderDetialService;
 import com.bootdo.common.utils.PageUtils;
 import com.bootdo.common.utils.Query;
 import com.bootdo.common.utils.R;
@@ -26,45 +25,45 @@ import com.bootdo.common.utils.R;
  * 
  * @author jy
  * @email 1992lcg@163.com
- * @date 2018-03-31 20:50:47
+ * @date 2018-03-31 20:31:20
  */
  
 @Controller
-@RequestMapping("/fanfan/tpUser")
-public class TpUserController {
+@RequestMapping("/fanfan/orderDetial")
+public class OrderDetialController {
 	@Autowired
-	private TpUserService tpUserService;
+	private OrderDetialService orderDetialService;
 	
 	@GetMapping()
-	@RequiresPermissions("fanfan:tpUser:tpUser")
-	String TpUser(){
-	    return "fanfan/tpUser/tpUser";
+	@RequiresPermissions("fanfan:orderDetial:orderDetial")
+	String OrderDetial(){
+	    return "fanfan/orderDetial/orderDetial";
 	}
 	
 	@ResponseBody
 	@GetMapping("/list")
-	@RequiresPermissions("fanfan:tpUser:tpUser")
+	@RequiresPermissions("fanfan:orderDetial:orderDetial")
 	public PageUtils list(@RequestParam Map<String, Object> params){
 		//查询列表数据
         Query query = new Query(params);
-		List<TpUserDO> tpUserList = tpUserService.list(query);
-		int total = tpUserService.count(query);
-		PageUtils pageUtils = new PageUtils(tpUserList, total);
+		List<OrderDetialDO> orderDetialList = orderDetialService.list(query);
+		int total = orderDetialService.count(query);
+		PageUtils pageUtils = new PageUtils(orderDetialList, total);
 		return pageUtils;
 	}
 	
 	@GetMapping("/add")
-	@RequiresPermissions("fanfan:tpUser:add")
+	@RequiresPermissions("fanfan:orderDetial:add")
 	String add(){
-	    return "fanfan/tpUser/add";
+	    return "fanfan/orderDetial/add";
 	}
 
 	@GetMapping("/edit/{id}")
-	@RequiresPermissions("fanfan:tpUser:edit")
+	@RequiresPermissions("fanfan:orderDetial:edit")
 	String edit(@PathVariable("id") Integer id,Model model){
-		TpUserDO tpUser = tpUserService.get(id);
-		model.addAttribute("tpUser", tpUser);
-	    return "fanfan/tpUser/edit";
+		OrderDetialDO orderDetial = orderDetialService.get(id);
+		model.addAttribute("orderDetial", orderDetial);
+	    return "fanfan/orderDetial/edit";
 	}
 	
 	/**
@@ -72,9 +71,9 @@ public class TpUserController {
 	 */
 	@ResponseBody
 	@PostMapping("/save")
-	@RequiresPermissions("fanfan:tpUser:add")
-	public R save( TpUserDO tpUser){
-		if(tpUserService.save(tpUser)>0){
+	@RequiresPermissions("fanfan:orderDetial:add")
+	public R save( OrderDetialDO orderDetial){
+		if(orderDetialService.save(orderDetial)>0){
 			return R.ok();
 		}
 		return R.error();
@@ -84,9 +83,9 @@ public class TpUserController {
 	 */
 	@ResponseBody
 	@RequestMapping("/update")
-	@RequiresPermissions("fanfan:tpUser:edit")
-	public R update( TpUserDO tpUser){
-		tpUserService.update(tpUser);
+	@RequiresPermissions("fanfan:orderDetial:edit")
+	public R update( OrderDetialDO orderDetial){
+		orderDetialService.update(orderDetial);
 		return R.ok();
 	}
 	
@@ -95,9 +94,9 @@ public class TpUserController {
 	 */
 	@PostMapping( "/remove")
 	@ResponseBody
-	@RequiresPermissions("fanfan:tpUser:remove")
+	@RequiresPermissions("fanfan:orderDetial:remove")
 	public R remove( Integer id){
-		if(tpUserService.remove(id)>0){
+		if(orderDetialService.remove(id)>0){
 		return R.ok();
 		}
 		return R.error();
@@ -108,9 +107,9 @@ public class TpUserController {
 	 */
 	@PostMapping( "/batchRemove")
 	@ResponseBody
-	@RequiresPermissions("fanfan:tpUser:batchRemove")
+	@RequiresPermissions("fanfan:orderDetial:batchRemove")
 	public R remove(@RequestParam("ids[]") Integer[] ids){
-		tpUserService.batchRemove(ids);
+		orderDetialService.batchRemove(ids);
 		return R.ok();
 	}
 	

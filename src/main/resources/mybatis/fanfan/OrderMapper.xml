@@ -4,14 +4,15 @@
 <mapper namespace="com.bootdo.fanfan.dao.OrderDao">
 
 	<select id="get" resultType="com.bootdo.fanfan.domain.OrderDO">
-		select `id`,`order_num`,`order_state`,`order_total`,`order_pay`,`order_discount_total`,`order_commodity_total`,`order_pay_type`,`order_meals_num`,`order_remark`,`order_invoice`,`create_id`,`create_time` from ff_order where id = #{value}
+		select `id`,`user_id`,`order_num`,`order_state`,`order_total`,`order_pay`,`order_discount_total`,`order_commodity_total`,`order_pay_type`,`order_meals_num`,`order_remark`,`order_invoice`,`customer_id` from ff_order where id = #{value}
 	</select>
 
 	<select id="list" resultType="com.bootdo.fanfan.domain.OrderDO">
 		SELECT  tab_order.*,tab_user.user_nick from (
-			select `id`,`order_num`,`order_state`,`order_total`,`order_pay`,`order_discount_total`,`order_commodity_total`,`order_pay_type`,`order_meals_num`,`order_remark`,`order_invoice`,`create_id`,`create_time` from ff_order
+			select `id`,`user_id`,`order_num`,`order_state`,`order_total`,`order_pay`,`order_discount_total`,`order_commodity_total`,`order_pay_type`,`order_meals_num`,`order_remark`,`order_invoice`,`customer_id`,`create_time` from ff_order
 			<where>
 					  <if test="id != null and id != ''"> and id = #{id} </if>
+				      <if test="userId != null and userId != ''"> and user_id = #{userId} </if>
 					  <if test="orderNum != null and orderNum != ''"> and order_num = #{orderNum} </if>
 					  <if test="orderState != null and orderState != ''"> and order_state = #{orderState} </if>
 					  <if test="orderTotal != null and orderTotal != ''"> and order_total = #{orderTotal} </if>
@@ -22,7 +23,7 @@
 					  <if test="orderMealsNum != null and orderMealsNum != ''"> and order_meals_num = #{orderMealsNum} </if>
 					  <if test="orderRemark != null and orderRemark != ''"> and order_remark = #{orderRemark} </if>
 					  <if test="orderInvoice != null and orderInvoice != ''"> and order_invoice = #{orderInvoice} </if>
-					  <if test="createId != null and createId != ''"> and create_id = #{createId} </if>
+					  <if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
 					  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
 			 </where>
 			<choose>
@@ -38,13 +39,14 @@
 			</if>
 		) as tab_order
 		JOIN ff_user as tab_user
-		ON tab_order.create_id = tab_user.id
+		ON tab_order.user_id = tab_user.id
 	</select>
 	
  	<select id="count" resultType="int">
 		select count(*) from ff_order
 		 <where>  
 		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+			 	  <if test="userId != null and userId != ''"> and user_id = #{userId} </if>
 		  		  <if test="orderNum != null and orderNum != ''"> and order_num = #{orderNum} </if>
 		  		  <if test="orderState != null and orderState != ''"> and order_state = #{orderState} </if>
 		  		  <if test="orderTotal != null and orderTotal != ''"> and order_total = #{orderTotal} </if>
@@ -55,7 +57,7 @@
 		  		  <if test="orderMealsNum != null and orderMealsNum != ''"> and order_meals_num = #{orderMealsNum} </if>
 		  		  <if test="orderRemark != null and orderRemark != ''"> and order_remark = #{orderRemark} </if>
 		  		  <if test="orderInvoice != null and orderInvoice != ''"> and order_invoice = #{orderInvoice} </if>
-		  		  <if test="createId != null and createId != ''"> and create_id = #{createId} </if>
+		  		  <if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
 		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
 		  		</where>
 	</select>
@@ -63,6 +65,7 @@
 	<insert id="save" parameterType="com.bootdo.fanfan.domain.OrderDO" useGeneratedKeys="true" keyProperty="id">
 		insert into ff_order
 		(
+			`user_id`,
 			`order_num`, 
 			`order_state`, 
 			`order_total`, 
@@ -73,11 +76,12 @@
 			`order_meals_num`, 
 			`order_remark`, 
 			`order_invoice`, 
-			`create_id`, 
+			`customer_id`,
 			`create_time`
 		)
 		values
 		(
+		    #{userId},
 			#{orderNum}, 
 			#{orderState}, 
 			#{orderTotal}, 
@@ -88,7 +92,7 @@
 			#{orderMealsNum}, 
 			#{orderRemark}, 
 			#{orderInvoice}, 
-			#{createId}, 
+			#{customerId},
 			#{createTime}
 		)
 	</insert>
@@ -96,6 +100,7 @@
 	<update id="update" parameterType="com.bootdo.fanfan.domain.OrderDO">
 		update ff_order 
 		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
 			<if test="orderNum != null">`order_num` = #{orderNum}, </if>
 			<if test="orderState != null">`order_state` = #{orderState}, </if>
 			<if test="orderTotal != null">`order_total` = #{orderTotal}, </if>
@@ -106,7 +111,7 @@
 			<if test="orderMealsNum != null">`order_meals_num` = #{orderMealsNum}, </if>
 			<if test="orderRemark != null">`order_remark` = #{orderRemark}, </if>
 			<if test="orderInvoice != null">`order_invoice` = #{orderInvoice}, </if>
-			<if test="createId != null">`create_id` = #{createId}, </if>
+			<if test="customerId != null">`customer_id` = #{customerId}, </if>
 			<if test="createTime != null">`create_time` = #{createTime}</if>
 		</set>
 		where id = #{id}
@@ -125,9 +130,17 @@
 
 	<select id="queryOrderByUser" resultType="com.bootdo.fanfan.vo.APIOrderListVO">
 		select A.id, A.`order_num`,A.`order_state`,A.`order_pay`,A.`order_commodity_total` as `commodity_total`,B.`out_title` as `title`,A.`create_time`,C.commodit_img    from
-		(select `id`,`order_num`,`order_state`,`order_pay`,`order_commodity_total`,`create_time`  from ff_order
+		(select `id`,`order_num`,`order_state`,`order_pay`,`order_commodity_total`,`create_time` from ff_order
 		<where>
-			<if test="createId != null and createId != ''"> and create_id = #{createId} </if>
+			order_state!=101
+			<if test="userId != null and userId != ''"> AND user_id = #{user_id} </if>
+			<if test="customerId != null and customerId != ''"> AND customer_id = #{customerId} </if>
+			<if test="orderState !=null and orderState.size>0">
+				AND order_state IN
+				<foreach collection="orderState" open="(" close=")" item="item" separator=",">
+					#{item}
+				</foreach>
+			</if>
 		</where>
 	    order by `create_time` desc
 		<if test="offset != null and limit != null">

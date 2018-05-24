@@ -14,7 +14,7 @@
 		  		  <if test="orderId != null and orderId != ''"> and order_id = #{orderId} </if>
 		  		  <if test="orderState != null and orderState != ''"> and order_state = #{orderState} </if>
 		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
-		  		  <if test="createId != null and createId != ''"> and create_id = #{createId} </if>
+		  		  <if test="customerId != null and customerId != ''"> and create_id = #{customerId} </if>
 		  		</where>
         <choose>
             <when test="sort != null and sort.trim() != ''">
@@ -36,7 +36,7 @@
 		  		  <if test="orderId != null and orderId != ''"> and order_id = #{orderId} </if>
 		  		  <if test="orderState != null and orderState != ''"> and order_state = #{orderState} </if>
 		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
-		  		  <if test="createId != null and createId != ''"> and create_id = #{createId} </if>
+		  		  <if test="customerId != null and customerId != ''"> and create_id = #{customerId} </if>
 		  		</where>
 	</select>
 	 
@@ -53,7 +53,7 @@
 			#{orderId}, 
 			#{orderState}, 
 			#{createTime}, 
-			#{createId}
+			#{customerId}
 		)
 	</insert>
 	 
@@ -63,7 +63,7 @@
 			<if test="orderId != null">`order_id` = #{orderId}, </if>
 			<if test="orderState != null">`order_state` = #{orderState}, </if>
 			<if test="createTime != null">`create_time` = #{createTime}, </if>
-			<if test="createId != null">`create_id` = #{createId}</if>
+			<if test="customerId != null">`create_id` = #{customerId}</if>
 		</set>
 		where id = #{id}
 	</update>

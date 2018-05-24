@@ -13,7 +13,7 @@
 		  		  <if test="id != null and id != ''"> and id = #{id} </if>
 		  		  <if test="key != null and key != ''"> and key = #{key} </if>
 		  		  <if test="val != null and val != ''"> and val = #{val} </if>
-		  		  <if test="createId != null and createId != ''"> and create_id = #{createId} </if>
+		  		  <if test="customerId != null and customerId != ''"> and create_id = #{customerId} </if>
 		  		</where>
         <choose>
             <when test="sort != null and sort.trim() != ''">
@@ -34,7 +34,7 @@
 		  		  <if test="id != null and id != ''"> and id = #{id} </if>
 		  		  <if test="key != null and key != ''"> and key = #{key} </if>
 		  		  <if test="val != null and val != ''"> and val = #{val} </if>
-		  		  <if test="createId != null and createId != ''"> and create_id = #{createId} </if>
+		  		  <if test="customerId != null and customerId != ''"> and create_id = #{customerId} </if>
 		  		</where>
 	</select>
 	 
@@ -49,7 +49,7 @@
 		(
 			#{key}, 
 			#{val}, 
-			#{createId}
+			#{customerId}
 		)
 	</insert>
 	 
@@ -58,7 +58,7 @@
 		<set>
 			<if test="key != null">`key` = #{key}, </if>
 			<if test="val != null">`val` = #{val}, </if>
-			<if test="createId != null">`create_id` = #{createId}</if>
+			<if test="customerId != null">`create_id` = #{customerId}</if>
 		</set>
 		where id = #{id}
 	</update>

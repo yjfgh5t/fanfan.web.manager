@@ -1,6 +1,8 @@
 bootdo:
   uploadPath: /usr/local/app/static
   staticUrl: http://static.wxcard.com.cn
+  xgAccessId: 2100205073
+  xgSecretKey: 630b8f1bfecc33e3373755da02b75657
 logging:
   level:
     root: error

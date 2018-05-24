@@ -1,4 +1,4 @@
-package com.bootdo.fanfan.api;
+package com.bootdo.fanfan.web.api;
 
 import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.bootdo.common.config.BootdoConfig;
@@ -12,6 +12,7 @@ import com.bootdo.fanfan.service.AlipayRecordService;
 import com.bootdo.fanfan.service.OrderService;
 import com.bootdo.fanfan.service.OrderStateService;
 import com.bootdo.fanfan.vo.APIOrderListVO;
+import com.bootdo.fanfan.vo.APIOrderQueryRequVO;
 import com.bootdo.fanfan.vo.APIOrderRequVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -49,6 +50,9 @@ public class OrderRestController extends ApiBaseRestController {
     @PostMapping("/")
     public R createOrder(@RequestBody APIOrderRequVO orderModel){
         try {
+
+            orderModel.setCustomerId(baseModel.getCustomerId());
+
             //创建订单
             Integer  orderId = orderService.createOrder(orderModel);
 
@@ -63,25 +67,45 @@ public class OrderRestController extends ApiBaseRestController {
 
     /**
      * 查询用户订单列表
-     * @param pageIndex
+     * @param orderQueryRequVO
      * @return
      */
-    @GetMapping("/")
-    public R queryOrder(Integer pageIndex){
+    @PostMapping("/query")
+    public R queryOrder(@RequestBody APIOrderQueryRequVO orderQueryRequVO){
 
-        if(pageIndex==null)
+        if(orderQueryRequVO.getPageIndex()==null)
             return R.error("参数不能未空");
 
-        int page =  pageIndex*10;
+        int page =  orderQueryRequVO.getPageIndex()*10;
 
         //设置参数
         Map<String,Object> params = new HashMap<>();
-        params.put("createId",baseModel.getUserId());
+
+        //用户
+        if(orderQueryRequVO.getUserId()!=null) {
+            params.put("userId", orderQueryRequVO.getUserId());
+        }
+
+        //商户
+        if(orderQueryRequVO.getCustomerId()!=null){
+            params.put("customerId", orderQueryRequVO.getCustomerId());
+        }
+
+        //状态
+        if(orderQueryRequVO.getOrderState()!=null){
+            params.put("orderState", orderQueryRequVO.getOrderState());
+        }
+
         params.put("offset",page-10);
         params.put("limit",page);
 
-        List<APIOrderListVO> list = orderService.queryOrderByUser(params);
+        //参数数量不够
+        if(params.size()<3){
+            return R.error("参数不能未空");
+        }
 
+
+        List<APIOrderListVO> list = orderService.queryOrderByUser(params);
 
        return R.ok().put("data",list);
     }
@@ -173,5 +197,16 @@ public class OrderRestController extends ApiBaseRestController {
             }
         }
         return R.ok().put("data","");
+    }
+
+    /**
+     * 测试推送订单
+     * @param id
+     * @return
+     */
+    @GetMapping("/debugPush/{id}")
+    public R debugPush(@PathVariable("id") Integer id){
+        orderService.sendOrderNotification(id);
+        return R.ok();
     }
 }

@@ -15,16 +15,29 @@ public class BootdoConfig {
 	private String staticUrl;
 
 	/**
-	 * 测试环境
+	 * 信鸽账号
 	 */
-	private Boolean aliPayTest;
+	private Integer xgAccessId;
 
-	public Boolean getAliPayTest() {
-		return aliPayTest;
+	/**
+	 * 信鸽Key
+	 */
+	private String xgSecretKey;
+
+	public Integer getXgAccessId() {
+		return xgAccessId;
 	}
 
-	public void setAliPayTest(Boolean aliPayTest) {
-		this.aliPayTest = aliPayTest;
+	public void setXgAccessId(Integer xgAccessId) {
+		this.xgAccessId = xgAccessId;
+	}
+
+	public String getXgSecretKey() {
+		return xgSecretKey;
+	}
+
+	public void setXgSecretKey(String xgSecretKey) {
+		this.xgSecretKey = xgSecretKey;
 	}
 
 	public String getStaticUrl() {

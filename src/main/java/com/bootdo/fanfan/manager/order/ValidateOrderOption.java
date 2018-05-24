@@ -16,7 +16,7 @@ public class ValidateOrderOption implements OrderChain {
             throw new SecurityException("订单商品信息不能为空");
         }
 
-        if(orderRequVO.getCreateId()==null){
+        if(orderRequVO.getUserId()==null){
             throw  new SecurityException("用户信息不能为空");
         }
 

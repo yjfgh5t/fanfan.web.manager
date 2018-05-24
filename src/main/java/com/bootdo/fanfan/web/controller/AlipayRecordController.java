@@ -1,4 +1,4 @@
-package com.bootdo.fanfan.controller;
+package com.bootdo.fanfan.web.controller;
 
 import java.util.List;
 import java.util.Map;
@@ -10,13 +10,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.bootdo.fanfan.domain.OrderAlipayDO;
-import com.bootdo.fanfan.service.OrderAlipayService;
+import com.bootdo.fanfan.domain.AlipayRecordDO;
+import com.bootdo.fanfan.service.AlipayRecordService;
 import com.bootdo.common.utils.PageUtils;
 import com.bootdo.common.utils.Query;
 import com.bootdo.common.utils.R;
@@ -26,45 +25,45 @@ import com.bootdo.common.utils.R;
  * 
  * @author jy
  * @email 1992lcg@163.com
- * @date 2018-04-09 22:34:51
+ * @date 2018-04-11 15:33:59
  */
  
 @Controller
-@RequestMapping("/fanfan/orderAlipay")
-public class OrderAlipayController {
+@RequestMapping("/fanfan/alipayRecord")
+public class AlipayRecordController {
 	@Autowired
-	private OrderAlipayService orderAlipayService;
+	private AlipayRecordService alipayRecordService;
 	
 	@GetMapping()
-	@RequiresPermissions("fanfan:orderAlipay:orderAlipay")
-	String OrderAlipay(){
-	    return "fanfan/orderAlipay/orderAlipay";
+	@RequiresPermissions("fanfan:alipayRecord:alipayRecord")
+	String AlipayRecord(){
+	    return "fanfan/alipayRecord/alipayRecord";
 	}
 	
 	@ResponseBody
 	@GetMapping("/list")
-	@RequiresPermissions("fanfan:orderAlipay:orderAlipay")
+	@RequiresPermissions("fanfan:alipayRecord:alipayRecord")
 	public PageUtils list(@RequestParam Map<String, Object> params){
 		//查询列表数据
         Query query = new Query(params);
-		List<OrderAlipayDO> orderAlipayList = orderAlipayService.list(query);
-		int total = orderAlipayService.count(query);
-		PageUtils pageUtils = new PageUtils(orderAlipayList, total);
+		List<AlipayRecordDO> alipayRecordList = alipayRecordService.list(query);
+		int total = alipayRecordService.count(query);
+		PageUtils pageUtils = new PageUtils(alipayRecordList, total);
 		return pageUtils;
 	}
 	
 	@GetMapping("/add")
-	@RequiresPermissions("fanfan:orderAlipay:add")
+	@RequiresPermissions("fanfan:alipayRecord:add")
 	String add(){
-	    return "fanfan/orderAlipay/add";
+	    return "fanfan/alipayRecord/add";
 	}
 
 	@GetMapping("/edit/{id}")
-	@RequiresPermissions("fanfan:orderAlipay:edit")
+	@RequiresPermissions("fanfan:alipayRecord:edit")
 	String edit(@PathVariable("id") Integer id,Model model){
-		OrderAlipayDO orderAlipay = orderAlipayService.get(id);
-		model.addAttribute("orderAlipay", orderAlipay);
-	    return "fanfan/orderAlipay/edit";
+		AlipayRecordDO alipayRecord = alipayRecordService.get(id);
+		model.addAttribute("alipayRecord", alipayRecord);
+	    return "fanfan/alipayRecord/edit";
 	}
 	
 	/**
@@ -72,9 +71,9 @@ public class OrderAlipayController {
 	 */
 	@ResponseBody
 	@PostMapping("/save")
-	@RequiresPermissions("fanfan:orderAlipay:add")
-	public R save( OrderAlipayDO orderAlipay){
-		if(orderAlipayService.save(orderAlipay)>0){
+	@RequiresPermissions("fanfan:alipayRecord:add")
+	public R save( AlipayRecordDO alipayRecord){
+		if(alipayRecordService.save(alipayRecord)>0){
 			return R.ok();
 		}
 		return R.error();
@@ -84,9 +83,9 @@ public class OrderAlipayController {
 	 */
 	@ResponseBody
 	@RequestMapping("/update")
-	@RequiresPermissions("fanfan:orderAlipay:edit")
-	public R update( OrderAlipayDO orderAlipay){
-		orderAlipayService.update(orderAlipay);
+	@RequiresPermissions("fanfan:alipayRecord:edit")
+	public R update( AlipayRecordDO alipayRecord){
+		alipayRecordService.update(alipayRecord);
 		return R.ok();
 	}
 	
@@ -95,9 +94,9 @@ public class OrderAlipayController {
 	 */
 	@PostMapping( "/remove")
 	@ResponseBody
-	@RequiresPermissions("fanfan:orderAlipay:remove")
+	@RequiresPermissions("fanfan:alipayRecord:remove")
 	public R remove( Integer id){
-		if(orderAlipayService.remove(id)>0){
+		if(alipayRecordService.remove(id)>0){
 		return R.ok();
 		}
 		return R.error();
@@ -108,9 +107,9 @@ public class OrderAlipayController {
 	 */
 	@PostMapping( "/batchRemove")
 	@ResponseBody
-	@RequiresPermissions("fanfan:orderAlipay:batchRemove")
+	@RequiresPermissions("fanfan:alipayRecord:batchRemove")
 	public R remove(@RequestParam("ids[]") Integer[] ids){
-		orderAlipayService.batchRemove(ids);
+		alipayRecordService.batchRemove(ids);
 		return R.ok();
 	}
 	
