@@ -1,9 +1,12 @@
 package com.bootdo.fanfan.web.api;
 
+import com.bootdo.common.utils.FileUtil;
 import com.bootdo.common.utils.R;
 import com.bootdo.fanfan.domain.enumDO.DictionaryEnum;
 import com.bootdo.fanfan.service.DictionaryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,4 +43,22 @@ public class InfoRestController extends ApiBaseRestController {
         return R.ok().put("data",resultData);
     }
 
+    /**
+     * 获取最新html版本
+     * @return
+     */
+    @GetMapping("/version")
+    public R htmlVersion(){
+        Map<Integer,String>  dicMap = dictionaryService.queryByKeys(0,DictionaryEnum.htmlVersion.getVal());
+
+        return R.ok().put("data",dicMap.get(DictionaryEnum.htmlVersion.getVal()));
+    }
+
+    @GetMapping("/www.zip")
+    public ResponseEntity<byte[]> downLoadZip(){
+
+       byte[] fileBytes = FileUtil.readByBytes("D:\\var\\uploaded_files\\www.zip");
+
+       return  new ResponseEntity<byte[]>(fileBytes, HttpStatus.OK);
+    }
 }

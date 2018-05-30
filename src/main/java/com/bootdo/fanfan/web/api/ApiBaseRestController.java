@@ -1,6 +1,7 @@
 package com.bootdo.fanfan.web.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.bootdo.common.utils.StringUtils;
 import com.bootdo.fanfan.vo.APIBaseVO;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,9 +20,9 @@ public class ApiBaseRestController {
     protected APIBaseVO baseModel;
 
     @ModelAttribute
-    private void headerAttribute(@RequestHeader(name = "base") String base){
-
-        baseModel = JSONObject.parseObject(base, APIBaseVO.class);
+    private void headerAttribute(@RequestHeader(name = "base",required = false) String base){
+        if(!StringUtils.isEmpty(base))
+             baseModel = JSONObject.parseObject(base, APIBaseVO.class);
     }
 
 }

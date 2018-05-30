@@ -1,7 +1,6 @@
 package com.bootdo.common.utils;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.util.UUID;
 
 public class FileUtil {
@@ -29,6 +28,39 @@ public class FileUtil {
 		} else {
 			return false;
 		}
+	}
+
+	/**
+	 * 读取文件
+	 * @param path
+	 * @return
+	 */
+	public static byte[] readByBytes(String path) {
+		byte[] renByte=null;
+
+		try {
+			InputStream inputStream = new FileInputStream(path);
+			renByte = input2byte(inputStream);
+			inputStream.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return renByte;
+	}
+
+	public static final byte[] input2byte(InputStream inStream)
+			throws IOException {
+		ByteArrayOutputStream swapStream = new ByteArrayOutputStream();
+		byte[] buff = new byte[100];
+		int rc = 0;
+		while ((rc = inStream.read(buff, 0, 100)) > 0) {
+			swapStream.write(buff, 0, rc);
+		}
+		byte[] in2b = swapStream.toByteArray();
+		return in2b;
 	}
 
 	public static String renameToUUID(String fileName) {

@@ -13,8 +13,9 @@ public enum  DictionaryEnum {
     minOrderPrice(1022,"最低起送价"),
 
     businessDelivery(1031,"商家配送"),
-    fengNiaoDelivery(1032,"蜂鸟配送");
+    fengNiaoDelivery(1032,"蜂鸟配送"),
 
+    htmlVersion(9001,"html最新版本");
     private Integer key;
 
     private String  text;
