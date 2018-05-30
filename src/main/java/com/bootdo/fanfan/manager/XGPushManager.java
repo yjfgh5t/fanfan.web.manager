@@ -54,7 +54,5 @@ public class XGPushManager extends AbstractMsgQueue<XGPushModel> {
         }
 
         xingeApp.pushSingleAccount(000,item.getUserId().toString(),message);
-
-
     }
 }

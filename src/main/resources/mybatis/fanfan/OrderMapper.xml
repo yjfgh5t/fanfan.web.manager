@@ -133,7 +133,7 @@
 		(select `id`,`order_num`,`order_state`,`order_pay`,`order_commodity_total`,`create_time` from ff_order
 		<where>
 			order_state!=101
-			<if test="userId != null and userId != ''"> AND user_id = #{user_id} </if>
+			<if test="userId != null and userId != ''"> AND user_id = #{userId} </if>
 			<if test="customerId != null and customerId != ''"> AND customer_id = #{customerId} </if>
 			<if test="orderState !=null and orderState.size>0">
 				AND order_state IN
