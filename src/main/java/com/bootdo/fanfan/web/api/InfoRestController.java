@@ -1,5 +1,6 @@
 package com.bootdo.fanfan.web.api;
 
+import com.bootdo.common.config.BootdoConfig;
 import com.bootdo.common.utils.FileUtil;
 import com.bootdo.common.utils.R;
 import com.bootdo.fanfan.domain.enumDO.DictionaryEnum;
@@ -20,6 +21,9 @@ public class InfoRestController extends ApiBaseRestController {
 
     @Autowired
     DictionaryService dictionaryService;
+
+    @Autowired
+    BootdoConfig bootdoConfig;
 
     /**
      * 初始化信息
@@ -57,7 +61,7 @@ public class InfoRestController extends ApiBaseRestController {
     @GetMapping("/www.zip")
     public ResponseEntity<byte[]> downLoadZip(){
 
-       byte[] fileBytes = FileUtil.readByBytes("D:\\var\\uploaded_files\\www.zip");
+       byte[] fileBytes = FileUtil.readByBytes(bootdoConfig.getUploadPath()+"www.zip");
 
        return  new ResponseEntity<byte[]>(fileBytes, HttpStatus.OK);
     }
