@@ -1,6 +1,6 @@
 bootdo:
   uploadPath: D:/var/uploaded_files/
-  staticUrl: http://static.qingxixi.com
+  staticUrl: http://192.168.2.68:8081
   aliPayTest: false
   xgAccessId: 2100120096
   xgSecretKey: 2acc284379d4ddea59e38c0af256fb4d

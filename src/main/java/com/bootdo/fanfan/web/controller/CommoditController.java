@@ -1,13 +1,17 @@
 package com.bootdo.fanfan.web.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.bootdo.common.controller.BaseController;
+import com.bootdo.fanfan.domain.CommoditCategoryDO;
+import com.bootdo.fanfan.service.CommoditCategoryService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,6 +38,9 @@ import com.bootdo.common.utils.R;
 public class CommoditController extends BaseController {
 	@Autowired
 	private CommoditService commoditService;
+
+	@Autowired
+	private CommoditCategoryService commoditCategoryService;
 	
 	@GetMapping()
 	@RequiresPermissions("fanfan:commodit:commodit")
@@ -59,19 +66,39 @@ public class CommoditController extends BaseController {
 	
 	@GetMapping("/add")
 	@RequiresPermissions("fanfan:commodit:add")
-	String add(){
-	    return "fanfan/commodit/add";
+	String add(ModelMap modelMap){
+
+		//查询分类列表
+		Map<String,Object> queryParams = new HashMap<>();
+		queryParams.put("createId",this.getUserId().intValue());
+		List<CommoditCategoryDO> categoryDOList = commoditCategoryService.list(queryParams);
+
+		modelMap.put("categoryTypes",categoryDOList);
+
+		return "fanfan/commodit/add";
 	}
 
 	@GetMapping("/edit/{id}")
 	@RequiresPermissions("fanfan:commodit:edit")
 	String edit(@PathVariable("id") Integer id,Model model){
-		CommoditDO commodit = new CommoditDO();
-		commodit.setId(id);
+		CommoditDO commodit =null;
 		if(id>0) {
 			commodit = commoditService.get(id);
 		}
+
+		if(commodit==null){
+			commodit = new CommoditDO();
+			commodit.setId(id);
+		}
+
 		model.addAttribute("commodit", commodit);
+
+		//查询分类列表
+		Map<String,Object> queryParams = new HashMap<>();
+		queryParams.put("createId",this.getUserId().intValue());
+		List<CommoditCategoryDO> categoryDOList = commoditCategoryService.list(queryParams);
+		model.addAttribute("categoryTypes",categoryDOList);
+
 	    return "fanfan/commodit/edit";
 	}
 	
@@ -95,7 +122,7 @@ public class CommoditController extends BaseController {
 	@RequiresPermissions("fanfan:commodit:edit")
 	public R update( CommoditDO commodit){
 		if(commodit.getId()==0) {
-			commodit.setCreateId(getUserId().intValue());
+			commodit.setCustomerId(getUserId().intValue());
 			commodit.setDelete(0);
 			commoditService.save(commodit);
 		}else {

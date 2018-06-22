@@ -53,7 +53,7 @@ public class DictionaryController extends BaseController{
 	public PageUtils list(@RequestParam Map<String, Object> params){
 		//查询列表数据
         Query query = new Query(params);
-        query.put("create_id",getUserId());
+        query.put("customerId",getUserId());
         //获取列表
 		List<DictionaryDO> dictionaryList = dictionaryService.list(query);
 

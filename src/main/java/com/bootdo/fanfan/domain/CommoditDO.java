@@ -18,6 +18,8 @@ public class CommoditDO implements Serializable {
 	
 	//标识id
 	private Integer id;
+	//商品分类
+	private Integer categoryId;
 	//商品标题
 	private String commoditTitle;
 	//商品图片
@@ -35,13 +37,15 @@ public class CommoditDO implements Serializable {
 	//创建时间
 	private Date createTime;
 	//创建人 用户主键
-	private Integer createId;
+	private Integer customerId;
 	//排序 值越大 越靠前
 	private Integer order;
 	//商品类型 1：出售 2：非卖品
 	private Integer commoditType;
 	//是否删除
 	private Integer delete;
+	//是否必点
+	private Integer mustOrder;
 
 	/**
 	 * 设置：标识id
@@ -128,13 +132,13 @@ public class CommoditDO implements Serializable {
 		return commoditFiexNum;
 	}
 	/**
-	 * 设置：1:有效 2:下架 3:删除
+	 * 设置：1:有效 2:下架
 	 */
 	public void setStatus(Integer status) {
 		this.status = status;
 	}
 	/**
-	 * 获取：1:有效 2:下架 3:删除
+	 * 获取：1:有效 2:下架
 	 */
 	public Integer getStatus() {
 		return status;
@@ -154,14 +158,14 @@ public class CommoditDO implements Serializable {
 	/**
 	 * 设置：创建人 用户主键
 	 */
-	public void setCreateId(Integer createId) {
-		this.createId = createId;
+	public void setCustomerId(Integer customerId) {
+		this.customerId = customerId;
 	}
 	/**
 	 * 获取：创建人 用户主键
 	 */
-	public Integer getCreateId() {
-		return createId;
+	public Integer getCustomerId() {
+		return customerId;
 	}
 	/**
 	 * 设置：排序 值越大 越靠前
@@ -198,5 +202,30 @@ public class CommoditDO implements Serializable {
 	 */
 	public Integer getDelete() {
 		return delete;
+	}
+	/**
+	 * 设置：是否必点
+	 */
+	public void setMustOrder(Integer mustOrder) {
+		this.mustOrder = mustOrder;
+	}
+	/**
+	 * 获取：是否必点
+	 */
+	public Integer getMustOrder() {
+		return mustOrder;
+	}
+
+	/**
+	 * 设置：分类Id
+	 */
+	public void setCategoryId(Integer categoryId) {
+		this.categoryId = categoryId;
+	}
+	/**
+	 * 获取：分类Id
+	 */
+	public Integer getCategoryId() {
+		return categoryId;
 	}
 }

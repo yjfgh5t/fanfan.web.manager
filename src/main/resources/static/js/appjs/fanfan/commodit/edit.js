@@ -4,6 +4,13 @@ $().ready(function() {
 
 	//上传文件
     upload();
+
+    //select 选择值
+    $("select").each(function () {
+        var val = $(this).attr("value");
+        $(this).val(val);
+    })
+
 });
 
 $.validator.setDefaults({
@@ -51,6 +58,9 @@ function validateRule() {
 				required : true,
                 rangelength:[2,30]
 			},
+            categoryId:{
+                required:true,
+            },
             commoditImg:{
 				required:true,
 			},
@@ -75,6 +85,9 @@ function validateRule() {
 				required :"请输入商品名称",
                 rangelength:"名称长度在2-30之间"
 			},
+            categoryId:{
+                required:"请选择商品分类",
+            },
             commoditImg:{
                 required:"请上传商品图片",
             },

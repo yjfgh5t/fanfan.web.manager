@@ -1,8 +1,6 @@
 package com.bootdo.fanfan.domain;
 
 import java.io.Serializable;
-import java.util.Date;
-
 
 
 /**
@@ -22,7 +20,7 @@ public class DictionaryDO implements Serializable {
 	//
 	private String val;
 	//
-	private Integer createId;
+	private Integer customerId;
 
 	/**
 	 * 设置：
@@ -63,13 +61,13 @@ public class DictionaryDO implements Serializable {
 	/**
 	 * 设置：
 	 */
-	public void setCreateId(Integer createId) {
-		this.createId = createId;
+	public void setCustomerId(Integer customerId) {
+		this.customerId = customerId;
 	}
 	/**
 	 * 获取：
 	 */
-	public Integer getCreateId() {
-		return createId;
+	public Integer getCustomerId() {
+		return customerId;
 	}
 }
