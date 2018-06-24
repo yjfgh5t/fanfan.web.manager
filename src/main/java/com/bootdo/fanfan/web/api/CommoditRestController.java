@@ -1,9 +1,10 @@
 package com.bootdo.fanfan.web.api;
 
 import com.bootdo.common.extend.EMapper;
-import com.bootdo.common.utils.Query;
 import com.bootdo.common.utils.R;
+import com.bootdo.fanfan.domain.CommoditDO;
 import com.bootdo.fanfan.service.CommoditService;
+import com.bootdo.fanfan.vo.APICommoditySimpleVO;
 import com.bootdo.fanfan.vo.APICommodityVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,16 +33,15 @@ public class CommoditRestController extends ApiBaseRestController {
     public R commodity(){
 
         Map<String, Object> _map = new HashMap<>();
-
         _map.put("sort","`order`");
-        _map.put("order","asc");
-        _map.put("limit","10");
-        _map.put("offset","0");
-        Query query =new Query(_map);
-        List<APICommodityVO> list = mapper.mapArray(commoditService.list(query), APICommodityVO.class);
-        return R.ok().put("data", list);
+        _map.put("customerId",baseModel.getCustomerId());
+
+        List<CommoditDO> list = commoditService.list(_map);
+        if(baseModel.getClientType().equals("Android")){
+            return R.ok().put("data", mapper.mapArray(list, APICommodityVO.class));
+        }else {
+            return R.ok().put("data", mapper.mapArray(list, APICommoditySimpleVO.class));
+        }
     }
-
-
 
 }

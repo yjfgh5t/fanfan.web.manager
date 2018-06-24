@@ -10,7 +10,7 @@
     <!--商品DO VO转换-->
     <mapping>
         <class-a>com.bootdo.fanfan.domain.CommoditDO</class-a>
-        <class-b>com.bootdo.fanfan.vo.APICommodityVO</class-b>
+        <class-b>com.bootdo.fanfan.vo.APICommoditySimpleVO</class-b>
         <field>
             <a>commoditTitle</a>
             <b>title</b>
@@ -36,7 +36,43 @@
             <b>desc</b>
         </field>
     </mapping>
-    
+
+    <!--商品DO VO转换-->
+    <mapping>
+        <class-a>com.bootdo.fanfan.domain.CommoditDO</class-a>
+        <class-b>com.bootdo.fanfan.vo.APICommodityVO</class-b>
+        <field>
+            <a>commoditTitle</a>
+            <b>title</b>
+        </field>
+
+        <field>
+            <a>commoditImg</a>
+            <b>icon</b>
+        </field>
+
+        <field>
+            <a>commoditPrice</a>
+            <b>price</b>
+        </field>
+
+        <field>
+            <a>commoditSalePrice</a>
+            <b>salePrice</b>
+        </field>
+
+        <field>
+            <a>commoditRemark</a>
+            <b>desc</b>
+        </field>
+
+        <field>
+            <a>commoditFiexNum</a>
+            <b>inventory</b>
+        </field>
+
+    </mapping>
+
     <!-- 支付宝用户信息转换-->
     <mapping>
             <class-a>com.alipay.api.response.AlipayUserInfoShareResponse</class-a>

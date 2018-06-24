@@ -4,6 +4,7 @@ import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,12 @@ public class CommoditCategoryServiceImpl implements CommoditCategoryService {
 	
 	@Override
 	public List<CommoditCategoryDO> list(Map<String, Object> map){
-		return commoditCategoryDao.list(map);
+		List<CommoditCategoryDO> list =commoditCategoryDao.list(map);
+
+		if(list==null)
+			list = new ArrayList<>();
+
+		return list;
 	}
 	
 	@Override

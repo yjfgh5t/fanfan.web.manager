@@ -15,7 +15,7 @@ import java.util.Date;
 public class CommoditCategoryDO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	//sys_user用户主键-商户id
+	//主键
 	private Integer id;
 	//分类名称
 	private String name;
@@ -25,6 +25,8 @@ public class CommoditCategoryDO implements Serializable {
 	private Date createTime;
 	//创建人
 	private Integer customerId;
+	//是否删除
+	private Integer delete;
 
 	/**
 	 * 设置：sys_user用户主键-商户id
@@ -85,5 +87,18 @@ public class CommoditCategoryDO implements Serializable {
 	 */
 	public Integer getCustomerId() {
 		return customerId;
+	}
+
+	/**
+	 * 设置：是否删除
+	 */
+	public void setDelete(Integer delete) {
+		this.delete = delete;
+	}
+	/**
+	 * 获取：是否删除
+	 */
+	public Integer getDelete() {
+		return delete;
 	}
 }

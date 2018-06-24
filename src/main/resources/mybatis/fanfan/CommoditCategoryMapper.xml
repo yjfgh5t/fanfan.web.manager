@@ -4,7 +4,7 @@
 <mapper namespace="com.bootdo.fanfan.dao.CommoditCategoryDao">
 
 	<select id="get" resultType="com.bootdo.fanfan.domain.CommoditCategoryDO">
-		select `id`,`name`,`order`,`create_time`,`create_id` from ff_commodit_category where id = #{value}
+		select `id`,`name`,`order`,`create_time`,`customer_id`,`delete` from ff_commodit_category where id = #{value}
 	</select>
 
 	<select id="list" resultType="com.bootdo.fanfan.domain.CommoditCategoryDO">
@@ -12,9 +12,9 @@
         <where>  
 		  		  <if test="id != null and id != ''"> and id = #{id} </if>
 		  		  <if test="name != null and name != ''"> and name = #{name} </if>
-		  		  <if test="order != null and order != ''"> and order = #{order} </if>
 		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
 		  		  <if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
+				  <if test="delete != null and delete != ''"> and `delete` = #{delete} </if>
 		  		</where>
         <choose>
             <when test="sort != null and sort.trim() != ''">
@@ -34,9 +34,9 @@
 		 <where>  
 		  		  <if test="id != null and id != ''"> and id = #{id} </if>
 		  		  <if test="name != null and name != ''"> and name = #{name} </if>
-		  		  <if test="order != null and order != ''"> and order = #{order} </if>
 		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
 		  		  <if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
+			      <if test="delete != null and delete != ''"> and `delete` = #{delete} </if>
 		  		</where>
 	</select>
 	 
@@ -46,14 +46,16 @@
 			`name`, 
 			`order`, 
 			`create_time`, 
-			`customer_id`
+			`customer_id`,
+			`delete`
 		)
 		values
 		(
 			#{name}, 
 			#{order}, 
 			#{createTime}, 
-			#{customerId}
+			#{customerId},
+		    #{delete}
 		)
 	</insert>
 	 
@@ -63,13 +65,14 @@
 			<if test="name != null">`name` = #{name}, </if>
 			<if test="order != null">`order` = #{order}, </if>
 			<if test="createTime != null">`create_time` = #{createTime}, </if>
-			<if test="customerId != null">`customer_id` = #{customerId}</if>
+			<if test="customerId != null">`customer_id` = #{customerId},</if>
+			<if test="delete != null">`delete` = #{delete}</if>
 		</set>
 		where id = #{id}
 	</update>
 	
 	<delete id="remove">
-		delete from ff_commodit_category where id = #{value}
+		update ff_commodit_category set `delete` =1 where id = #{value}
 	</delete>
 	
 	<delete id="batchRemove">
