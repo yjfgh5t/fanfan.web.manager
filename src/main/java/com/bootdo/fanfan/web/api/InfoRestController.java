@@ -1,6 +1,9 @@
 package com.bootdo.fanfan.web.api;
 
 import com.bootdo.common.config.BootdoConfig;
+import com.bootdo.common.domain.FileDO;
+import com.bootdo.common.service.FileService;
+import com.bootdo.common.utils.FileType;
 import com.bootdo.common.utils.FileUtil;
 import com.bootdo.common.utils.R;
 import com.bootdo.fanfan.domain.enumDO.DictionaryEnum;
@@ -8,10 +11,11 @@ import com.bootdo.fanfan.service.DictionaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +28,9 @@ public class InfoRestController extends ApiBaseRestController {
 
     @Autowired
     BootdoConfig bootdoConfig;
+
+    @Autowired
+    private FileService sysFileService;
 
     /**
      * 初始化信息
@@ -64,5 +71,22 @@ public class InfoRestController extends ApiBaseRestController {
        byte[] fileBytes = FileUtil.readByBytes(bootdoConfig.getUploadPath()+"www.zip");
 
        return  new ResponseEntity<byte[]>(fileBytes, HttpStatus.OK);
+    }
+
+    @PostMapping("/upload")
+    public R uploadFile(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+        String fileName = file.getOriginalFilename();
+        fileName = FileUtil.renameToUUID(fileName);
+        FileDO sysFile = new FileDO(FileType.fileType(fileName), "/files/" + fileName, new Date());
+        try {
+            FileUtil.uploadFile(file.getBytes(), bootdoConfig.getUploadPath(), fileName);
+        } catch (Exception e) {
+            return R.error();
+        }
+
+        if (sysFileService.save(sysFile) > 0) {
+            return R.ok().put("data",bootdoConfig.getStaticUrl()+sysFile.getUrl());
+        }
+        return R.error();
     }
 }

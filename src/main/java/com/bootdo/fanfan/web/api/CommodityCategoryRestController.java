@@ -15,7 +15,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api/commodityCategory")
-public class CommodityCategoryController extends ApiBaseRestController  {
+public class CommodityCategoryRestController extends ApiBaseRestController  {
 
     @Autowired
     CommoditCategoryService commoditCategoryService;

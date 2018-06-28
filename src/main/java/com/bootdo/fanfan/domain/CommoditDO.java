@@ -32,6 +32,8 @@ public class CommoditDO implements Serializable {
 	private String commoditRemark;
 	//每天/每餐 商品库存量
 	private Integer commoditFiexNum;
+	//商品单位
+	private String commoditUnit;
 	//1:有效 2:下架
 	private Integer status;
 	//创建时间
@@ -130,6 +132,18 @@ public class CommoditDO implements Serializable {
 	 */
 	public Integer getCommoditFiexNum() {
 		return commoditFiexNum;
+	}
+	/**
+	 * 设置：商品单位
+	 */
+	public void setCommoditUnit(String commoditUnit) {
+		this.commoditUnit = commoditUnit;
+	}
+	/**
+	 * 获取：商品单位
+	 */
+	public String getcommoditUnit() {
+		return commoditUnit;
 	}
 	/**
 	 * 设置：1:有效 2:下架

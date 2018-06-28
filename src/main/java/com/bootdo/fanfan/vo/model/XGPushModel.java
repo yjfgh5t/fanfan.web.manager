@@ -16,7 +16,7 @@ public class XGPushModel {
     /**
      * 推送用户id
      */
-    private Integer userId;
+    private Long userId;
 
     /**
      * 消息内容
@@ -45,7 +45,7 @@ public class XGPushModel {
      * @param msgType
      * @param userId
      */
-    public XGPushModel(MsgType msgType, Integer userId){
+    public XGPushModel(MsgType msgType, Long userId){
         this(msgType,userId,"","");
     }
 
@@ -55,7 +55,7 @@ public class XGPushModel {
      * @param msgTitle
      * @param msgContent
      */
-    public XGPushModel(MsgType msgType, Integer userId,String msgTitle, String msgContent){
+    public XGPushModel(MsgType msgType, Long userId,String msgTitle, String msgContent){
         this.userId=userId;
         this.msgTitle = msgTitle;
         this.msgContent=msgContent;

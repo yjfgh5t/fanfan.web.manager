@@ -4,11 +4,11 @@
 <mapper namespace="com.bootdo.fanfan.dao.CommoditDao">
 
 	<select id="get" resultType="com.bootdo.fanfan.domain.CommoditDO">
-		select `id`,`category_id`,`commodit_title`,`commodit_img`,`commodit_price`,`commodit_sale_price`,`commodit_remark`,`commodit_fiex_num`,`status`,`create_time`,`customer_id`,`order`,`commodit_type`,`delete`,`must_order` from ff_commodit where id = #{value}
+		select `id`,`category_id`,`commodit_title`,`commodit_img`,`commodit_price`,`commodit_sale_price`,`commodit_remark`,`commodit_fiex_num`,`commodit_unit`,`status`,`create_time`,`customer_id`,`order`,`commodit_type`,`delete`,`must_order` from ff_commodit where id = #{value}
 	</select>
 
 	<select id="list" resultType="com.bootdo.fanfan.domain.CommoditDO">
-		select `id`,`category_id`,`commodit_title`,`commodit_img`,`commodit_price`,`commodit_sale_price`,`commodit_remark`,`commodit_fiex_num`,`status`,`create_time`,`customer_id`,`order`,`commodit_type`,`delete`,`must_order` from ff_commodit
+		select `id`,`category_id`,`commodit_title`,`commodit_img`,`commodit_price`,`commodit_sale_price`,`commodit_remark`,`commodit_fiex_num`,`commodit_unit`,`status`,`create_time`,`customer_id`,`order`,`commodit_type`,`delete`,`must_order` from ff_commodit
         <where> `delete` = 0
 		  		  <if test="id != null and id != ''"> and id = #{id} </if>
 		  		  <if test="commoditTitle != null and commoditTitle != ''"> and commodit_title = #{commoditTitle} </if>
@@ -64,7 +64,8 @@
 			`commodit_price`, 
 			`commodit_sale_price`, 
 			`commodit_remark`, 
-			`commodit_fiex_num`, 
+			`commodit_fiex_num`,
+			`commodit_unit`,
 			`status`, 
 			`create_time`, 
 			`customer_id`,
@@ -81,7 +82,8 @@
 			#{commoditPrice}, 
 			#{commoditSalePrice}, 
 			#{commoditRemark}, 
-			#{commoditFiexNum}, 
+			#{commoditFiexNum},
+			#{commoditUnit},
 			#{status}, 
 			#{createTime}, 
 			#{customerId},
@@ -102,6 +104,7 @@
 			<if test="commoditSalePrice != null">`commodit_sale_price` = #{commoditSalePrice}, </if>
 			<if test="commoditRemark != null">`commodit_remark` = #{commoditRemark}, </if>
 			<if test="commoditFiexNum != null">`commodit_fiex_num` = #{commoditFiexNum}, </if>
+			<if test="commoditUnit != null">`commodit_unit` = #{commoditUnit}, </if>
 			<if test="status != null">`status` = #{status}, </if>
 			<if test="createTime != null">`create_time` = #{createTime}, </if>
 			<if test="customerId != null">`customer_id` = #{customerId}, </if>

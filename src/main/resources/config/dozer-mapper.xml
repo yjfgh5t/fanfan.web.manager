@@ -25,7 +25,10 @@
             <a>commoditPrice</a>
             <b>price</b>
         </field>
-
+        <field>
+            <a>commoditUnit</a>
+            <b>unit</b>
+        </field>
         <field>
             <a>commoditSalePrice</a>
             <b>salePrice</b>
@@ -57,6 +60,11 @@
         </field>
 
         <field>
+            <a>commoditUnit</a>
+            <b>unit</b>
+        </field>
+
+        <field>
             <a>commoditSalePrice</a>
             <b>salePrice</b>
         </field>
@@ -69,6 +77,10 @@
         <field>
             <a>commoditFiexNum</a>
             <b>inventory</b>
+        </field>
+        <field>
+            <a>commoditType</a>
+            <b>saleType</b>
         </field>
 
     </mapping>

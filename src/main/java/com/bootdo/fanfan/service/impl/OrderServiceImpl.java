@@ -239,7 +239,7 @@ public class OrderServiceImpl implements OrderService {
 			return;
 		}
 
-		XGPushModel pushModel = new XGPushModel(XGPushModel.MsgType.payOrder,1);
+		XGPushModel pushModel = new XGPushModel(XGPushModel.MsgType.payOrder,15821243531L);
 		pushModel.setMsgTitle("您有新的订单");
 		pushModel.setMsgContent("订单总额："+orderDO.getOrderTotal().toString());
 		pushModel.addParams("orderId",orderId);

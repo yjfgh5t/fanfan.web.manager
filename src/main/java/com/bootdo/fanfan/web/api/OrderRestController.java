@@ -104,7 +104,6 @@ public class OrderRestController extends ApiBaseRestController {
             return R.error("参数不能未空");
         }
 
-
         List<APIOrderListVO> list = orderService.queryOrderByUser(params);
 
        return R.ok().put("data",list);
@@ -197,6 +196,13 @@ public class OrderRestController extends ApiBaseRestController {
             }
         }
         return R.ok().put("data","");
+    }
+
+    @GetMapping("/date")
+    public R queryDayOrder(String date){
+
+
+        return R.ok();
     }
 
     /**

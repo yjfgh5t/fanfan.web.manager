@@ -153,7 +153,7 @@ public class FileController extends BaseController {
 		}
 
 		if (sysFileService.save(sysFile) > 0) {
-			return R.ok().put("fileName",sysFile.getUrl());
+			return R.ok().put("fileName",bootdoConfig.getStaticUrl()+sysFile.getUrl());
 		}
 		return R.error();
 	}

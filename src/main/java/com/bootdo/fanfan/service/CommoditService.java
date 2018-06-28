@@ -25,6 +25,14 @@ public interface CommoditService {
 	int update(CommoditDO commodit);
 	
 	int remove(Integer id);
+
+	/**
+	 * 商品上架 下架
+	 * @param id 商品id
+	 *  @param pullOff 下架
+	 * @return
+	 */
+	int updateStatus(Integer id,boolean pullOff);
 	
 	int batchRemove(Integer[] ids);
 

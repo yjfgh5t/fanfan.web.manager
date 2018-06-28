@@ -30,15 +30,7 @@ public class CommoditServiceImpl implements CommoditService {
 	@Override
 	public List<CommoditDO> list(Map<String, Object> map){
 
-		List<CommoditDO> list = commoditDao.list(map);
-
-		if(list!=null){
-			list.forEach((item)->{
-				item.setCommoditImg(bootdoConfig.getStaticUrl()+item.getCommoditImg());
-			});
-		}
-
-		return list;
+		return commoditDao.list(map);
 	}
 	
 	@Override
@@ -77,7 +69,12 @@ public class CommoditServiceImpl implements CommoditService {
 	public int remove(Integer id){
 		return commoditDao.remove(id);
 	}
-	
+
+	@Override
+	public int updateStatus(Integer id, boolean pullOff) {
+		return commoditDao.updateState(id, pullOff ? 2 : 1);
+	}
+
 	@Override
 	public int batchRemove(Integer[] ids){
 		return commoditDao.batchRemove(ids);

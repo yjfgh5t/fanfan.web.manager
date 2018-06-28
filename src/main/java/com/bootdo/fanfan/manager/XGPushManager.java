@@ -6,6 +6,9 @@ import com.bootdo.fanfan.vo.model.XGPushModel;
 import com.tencent.xinge.Message;
 import com.tencent.xinge.Style;
 import com.tencent.xinge.XingeApp;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +26,7 @@ public class XGPushManager extends AbstractMsgQueue<XGPushModel> {
 
     XingeApp xingeApp;
 
+    private  static Logger logger= LoggerFactory.getLogger(AbstractMsgQueue.class);
 
     /**
      * 初始化
@@ -53,6 +57,8 @@ public class XGPushManager extends AbstractMsgQueue<XGPushModel> {
             message.setStyle(style);
         }
 
-        xingeApp.pushSingleAccount(000,item.getUserId().toString(),message);
+        JSONObject jsonObject = xingeApp.pushSingleAccount(000,item.getUserId().toString(),message);
+
+        logger.info("执行推送-->{}",jsonObject);
     }
 }

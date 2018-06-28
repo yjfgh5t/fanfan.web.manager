@@ -9,6 +9,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 /**
  * 
@@ -35,5 +36,13 @@ public interface CommoditDao {
 
 	@Select("select id,commodit_title,commodit_sale_price from ff_commodit where id in(${idArry}) and `status`=1 and `delete`=FALSE")
 	List<CommoditDO> queryByIdArry(@Param("idArry") String idArry);
+
+	/**
+	 * 修改商品状态
+	 * @param status
+	 * @return
+	 */
+	@Update("update ff_commodit set status=${status} where id=${id}")
+	int updateState(@Param("id") Integer id, @Param("status") Integer status);
 
 }

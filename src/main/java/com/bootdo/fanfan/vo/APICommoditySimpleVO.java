@@ -24,6 +24,8 @@ public class APICommoditySimpleVO {
 
     private String categoryId;
 
+    private String unit;
+
     /**
      * 剩余量
      */
