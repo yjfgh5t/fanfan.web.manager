@@ -37,8 +37,19 @@ public class OrderDetialServiceImpl implements OrderDetialService {
 			return orderDetialDao.save(orderDetial);
 	}
 
+	@Override
 	public List<OrderDetialDO> queryByOrderId(Integer orderId){
 		return orderDetialDao.queryByOrderId(orderId);
+	}
+
+	/**
+	 * 批量查询订单详情
+	 * @param orderIdArray
+	 * @return
+	 */
+	@Override
+	public List<OrderDetialDO> queryByOrderIdArray(List<Integer> orderIdArray) {
+		return orderDetialDao.queryByOrderIdArray(orderIdArray);
 	}
 
 	@Override

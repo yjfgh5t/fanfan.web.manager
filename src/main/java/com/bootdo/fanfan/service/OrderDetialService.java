@@ -23,11 +23,18 @@ public interface OrderDetialService {
 	int save(OrderDetialDO orderDetial);
 
 	/**
-	 * 根据订单号查询订单详情
+	 * 根据订id查询订单详情
 	 * @param orderId
 	 * @return
 	 */
 	List<OrderDetialDO> queryByOrderId(Integer orderId);
+
+	/**
+	 * 根据订单id查询商品
+	 * @param orderIdArry
+	 * @return
+	 */
+	List<OrderDetialDO> queryByOrderIdArray(List<Integer> orderIdArry);
 
 	/**
 	 * 批量保存

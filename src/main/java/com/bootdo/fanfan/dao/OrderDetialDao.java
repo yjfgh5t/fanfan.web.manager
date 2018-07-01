@@ -36,8 +36,14 @@ public interface OrderDetialDao {
 	@Select("select * from ff_order_detial where order_id=#{orderId}")
 	List<OrderDetialDO> queryByOrderId(@Param("orderId") Integer orderId);
 
-	int batchRemove(Integer[] ids);
+	/**
+	 * 批量查询订单商品
+	 * @param orderIdArray
+	 * @return
+	 */
+	List<OrderDetialDO> queryByOrderIdArray(@Param("orderIdArray") List<Integer> orderIdArray);
 
+	int batchRemove(Integer[] ids);
 
 	/**
 	 * 根据订单id  查询商品图片

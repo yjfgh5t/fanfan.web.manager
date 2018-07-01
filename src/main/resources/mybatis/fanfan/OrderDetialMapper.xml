@@ -93,4 +93,11 @@
 		select commodit_img  from ff_commodit where id= (select min(out_id) from ff_order_detial where order_id=#{orderId} and out_type=1)
 	</select>
 
+	<select id="queryByOrderIdArray" resultType="com.bootdo.fanfan.domain.OrderDetialDO">
+		select order_id,out_title,out_price,out_size,out_type from ff_order_detial where order_id in
+		<foreach collection="orderIdArray" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</select>
+
 </mapper>

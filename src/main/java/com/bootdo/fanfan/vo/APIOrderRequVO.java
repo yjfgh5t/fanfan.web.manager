@@ -36,7 +36,7 @@ public class APIOrderRequVO {
     //收货人信息
     private APIOrderReceiverVO receiver;
     //订单详情
-    private List<APIOrderDetail> detailList;
+    private List<APIOrderDetailVO> detailList;
     //创建时间
     private Date createTime;
     //支付宝预付单Str

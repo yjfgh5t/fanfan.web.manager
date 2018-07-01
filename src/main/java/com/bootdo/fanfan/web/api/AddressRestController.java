@@ -6,7 +6,7 @@ import com.bootdo.fanfan.domain.ReceiverDO;
 import com.bootdo.fanfan.manager.GDMapManager;
 import com.bootdo.fanfan.service.ReceiverService;
 import com.bootdo.fanfan.vo.APIAddressVO;
-import com.bootdo.fanfan.vo.APIGDMapTip;
+import com.bootdo.fanfan.vo.APIGDMapTipVO;
 import com.bootdo.fanfan.vo.APIReceiverVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +37,7 @@ public class AddressRestController extends ApiBaseRestController {
     @GetMapping("/search")
     public R querAddress(String keyWord,String lat,String log){
         //地址列表
-        List<APIGDMapTip> list = gdMapManager.queryAddr(keyWord,lat,log);
+        List<APIGDMapTipVO> list = gdMapManager.queryAddr(keyWord,lat,log);
 
         return R.ok().put("data",eMapper.mapArray(list,APIAddressVO.class));
     }

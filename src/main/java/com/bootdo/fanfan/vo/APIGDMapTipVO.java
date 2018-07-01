@@ -3,7 +3,7 @@ package com.bootdo.fanfan.vo;
 import lombok.Data;
 
 @Data
-public class APIGDMapTip{
+public class APIGDMapTipVO {
 
     private String id;
 

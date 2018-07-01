@@ -3,7 +3,7 @@ package com.bootdo.fanfan.manager;
 import com.alibaba.fastjson.JSON;
 import com.bootdo.common.utils.HttpClientUtils;
 import com.bootdo.common.utils.StringUtils;
-import com.bootdo.fanfan.vo.APIGDMapTip;
+import com.bootdo.fanfan.vo.APIGDMapTipVO;
 import com.bootdo.fanfan.vo.APIGDMapVO;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +25,7 @@ public class GDMapManager {
      * @param log
      * @return
      */
-    public List<APIGDMapTip> queryAddr(String keyWord, String lat, String log){
+    public List<APIGDMapTipVO> queryAddr(String keyWord, String lat, String log){
 
         Map<String,String> params = new HashMap<>();
 

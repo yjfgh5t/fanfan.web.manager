@@ -11,12 +11,17 @@ import com.bootdo.fanfan.manager.AlipayManager;
 import com.bootdo.fanfan.service.AlipayRecordService;
 import com.bootdo.fanfan.service.OrderService;
 import com.bootdo.fanfan.service.OrderStateService;
+import com.bootdo.fanfan.vo.APIOrderListCustomerVO;
 import com.bootdo.fanfan.vo.APIOrderListVO;
 import com.bootdo.fanfan.vo.APIOrderQueryRequVO;
 import com.bootdo.fanfan.vo.APIOrderRequVO;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -110,6 +115,34 @@ public class OrderRestController extends ApiBaseRestController {
     }
 
     /**
+     * 查询当日订单
+     * @param date 日期
+     * @param lastId
+     * @param isMax
+     * @return
+     */
+    @PostMapping("/query/{date}")
+    public R queryDayOrder(@PathVariable("date") @DateTimeFormat(pattern = "YYYY-MM-dd") Date date,Integer lastId,boolean isMax) throws ParseException {
+        Map<String,Object> params = new HashMap<>();
+
+       // Date dateParam = DateUtils.parseDate(date,"YYYY-MM-dd");
+
+        //商户
+        params.put("customerId", baseModel.getCustomerId());
+        //开始日期
+        params.put("startTime",date);
+        //结束日期
+        Date endDate = DateUtils.addDays(date,1);
+        params.put("endTime",endDate);
+        params.put("lastId",lastId);
+        params.put("isMax",isMax);
+
+        List<APIOrderListCustomerVO> listCustomerVOS = orderService.queryOrderByCustomer(params);
+
+        return R.ok().put("data",listCustomerVOS);
+    }
+
+    /**
      * 查询单个订单详情
      * @param orderId
      * @return
@@ -198,12 +231,7 @@ public class OrderRestController extends ApiBaseRestController {
         return R.ok().put("data","");
     }
 
-    @GetMapping("/date")
-    public R queryDayOrder(String date){
 
-
-        return R.ok();
-    }
 
     /**
      * 测试推送订单

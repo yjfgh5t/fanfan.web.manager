@@ -5,7 +5,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Data
-public class APIOrderDetail {
+public class APIOrderDetailVO {
 
     private Integer id;
 

@@ -13,5 +13,5 @@ public class APIGDMapVO {
 
     private int count;
 
-    private List<APIGDMapTip> tips;
+    private List<APIGDMapTipVO> tips;
 }

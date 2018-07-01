@@ -8,10 +8,7 @@ import com.bootdo.fanfan.domain.enumDO.OrderStateEnum;
 import com.bootdo.fanfan.manager.AlipayManager;
 import com.bootdo.fanfan.manager.XGPushManager;
 import com.bootdo.fanfan.service.*;
-import com.bootdo.fanfan.vo.APIOrderDetail;
-import com.bootdo.fanfan.vo.APIOrderListVO;
-import com.bootdo.fanfan.vo.APIOrderReceiverVO;
-import com.bootdo.fanfan.vo.APIOrderRequVO;
+import com.bootdo.fanfan.vo.*;
 import com.bootdo.fanfan.vo.model.XGPushModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.bootdo.fanfan.dao.OrderDao;
 import org.springframework.transaction.annotation.Transactional;
@@ -177,7 +175,7 @@ public class OrderServiceImpl implements OrderService {
 		APIOrderRequVO apiOrderRequVO =  eMapper.map(orderDO,APIOrderRequVO.class);
 
 		//订单详情转换
-		apiOrderRequVO.setDetailList(eMapper.mapArray(orderDetialDOList,APIOrderDetail.class));
+		apiOrderRequVO.setDetailList(eMapper.mapArray(orderDetialDOList,APIOrderDetailVO.class));
 
 		//订单收货人信息
 		OrderReceiverDO receiverDO = orderReceiverService.queryById(orderDO.getId());
@@ -277,7 +275,38 @@ public class OrderServiceImpl implements OrderService {
 		return list;
 	}
 
+	@Override
+	public List<APIOrderListCustomerVO> queryOrderByCustomer(Map<String, Object> map) {
 
+		List<APIOrderListCustomerVO> list = orderDao.queryOrderByCustomer(map);
+
+		if(list!=null && list.size()>0){
+			List<Integer> idArray = list.stream().map(APIOrderListCustomerVO::getId).collect(Collectors.toList());
+			//查询订单商品
+			List<OrderDetialDO> detialDOList = orderDetialService.queryByOrderIdArray(idArray);
+
+			//遍历
+			if(detialDOList!=null && detialDOList.size()>0){
+				Stream<OrderDetialDO> streamOrderDetail = detialDOList.stream();
+
+				//遍历订单
+				list.forEach((item)->{
+					//获取订单对应的商品
+					List<OrderDetialDO> temList = streamOrderDetail.filter((detail)-> detail.getOrderId().equals(item.getId())).collect(Collectors.toList());
+
+					//设置订单详情
+					if(temList!=null && temList.size()>0){
+						item.setDetails(eMapper.mapArray(temList,APIOrderDetailVO.class));
+					}
+
+					//设置状态文本
+					item.setOrderStateText(OrderStateEnum.get(item.getOrderState()).getText());
+				});
+			}
+		}
+
+		return list;
+	}
 
 
 	//region  私有方法
@@ -372,7 +401,7 @@ public class OrderServiceImpl implements OrderService {
 		BigDecimal orderTotail = new BigDecimal(0);
 
 		//计算总数量
-		for (APIOrderDetail detail : orderRequVO.getDetailList()) {
+		for (APIOrderDetailVO detail : orderRequVO.getDetailList()) {
 
 			if (detail.getOutType() == null || detail.getOutType() != 1) {
 				continue;
