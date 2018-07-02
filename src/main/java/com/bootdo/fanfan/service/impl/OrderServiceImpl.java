@@ -287,12 +287,10 @@ public class OrderServiceImpl implements OrderService {
 
 			//遍历
 			if(detialDOList!=null && detialDOList.size()>0){
-				Stream<OrderDetialDO> streamOrderDetail = detialDOList.stream();
-
 				//遍历订单
 				list.forEach((item)->{
 					//获取订单对应的商品
-					List<OrderDetialDO> temList = streamOrderDetail.filter((detail)-> detail.getOrderId().equals(item.getId())).collect(Collectors.toList());
+					List<OrderDetialDO> temList = detialDOList.stream().filter((detail)-> detail.getOrderId().equals(item.getId())).collect(Collectors.toList());
 
 					//设置订单详情
 					if(temList!=null && temList.size()>0){
