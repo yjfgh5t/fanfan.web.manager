@@ -18,9 +18,9 @@ public interface DeskDao {
 
 	DeskDO get(Integer id);
 	
-	List<DeskDO> list(Map<String,Object> map);
+	List<DeskDO> list(Map<String, Object> map);
 	
-	int count(Map<String,Object> map);
+	int count(Map<String, Object> map);
 	
 	int save(DeskDO desk);
 	

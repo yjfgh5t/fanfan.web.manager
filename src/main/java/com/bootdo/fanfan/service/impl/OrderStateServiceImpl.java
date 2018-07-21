@@ -124,7 +124,7 @@ public class OrderStateServiceImpl implements OrderStateService {
 		}
 
 		//判断是否待支付订单
-		if(orderState.getOrderState()== OrderStateEnum.userWaitPay.getVal()){
+		if(orderState.getOrderState().equals(OrderStateEnum.userWaitPay.getVal())){
 			awaitPayOrders.put(orderState.getOrderId(),orderState.getCreateTime());
 		}
 

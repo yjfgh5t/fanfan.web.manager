@@ -124,9 +124,6 @@ public class OrderRestController extends ApiBaseRestController {
     @PostMapping("/query/{date}")
     public R queryDayOrder(@PathVariable("date") @DateTimeFormat(pattern = "YYYY-MM-dd") Date date,Integer lastId,boolean isMax) throws ParseException {
         Map<String,Object> params = new HashMap<>();
-
-       // Date dateParam = DateUtils.parseDate(date,"YYYY-MM-dd");
-
         //商户
         params.put("customerId", baseModel.getCustomerId());
         //开始日期

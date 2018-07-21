@@ -42,6 +42,14 @@ public interface OrderDao {
 	OrderDO getIdByOrderNum(@Param("orderNum") String orderNum);
 
 	/**
+	 * 查询商户id
+	 * @param id
+	 * @return
+	 */
+	@Select("select customer_id from  ff_order  where id=#{id}")
+	Integer getCustomerIdById(@Param("id") Integer id);
+
+	/**
 	 * 查询订单状态
 	 * @param idArray
 	 * @return
@@ -49,13 +57,22 @@ public interface OrderDao {
 	List<OrderDO> getStateById(@Param("idArray") List<Integer> idArray);
 
 	/**
-	 * 更新订单状态 如果是支付状态 则设置order_time
+	 * 更新订单状态
 	 * @param orderState
 	 * @param id
 	 * @return
 	 */
-	@Update("update ff_order set order_state=#{orderState}, order_time = CASE WHEN (#{orderState}=104) then NOW() else order_time END where id=#{id}")
+	@Update("update ff_order set order_state=#{orderState} where id=#{id}")
 	int updateOrderState(@Param("orderState") Integer orderState, @Param("id") Integer id);
+
+	/**
+	 * 更新订单支付状态
+	 * @param orderState
+	 * @param id
+	 * @return
+	 */
+	@Update("update ff_order set order_state=#{orderState}, order_date_num=#{orderDateNum}, order_time = NOW() where id=#{id}")
+	int updateOrderStatePay(@Param("orderState") Integer orderState, @Param("id") Integer id, @Param("orderDateNum") String dateNum);
 
 	/**
 	 * 查询订单列表
