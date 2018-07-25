@@ -1,5 +1,5 @@
 bootdo:
-  uploadPath: /usr/local/app/static
+  uploadPath: /usr/local/app/web-static
   staticUrl: http://static.wxcard.com.cn
   xgAccessId: 2100205073
   xgSecretKey: 630b8f1bfecc33e3373755da02b75657
