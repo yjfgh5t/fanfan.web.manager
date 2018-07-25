@@ -2,6 +2,8 @@ package com.bootdo.fanfan.service.impl;
 
 import com.bootdo.common.config.BootdoConfig;
 import com.bootdo.common.utils.StringUtils;
+import com.bootdo.fanfan.domain.enumDO.CommoditStateEnum;
+import com.bootdo.fanfan.domain.enumDO.OrderStateEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +44,7 @@ public class CommoditServiceImpl implements CommoditService {
 	public int save(CommoditDO commodit){
 		//设置当前时间
 		commodit.setCreateTime(Calendar.getInstance().getTime());
+		commodit.setStatus(CommoditStateEnum.useful.getVal());
 		return commoditDao.save(commodit);
 	}
 
