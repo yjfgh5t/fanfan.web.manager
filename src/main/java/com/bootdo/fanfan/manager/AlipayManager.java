@@ -10,6 +10,7 @@ import com.alipay.api.response.*;
 import com.bootdo.common.config.AlipayConfig;
 import com.bootdo.common.config.BootdoConfig;
 import com.bootdo.common.task.RefshOrderJob;
+import com.bootdo.fanfan.domain.DTO.QRCodeDTO;
 import com.bootdo.fanfan.domain.OrderAlipayDO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -118,6 +119,30 @@ public class AlipayManager {
 
 
     /**
+     * 创建小程序二维码
+     * @return
+     */
+    public String createQRCode(QRCodeDTO codeDTO){
+
+        //实例化客户端
+        AlipayClient alipayClient = AlipayConfig.getDefaultClient();
+        AlipayOpenAppQrcodeCreateRequest request = new AlipayOpenAppQrcodeCreateRequest();
+        request.setBizContent("{" +
+                "\"url_param\":\""+codeDTO.getUrlParam()+"\"," +
+                "\"query_param\":\""+codeDTO.getQueryParamToString()+"\"," +
+                "\"describe\":\""+codeDTO.getDescribe()+"\"" +
+                "  }");
+        AlipayOpenAppQrcodeCreateResponse response = null;
+        try {
+            response = alipayClient.execute(request);
+        } catch (AlipayApiException e) {
+            e.printStackTrace();
+        }
+
+        return response.getQrCodeUrl();
+    }
+
+    /**
      * 关闭支付交易
      * @return
      */
@@ -176,4 +201,5 @@ public class AlipayManager {
 
         return false;
     }
+
 }

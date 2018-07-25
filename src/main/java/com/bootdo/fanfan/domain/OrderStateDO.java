@@ -3,8 +3,6 @@ package com.bootdo.fanfan.domain;
 import java.io.Serializable;
 import java.util.Date;
 
-
-
 /**
  * 
  * 
@@ -14,8 +12,7 @@ import java.util.Date;
  */
 public class OrderStateDO implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
-	//
+
 	private Integer id;
 	//订单主键
 	private Integer orderId;

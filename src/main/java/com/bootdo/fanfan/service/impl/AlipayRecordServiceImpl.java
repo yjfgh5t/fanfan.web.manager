@@ -40,13 +40,13 @@ public class AlipayRecordServiceImpl implements AlipayRecordService {
 	}
 	
 	@Override
-	@Transactional(rollbackFor = {SecurityException.class} )
+	@Transactional(rollbackFor = {SecurityException.class,Exception.class})
 	public int save(AlipayRecordDO alipayRecord){
 
 		//支付宝信息是否保存
 		int count = alipayRecordDao.queryByTradeNo(alipayRecord.getTradeNo());
 
-		//判断添加或修改 支付宝同步和异步通知时
+		//判断是否添加 支付宝同步和异步通知时
 		if(count==0) {
 			OrderDO orderDO = new OrderDO();
 			orderDO.setId(Integer.parseInt(alipayRecord.getPassbackParams()));
@@ -54,9 +54,8 @@ public class AlipayRecordServiceImpl implements AlipayRecordService {
 			//修改订单状态
 			orderService.updateOrderState(orderDO);
 			return alipayRecordDao.save(alipayRecord);
-		}else {
-			return alipayRecordDao.update(alipayRecord);
 		}
+		return 1;
 	}
 	
 	@Override

@@ -141,7 +141,7 @@ public class OrderServiceImpl implements OrderService {
 		orderDetialService.batchSave(orderDetialDOList);
 
 		//保存订单状态
-		orderStateService.save(new OrderStateDO(orderDO.getId(),orderDO.getOrderState(),orderDO.getCustomerId()));
+		orderStateService.save(new OrderStateDO(orderDO.getId(),orderDO.getOrderState(),orderDO.getCustomerId()),orderDO.getOrderNum());
 
 		//保存订单收货人信息
 		orderReceiverDO.setId(orderDO.getId());
@@ -170,8 +170,9 @@ public class OrderServiceImpl implements OrderService {
 
 		OrderDO orderDO  =  orderDao.get(orderId);
 
-		if(orderDO==null)
+		if(orderDO==null) {
 			return null;
+		}
 
 		//查询商品详情
 		List<OrderDetialDO> orderDetialDOList = orderDetialService.queryByOrderId(orderDO.getId());
@@ -209,7 +210,7 @@ public class OrderServiceImpl implements OrderService {
 	@Transactional(rollbackFor = {SecurityException.class})
 	public void updateOrderState(OrderDO orderDO){
 		//保存订单状态
-		orderStateService.save(new OrderStateDO(orderDO.getId(),orderDO.getOrderState(),orderDO.getCustomerId()));
+		orderStateService.save(new OrderStateDO(orderDO.getId(),orderDO.getOrderState(),orderDO.getCustomerId()),orderDO.getOrderNum());
 		//修改订单状态
 		if(orderDO.getOrderState().equals(OrderStateEnum.userPaid.getVal())){
 			//查询customerId
@@ -260,7 +261,6 @@ public class OrderServiceImpl implements OrderService {
 		//推送消息
 		xgPushManager.put(pushModel);
 	}
-
 
 	/**
 	 * 查询用户订单

@@ -26,7 +26,7 @@ public interface UserService {
 
 	int remove(Long userId);
 
-	int batchremove(Long[] userIds);
+	int batchRemove(Long[] userIds);
 
 	boolean exit(Map<String, Object> params);
 

@@ -3,6 +3,7 @@ package com.bootdo.fanfan.web.api;
 import com.bootdo.common.extend.EMapper;
 import com.bootdo.common.utils.R;
 import com.bootdo.fanfan.domain.DeskDO;
+import com.bootdo.fanfan.manager.AlipayManager;
 import com.bootdo.fanfan.service.DeskService;
 import com.bootdo.fanfan.vo.APIDeskVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,10 +57,25 @@ public class DeskRestController extends ApiBaseRestController {
         return R.ok();
     }
 
+    /**
+     * 删除客桌
+     * @param id
+     * @return
+     */
     @PostMapping("/delete/{id}")
     public R delete(@PathVariable("id") Integer id){
         deskService.remove(id);
         return R.ok();
+    }
+
+    /**
+     * 获取客桌二维码
+     * @param id
+     * @return
+     */
+    @GetMapping("/qrcode/{id}")
+    public R deskQRCode(@PathVariable("id") Integer id){
+        return R.ok().put("data",deskService.getQRCode(id));
     }
 
 }

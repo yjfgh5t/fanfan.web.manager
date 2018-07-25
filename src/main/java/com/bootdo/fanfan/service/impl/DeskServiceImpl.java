@@ -1,5 +1,7 @@
 package com.bootdo.fanfan.service.impl;
 
+import com.bootdo.fanfan.domain.DTO.QRCodeDTO;
+import com.bootdo.fanfan.manager.AlipayManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,9 @@ import com.bootdo.fanfan.service.DeskService;
 public class DeskServiceImpl implements DeskService {
 	@Autowired
 	private DeskDao deskDao;
+
+	@Autowired
+	AlipayManager alipayManager;
 	
 	@Override
 	public DeskDO get(Integer id){
@@ -51,5 +56,25 @@ public class DeskServiceImpl implements DeskService {
 	public int batchRemove(Integer[] ids){
 		return deskDao.batchRemove(ids);
 	}
-	
+
+	@Override
+	public String getQRCode(Integer id) {
+
+		DeskDO deskDO = get(id);
+		if(deskDO==null){
+			return null;
+		}
+
+		QRCodeDTO codeDTO = new QRCodeDTO();
+		codeDTO.setDescribe(deskDO.getTitle());
+		codeDTO.putParam("customerId",deskDO.getCustomerId());
+		codeDTO.putParam("deskId",deskDO.getId());
+		codeDTO.setUrlParam("pages/index/index");
+
+		//调用接口
+		String codeUrl = alipayManager.createQRCode(codeDTO);
+
+		return codeUrl;
+	}
+
 }

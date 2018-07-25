@@ -65,19 +65,7 @@ public class OrderStateController {
 		model.addAttribute("orderState", orderState);
 	    return "fanfan/orderState/edit";
 	}
-	
-	/**
-	 * 保存
-	 */
-	@ResponseBody
-	@PostMapping("/save")
-	@RequiresPermissions("fanfan:orderState:add")
-	public R save( OrderStateDO orderState){
-		if(orderStateService.save(orderState)>0){
-			return R.ok();
-		}
-		return R.error();
-	}
+
 	/**
 	 * 修改
 	 */

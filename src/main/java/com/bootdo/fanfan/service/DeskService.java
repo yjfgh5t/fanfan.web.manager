@@ -27,4 +27,11 @@ public interface DeskService {
 	int remove(Integer id);
 	
 	int batchRemove(Integer[] ids);
+
+	/**
+	 * 获取二维码路径
+	 * @param id
+	 * @return
+	 */
+	String getQRCode(Integer id);
 }
