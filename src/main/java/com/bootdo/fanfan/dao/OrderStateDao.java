@@ -1,5 +1,6 @@
 package com.bootdo.fanfan.dao;
 
+import com.bootdo.fanfan.domain.DTO.OrderRefreshDTO;
 import com.bootdo.fanfan.domain.OrderStateDO;
 
 import java.util.Date;
@@ -44,7 +45,6 @@ public interface OrderStateDao {
 	 * 查询超时 待支付的订单
 	 * @return
 	 */
-	@MapKey("id")
-	@Select("SELECT order_id ,create_time from ff_order_state where order_id IN( SELECT id from ff_order where order_state=#{orderState} ) and order_state=#{orderState}")
-	List<OrderStateDO> queryAwaitPayOrder(@Param("orderState") Integer orderState);
+	@Select("select os.order_id,os.create_time,o.order_num from ff_order_state os join ff_order o on os.order_id = o.id where os.order_state=#{orderState} and o.order_state=#{orderState}")
+	List<OrderRefreshDTO> queryAwaitPayOrder(@Param("orderState") Integer orderState);
 }

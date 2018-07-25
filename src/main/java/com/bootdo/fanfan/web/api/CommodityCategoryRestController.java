@@ -52,6 +52,7 @@ public class CommodityCategoryRestController extends ApiBaseRestController  {
 
         if(commoditCategory.getId()==-1){
             commoditCategory.setCustomerId(this.baseModel.getCustomerId());
+            commoditCategory.setDelete(0);
             commoditCategoryService.save(commoditCategory);
         }else {
             commoditCategoryService.update(commoditCategory);

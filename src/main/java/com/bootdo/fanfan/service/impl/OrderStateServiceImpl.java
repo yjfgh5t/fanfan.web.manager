@@ -1,5 +1,6 @@
 package com.bootdo.fanfan.service.impl;
 
+import com.bootdo.fanfan.domain.DTO.OrderRefreshDTO;
 import com.bootdo.fanfan.domain.enumDO.OrderStateEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
@@ -22,7 +23,7 @@ public class OrderStateServiceImpl implements OrderStateService {
 	/**
 	 * 待支付的订单集合
 	 */
-	public Map<Integer,Date> awaitPayOrders = new HashMap<>();
+	public Map<Integer,OrderRefreshDTO> awaitPayOrders = new HashMap<>();
 
 	/**
 	 * 初始加载
@@ -30,10 +31,10 @@ public class OrderStateServiceImpl implements OrderStateService {
 	@PostConstruct
 	private void init(){
 		//加载待支付的订单
-		List<OrderStateDO> listOrder= orderStateDao.queryAwaitPayOrder(OrderStateEnum.userWaitPay.getVal());
+		List<OrderRefreshDTO> listOrder= orderStateDao.queryAwaitPayOrder(OrderStateEnum.userWaitPay.getVal());
 		if(listOrder!=null) {
 			listOrder.forEach((item)->{
-				awaitPayOrders.put(item.getOrderId(),item.getCreateTime());
+				awaitPayOrders.put(item.getOrderId(),item);
 			});
 		}
 	}
@@ -54,7 +55,7 @@ public class OrderStateServiceImpl implements OrderStateService {
 	}
 	
 	@Override
-	public int save(OrderStateDO orderState) {
+	public int save(OrderStateDO orderState,String orderNum) {
 		//查询此订单状态是否存在
 		Integer id =  orderStateDao.queryHasSave(orderState.getOrderId(), orderState.getOrderState());
 
@@ -68,7 +69,7 @@ public class OrderStateServiceImpl implements OrderStateService {
 		int result = orderStateDao.save(orderState);
 
 		//判断是否待支付订单
-		addAwaitPayOrder(orderState);
+		addAwaitPayOrder(orderState,orderNum);
 
 		return result;
 	}
@@ -96,7 +97,7 @@ public class OrderStateServiceImpl implements OrderStateService {
 	}
 
 	@Override
-	public Map<Integer, Date> getAwaitPayOrder() {
+	public Map<Integer,OrderRefreshDTO> getAwaitPayOrder() {
 		return awaitPayOrders;
 	}
 
@@ -115,7 +116,7 @@ public class OrderStateServiceImpl implements OrderStateService {
 	 * 添加待支付的订单至监控集合
 	 * @param orderState
 	 */
-	private void addAwaitPayOrder(OrderStateDO orderState){
+	private void addAwaitPayOrder(OrderStateDO orderState,String orderNum){
 
 		//更改的订单状态在监控集合中 切不为待支付状态
 		if(awaitPayOrders.containsKey(orderState.getOrderId()) && orderState.getOrderState()> OrderStateEnum.userWaitPay.getVal() ){
@@ -124,8 +125,12 @@ public class OrderStateServiceImpl implements OrderStateService {
 		}
 
 		//判断是否待支付订单
-		if(orderState.getOrderState()== OrderStateEnum.userWaitPay.getVal()){
-			awaitPayOrders.put(orderState.getOrderId(),orderState.getCreateTime());
+		if(orderState.getOrderState().equals(OrderStateEnum.userWaitPay.getVal())){
+			OrderRefreshDTO refreshDTO = new OrderRefreshDTO();
+			refreshDTO.setCreateTime(orderState.getCreateTime());
+			refreshDTO.setOrderId(orderState.getCreateId());
+			refreshDTO.setOrderNum(orderNum);
+			awaitPayOrders.put(orderState.getOrderId(),refreshDTO);
 		}
 
 	}

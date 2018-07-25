@@ -1,5 +1,6 @@
 package com.bootdo.fanfan.service;
 
+import com.bootdo.fanfan.domain.DTO.OrderRefreshDTO;
 import com.bootdo.fanfan.domain.OrderStateDO;
 import org.apache.ibatis.annotations.Param;
 
@@ -22,7 +23,7 @@ public interface OrderStateService {
 	
 	int count(Map<String, Object> map);
 	
-	int save(OrderStateDO orderState);
+	int save(OrderStateDO orderState,String orderNum);
 	
 	int remove(Integer id);
 	
@@ -40,7 +41,7 @@ public interface OrderStateService {
 	 * 获取超时未支付的订单
 	 * @return
 	 */
-	Map<Integer,Date> getAwaitPayOrder();
+	Map<Integer,OrderRefreshDTO> getAwaitPayOrder();
 
 	/**
 	 * 查询订单是否支付

@@ -45,4 +45,6 @@ public class APIOrderRequVO {
     private String mainImg;
     //最后付款剩余秒数
     private Long lastPayTime;
+    //桌号
+    private String orderDeskNum;
 }

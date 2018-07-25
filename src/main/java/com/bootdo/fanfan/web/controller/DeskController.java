@@ -10,12 +10,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.bootdo.fanfan.domain.OrderStateDO;
-import com.bootdo.fanfan.service.OrderStateService;
+import com.bootdo.fanfan.domain.DeskDO;
+import com.bootdo.fanfan.service.DeskService;
 import com.bootdo.common.utils.PageUtils;
 import com.bootdo.common.utils.Query;
 import com.bootdo.common.utils.R;
@@ -25,55 +26,67 @@ import com.bootdo.common.utils.R;
  * 
  * @author jy
  * @email 1992lcg@163.com
- * @date 2018-03-31 20:31:20
+ * @date 2018-07-03 12:18:24
  */
  
 @Controller
-@RequestMapping("/fanfan/orderState")
-public class OrderStateController {
+@RequestMapping("/fanfan/desk")
+public class DeskController {
 	@Autowired
-	private OrderStateService orderStateService;
+	private DeskService deskService;
 	
 	@GetMapping()
-	@RequiresPermissions("fanfan:orderState:orderState")
-	String OrderState(){
-	    return "fanfan/orderState/orderState";
+	@RequiresPermissions("fanfan:desk:desk")
+	String Desk(){
+	    return "fanfan/desk/desk";
 	}
 	
 	@ResponseBody
 	@GetMapping("/list")
-	@RequiresPermissions("fanfan:orderState:orderState")
+	@RequiresPermissions("fanfan:desk:desk")
 	public PageUtils list(@RequestParam Map<String, Object> params){
 		//查询列表数据
         Query query = new Query(params);
-		List<OrderStateDO> orderStateList = orderStateService.list(query);
-		int total = orderStateService.count(query);
-		PageUtils pageUtils = new PageUtils(orderStateList, total);
+		List<DeskDO> deskList = deskService.list(query);
+		int total = deskService.count(query);
+		PageUtils pageUtils = new PageUtils(deskList, total);
 		return pageUtils;
 	}
 	
 	@GetMapping("/add")
-	@RequiresPermissions("fanfan:orderState:add")
+	@RequiresPermissions("fanfan:desk:add")
 	String add(){
-	    return "fanfan/orderState/add";
+	    return "fanfan/desk/add";
 	}
 
 	@GetMapping("/edit/{id}")
-	@RequiresPermissions("fanfan:orderState:edit")
+	@RequiresPermissions("fanfan:desk:edit")
 	String edit(@PathVariable("id") Integer id,Model model){
-		OrderStateDO orderState = orderStateService.get(id);
-		model.addAttribute("orderState", orderState);
-	    return "fanfan/orderState/edit";
+		DeskDO desk = deskService.get(id);
+		model.addAttribute("desk", desk);
+	    return "fanfan/desk/edit";
 	}
-
+	
+	/**
+	 * 保存
+	 */
+	@ResponseBody
+	@PostMapping("/save")
+	@RequiresPermissions("fanfan:desk:add")
+	public R save( DeskDO desk){
+		if(deskService.save(desk)>0){
+			return R.ok();
+		}
+		return R.error();
+	}
 	/**
 	 * 修改
 	 */
 	@ResponseBody
 	@RequestMapping("/update")
-	@RequiresPermissions("fanfan:orderState:edit")
-	public R update( OrderStateDO orderState){
-		//orderStateService.update(orderState);
+	@RequiresPermissions("fanfan:desk:edit")
+	public R update( DeskDO desk){
+		deskService.update(desk);
 		return R.ok();
 	}
 	
@@ -82,9 +95,9 @@ public class OrderStateController {
 	 */
 	@PostMapping( "/remove")
 	@ResponseBody
-	@RequiresPermissions("fanfan:orderState:remove")
+	@RequiresPermissions("fanfan:desk:remove")
 	public R remove( Integer id){
-		if(orderStateService.remove(id)>0){
+		if(deskService.remove(id)>0){
 		return R.ok();
 		}
 		return R.error();
@@ -95,9 +108,9 @@ public class OrderStateController {
 	 */
 	@PostMapping( "/batchRemove")
 	@ResponseBody
-	@RequiresPermissions("fanfan:orderState:batchRemove")
+	@RequiresPermissions("fanfan:desk:batchRemove")
 	public R remove(@RequestParam("ids[]") Integer[] ids){
-		orderStateService.batchRemove(ids);
+		deskService.batchRemove(ids);
 		return R.ok();
 	}
 	

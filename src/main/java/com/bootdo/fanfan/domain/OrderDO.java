@@ -50,6 +50,41 @@ public class OrderDO implements Serializable {
 	//创建时间
 	private Date createTime;
 
+	//定时间
+	private Date orderTime;
+	/**
+	 * 订单桌号
+	 */
+	private String orderDeskNum;
+
+	/**
+	 * 当日串编号
+	 */
+	private String orderDateNum;
+
+	public String getOrderDeskNum() {
+		return orderDeskNum;
+	}
+
+	public void setOrderDeskNum(String orderDeskNum) {
+		this.orderDeskNum = orderDeskNum;
+	}
+
+	public String getOrderDateNum() {
+		return orderDateNum;
+	}
+
+	public void setOrderDateNum(String orderDateNum) {
+		this.orderDateNum = orderDateNum;
+	}
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
 	/**
 	 * 设置：主键
 	 */
@@ -219,5 +254,11 @@ public class OrderDO implements Serializable {
 	 */
 	public Date getCreateTime() {
 		return createTime;
+	}
+	public Date getOrderTime() {
+		return orderTime;
+	}
+	public void setOrderTime(Date orderTime) {
+		this.orderTime = orderTime;
 	}
 }

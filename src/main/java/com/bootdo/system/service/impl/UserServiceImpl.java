@@ -144,9 +144,9 @@ public class UserServiceImpl implements UserService {
 
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public int batchremove(Long[] userIds) {
+	public int batchRemove(Long[] userIds) {
 		int count = userMapper.batchRemove(userIds);
 		userRoleMapper.batchRemoveByUserId(userIds);
 		return count;

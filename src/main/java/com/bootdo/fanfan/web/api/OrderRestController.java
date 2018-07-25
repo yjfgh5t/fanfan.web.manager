@@ -8,6 +8,7 @@ import com.bootdo.fanfan.domain.AlipayRecordDO;
 import com.bootdo.fanfan.domain.OrderDO;
 import com.bootdo.fanfan.domain.enumDO.OrderStateEnum;
 import com.bootdo.fanfan.manager.AlipayManager;
+import com.bootdo.fanfan.manager.XGPushManager;
 import com.bootdo.fanfan.service.AlipayRecordService;
 import com.bootdo.fanfan.service.OrderService;
 import com.bootdo.fanfan.service.OrderStateService;
@@ -15,16 +16,15 @@ import com.bootdo.fanfan.vo.APIOrderListCustomerVO;
 import com.bootdo.fanfan.vo.APIOrderListVO;
 import com.bootdo.fanfan.vo.APIOrderQueryRequVO;
 import com.bootdo.fanfan.vo.APIOrderRequVO;
+import com.bootdo.fanfan.vo.model.XGPushModel;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
+import sun.util.calendar.CalendarUtils;
 
 import java.text.ParseException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping(value = "/api/order")
@@ -46,7 +46,7 @@ public class OrderRestController extends ApiBaseRestController {
     private EMapper mapper;
 
     @Autowired
-    private BootdoConfig bootdoConfig;
+    XGPushManager xgPushManager;
 
     /**
      * 创建订单
@@ -124,9 +124,6 @@ public class OrderRestController extends ApiBaseRestController {
     @PostMapping("/query/{date}")
     public R queryDayOrder(@PathVariable("date") @DateTimeFormat(pattern = "YYYY-MM-dd") Date date,Integer lastId,boolean isMax) throws ParseException {
         Map<String,Object> params = new HashMap<>();
-
-       // Date dateParam = DateUtils.parseDate(date,"YYYY-MM-dd");
-
         //商户
         params.put("customerId", baseModel.getCustomerId());
         //开始日期
@@ -182,22 +179,24 @@ public class OrderRestController extends ApiBaseRestController {
     /**
      * 验证是否支付
      * @param id
-     * @param recordDO
      * @return
      */
     @PostMapping("/checkPay/{id}")
-    public R queryPayState(@PathVariable("id") Integer id,@RequestBody AlipayRecordDO recordDO){
+    public R queryPayState(@PathVariable("id") Integer id){
 
         boolean hasPay = orderStateService.orderHasPay(id);
         if(hasPay){
             return  R.ok().put("data",true);
         }
+        String orderNum = orderService.get(id).getOrderNum();
 
         //查询支付宝订单
-        AlipayTradeQueryResponse tradeQueryResponse = alipayManager.queryTradePay(recordDO.getTradeNo());
+        AlipayTradeQueryResponse tradeQueryResponse = alipayManager.queryTradePay(orderNum);
 
         //判断是否支付成功
         if(tradeQueryResponse!=null && tradeQueryResponse.isSuccess()){
+            AlipayRecordDO recordDO = mapper.map(tradeQueryResponse,AlipayRecordDO.class);
+            recordDO.setPassbackParams(id+"");
             //保存数据
             alipayRecordService.save(recordDO);
 
@@ -233,6 +232,7 @@ public class OrderRestController extends ApiBaseRestController {
 
 
 
+    //region debug
     /**
      * 测试推送订单
      * @param id
@@ -240,7 +240,48 @@ public class OrderRestController extends ApiBaseRestController {
      */
     @GetMapping("/debugPush/{id}")
     public R debugPush(@PathVariable("id") Integer id){
-        orderService.sendOrderNotification(id);
+        XGPushModel pushModel = new XGPushModel(XGPushModel.MsgType.payOrder,id.longValue());
+        pushModel.setMsgTitle("您有新的订单");
+        pushModel.setMsgContent("订单总额：10");
+        pushModel.addParams("orderId","测试-id");
+
+        //推送消息
+        xgPushManager.put(pushModel);
         return R.ok();
     }
+
+    @GetMapping("/debugPay/{id}")
+    public R debugPay(@PathVariable("id") Integer id){
+
+        boolean hasPay = orderStateService.orderHasPay(id);
+        if(hasPay){
+            return  R.ok().put("data",true);
+        }
+        OrderDO orderInfo = orderService.get(id);
+
+        if(orderInfo==null){
+            return R.error(1,"订单不存在");
+        }
+
+        //查询支付宝订单
+        AlipayTradeQueryResponse tradeQueryResponse = new AlipayTradeQueryResponse();
+        tradeQueryResponse.setOutTradeNo(orderInfo.getOrderNum());
+        tradeQueryResponse.setTotalAmount(orderInfo.getOrderTotal().doubleValue()+"");
+        tradeQueryResponse.setTradeNo("Debug-"+ Calendar.getInstance().getTime().getTime());
+        tradeQueryResponse.setPayAmount(orderInfo.getOrderTotal().doubleValue()+"");
+        tradeQueryResponse.setBuyerUserId(orderInfo.getUserId()+"");
+
+        //判断是否支付成功
+        if(tradeQueryResponse!=null && tradeQueryResponse.isSuccess()){
+            AlipayRecordDO recordDO = mapper.map(tradeQueryResponse,AlipayRecordDO.class);
+            recordDO.setPassbackParams(id+"");
+            //保存数据
+            alipayRecordService.save(recordDO);
+
+            return  R.ok().put("data","true");
+        }
+
+        return R.error(1,"添加失败");
+    }
+    //endregion
 }

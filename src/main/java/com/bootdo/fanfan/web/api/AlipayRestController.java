@@ -64,7 +64,7 @@ public class AlipayRestController {
             alipayRecordService.save(recordDO);
             //发送消息
             orderService.sendOrderNotification(Integer.parseInt(recordDO.getPassbackParams()));
-        }catch (SecurityException ex){
+        }catch (Exception ex){
             log.error("保存支付宝异步消息异常--{}",ex);
         }
 

@@ -39,6 +39,16 @@ public class APIOrderListCustomerVO {
     private BigDecimal orderPay;
 
     /**
+     * 订单桌号
+     */
+    private String orderDeskNum;
+
+    /**
+     * 当日串编号
+     */
+    private String orderDateNum;
+
+    /**
      * 下单时间
      */
     private Date orderTime;
@@ -57,4 +67,9 @@ public class APIOrderListCustomerVO {
      * 订单详情列表
      */
     private List<APIOrderDetailVO> details;
+
+    /**
+     * 商品数量
+     */
+    private Integer commoditySize;
 }

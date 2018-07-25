@@ -2,8 +2,10 @@ package com.bootdo.fanfan.service.impl;
 
 import com.bootdo.common.config.BootdoConfig;
 import com.bootdo.common.extend.EMapper;
+import com.bootdo.common.utils.RedisUtils;
 import com.bootdo.common.utils.StringUtils;
 import com.bootdo.fanfan.domain.*;
+import com.bootdo.fanfan.domain.enumDO.OrderDetailEnum;
 import com.bootdo.fanfan.domain.enumDO.OrderStateEnum;
 import com.bootdo.fanfan.manager.AlipayManager;
 import com.bootdo.fanfan.manager.XGPushManager;
@@ -54,6 +56,9 @@ public class OrderServiceImpl implements OrderService {
 	@Autowired
 	XGPushManager xgPushManager;
 
+	@Autowired
+	RedisUtils redisUtils;
+
 	//region 默认方法
 	@Override
 	public OrderDO get(Integer id){
@@ -96,7 +101,7 @@ public class OrderServiceImpl implements OrderService {
 	 * 创建订单
 	 */
 	@Override
-	@Transactional(rollbackFor = {SecurityException.class})
+	@Transactional(rollbackFor = {SecurityException.class,Exception.class})
 	public Integer createOrder(APIOrderRequVO orderVO){
 
 		//验证
@@ -136,7 +141,7 @@ public class OrderServiceImpl implements OrderService {
 		orderDetialService.batchSave(orderDetialDOList);
 
 		//保存订单状态
-		orderStateService.save(new OrderStateDO(orderDO.getId(),orderDO.getOrderState(),orderDO.getCustomerId()));
+		orderStateService.save(new OrderStateDO(orderDO.getId(),orderDO.getOrderState(),orderDO.getCustomerId()),orderDO.getOrderNum());
 
 		//保存订单收货人信息
 		orderReceiverDO.setId(orderDO.getId());
@@ -165,8 +170,9 @@ public class OrderServiceImpl implements OrderService {
 
 		OrderDO orderDO  =  orderDao.get(orderId);
 
-		if(orderDO==null)
+		if(orderDO==null) {
 			return null;
+		}
 
 		//查询商品详情
 		List<OrderDetialDO> orderDetialDOList = orderDetialService.queryByOrderId(orderDO.getId());
@@ -203,10 +209,20 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	@Transactional(rollbackFor = {SecurityException.class})
 	public void updateOrderState(OrderDO orderDO){
-
 		//保存订单状态
-		orderStateService.save(new OrderStateDO(orderDO.getId(),orderDO.getOrderState(),orderDO.getCustomerId()));
+		orderStateService.save(new OrderStateDO(orderDO.getId(),orderDO.getOrderState(),orderDO.getCustomerId()),orderDO.getOrderNum());
 		//修改订单状态
+		if(orderDO.getOrderState().equals(OrderStateEnum.userPaid.getVal())){
+			//查询customerId
+			Integer customerId = orderDao.getCustomerIdById(orderDO.getId());
+			String redisKey = dateNumKey(customerId);
+			Long dateNum = (Long)redisUtils.get(redisKey);
+			//加一
+			dateNum = dateNum==null?10001L:(++dateNum);
+			//更新订单信息
+			orderDao.updateOrderStatePay(orderDO.getOrderState(),orderDO.getId(),"A"+dateNum);
+			redisUtils.set(redisKey,dateNum);
+		}
 		orderDao.updateOrderState(orderDO.getOrderState(),orderDO.getId());
 	}
 
@@ -237,7 +253,7 @@ public class OrderServiceImpl implements OrderService {
 			return;
 		}
 
-		XGPushModel pushModel = new XGPushModel(XGPushModel.MsgType.payOrder,15821243531L);
+		XGPushModel pushModel = new XGPushModel(XGPushModel.MsgType.payOrder,orderDO.getCustomerId().longValue());
 		pushModel.setMsgTitle("您有新的订单");
 		pushModel.setMsgContent("订单总额："+orderDO.getOrderTotal().toString());
 		pushModel.addParams("orderId",orderId);
@@ -245,7 +261,6 @@ public class OrderServiceImpl implements OrderService {
 		//推送消息
 		xgPushManager.put(pushModel);
 	}
-
 
 	/**
 	 * 查询用户订单
@@ -295,6 +310,9 @@ public class OrderServiceImpl implements OrderService {
 					//设置订单详情
 					if(temList!=null && temList.size()>0){
 						item.setDetails(eMapper.mapArray(temList,APIOrderDetailVO.class));
+						//设置商品数量
+						Integer commoditySize = (int)temList.stream().filter((commodity) -> OrderDetailEnum.Commodity.getVal().equals(commodity.getOutType())).count();
+						item.setCommoditySize(commoditySize);
 					}
 
 					//设置状态文本
@@ -480,6 +498,10 @@ public class OrderServiceImpl implements OrderService {
 		submitOrderTime.setMinutes(submitOrderTime.getMinutes()+15);
 		//最后付款剩余秒数
 		return (submitOrderTime.getTime() - System.currentTimeMillis())/1000;
+	}
+
+	private String dateNumKey(Integer customerId){
+		return "date_num_"+customerId+"_"+Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
 	}
 
 	//endregion
