@@ -2,6 +2,7 @@ package com.bootdo.fanfan.service.impl;
 
 import com.bootdo.common.config.BootdoConfig;
 import com.bootdo.common.utils.StringUtils;
+import com.bootdo.fanfan.domain.enumDO.BooleanEnum;
 import com.bootdo.fanfan.domain.enumDO.CommoditStateEnum;
 import com.bootdo.fanfan.domain.enumDO.OrderStateEnum;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,10 @@ public class CommoditServiceImpl implements CommoditService {
 		//设置当前时间
 		commodit.setCreateTime(Calendar.getInstance().getTime());
 		commodit.setStatus(CommoditStateEnum.useful.getVal());
+		commodit.setDelete(BooleanEnum.False.getVal());
+		if(commodit.getMustOrder()==null){
+			commodit.setMustOrder(BooleanEnum.False.getVal());
+		}
 		return commoditDao.save(commodit);
 	}
 
@@ -53,6 +58,7 @@ public class CommoditServiceImpl implements CommoditService {
 	 * @param idArry
 	 * @return
 	 */
+	@Override
 	public List<CommoditDO> queryByIdarry(List<Integer> idArry){
 
 		if(CollectionUtils.isEmpty(idArry))

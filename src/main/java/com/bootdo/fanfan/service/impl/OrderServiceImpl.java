@@ -125,7 +125,7 @@ public class OrderServiceImpl implements OrderService {
 			//生成订单号
 			orderDO.setOrderNum(this.getOrderNum(orderDO.getCustomerId()));
 			//获取实体
-			orderDO.setOrderState(101);
+			orderDO.setOrderState(OrderStateEnum.userCreate.getVal());
 			orderDO.setCreateTime(Calendar.getInstance().getTime());
 			//保存订单
 			save(orderDO);

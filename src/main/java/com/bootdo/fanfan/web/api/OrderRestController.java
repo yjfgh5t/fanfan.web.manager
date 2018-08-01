@@ -12,18 +12,12 @@ import com.bootdo.fanfan.manager.XGPushManager;
 import com.bootdo.fanfan.service.AlipayRecordService;
 import com.bootdo.fanfan.service.OrderService;
 import com.bootdo.fanfan.service.OrderStateService;
-import com.bootdo.fanfan.vo.APIOrderListCustomerVO;
-import com.bootdo.fanfan.vo.APIOrderListVO;
-import com.bootdo.fanfan.vo.APIOrderQueryRequVO;
-import com.bootdo.fanfan.vo.APIOrderRequVO;
+import com.bootdo.fanfan.vo.*;
 import com.bootdo.fanfan.vo.model.XGPushModel;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
-import sun.util.calendar.CalendarUtils;
-
-import java.text.ParseException;
 import java.util.*;
 
 @RestController
@@ -117,12 +111,13 @@ public class OrderRestController extends ApiBaseRestController {
     /**
      * 查询当日订单
      * @param date 日期
-     * @param lastId
-     * @param isMax
      * @return
      */
     @PostMapping("/query/{date}")
-    public R queryDayOrder(@PathVariable("date") @DateTimeFormat(pattern = "YYYY-MM-dd") Date date,Integer lastId,boolean isMax) throws ParseException {
+    public R queryDayOrder(@PathVariable("date") @DateTimeFormat(pattern = "YYYY-MM-dd") Date date,APIOrderDayQueryRequVO dayQueryRequVO) {
+
+        dayQueryRequVO.setDate(date);
+
         Map<String,Object> params = new HashMap<>();
         //商户
         params.put("customerId", baseModel.getCustomerId());
@@ -131,8 +126,17 @@ public class OrderRestController extends ApiBaseRestController {
         //结束日期
         Date endDate = DateUtils.addDays(date,1);
         params.put("endTime",endDate);
-        params.put("lastId",lastId);
-        params.put("isMax",isMax);
+        params.put("lastId",dayQueryRequVO.getLastId());
+        params.put("isMax",dayQueryRequVO.getIsMax());
+        //订单状态不为空
+        if(dayQueryRequVO.getOrderState()!=null && dayQueryRequVO.getOrderState()>0){
+            switch (dayQueryRequVO.getOrderState()){
+                case 1: params.put("orderState", OrderStateEnum.userPaid.getVal()); break;
+                case 2: params.put("orderState",OrderStateEnum.orderSuccess.getVal()); break;
+                case 3:params.put("orderState",OrderStateEnum.businessCancel.getVal()); break;
+                default:
+            }
+        }
 
         List<APIOrderListCustomerVO> listCustomerVOS = orderService.queryOrderByCustomer(params);
 

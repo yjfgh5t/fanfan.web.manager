@@ -179,7 +179,7 @@
 		left JOIN ff_user as b
 		on a.user_id = b.id
 		where  a.customer_id=#{customerId}
-		and a.order_time BETWEEN #{startTime} and #{endTime}
+		AND a.order_time BETWEEN #{startTime} and #{endTime}
 		<if test="lastId>=0">
 			<if test="isMax==true">
 				AND a.id &gt; #{lastId}
@@ -187,6 +187,9 @@
 			<if test="isMax==false">
 				AND a.id &lt; #{lastId}
 			</if>
+		</if>
+		<if test="orderState != null">
+			AND a.order_state = #{orderState}
 		</if>
 		ORDER BY a.id DESC
 	</select>
