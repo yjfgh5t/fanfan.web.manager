@@ -31,4 +31,8 @@ public class APIOrderListVO {
 
     //支付宝支付串
     private String alipayOrderStr;
+
+    private String orderDateNum;
+
+    private String orderDeskNum;
 }

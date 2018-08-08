@@ -47,4 +47,6 @@ public class APIOrderRequVO {
     private Long lastPayTime;
     //桌号
     private String orderDeskNum;
+    //当日串号
+    private String  orderDateNum;
 }

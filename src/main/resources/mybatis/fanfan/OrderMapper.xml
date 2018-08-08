@@ -144,8 +144,8 @@
 	</delete>
 
 	<select id="queryOrderByUser" resultType="com.bootdo.fanfan.vo.APIOrderListVO">
-		select A.id, A.`order_num`,A.`order_state`,A.`order_pay`,A.`order_commodity_total` as `commodity_total`,B.`out_title` as `title`,A.`create_time`,C.commodit_img    from
-		(select `id`,`order_num`,`order_state`,`order_pay`,`order_commodity_total`,`create_time` from ff_order
+		select A.id, A.`order_num`,A.`order_state`,A.`order_pay`,A.`order_commodity_total` as `commodity_total`,B.`out_title` as `title`,A.`create_time`,C.commodit_img,A.`order_date_num`    from
+		(select `id`,`order_num`,`order_state`,`order_pay`,`order_commodity_total`,`create_time`,`order_date_num` from ff_order
 		<where>
 			order_state!=101
 			<if test="userId != null and userId != ''"> AND user_id = #{userId} </if>
