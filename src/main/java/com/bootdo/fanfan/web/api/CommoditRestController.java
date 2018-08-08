@@ -70,7 +70,6 @@ public class CommoditRestController extends ApiBaseRestController {
 
         if(commodit.getId()==0) {
             commodit.setCustomerId(baseModel.getCustomerId());
-            commodit.setDelete(0);
             commodit.setId(commoditService.save(commodit));
         }else {
             commoditService.update(commodit);
