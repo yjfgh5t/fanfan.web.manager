@@ -47,6 +47,7 @@ public class XGPushManager extends AbstractMsgQueue<XGPushModel> {
 
         message.setContent(item.getMsgContent());
         message.setTitle(item.getMsgTitle());
+        message.setMultiPkg(1);
         message.setCustom(item.getParams());
         //消息类型
         message.setType(item.getNotification()?Message.TYPE_NOTIFICATION:Message.TYPE_MESSAGE);
@@ -57,8 +58,15 @@ public class XGPushManager extends AbstractMsgQueue<XGPushModel> {
             message.setStyle(style);
         }
 
-        JSONObject jsonObject = xingeApp.pushSingleAccount(000,item.getUserId().toString(),message);
+        JSONObject jsonObject = xingeApp.pushSingleAccount(0,item.getUserId().toString(),message);
 
         logger.info("执行推送-->{}",jsonObject);
+    }
+
+    /**
+     * 推送通知消息
+     */
+    private void pushNotify(){
+
     }
 }
