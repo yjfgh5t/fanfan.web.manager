@@ -5,9 +5,11 @@ import com.bootdo.common.extend.EMapper;
 import com.bootdo.common.utils.RedisUtils;
 import com.bootdo.common.utils.StringUtils;
 import com.bootdo.fanfan.domain.*;
+import com.bootdo.fanfan.domain.DTO.TemplateMsgMQDTO;
 import com.bootdo.fanfan.domain.enumDO.OrderDetailEnum;
 import com.bootdo.fanfan.domain.enumDO.OrderStateEnum;
 import com.bootdo.fanfan.manager.AlipayManager;
+import com.bootdo.fanfan.manager.TemplateMsgManager;
 import com.bootdo.fanfan.manager.XGPushManager;
 import com.bootdo.fanfan.service.*;
 import com.bootdo.fanfan.vo.*;
@@ -17,8 +19,8 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import com.bootdo.fanfan.dao.OrderDao;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,6 +57,9 @@ public class OrderServiceImpl implements OrderService {
 
 	@Autowired
 	XGPushManager xgPushManager;
+
+	@Autowired
+	TemplateMsgManager templateMsgManager;
 
 	@Autowired
 	RedisUtils redisUtils;
@@ -207,23 +212,34 @@ public class OrderServiceImpl implements OrderService {
 	 * @param orderDO
 	 */
 	@Override
-	@Transactional(rollbackFor = {SecurityException.class})
+	@Transactional(rollbackFor = {Exception.class})
 	public void updateOrderState(OrderDO orderDO){
 		//保存订单状态
 		orderStateService.save(new OrderStateDO(orderDO.getId(),orderDO.getOrderState(),orderDO.getCustomerId()),orderDO.getOrderNum());
-		//修改订单状态
+
+		//顾客支付
 		if(orderDO.getOrderState().equals(OrderStateEnum.userPaid.getVal())){
 			//查询customerId
 			Integer customerId = orderDao.getCustomerIdById(orderDO.getId());
-			String redisKey = dateNumKey(customerId);
-			Long dateNum = (Long)redisUtils.get(redisKey);
-			//加一
-			dateNum = dateNum==null?10001L:(++dateNum);
+			String dateNum = dateNum(customerId);
 			//更新订单信息
-			orderDao.updateOrderStatePay(orderDO.getOrderState(),orderDO.getId(),"A"+dateNum);
-			redisUtils.set(redisKey,dateNum);
+			orderDao.updateOrderStatePay(orderDO.getOrderState(),orderDO.getId(),dateNum);
+			//推送消息队列-下单通知-给顾客
+			templateMsgManager.put(new TemplateMsgMQDTO().buildOrderPayMQ(orderDO.getId()));
+			//推送下单通知-给商户
+			sendOrderNotification(orderDO.getId());
+		//商户取消订单
+		}else if(orderDO.getOrderState().equals(OrderStateEnum.businessCancel)){
+			//支付宝退款
+			alipayManager.tradeRefund(orderDO.getOrderNum(),orderDO.getOrderPay().toString());
+			//更新状态
+			orderDao.updateOrderStateCancel(orderDO.getOrderState(),orderDO.getId(),orderDO.getOrderCustomerRemark());
+			//推送消息队列-取消订单通知
+			templateMsgManager.put(new TemplateMsgMQDTO().buildOrderCancleMQ(orderDO.getId()));
+		}else{
+			//其它交易状态
+			orderDao.updateOrderState(orderDO.getOrderState(),orderDO.getId());
 		}
-		orderDao.updateOrderState(orderDO.getOrderState(),orderDO.getId());
 	}
 
 	@Override
@@ -256,7 +272,7 @@ public class OrderServiceImpl implements OrderService {
 		XGPushModel pushModel = new XGPushModel(XGPushModel.MsgType.payOrder,orderDO.getCustomerId().longValue());
 		pushModel.setMsgTitle("您有新的订单");
 		pushModel.setMsgContent("订单总额："+orderDO.getOrderTotal().toString());
-		pushModel.addParams("orderId",orderId);
+		pushModel.addParams("data",orderId);
 
 		//推送消息
 		xgPushManager.put(pushModel);
@@ -500,8 +516,16 @@ public class OrderServiceImpl implements OrderService {
 		return (submitOrderTime.getTime() - System.currentTimeMillis())/1000;
 	}
 
-	private String dateNumKey(Integer customerId){
-		return "date_num_"+customerId+"_"+Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+	private String dateNum(Integer customerId){
+		String redisKey = "date_num_"+customerId+"_"+Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+
+		long dateNum = redisUtils.incr(redisKey, 0);
+		//设置过期时间
+		if(dateNum==0){
+			redisUtils.expire(redisKey,1, TimeUnit.DAYS);
+		}
+
+		return ""+dateNum;
 	}
 
 	//endregion

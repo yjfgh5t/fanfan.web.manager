@@ -4,12 +4,12 @@
 <mapper namespace="com.bootdo.fanfan.dao.OrderDao">
 
 	<select id="get" resultType="com.bootdo.fanfan.domain.OrderDO">
-		select `id`,`user_id`,`order_num`,`order_date_num`,`order_desk_num`,`order_state`,`order_total`,`order_pay`,`order_discount_total`,`order_commodity_total`,`order_pay_type`,`order_meals_num`,`order_remark`,`order_invoice`,`order_time`,`customer_id`,`create_time` from ff_order where id = #{value}
+		select `id`,`user_id`,`order_num`,`order_date_num`,`order_desk_num`,`order_state`,`order_total`,`order_pay`,`order_discount_total`,`order_commodity_total`,`order_pay_type`,`order_meals_num`,`order_remark`,`order_customer_remark`,`order_invoice`,`order_time`,`customer_id`,`create_time` from ff_order where id = #{value}
 	</select>
 
 	<select id="list" resultType="com.bootdo.fanfan.domain.OrderDO">
 		SELECT  tab_order.*,tab_user.user_nick from (
-			select `id`,`user_id`,`order_num`,`order_date_num`,`order_desk_num`,`order_state`,`order_total`,`order_pay`,`order_discount_total`,`order_commodity_total`,`order_pay_type`,`order_meals_num`,`order_remark`,`order_time`,`order_invoice`,`customer_id`,`create_time` from ff_order
+			select `id`,`user_id`,`order_num`,`order_date_num`,`order_desk_num`,`order_state`,`order_total`,`order_pay`,`order_discount_total`,`order_commodity_total`,`order_pay_type`,`order_meals_num`,`order_remark`,`order_customer_remark`,`order_time`,`order_invoice`,`customer_id`,`create_time` from ff_order
 			<where>
 					  <if test="id != null and id != ''"> and id = #{id} </if>
 				      <if test="userId != null and userId != ''"> and user_id = #{userId} </if>
@@ -82,6 +82,7 @@
 			`order_commodity_total`,
 			`order_pay_type`,
 			`order_meals_num`,
+			`order_customer_remark`,
 			`order_remark`,
 			`order_invoice`,
 			`order_time`,
@@ -101,6 +102,7 @@
 			#{orderCommodityTotal},
 			#{orderPayType},
 			#{orderMealsNum},
+			#{orderCustomerRemark},
 			#{orderRemark},
 			#{orderInvoice},
 			#{orderTime},
@@ -124,6 +126,7 @@
 			<if test="orderPayType != null">`order_pay_type` = #{orderPayType}, </if>
 			<if test="orderMealsNum != null">`order_meals_num` = #{orderMealsNum}, </if>
 			<if test="orderRemark != null">`order_remark` = #{orderRemark}, </if>
+			<if test="orderCustomerRemark != null">`order_customer_remark` = #{orderCustomerRemark}, </if>
 			<if test="orderInvoice != null">`order_invoice` = #{orderInvoice}, </if>
 			<if test="orderTime != null">`order_time` = #{orderTime}, </if>
 			<if test="customerId != null">`customer_id` = #{customerId}, </if>

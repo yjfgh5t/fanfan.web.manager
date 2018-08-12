@@ -39,6 +39,8 @@ public class OrderDO implements Serializable {
 	private Integer orderPayType;
 	//用餐人数
 	private String orderMealsNum;
+	//商家描述（退款描述）
+	private String orderCustomerRemark;
 	//描述
 	private String orderRemark;
 	//订单发票信息
@@ -50,7 +52,7 @@ public class OrderDO implements Serializable {
 	//创建时间
 	private Date createTime;
 
-	//定时间
+	//下单时间
 	private Date orderTime;
 	/**
 	 * 订单桌号
@@ -217,8 +219,18 @@ public class OrderDO implements Serializable {
 	public String getOrderInvoice() {
 		return orderInvoice;
 	}
+
+	public String getOrderCustomerRemark() {
+		return orderCustomerRemark;
+	}
+
+	public void setOrderCustomerRemark(String orderCustomerRemark) {
+		this.orderCustomerRemark = orderCustomerRemark;
+	}
+
 	/**
 	 * 设置：用户主键
+
 	 */
 	public void setCustomerId(Integer customerId) {
 		this.customerId = customerId;
@@ -261,4 +273,5 @@ public class OrderDO implements Serializable {
 	public void setOrderTime(Date orderTime) {
 		this.orderTime = orderTime;
 	}
+
 }

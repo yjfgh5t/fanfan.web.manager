@@ -4,6 +4,7 @@ import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.bootdo.common.config.BootdoConfig;
 import com.bootdo.common.extend.EMapper;
 import com.bootdo.common.utils.R;
+import com.bootdo.common.utils.StringUtils;
 import com.bootdo.fanfan.domain.AlipayRecordDO;
 import com.bootdo.fanfan.domain.OrderDO;
 import com.bootdo.fanfan.domain.enumDO.OrderStateEnum;
@@ -183,7 +184,7 @@ public class OrderRestController extends ApiBaseRestController {
      * @return
      */
     @PostMapping("/state/{orderId}")
-    public R orderCancel(@PathVariable("orderId") Integer orderId, String state) {
+    public R orderState(@PathVariable("orderId") Integer orderId, String state,String customerRemark) {
 
         OrderDO orderDO = new OrderDO();
         orderDO.setId(orderId);
@@ -209,6 +210,11 @@ public class OrderRestController extends ApiBaseRestController {
                 break;
             default:
                 return R.error(1, "非法参数");
+        }
+
+        //商家描述
+        if(StringUtils.isNotEmpty(customerRemark)){
+            orderDO.setOrderCustomerRemark(customerRemark);
         }
 
         //更新状态

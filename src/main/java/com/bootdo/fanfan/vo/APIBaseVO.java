@@ -10,7 +10,7 @@ import lombok.Data;
 public class APIBaseVO {
 
     /**
-     * 客户端类型
+     * 客户端类型[Android Alipay Wechat]
      */
     private String clientType;
 

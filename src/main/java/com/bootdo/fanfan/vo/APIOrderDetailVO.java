@@ -17,7 +17,9 @@ public class APIOrderDetailVO {
 
     private BigDecimal outPrice;
 
-    //商品数量
+    /**
+     * 商品数量
+     */
     private Integer outSize;
 
     private Integer outType;
