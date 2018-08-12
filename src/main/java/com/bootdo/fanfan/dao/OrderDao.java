@@ -66,6 +66,15 @@ public interface OrderDao {
 	int updateOrderState(@Param("orderState") Integer orderState, @Param("id") Integer id);
 
 	/**
+	 * 更新订单状态和文本
+	 * @param orderState
+	 * @param id
+	 * @return
+	 */
+	@Update("update ff_order set order_state=#{orderState}, order_customer_remark=#{customerRemark} where id=#{id}")
+	int updateOrderStateCancel(@Param("orderState") Integer orderState, @Param("id") Integer id, @Param("customerRemark") String customerRemark);
+
+	/**
 	 * 更新订单支付状态
 	 * @param orderState
 	 * @param id

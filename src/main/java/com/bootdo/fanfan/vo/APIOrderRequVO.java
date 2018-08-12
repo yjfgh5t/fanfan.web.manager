@@ -27,12 +27,15 @@ public class APIOrderRequVO {
     private Integer orderPayType;
     //用餐人数
     private String orderMealsNum;
+    //商户描述（退款描述）
+    private String orderCustomerRemark;
     //描述
     private String orderRemark;
     //订单发票信息
     private String orderInvoice;
     //商户id
     private Integer customerId;
+
     //收货人信息
     private APIOrderReceiverVO receiver;
     //订单详情
@@ -49,4 +52,6 @@ public class APIOrderRequVO {
     private String orderDeskNum;
     //当日串号
     private String  orderDateNum;
+    //下单时间
+    private Date orderTime;
 }

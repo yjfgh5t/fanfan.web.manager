@@ -29,9 +29,6 @@ public class AlipayRestController {
     @Autowired
     AlipayRecordService alipayRecordService;
 
-    @Autowired
-    OrderService orderService;
-
     Log log = LogFactory.getLog(AlipayRestController.class);
 
     /**
@@ -62,8 +59,6 @@ public class AlipayRestController {
         try {
             //修改订单支付状态
             alipayRecordService.save(recordDO);
-            //发送消息
-            orderService.sendOrderNotification(Integer.parseInt(recordDO.getPassbackParams()));
         }catch (Exception ex){
             log.error("保存支付宝异步消息异常--{}",ex);
         }

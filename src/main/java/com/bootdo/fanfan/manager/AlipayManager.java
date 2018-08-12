@@ -11,6 +11,7 @@ import com.bootdo.common.config.AlipayConfig;
 import com.bootdo.common.config.BootdoConfig;
 import com.bootdo.common.task.RefshOrderJob;
 import com.bootdo.fanfan.domain.DTO.QRCodeDTO;
+import com.bootdo.fanfan.domain.DTO.TemplateMsgDTO;
 import com.bootdo.fanfan.domain.OrderAlipayDO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -117,6 +118,28 @@ public class AlipayManager {
         return "";
     }
 
+    /**
+     * 退款
+     */
+    public boolean tradeRefund(String orderNum,String refundAmount){
+        AlipayClient alipayClient = AlipayConfig.getDefaultClient();
+        AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
+        request.setBizContent("{" +
+                "\"out_trade_no\":\""+orderNum+"\"," +
+                "\"refund_amount\":"+refundAmount+"" +
+                "  }");
+        AlipayTradeRefundResponse response = null;
+        try {
+            //执行退款
+            response = alipayClient.execute(request);
+            return  response.isSuccess() && response.getCode()=="10000";
+
+        } catch (AlipayApiException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
 
     /**
      * 创建小程序二维码
@@ -184,6 +207,29 @@ public class AlipayManager {
             logger.error("查询支付宝交易异常- ->{}",e);
         }
         return response;
+    }
+
+    /**
+     * 推送支付宝模板消息
+     */
+    public boolean sendTemplateMsg(TemplateMsgDTO templateModel){
+        AlipayClient alipayClient = AlipayConfig.getDefaultClient();
+        AlipayOpenAppMiniTemplatemessageSendRequest request =new AlipayOpenAppMiniTemplatemessageSendRequest();
+        request.setBizContent(templateModel.build());
+        AlipayOpenAppMiniTemplatemessageSendResponse response = null;
+        try {
+            response = alipayClient.execute(request);
+        } catch (AlipayApiException e) {
+            e.printStackTrace();
+        }
+        if(response.isSuccess()){
+            logger.info("模板发送成功");
+            return true;
+        }else{
+            logger.error("模板发送失败--{}",response.getMsg());
+        }
+
+        return false;
     }
 
     /**
