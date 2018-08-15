@@ -299,11 +299,12 @@ public class OrderRestController extends ApiBaseRestController {
      */
     @GetMapping("/debugPush/{id}")
     public R debugPush(@PathVariable("id") Integer id) {
-        XGPushModel pushModel = new XGPushModel(XGPushModel.MsgType.payOrder, id.longValue());
+        APIOrderRequVO apiOrderRequVO = orderService.queryOrder(id);
+        XGPushModel pushModel = new XGPushModel(XGPushModel.MsgType.payOrder, apiOrderRequVO.getCustomerId().longValue());
         pushModel.setMsgTitle("您有新的订单");
         pushModel.setMsgContent("订单总额："+new Random().nextInt());
         pushModel.setNotification(false);
-        pushModel.addParams("data", "测试订单数据"+new Random().nextInt());
+        pushModel.addParams("data", apiOrderRequVO);
         pushModel.addParams("time",Calendar.getInstance().getTime());
 
         //推送消息

@@ -264,16 +264,15 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public void sendOrderNotification(Integer orderId) {
 
-		OrderDO orderDO = this.get(orderId);
-		if(orderDO==null){
+		APIOrderRequVO orderRequVO = this.queryOrder(orderId);
+		if(orderRequVO==null){
 			return;
 		}
 
-		XGPushModel pushModel = new XGPushModel(XGPushModel.MsgType.payOrder,orderDO.getCustomerId().longValue());
+		XGPushModel pushModel = new XGPushModel(XGPushModel.MsgType.payOrder,orderRequVO.getCustomerId().longValue());
 		pushModel.setMsgTitle("您有新的订单");
-		pushModel.setMsgContent("订单总额："+orderDO.getOrderTotal().toString());
-		pushModel.addParams("data",orderId);
-
+		pushModel.setMsgContent("订单总额："+orderRequVO.getOrderTotal().toString());
+		pushModel.addParams("data",orderRequVO);
 		//推送消息
 		xgPushManager.put(pushModel);
 	}
