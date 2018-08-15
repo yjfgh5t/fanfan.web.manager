@@ -37,7 +37,7 @@ public class CommodityCategoryRestController extends ApiBaseRestController  {
         parmas.put("sort","`order`");
         parmas.put("order","asc");
         parmas.put("delete","0");
-        parmas.put("customerId",this.baseModel.getCustomerId());
+        parmas.put("customerId",getBaseModel().getCustomerId());
 
         List<APICommodityCategoryRequVO> commoditCategoryList =  mapper.mapArray(commoditCategoryService.list(parmas), APICommodityCategoryRequVO.class);
         return R.ok().put("data", commoditCategoryList);
@@ -51,7 +51,7 @@ public class CommodityCategoryRestController extends ApiBaseRestController  {
     public R save(@RequestBody CommoditCategoryDO commoditCategory){
 
         if(commoditCategory.getId()==-1){
-            commoditCategory.setCustomerId(this.baseModel.getCustomerId());
+            commoditCategory.setCustomerId(getBaseModel().getCustomerId());
             commoditCategory.setDelete(0);
             commoditCategoryService.save(commoditCategory);
         }else {
@@ -65,7 +65,7 @@ public class CommodityCategoryRestController extends ApiBaseRestController  {
 
         //查询改分类下是否包含商品
         Map<String,Object> params = new HashMap<>();
-        params.put("customerId",baseModel.getCustomerId());
+        params.put("customerId",getBaseModel().getCustomerId());
         params.put("categoryId",id);
         int count = commoditService.count(params);
         if(count>0){

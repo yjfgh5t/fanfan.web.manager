@@ -32,10 +32,10 @@ public class CommoditRestController extends ApiBaseRestController {
 
         Map<String, Object> _map = new HashMap<>();
         _map.put("sort","`order`");
-        _map.put("customerId",baseModel.getCustomerId());
+        _map.put("customerId",getBaseModel().getCustomerId());
 
         List<CommoditDO> list = commoditService.list(_map);
-        if(baseModel.getClientType().equals("Android")){
+        if(getBaseModel().getClientType().equals("Android")){
             return R.ok().put("data", mapper.mapArray(list, APICommodityVO.class));
         }else {
             return R.ok().put("data", mapper.mapArray(list, APICommoditySimpleVO.class));
@@ -52,7 +52,7 @@ public class CommoditRestController extends ApiBaseRestController {
         //查询商品详情
         CommoditDO model = commoditService.get(id);
 
-        if(baseModel.getClientType().equals("Android")){
+        if(getBaseModel().getClientType().equals("Android")){
             return R.ok().put("data", mapper.map(model, APICommodityVO.class));
         }else {
             return R.ok().put("data", mapper.map(model, APICommoditySimpleVO.class));
@@ -69,7 +69,7 @@ public class CommoditRestController extends ApiBaseRestController {
         CommoditDO commodit = mapper.map(commodityVO,CommoditDO.class);
 
         if(commodit.getId()==0) {
-            commodit.setCustomerId(baseModel.getCustomerId());
+            commodit.setCustomerId(getBaseModel().getCustomerId());
             commodit.setId(commoditService.save(commodit));
         }else {
             commoditService.update(commodit);

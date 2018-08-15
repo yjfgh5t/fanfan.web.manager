@@ -53,7 +53,7 @@ public class OrderRestController extends ApiBaseRestController {
     public R createOrder(@RequestBody APIOrderRequVO orderModel) {
         try {
 
-            orderModel.setCustomerId(baseModel.getCustomerId());
+            orderModel.setCustomerId(getBaseModel().getCustomerId());
 
             //创建订单
             Integer orderId = orderService.createOrder(orderModel);
@@ -125,7 +125,7 @@ public class OrderRestController extends ApiBaseRestController {
 
         Map<String, Object> params = new HashMap<>();
         //商户
-        params.put("customerId", baseModel.getCustomerId());
+        params.put("customerId", getBaseModel().getCustomerId());
         //开始日期
         params.put("startTime", date);
         //结束日期

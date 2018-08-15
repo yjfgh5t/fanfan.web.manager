@@ -14,15 +14,18 @@ import org.springframework.web.bind.annotation.RequestHeader;
 @Controller
 public class ApiBaseRestController {
 
-    /**
-     * header相关信息
-     */
-    protected APIBaseVO baseModel;
+    private static ThreadLocal<APIBaseVO> local = new ThreadLocal<>();
 
     @ModelAttribute
     private void headerAttribute(@RequestHeader(name = "base",required = false) String base){
-        if(!StringUtils.isEmpty(base))
-             baseModel = JSONObject.parseObject(base, APIBaseVO.class);
+        if(!StringUtils.isEmpty(base)) {
+            APIBaseVO baseModel = JSONObject.parseObject(base, APIBaseVO.class);
+            local.set(baseModel);
+        }
+    }
+
+    protected APIBaseVO getBaseModel(){
+        return local.get();
     }
 
 }

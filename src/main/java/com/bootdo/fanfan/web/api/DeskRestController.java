@@ -36,7 +36,7 @@ public class DeskRestController extends ApiBaseRestController {
         Map<String,Object> parmas = new HashMap<>();
         parmas.put("sort","`id`");
         parmas.put("order","asc");
-        parmas.put("customerId",this.baseModel.getCustomerId());
+        parmas.put("customerId",getBaseModel().getCustomerId());
         List<APIDeskVO> deskList =  mapper.mapArray(deskService.list(parmas), APIDeskVO.class);
         return R.ok().put("data", deskList);
     }
@@ -49,7 +49,7 @@ public class DeskRestController extends ApiBaseRestController {
     public R save(@RequestBody APIDeskVO deskVO){
         DeskDO deskDO = mapper.map(deskVO,DeskDO.class);
         if(deskVO.getId()==-1){
-            deskDO.setCustomerId(this.baseModel.getCustomerId());
+            deskDO.setCustomerId(getBaseModel().getCustomerId());
             deskService.save(deskDO);
         }else {
             deskService.update(deskDO);

@@ -2,6 +2,7 @@ package com.bootdo.fanfan.web.api;
 
 import com.bootdo.common.utils.R;
 import com.bootdo.fanfan.domain.FormIdDO;
+import com.bootdo.fanfan.domain.enumDO.PlatformEnum;
 import com.bootdo.fanfan.service.FormIdService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,8 +30,14 @@ public class FormIdRestController extends ApiBaseRestController {
 
         FormIdDO formIdDO = new FormIdDO();
         formIdDO.setFormId(formId);
-        formIdDO.setUserId(baseModel.getUserId());
-        formIdDO.setFormType("alipay-miniprogram".equals(baseModel.getClientType())?1:2);
+        formIdDO.setUserId(getBaseModel().getUserId());
+
+        //判断客户端类型
+        if(PlatformEnum.AlipayMiniprogram.toString().equals(getBaseModel().getClientType())){
+            formIdDO.setFormType(PlatformEnum.AlipayMiniprogram.getVal());
+        }else{
+            formIdDO.setFormType(PlatformEnum.WechatMiniprogram.getVal());
+        }
 
         //执行保存
         formIdService.save(formIdDO);

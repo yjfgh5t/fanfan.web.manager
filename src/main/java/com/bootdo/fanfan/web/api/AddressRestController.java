@@ -62,7 +62,7 @@ public class AddressRestController extends ApiBaseRestController {
 
         Map<String,Object> params =  new HashMap<>();
 
-        params.put("userId",baseModel.getUserId());
+        params.put("userId",getBaseModel().getUserId());
 
         List<ReceiverDO> list = receiverService.list(params);
 

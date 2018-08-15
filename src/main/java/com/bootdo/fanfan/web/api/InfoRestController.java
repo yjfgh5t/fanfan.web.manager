@@ -40,7 +40,7 @@ public class InfoRestController extends ApiBaseRestController {
     public R initInfo(){
 
         //字典信息
-        Map<Integer,String> dictionaryDOList = dictionaryService.queryByKeys(baseModel.getCustomerId(),
+        Map<Integer,String> dictionaryDOList = dictionaryService.queryByKeys(getBaseModel().getCustomerId(),
                 DictionaryEnum.businessEndTime.getVal(),
                 DictionaryEnum.businessStartTime.getVal(),
                 DictionaryEnum.minOrderPrice.getVal(),
