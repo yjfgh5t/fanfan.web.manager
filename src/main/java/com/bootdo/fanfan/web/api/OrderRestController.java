@@ -304,7 +304,13 @@ public class OrderRestController extends ApiBaseRestController {
         pushModel.setMsgTitle("您有新的订单");
         pushModel.setMsgContent("订单总额："+new Random().nextInt());
         pushModel.setNotification(false);
-        pushModel.addParams("data", apiOrderRequVO);
+        //数据转换
+        APIPrintOrderVO data = mapper.map(apiOrderRequVO, APIPrintOrderVO.class);
+        if(apiOrderRequVO.getDetailList()!=null){
+            List<APIPrintOrderDetailVO> detailVOS = mapper.mapArray(apiOrderRequVO.getDetailList(), APIPrintOrderDetailVO.class);
+            data.setDetails(detailVOS);
+        }
+        pushModel.addParams("data", data);
         pushModel.addParams("time",Calendar.getInstance().getTime());
 
         //推送消息
