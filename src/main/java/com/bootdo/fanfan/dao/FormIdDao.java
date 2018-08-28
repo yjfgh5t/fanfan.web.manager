@@ -1,5 +1,6 @@
 package com.bootdo.fanfan.dao;
 
+import com.bootdo.fanfan.domain.DTO.FormUserDTO;
 import com.bootdo.fanfan.domain.FormIdDO;
 
 import java.util.List;
@@ -32,6 +33,6 @@ public interface FormIdDao {
 	
 	int batchRemove(Integer[] ids);
 
-	@Select("SELECT form_id from ff_form_id where expired_time>NOW() and use_count<#{count} and user_id=#{userId} and form_type=#{type} limit 0,1")
-	String getCanUseFormId(@Param("type") Integer type, @Param("count") Integer count, @Param("userId") Integer userId);
+	@Select("SELECT fi.form_id as formId,tp.tp_id as tpId from ff_form_id as fi join ff_tp_user as tp on tp.user_id = fi.user_id  where fi.expired_time>NOW() and fi.use_count<#{count} and fi.user_id=#{userId} and fi.form_type=#{type} and tp.tp_type=#{type} limit 0,1")
+	FormUserDTO getCanUseFormId(@Param("type") Integer type, @Param("count") Integer count, @Param("userId") Integer userId);
 }

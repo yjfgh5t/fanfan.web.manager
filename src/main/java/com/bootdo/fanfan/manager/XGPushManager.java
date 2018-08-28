@@ -43,6 +43,8 @@ public class XGPushManager extends AbstractMsgQueue<XGPushModel> {
     @Override
     protected void runCallback(XGPushModel item) {
 
+        StringBuilder builder = new StringBuilder("开始推送信鸽消息---->\t");
+
         Message message = new Message();
 
         message.setContent(item.getMsgContent());
@@ -58,9 +60,11 @@ public class XGPushManager extends AbstractMsgQueue<XGPushModel> {
             message.setStyle(style);
         }
 
+        builder.append("推送人："+item.getUserId());
+
         JSONObject jsonObject = xingeApp.pushSingleAccount(0,item.getUserId().toString(),message);
 
-        logger.info("执行推送-->{}",jsonObject);
+        builder.append("推送结果："+jsonObject.toString());
     }
 
     /**

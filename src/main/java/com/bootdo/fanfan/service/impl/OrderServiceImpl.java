@@ -216,7 +216,6 @@ public class OrderServiceImpl implements OrderService {
 	public void updateOrderState(OrderDO orderDO){
 		//保存订单状态
 		orderStateService.save(new OrderStateDO(orderDO.getId(),orderDO.getOrderState(),orderDO.getCustomerId()),orderDO.getOrderNum());
-
 		//顾客支付
 		if(orderDO.getOrderState().equals(OrderStateEnum.userPaid.getVal())){
 			//查询customerId

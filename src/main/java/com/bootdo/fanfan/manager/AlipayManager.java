@@ -226,7 +226,7 @@ public class AlipayManager {
             logger.info("模板发送成功");
             return true;
         }else{
-            logger.error("模板发送失败--{}",response.getMsg());
+            logger.error("模板发送失败--{}",response);
         }
 
         return false;

@@ -11,16 +11,16 @@ public enum PlatformEnum {
     /**
      * 支付宝小程序
      */
-    AlipayMiniprogram(0,"支付宝小程序"),
+    AlipayMiniprogram(1,"支付宝小程序"),
 
     /**
      * 微信小程序
      */
-    WechatMiniprogram(1,"微信小程序"),
+    WechatMiniprogram(2,"微信小程序"),
     /**
      * Android商户端
      */
-    CustomerAndroid(2,"Android商户端");
+    CustomerAndroid(3,"Android商户端");
 
     private Integer val;
 

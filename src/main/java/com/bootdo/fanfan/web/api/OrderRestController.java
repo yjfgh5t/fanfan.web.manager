@@ -347,7 +347,7 @@ public class OrderRestController extends ApiBaseRestController {
             alipayRecordService.save(recordDO);
 
             //发送消息
-            debugPush(orderInfo.getCustomerId());
+            debugPush(id);
 
             return R.ok().put("data", "true");
         }

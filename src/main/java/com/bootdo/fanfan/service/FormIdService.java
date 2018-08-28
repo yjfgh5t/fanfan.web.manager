@@ -1,5 +1,6 @@
 package com.bootdo.fanfan.service;
 
+import com.bootdo.fanfan.domain.DTO.FormUserDTO;
 import com.bootdo.fanfan.domain.FormIdDO;
 import com.bootdo.fanfan.domain.enumDO.PlatformEnum;
 
@@ -15,7 +16,7 @@ import java.util.Map;
  */
 public interface FormIdService {
 
-	String getCanUseFormId(PlatformEnum platformEnum, Integer userId);
+	FormUserDTO getCanUseFormId(PlatformEnum platformEnum, Integer userId);
 
 	FormIdDO get(Integer id);
 	

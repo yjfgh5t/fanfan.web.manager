@@ -1,6 +1,7 @@
 package com.bootdo.fanfan.service.impl;
 
 import com.bootdo.common.utils.DateUtils;
+import com.bootdo.fanfan.domain.DTO.FormUserDTO;
 import com.bootdo.fanfan.domain.enumDO.PlatformEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,7 @@ public class FormIdServiceImpl implements FormIdService {
 	 * @return
 	 */
 	@Override
-	public String getCanUseFormId(PlatformEnum platformEnum,Integer userId) {
+	public FormUserDTO getCanUseFormId(PlatformEnum platformEnum, Integer userId) {
 
 		int count = platformEnum == PlatformEnum.AlipayMiniprogram ? 3 : 1;
 
@@ -56,7 +57,7 @@ public class FormIdServiceImpl implements FormIdService {
 
 		//设置有效期为7天
 		Calendar expiredTime = Calendar.getInstance();
-		expiredTime.set(Calendar.DATE,7);
+		expiredTime.add(Calendar.DATE,7);
 		model.setExpiredTime(expiredTime.getTime());
 
 		return formIdDao.save(model);
