@@ -15,7 +15,10 @@ public enum  DictionaryEnum {
     businessDelivery(1031,"商家配送"),
     fengNiaoDelivery(1032,"蜂鸟配送"),
 
-    htmlVersion(9001,"html最新版本");
+    htmlVersion(9001,"html最新版本"),
+
+    customerId(9101,"商户Id"),
+    deskId(9102,"客桌Id");
     private Integer key;
 
     private String  text;

@@ -18,6 +18,8 @@ public class OrderDTO {
     private String orderNum;
     //订单状态
     private Integer orderState;
+    //订单类型
+    private Integer orderType;
     //订单描述
     private String orderStateText;
     //订单总额

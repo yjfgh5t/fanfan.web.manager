@@ -6,9 +6,13 @@ import com.bootdo.common.service.FileService;
 import com.bootdo.common.utils.FileType;
 import com.bootdo.common.utils.FileUtil;
 import com.bootdo.common.utils.R;
+import com.bootdo.common.utils.StringUtils;
+import com.bootdo.fanfan.domain.QrcodeDO;
 import com.bootdo.fanfan.domain.enumDO.DictionaryEnum;
 import com.bootdo.fanfan.service.DictionaryService;
+import com.bootdo.fanfan.service.QrcodeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +34,9 @@ public class InfoRestController extends ApiBaseRestController {
     BootdoConfig bootdoConfig;
 
     @Autowired
+    QrcodeService qrcodeService;
+
+    @Autowired
     private FileService sysFileService;
 
     /**
@@ -37,19 +44,52 @@ public class InfoRestController extends ApiBaseRestController {
      * @return
      */
     @GetMapping("/")
-    public R initInfo(){
+    public R initInfo(@RequestParam(required = false) String qrcode){
+
+
+        Integer customerId = getBaseModel().getCustomerId();
 
         //字典信息
-        Map<Integer,String> dictionaryDOList = dictionaryService.queryByKeys(getBaseModel().getCustomerId(),
+        Map<Integer,String> resultMap = new HashMap<>();
+
+        QrcodeDO qrcodeDO=null;
+
+        if(StringUtils.isNotEmpty(qrcode)){
+            qrcodeDO = qrcodeService.get(qrcode);
+            if(qrcodeDO.getCustomerId()!=null){
+                if(qrcodeDO.getCustomerId()!=null) {
+                    customerId = qrcodeDO.getCustomerId();
+                }
+                //设置桌号
+                if(qrcodeDO.getDeskId()!=null) {
+                    resultMap.put(DictionaryEnum.deskId.getVal(), qrcodeDO.getDeskId() + "");
+                }
+            }
+        }
+
+        if(customerId==-1){
+            customerId=132;
+        }
+
+        //字典信息
+        Map<Integer,String> dictionaryDOList = dictionaryService.queryByKeys(customerId,
                 DictionaryEnum.businessEndTime.getVal(),
                 DictionaryEnum.businessStartTime.getVal(),
                 DictionaryEnum.minOrderPrice.getVal(),
                 DictionaryEnum.shopName.getVal()
         );
 
+        //合并Map
+        if(dictionaryDOList!=null){
+            resultMap.putAll(dictionaryDOList);
+        }
+
+        //设置customerId
+        resultMap.put(DictionaryEnum.customerId.getVal(),customerId+"");
+
         //返回的结果集
         Map<String,Object> resultData = new HashMap<>();
-        resultData.put("dict",dictionaryDOList);
+        resultData.put("dict",resultMap);
 
         return R.ok().put("data",resultData);
     }
@@ -88,5 +128,10 @@ public class InfoRestController extends ApiBaseRestController {
             return R.ok().put("data",bootdoConfig.getStaticUrl()+sysFile.getUrl());
         }
         return R.error();
+    }
+
+    @GetMapping("/qrcode/{qrcode}")
+    public R qrcode(@PathVariable("qrcode") String qrCodeId){
+        return R.ok();
     }
 }

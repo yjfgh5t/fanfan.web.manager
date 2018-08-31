@@ -1,5 +1,6 @@
 package com.bootdo.fanfan.manager;
 
+import com.alibaba.fastjson.JSON;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
@@ -226,7 +227,7 @@ public class AlipayManager {
             logger.info("模板发送成功");
             return true;
         }else{
-            logger.error("模板发送失败--{}",response);
+            logger.error("模板发送失败--{}", JSON.toJSONString(response));
         }
 
         return false;

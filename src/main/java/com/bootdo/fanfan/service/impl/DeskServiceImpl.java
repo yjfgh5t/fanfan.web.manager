@@ -1,7 +1,9 @@
 package com.bootdo.fanfan.service.impl;
 
+import com.bootdo.fanfan.domain.DTO.DeskDTO;
 import com.bootdo.fanfan.domain.DTO.QRCodeDTO;
 import com.bootdo.fanfan.manager.AlipayManager;
+import com.bootdo.fanfan.vo.APIDeskVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,21 @@ public class DeskServiceImpl implements DeskService {
 	@Override
 	public List<DeskDO> list(Map<String, Object> map){
 		return deskDao.list(map);
+	}
+
+	@Override
+	public List<DeskDTO> queryList(Integer customerId){
+
+		List<DeskDTO> deskDTOS = deskDao.queryList(customerId);
+		if(deskDTOS!=null && deskDTOS.size()>0){
+			deskDTOS.forEach((item)->{
+				if(item.getQrCodeId()==null){
+					item.setQrCodeId("");
+				}
+			});
+		}
+
+		return deskDTOS;
 	}
 	
 	@Override

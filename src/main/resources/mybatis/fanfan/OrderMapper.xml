@@ -9,7 +9,7 @@
 
 	<select id="list" resultType="com.bootdo.fanfan.domain.OrderDO">
 		SELECT  tab_order.*,tab_user.user_nick from (
-			select `id`,`user_id`,`order_num`,`order_date_num`,`order_desk_num`,`order_state`,`order_total`,`order_pay`,`order_discount_total`,`order_commodity_total`,`order_pay_type`,`order_meals_num`,`order_remark`,`order_customer_remark`,`order_time`,`order_invoice`,`customer_id`,`create_time` from ff_order
+			select `id`,`user_id`,`order_num`,`order_date_num`,`order_desk_num`,`order_state`,`order_type`,`order_total`,`order_pay`,`order_discount_total`,`order_commodity_total`,`order_pay_type`,`order_meals_num`,`order_remark`,`order_customer_remark`,`order_time`,`order_invoice`,`customer_id`,`create_time` from ff_order
 			<where>
 					  <if test="id != null and id != ''"> and id = #{id} </if>
 				      <if test="userId != null and userId != ''"> and user_id = #{userId} </if>
@@ -17,6 +17,7 @@
 					  <if test="orderDateNum != null and orderDateNum != ''"> and order_date_num = #{orderDateNum} </if>
 					  <if test="orderDeskNum != null and orderDeskNum != ''"> and order_desk_num = #{orderDeskNum} </if>
 					  <if test="orderState != null and orderState != ''"> and order_state = #{orderState} </if>
+					  <if test="orderType != null and orderType != ''"> and order_type = #{orderType} </if>
 					  <if test="orderTotal != null and orderTotal != ''"> and order_total = #{orderTotal} </if>
 					  <if test="orderPay != null and orderPay != ''"> and order_pay = #{orderPay} </if>
 					  <if test="orderDiscountTotal != null and orderDiscountTotal != ''"> and order_discount_total = #{orderDiscountTotal} </if>
@@ -54,6 +55,7 @@
 			 <if test="orderDateNum != null and orderDateNum != ''"> and order_date_num = #{orderDateNum} </if>
 			 <if test="orderDeskNum != null and orderDeskNum != ''"> and order_desk_num = #{orderDeskNum} </if>
 			 <if test="orderState != null and orderState != ''"> and order_state = #{orderState} </if>
+			 <if test="orderType != null and orderType != ''"> and order_type = #{orderType} </if>
 			 <if test="orderTotal != null and orderTotal != ''"> and order_total = #{orderTotal} </if>
 			 <if test="orderPay != null and orderPay != ''"> and order_pay = #{orderPay} </if>
 			 <if test="orderDiscountTotal != null and orderDiscountTotal != ''"> and order_discount_total = #{orderDiscountTotal} </if>
@@ -76,6 +78,7 @@
 			`order_date_num`,
 			`order_desk_num`,
 			`order_state`,
+			`order_type`,
 			`order_total`,
 			`order_pay`,
 			`order_discount_total`,
@@ -96,6 +99,7 @@
 			#{orderDateNum},
 			#{orderDeskNum},
 			#{orderState},
+			#{orderType},
 			#{orderTotal},
 			#{orderPay},
 			#{orderDiscountTotal},
@@ -119,6 +123,7 @@
 			<if test="orderDateNum != null">`order_date_num` = #{orderDateNum}, </if>
 			<if test="orderDeskNum != null">`order_desk_num` = #{orderDeskNum}, </if>
 			<if test="orderState != null">`order_state` = #{orderState}, </if>
+			<if test="orderType != null">`order_type` = #{orderType}, </if>
 			<if test="orderTotal != null">`order_total` = #{orderTotal}, </if>
 			<if test="orderPay != null">`order_pay` = #{orderPay}, </if>
 			<if test="orderDiscountTotal != null">`order_discount_total` = #{orderDiscountTotal}, </if>
@@ -134,11 +139,11 @@
 		</set>
 		where id = #{id}
 	</update>
-	
+
 	<delete id="remove">
 		delete from ff_order where id = #{value}
 	</delete>
-	
+
 	<delete id="batchRemove">
 		delete from ff_order where id in 
 		<foreach item="id" collection="array" open="(" separator="," close=")">
@@ -147,8 +152,8 @@
 	</delete>
 
 	<select id="queryOrderByUser" resultType="com.bootdo.fanfan.vo.APIOrderListVO">
-		select A.id, A.`order_num`,A.`order_state`,A.`order_pay`,A.`order_commodity_total` as `commodity_total`,B.`out_title` as `title`,A.`create_time`,C.commodit_img,A.`order_date_num`    from
-		(select `id`,`order_num`,`order_state`,`order_pay`,`order_commodity_total`,`create_time`,`order_date_num` from ff_order
+		select A.id, A.`order_num`,A.`order_state`,A.`order_type`,A.`order_pay`,A.`order_commodity_total` as `commodity_total`,B.`out_title` as `title`,A.`create_time`,C.commodit_img,A.`order_date_num`    from
+		(select `id`,`order_num`,`order_state`,`order_type`,`order_pay`,`order_commodity_total`,`create_time`,`order_date_num` from ff_order
 		<where>
 			order_state!=101
 			<if test="userId != null and userId != ''"> AND user_id = #{userId} </if>
@@ -178,7 +183,7 @@
 	</select>
 
 	<select id="queryOrderByCustomer" resultType="com.bootdo.fanfan.vo.APIOrderListCustomerVO">
-		SELECT a.id,a.order_num,a.order_state,a.order_total,a.order_pay,a.order_date_num,a.order_desk_num,a.order_time,b.user_nick,b.user_icon from ff_order  as a
+		SELECT a.id,a.order_num,a.order_state,a.order_type,a.order_total,a.order_pay,a.order_date_num,a.order_desk_num,a.order_time,b.user_nick,b.user_icon from ff_order  as a
 		left JOIN ff_user as b
 		on a.user_id = b.id
 		where  a.customer_id=#{customerId}

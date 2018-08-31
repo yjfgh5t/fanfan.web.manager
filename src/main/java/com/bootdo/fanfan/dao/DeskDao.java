@@ -1,11 +1,14 @@
 package com.bootdo.fanfan.dao;
 
+import com.bootdo.fanfan.domain.DTO.DeskDTO;
 import com.bootdo.fanfan.domain.DeskDO;
 
 import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * 
@@ -29,4 +32,7 @@ public interface DeskDao {
 	int remove(Integer id);
 	
 	int batchRemove(Integer[] ids);
+
+	@Select("select fd.*,fq.id as qr_code_id from ff_desk as fd LEFT JOIN ff_qrcode fq on fd.id = fq.desk_id where fd.customer_id=#{customerId} order by fd.id")
+	List<DeskDTO> queryList(@Param("customerId") Integer customerId);
 }

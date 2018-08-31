@@ -57,7 +57,7 @@ public class CommoditController extends BaseController {
         Query query = new Query(params);
 		query.put("sort","`order`");
 		query.put("order","asc");
-		query.put("create_id",getUserId());
+		query.put("customer_id",getUserId());
 		List<CommoditDO> commoditList = commoditService.list(query);
 		int total = commoditService.count(query);
 		PageUtils pageUtils = new PageUtils(commoditList, total);
@@ -70,7 +70,7 @@ public class CommoditController extends BaseController {
 
 		//查询分类列表
 		Map<String,Object> queryParams = new HashMap<>();
-		queryParams.put("createId",this.getUserId().intValue());
+		queryParams.put("customer_id",this.getUserId().intValue());
 		List<CommoditCategoryDO> categoryDOList = commoditCategoryService.list(queryParams);
 
 		modelMap.put("categoryTypes",categoryDOList);
@@ -95,7 +95,7 @@ public class CommoditController extends BaseController {
 
 		//查询分类列表
 		Map<String,Object> queryParams = new HashMap<>();
-		queryParams.put("createId",this.getUserId().intValue());
+		queryParams.put("customer_id",this.getUserId().intValue());
 		List<CommoditCategoryDO> categoryDOList = commoditCategoryService.list(queryParams);
 		model.addAttribute("categoryTypes",categoryDOList);
 

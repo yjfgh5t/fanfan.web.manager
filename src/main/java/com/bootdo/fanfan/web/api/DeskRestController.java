@@ -2,9 +2,12 @@ package com.bootdo.fanfan.web.api;
 
 import com.bootdo.common.extend.EMapper;
 import com.bootdo.common.utils.R;
+import com.bootdo.common.utils.StringUtils;
 import com.bootdo.fanfan.domain.DeskDO;
+import com.bootdo.fanfan.domain.QrcodeDO;
 import com.bootdo.fanfan.manager.AlipayManager;
 import com.bootdo.fanfan.service.DeskService;
+import com.bootdo.fanfan.service.QrcodeService;
 import com.bootdo.fanfan.vo.APIDeskVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,26 +26,24 @@ public class DeskRestController extends ApiBaseRestController {
 
     @Autowired
     DeskService deskService;
+    @Autowired
+    QrcodeService qrcodeService;
 
     @Autowired
     private EMapper mapper;
 
     /**
-     * 查询商品列表
+     * 查询客桌列表
      * @return
      */
     @GetMapping("/")
     public R list(){
-        Map<String,Object> parmas = new HashMap<>();
-        parmas.put("sort","`id`");
-        parmas.put("order","asc");
-        parmas.put("customerId",getBaseModel().getCustomerId());
-        List<APIDeskVO> deskList =  mapper.mapArray(deskService.list(parmas), APIDeskVO.class);
+        List<APIDeskVO> deskList =  mapper.mapArray(deskService.queryList(getBaseModel().getCustomerId()), APIDeskVO.class);
         return R.ok().put("data", deskList);
     }
 
     /**
-     * 保存商品
+     * 保存客桌
      * @return
      */
     @PostMapping("/")
@@ -53,6 +54,17 @@ public class DeskRestController extends ApiBaseRestController {
             deskService.save(deskDO);
         }else {
             deskService.update(deskDO);
+            //修改二维码
+            if(StringUtils.isNotEmpty(deskVO.getQrCodeId())){
+                QrcodeDO qrcode = new QrcodeDO();
+                qrcode.setId(deskVO.getQrCodeId());
+                qrcode.setCustomerId(getBaseModel().getCustomerId());
+                qrcode.setDeskId(deskVO.getId());
+                //去除原有的标记
+                qrcodeService.removeOldDesk(qrcode.getCustomerId(),qrcode.getDeskId());
+                //设置新的标记
+                qrcodeService.update(qrcode);
+            }
         }
         return R.ok();
     }

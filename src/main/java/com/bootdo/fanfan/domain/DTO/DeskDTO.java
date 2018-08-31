@@ -1,13 +1,14 @@
-package com.bootdo.fanfan.vo;
+package com.bootdo.fanfan.domain.DTO;
 
 import lombok.Data;
 
 /**
  * @author: JY
- * @date: 2018/7/3 12:24
+ * @date: 2018/8/31 10:53
  */
 @Data
-public class APIDeskVO {
+public class DeskDTO {
+
     //主键
     private Integer id;
     //桌号
@@ -16,4 +17,6 @@ public class APIDeskVO {
     private Integer customerId;
     //二维码Id
     private String qrCodeId;
+
+
 }

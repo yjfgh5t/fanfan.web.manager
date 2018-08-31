@@ -142,9 +142,9 @@ public abstract class AbstractMsgQueue<T> implements MsgQueue<T> {
     /**
      * 执行任务
      */
-    private boolean execute(){
+    private boolean execute() {
 
-        boolean canexecute=false,isunLock=false;
+        boolean canexecute = false, isunLock = false;
         try {
             //获取锁
             lock.lock();
@@ -152,29 +152,24 @@ public abstract class AbstractMsgQueue<T> implements MsgQueue<T> {
             //数据队列中没有数据 线程等待
             if (dataQueue.size() == 0) {
                 //等待时间为10s
-                condition.await(10L,TimeUnit.SECONDS);
+                condition.await(10L, TimeUnit.SECONDS);
             }
 
             //获取队列数据
-           T tModel = dataQueue.poll();
+            T tModel = dataQueue.poll();
 
             //处理回调方法
-            if(tModel!=null){
-                canexecute=true;
+            if (tModel != null) {
+                canexecute = true;
                 runCallback(tModel);
             }
 
-        } catch (InterruptedException e) {
-            logger.error("处理任务出错-->{}",e);
-        }finally {
-            //if(!isunLock) {
-                lock.unlock();
-            //}
+        } catch (Exception e) {
+            logger.error("处理任务出错-->{}", e);
+        } finally {
+            lock.unlock();
         }
 
         return canexecute;
     }
-
-
-
 }

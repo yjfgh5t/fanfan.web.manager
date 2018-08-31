@@ -68,7 +68,7 @@ public class OrderController extends BaseController {
 	public PageUtils list(@RequestParam Map<String, Object> params){
 		//查询列表数据
         Query query = new Query(params);
-		query.put("customerId",getUserId());
+		query.put("customer_id",getUserId());
 		List<OrderDO> orderList = orderService.list(query);
 
 		//转换VO

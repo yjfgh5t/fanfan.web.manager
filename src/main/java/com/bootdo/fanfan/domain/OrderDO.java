@@ -27,6 +27,8 @@ public class OrderDO implements Serializable {
 	private String orderNum;
 	//订单状态：101：创建订单  102：待支付 103：已支付 104:超时未支付 105：确认收单 106：异常订单反馈 201：确认收单 202:取消收单-退款 203:开始派单
 	private Integer orderState;
+	//订单类型 1：堂吃 2：打包 3：外卖
+	private Integer orderType;
 	//订单总额
 	private BigDecimal orderTotal;
 	//支付金额

@@ -1,5 +1,6 @@
 package com.bootdo.fanfan.service;
 
+import com.bootdo.fanfan.domain.DTO.DeskDTO;
 import com.bootdo.fanfan.domain.DeskDO;
 
 import java.util.List;
@@ -17,6 +18,13 @@ public interface DeskService {
 	DeskDO get(Integer id);
 	
 	List<DeskDO> list(Map<String, Object> map);
+
+	/**
+	 * 查询列表
+	 * @param customerId
+	 * @return
+	 */
+	List<DeskDTO> queryList(Integer customerId);
 	
 	int count(Map<String, Object> map);
 	
