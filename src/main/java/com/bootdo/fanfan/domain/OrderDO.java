@@ -276,4 +276,11 @@ public class OrderDO implements Serializable {
 		this.orderTime = orderTime;
 	}
 
+	public Integer getOrderType() {
+		return orderType;
+	}
+
+	public void setOrderType(Integer orderType) {
+		this.orderType = orderType;
+	}
 }

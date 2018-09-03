@@ -117,7 +117,7 @@ public class InfoRestController extends ApiBaseRestController {
     public R uploadFile(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
         String fileName = file.getOriginalFilename();
         fileName = FileUtil.renameToUUID(fileName);
-        FileDO sysFile = new FileDO(FileType.fileType(fileName), "/files/" + fileName, new Date());
+        FileDO sysFile = new FileDO(FileType.fileType(fileName), fileName, new Date());
         try {
             FileUtil.uploadFile(file.getBytes(), bootdoConfig.getUploadPath(), fileName);
         } catch (Exception e) {
