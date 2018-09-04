@@ -201,7 +201,7 @@ public class OrderServiceImpl implements OrderService {
        }
 
        //主体图片
-       apiOrderRequVO.setMainImg(bootdoConfig.getStaticUrl()+orderDetialService.queryCommodityImgByOrderId(orderDO.getId()));
+       apiOrderRequVO.setMainImg(orderDetialService.queryCommodityImgByOrderId(orderDO.getId()));
 
 		return  apiOrderRequVO;
 	}
@@ -290,7 +290,7 @@ public class OrderServiceImpl implements OrderService {
 			list.forEach((item)->{
 				//设置文本
 				item.setOrderStateText(OrderStateEnum.get(item.getOrderState()).getText());
-				item.setCommoditImg(bootdoConfig.getStaticUrl()+item.getCommoditImg());
+				item.setCommoditImg(item.getCommoditImg());
 				//待支付状态
 				if(item.getOrderState()==OrderStateEnum.userWaitPay.getVal()){
 					//剩余支付秒数
