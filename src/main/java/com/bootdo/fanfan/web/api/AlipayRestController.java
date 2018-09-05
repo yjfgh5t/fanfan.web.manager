@@ -65,4 +65,24 @@ public class AlipayRestController {
 
         return "success";
     }
+
+    /**
+     * 支付宝用户授权
+     * @return
+     */
+    @RequestMapping("authRedirect")
+    public String authRedirect(HttpServletRequest request){
+
+        //获取参数
+        Map<String,String> mapParams = new HashMap<>(request.getParameterMap().size());
+
+        //数据转换
+        request.getParameterMap().forEach((key,val)->{
+            mapParams.put(key,val[0]);
+        });
+
+        log.info("授权信息："+JSON.toJSONString(mapParams));
+
+        return "success";
+    }
 }

@@ -2,7 +2,6 @@ package com.bootdo.common.config;
 
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class AlipayConfig {
 
@@ -37,39 +36,6 @@ public class AlipayConfig {
     public static final String appId="2018033102482725";
     public static final String alipayUrl="https://openapi.alipay.com/gateway.do";
 
-
-
-    public static final String testPrivateKey="MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCzZfvnLXSs7d+Q\n" +
-            "/Qem/2IJkA1XsyhgRRWDp1rqlSR5L20bURCk8VUC3PCHsdmGQv1nSaBJNKD7GhK3\n" +
-            "eCrjhtfObO2o4weE7PwuDiXtNh55SJtE0hykGEq/FHiNID7UnbnkGCMf2LyTweWM\n" +
-            "gHNeNUgFKzyzD5zS9NhingaviWur+WCHu5rgMFto8Zecu1BIdI/UtseNlyHtJTlp\n" +
-            "QSKh7wZHm6+ojuQcPvvOLPSB9mUOfruIrDlcjl3jpoQ/imIWOaJveKVmXmfQzM1j\n" +
-            "Vc7UZ6ELcJD4FKc7pkC8t/0NiYQSkcUosqQnaZI8P0RqrLXyQlj6nGCGLPsOAHVw\n" +
-            "puBKto3dAgMBAAECggEAexXc2Ic6hy+J9at1paGQ/SilzucwK6UalsKrQUnkxXTB\n" +
-            "sj1TYyflgNpf+WoP6etqe4Rrge6nCMGh19mN65/nz0yzXu2tigkjGOJCKVe5XtNv\n" +
-            "HK/gUMIN/r4n3AQkt7IkCZh5+O62q9YcDeNPxHJgIJPCyMRMf/zXvgnYYnWxt0Jz\n" +
-            "NFngoh0iisZ+LrUF4/VZPPewzY4eZyGQ/pg6YM8Q/lIouryN4JroZtfspbyQIDXv\n" +
-            "OZw+lEKd34ryFeuhk8OiVYN28WcYOY9aYEo3b5LkOU7tBmAONYD+PkNRfrL17/ne\n" +
-            "RxUb971LUXdE15xEQc9dny8eC844wmAHbJGgVlpyoQKBgQDd/RYDjaHDKNN+ZKXw\n" +
-            "pwPNy08sDTUlu8UL2JwTQrLaiAQnYZhyDh1sahck6omNOfAtDlNv8z0RO/zXXFMM\n" +
-            "p3SgidBrJ/nKuCsdtTD/TPvckv7IWbTs6R5fSJ0YLo+65qUYdNrryWA0jNawUSzN\n" +
-            "gEmqXNcyK+CJ9l9onHAHUrZxaQKBgQDO4miqwPrvUCwqvHxxJLRHklonygPOd+qD\n" +
-            "dBdtdDCKYt6kPk0w7DkRWo1/q6+9h0ltAm53QQNywPKmEVbdvWYVCYU+w9UwknoG\n" +
-            "52XqUTaJPeS/Nim6pMrYz0NkWCHy1HcCZ3+vI6rOKen5ds//I2lWyEih/AQH7AT9\n" +
-            "4uQuXOj2VQKBgG3hsNvhZ4jq1IVj3J/ajA95656qivw6jbbnaZo/EbkKSsQTkxoh\n" +
-            "0n6vpPUpAx1c6H3k8XggtsGpJ+aSVKmW2iv9C6V/DC5EK1NxNOeqe6EbQfJ6NQxv\n" +
-            "+BDCKMCni43ATUhlz1eXPn/ElyB/jeXK8qvZeMvk3ChuQ5vMk8eMMbLBAoGAZxZK\n" +
-            "MUuXvkekumbRW09+xWsXoVv4KZl3MalXQyLyTQKXDiA9NnN+vDby6vsRxs7yt27O\n" +
-            "vH2YykV6o2Vgc308sJ7d1jiesmVKiMYk8m0lT52Xre+/O1GCAibE3etMf0N/SaNo\n" +
-            "7ExJgBFClRuu6OMsSiHij1SUbZ4dnqTALpn9O0ECgYEAg6M5VRxUH5PO5DCeUnOX\n" +
-            "nOI+aFx7QzuD+uKh/x6E0GXL61/+NMVWr/fc3/tEVz8KdQ+iJQ3kvxIWWqnCEpIY\n" +
-            "ps55kHAtaL0xMy2EqIfU/Q7dtljwWITj9RqSOO7tXHe09mG3zZ6Cs6jjaGQxCmGn\n" +
-            "o6LTQuGyiWLB9T/97V1RWL4=";
-    public static final String testPublicKey="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxnWcD0HmBGKAhO7gCMyz5SmKB0JeLQA7i2z2smFDMxm8YIR2ep3ou60+sUTltDCEI1ysBvd3nQf2wtwO0rK006mPCN23UtC6FoWsd5eZh7+4bmAMeF8ZGyVmLielv5nIH3uUiKJdODGGAhPozqRxqevcHBtRFfZJ4lq+zR6XH6gWmjVraKxWzCB+JF3uh5jIYTkd+1ZtOu8fD2K7oNtaDnKav+K33Kpbsbir8m/zPCeFwTyV2BeX+jGaNhB9vpXi0IWE7t1pM3+bA/kKV/yUGUYembrVPlYtu6O1VWnqiWbB0Afg53TeXFEeAVh5gKwPh8On7pFLfYC26INK1Ky1iwIDAQAB";
-    public static final String testAppId="2016091000481099";
-    public static final String testAlipayUrl="https://openapi.alipaydev.com/gateway.do";
-
-
     /**
      * 获取默认对象
      * @return
@@ -83,21 +49,6 @@ public class AlipayConfig {
                 "JSON",
                 "utf-8",
                 AlipayConfig.publicKey,
-                "RSA2");
-    }
-
-    /**
-     * 获取默认对象
-     * @return
-     */
-    public static AlipayClient getTestDefaultClient(){
-        return new DefaultAlipayClient(
-                AlipayConfig.testAlipayUrl,
-                AlipayConfig.testAppId,
-                AlipayConfig.testPrivateKey,
-                "JSON",
-                "UTF-8",
-                AlipayConfig.testPublicKey,
                 "RSA2");
     }
 }

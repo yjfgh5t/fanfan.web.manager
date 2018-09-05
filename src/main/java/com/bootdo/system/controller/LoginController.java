@@ -34,6 +34,7 @@ public class LoginController extends BaseController {
 	MenuService menuService;
 	@Autowired
 	FileService fileService;
+
 	@GetMapping({ "/", "" })
 	String welcome(Model model) {
 
