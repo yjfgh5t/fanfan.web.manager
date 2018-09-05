@@ -17,6 +17,8 @@ public class APIOrderRequVO {
     private Integer orderState;
     //订单类型 1：堂吃 2：打包 3：外卖
     private Integer orderType;
+    //订单类型文本
+    private String orderTypeText;
     //订单状态文本
     private String orderStateText;
     //订单总额

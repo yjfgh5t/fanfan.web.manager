@@ -33,7 +33,7 @@ public class AlipayConfig {
             "AM4Q+qsuXyzJFVdMNT8qjrQk0A==";
 
     public static final String publicKey="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApADzsVMQ5zogiKyPNbtOpENv18EtLHrFsUx2hwmeOLfuHDyLBYJaxcieo2KQpFyzp/Az/DUEIMe3+0BU401Ajklqx791Xd3/yml3Qm7ohJPyCHGUt+hDgEFs+kbllg2VFc7DKXSKzCre3UW6+iZsulDTCJXegdJKiDSd9hZeH70X9554Qi5dyhXTpwwlILQG/D65/frLXaujdRZ5L7sMrNMgc3FV8cOLAucnfT3ViHHNbAALv/ROHK0IF2ddsKrLByvVqP2zSMCnDooyWBdU69dBptwiD1jDcv9DdxoGmqC2JOD8XwQXIGCy2wKNRbIoaheNaf6Myi0FTgQwn3kozQIDAQAB";
-    public static final String appId="2018033102482725";
+    public static final String appId="2018090561244435";
     public static final String alipayUrl="https://openapi.alipay.com/gateway.do";
 
     /**

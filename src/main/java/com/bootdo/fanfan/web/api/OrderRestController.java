@@ -8,6 +8,7 @@ import com.bootdo.common.utils.StringUtils;
 import com.bootdo.fanfan.domain.AlipayRecordDO;
 import com.bootdo.fanfan.domain.OrderDO;
 import com.bootdo.fanfan.domain.enumDO.OrderStateEnum;
+import com.bootdo.fanfan.domain.enumDO.OrderTypeEnum;
 import com.bootdo.fanfan.manager.AlipayManager;
 import com.bootdo.fanfan.manager.XGPushManager;
 import com.bootdo.fanfan.service.AlipayRecordService;
@@ -171,6 +172,7 @@ public class OrderRestController extends ApiBaseRestController {
 
         //设置状态文本
         requVO.setOrderStateText(OrderStateEnum.get(requVO.getOrderState()).getText());
+        requVO.setOrderTypeText(OrderTypeEnum.get(requVO.getOrderType()).getText());
 
         return R.ok().put("data", requVO);
     }
