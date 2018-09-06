@@ -89,7 +89,7 @@ public class DeskServiceImpl implements DeskService {
 		codeDTO.setUrlParam("pages/index/index");
 
 		//调用接口
-		String codeUrl = alipayManager.createQRCode(codeDTO);
+		String codeUrl = alipayManager.createQRCode(codeDTO,null);
 
 		return codeUrl;
 	}

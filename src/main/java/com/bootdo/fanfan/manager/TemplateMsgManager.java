@@ -77,7 +77,7 @@ public class TemplateMsgManager extends AbstractMsgQueue<TemplateMsgMQDTO> {
                 templateMsgDTO.setKeyword3(orderDO.getOrderCustomerRemark());
 
                 //发送模板消息
-               boolean send = alipayManager.sendTemplateMsg(templateMsgDTO.buildCancelPayOrder(item.getOrderId()));
+               boolean send = alipayManager.sendTemplateMsg(templateMsgDTO.buildCancelPayOrder(item.getOrderId()),null);
                 builder.append("2.执行发送结果:"+send);
             }
         }
@@ -108,7 +108,7 @@ public class TemplateMsgManager extends AbstractMsgQueue<TemplateMsgMQDTO> {
                 //下单时间
                 templateMsgDTO.setKeyword3(DateUtils.format(orderDO.getOrderTime()));
                 //发送模板消息
-                boolean send = alipayManager.sendTemplateMsg(templateMsgDTO.buildPaySuccess(item.getOrderId()));
+                boolean send = alipayManager.sendTemplateMsg(templateMsgDTO.buildPaySuccess(item.getOrderId()),null);
                 builder.append("2.执行发送结果:"+send);
             }
         }

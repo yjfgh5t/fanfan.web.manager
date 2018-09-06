@@ -230,7 +230,7 @@ public class OrderServiceImpl implements OrderService {
 		//商户取消订单
 		}else if(orderDO.getOrderState().equals(OrderStateEnum.businessCancel)){
 			//支付宝退款
-			alipayManager.tradeRefund(orderDO.getOrderNum(),orderDO.getOrderPay().toString());
+			alipayManager.tradeRefund(orderDO.getOrderNum(),orderDO.getOrderPay().toString(),null);
 			//更新状态
 			orderDao.updateOrderStateCancel(orderDO.getOrderState(),orderDO.getId(),orderDO.getOrderCustomerRemark());
 			//推送消息队列-取消订单通知

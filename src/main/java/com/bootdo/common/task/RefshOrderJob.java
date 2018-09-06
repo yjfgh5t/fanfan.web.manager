@@ -70,7 +70,7 @@ public class RefshOrderJob implements Job {
                     OrderRefreshDTO model = entry.getValue();
 
                     //查询是否已经支付
-                    AlipayTradeQueryResponse tradeQueryResponse = alipayManager.queryTradePay(model.getOrderNum());
+                    AlipayTradeQueryResponse tradeQueryResponse = alipayManager.queryTradePay(model.getOrderNum(),null);
 
                     //已经支付
                     if (tradeQueryResponse != null && tradeQueryResponse.isSuccess()) {

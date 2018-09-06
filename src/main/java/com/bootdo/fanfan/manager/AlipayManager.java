@@ -5,6 +5,7 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
+import com.alipay.api.domain.ExtendParams;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.*;
 import com.alipay.api.response.*;
@@ -28,6 +29,8 @@ public class AlipayManager {
 
     private static final Logger logger = LoggerFactory.getLogger(RefshOrderJob.class);
 
+    private static final String authToken="201809BB4de9a2bfd3134b02a45cfe07470ebX33";
+
     @Autowired
     static BootdoConfig bootdoConfig;
 
@@ -35,7 +38,7 @@ public class AlipayManager {
      * 获取用信息
      * @param code
      */
-    public String getToken(String code){
+    public String getToken(String code,String authToken){
 
         AlipayClient alipayClient = AlipayConfig.getDefaultClient();
         //请求对象
@@ -46,7 +49,7 @@ public class AlipayManager {
         //接收对象
         AlipaySystemOauthTokenResponse response = null;
         try {
-            response = alipayClient.execute(request,null,"201809BB4de9a2bfd3134b02a45cfe07470ebX33");
+            response = alipayClient.execute(request,null,this.authToken);
             if(response.isSuccess()){
                 return response.getAccessToken();
             }else{
@@ -55,7 +58,7 @@ public class AlipayManager {
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
-        return "201809BB4de9a2bfd3134b02a45cfe07470ebX33";
+        return "";
     }
 
     /**
@@ -63,18 +66,18 @@ public class AlipayManager {
      * @param code
      * @return
      */
-    public AlipayUserInfoShareResponse getUserInfo(String  code){
+    public AlipayUserInfoShareResponse getUserInfo(String  code,String authToken){
         AlipayClient alipayClient = AlipayConfig.getDefaultClient();
         AlipayUserInfoShareRequest request = new AlipayUserInfoShareRequest();
         AlipayUserInfoShareResponse response = null;
 
         try {
-            String _token  =  this.getToken(code);
+            String _token  =  this.getToken(code,this.authToken);
             if(_token==null){
                 System.out.println("获取token失败");
             }
 
-            response = alipayClient.execute(request,_token,"201809BB4de9a2bfd3134b02a45cfe07470ebX33");
+            response = alipayClient.execute(request,_token,this.authToken);
 
             if(response.isSuccess()){
                 System.out.println(response.getUserName());
@@ -108,6 +111,9 @@ public class AlipayManager {
         model.setTotalAmount(alipayDO.getTotalAmount());
         model.setProductCode(alipayDO.getProductCode());
         model.setPassbackParams(alipayDO.getPassbackParams());
+        ExtendParams extendParams = new ExtendParams();
+        extendParams.setSysServiceProviderId("2088031463487330");
+        model.setExtendParams(extendParams);
         request.setBizModel(model);
         request.setNotifyUrl("http://wxcard.com.cn/api/alipay/alipayReceiver");
         try {
@@ -123,7 +129,7 @@ public class AlipayManager {
     /**
      * 退款
      */
-    public boolean tradeRefund(String orderNum,String refundAmount){
+    public boolean tradeRefund(String orderNum,String refundAmount,String authToken){
         AlipayClient alipayClient = AlipayConfig.getDefaultClient();
         AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
         request.setBizContent("{" +
@@ -133,7 +139,7 @@ public class AlipayManager {
         AlipayTradeRefundResponse response = null;
         try {
             //执行退款
-            response = alipayClient.execute(request);
+            response = alipayClient.execute(request,null,this.authToken);
             return  response.isSuccess() && response.getCode()=="10000";
 
         } catch (AlipayApiException e) {
@@ -147,7 +153,7 @@ public class AlipayManager {
      * 创建小程序二维码
      * @return
      */
-    public String createQRCode(QRCodeDTO codeDTO){
+    public String createQRCode(QRCodeDTO codeDTO,String authToken){
 
         //实例化客户端
         AlipayClient alipayClient = AlipayConfig.getDefaultClient();
@@ -159,7 +165,7 @@ public class AlipayManager {
                 "  }");
         AlipayOpenAppQrcodeCreateResponse response = null;
         try {
-            response = alipayClient.execute(request);
+            response = alipayClient.execute(request,null,this.authToken);
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
@@ -171,7 +177,7 @@ public class AlipayManager {
      * 关闭支付交易
      * @return
      */
-    public boolean closeTradePay(String tradeNo,String outTradeNo){
+    public boolean closeTradePay(String tradeNo,String outTradeNo,String authToken){
 
         AlipayClient alipayClient = AlipayConfig.getDefaultClient();
         AlipayTradeCloseRequest request = new AlipayTradeCloseRequest();
@@ -182,7 +188,7 @@ public class AlipayManager {
                 "  }");
         AlipayTradeCloseResponse response = null;
         try {
-            response = alipayClient.execute(request);
+            response = alipayClient.execute(request,null,this.authToken);
 
             return response.isSuccess();
         } catch (AlipayApiException e) {
@@ -197,14 +203,14 @@ public class AlipayManager {
      * @param tradeNo
      * @return
      */
-    public AlipayTradeQueryResponse queryTradePay(String tradeNo){
+    public AlipayTradeQueryResponse queryTradePay(String tradeNo,String authToken){
 
         AlipayClient alipayClient = AlipayConfig.getDefaultClient();
         AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
         request.setBizContent("{\"trade_no\":\""+tradeNo+"\"}");
         AlipayTradeQueryResponse response = null;
         try {
-            response = alipayClient.execute(request);
+            response = alipayClient.execute(request,null,this.authToken);
         } catch (AlipayApiException e) {
             logger.error("查询支付宝交易异常- ->{}",e);
         }
@@ -214,13 +220,13 @@ public class AlipayManager {
     /**
      * 推送支付宝模板消息
      */
-    public boolean sendTemplateMsg(TemplateMsgDTO templateModel){
+    public boolean sendTemplateMsg(TemplateMsgDTO templateModel,String authToken){
         AlipayClient alipayClient = AlipayConfig.getDefaultClient();
         AlipayOpenAppMiniTemplatemessageSendRequest request =new AlipayOpenAppMiniTemplatemessageSendRequest();
         request.setBizContent(templateModel.build());
         AlipayOpenAppMiniTemplatemessageSendResponse response = null;
         try {
-            response = alipayClient.execute(request);
+            response = alipayClient.execute(request,null,this.authToken);
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
@@ -240,7 +246,6 @@ public class AlipayManager {
      * @return
      */
     public boolean checkSign(Map<String,String> params){
-
         try {
             return AlipaySignature.rsaCheckV1(params,AlipayConfig.publicKey,"utf-8","RSA2");
         } catch (AlipayApiException e) {

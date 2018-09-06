@@ -117,7 +117,7 @@ public class TpUserServiceImpl implements TpUserService {
 		if(type==1)
 		{
 			//调用接口返回
-			AlipayUserInfoShareResponse alipayUserInfoShareResponse = alipayManager.getUserInfo(code);
+			AlipayUserInfoShareResponse alipayUserInfoShareResponse = alipayManager.getUserInfo(code,null);
 			//数据转换
 			if(alipayUserInfoShareResponse!=null) {
 				tpUserDO = eMapper.map(alipayUserInfoShareResponse, TpUserDO.class);

@@ -250,7 +250,7 @@ public class OrderRestController extends ApiBaseRestController {
         String orderNum = orderService.get(id).getOrderNum();
 
         //查询支付宝订单
-        AlipayTradeQueryResponse tradeQueryResponse = alipayManager.queryTradePay(orderNum);
+        AlipayTradeQueryResponse tradeQueryResponse = alipayManager.queryTradePay(orderNum,null);
 
         //判断是否支付成功
         if (tradeQueryResponse != null && tradeQueryResponse.isSuccess()) {
