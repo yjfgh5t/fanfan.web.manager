@@ -43,18 +43,19 @@ public class AlipayManager {
         //当有code时 更具code获取token
         request.setGrantType("authorization_code");
         request.setCode(code);
-
         //接收对象
         AlipaySystemOauthTokenResponse response = null;
         try {
-            response = alipayClient.execute(request);
+            response = alipayClient.execute(request,null,"201809BB4de9a2bfd3134b02a45cfe07470ebX33");
             if(response.isSuccess()){
                 return response.getAccessToken();
+            }else{
+                logger.error("调用接口失败："+ response.getBody());
             }
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
-        return null;
+        return "201809BB4de9a2bfd3134b02a45cfe07470ebX33";
     }
 
     /**
@@ -73,7 +74,7 @@ public class AlipayManager {
                 System.out.println("获取token失败");
             }
 
-            response = alipayClient.execute(request,_token);
+            response = alipayClient.execute(request,_token,"201809BB4de9a2bfd3134b02a45cfe07470ebX33");
 
             if(response.isSuccess()){
                 System.out.println(response.getUserName());
