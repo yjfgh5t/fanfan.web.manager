@@ -517,12 +517,11 @@ public class OrderServiceImpl implements OrderService {
 	private String dateNum(Integer customerId){
 		String redisKey = "date_num_"+customerId+"_"+Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
 
-		long dateNum = redisUtils.incr(redisKey, 0);
+		long dateNum =redisUtils.incr(redisKey, 1);
 		//设置过期时间
 		if(dateNum==0){
 			redisUtils.expire(redisKey,1, TimeUnit.DAYS);
 		}
-
 		return ""+dateNum;
 	}
 

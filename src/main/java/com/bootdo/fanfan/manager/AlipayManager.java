@@ -29,7 +29,7 @@ public class AlipayManager {
 
     private static final Logger logger = LoggerFactory.getLogger(RefshOrderJob.class);
 
-    private static final String authToken="201809BB4de9a2bfd3134b02a45cfe07470ebX33";
+    private  final String authToken="201809BB4de9a2bfd3134b02a45cfe07470ebX33";
 
     @Autowired
     static BootdoConfig bootdoConfig;
@@ -99,7 +99,7 @@ public class AlipayManager {
      */
     public String  createTradePay(OrderAlipayDO alipayDO){
         //实例化客户端
-        AlipayClient alipayClient = AlipayConfig.getDefaultClient();
+        AlipayClient alipayClient = AlipayConfig.getPayClient();
         //实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.trade.app.pay
         AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
         //SDK已经封装掉了公共参数，这里只需要传入业务参数。以下方法为sdk的model入参方式(model和biz_content同时存在的情况下取biz_content)。
@@ -111,15 +111,16 @@ public class AlipayManager {
         model.setTotalAmount(alipayDO.getTotalAmount());
         model.setProductCode(alipayDO.getProductCode());
         model.setPassbackParams(alipayDO.getPassbackParams());
-        ExtendParams extendParams = new ExtendParams();
-        extendParams.setSysServiceProviderId("2088031463487330");
-        model.setExtendParams(extendParams);
         request.setBizModel(model);
         request.setNotifyUrl("http://wxcard.com.cn/api/alipay/alipayReceiver");
         try {
             //这里和普通的接口调用不同，使用的是sdkExecute
             AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);
-            return response.getBody();//就是orderString 可以直接给客户端请求，无需再做处理。
+            logger.info("预付单返回："+response.getBody());
+            if(response.isSuccess()) {
+                return response.getBody();//就是orderString 可以直接给客户端请求，无需再做处理。
+            }
+            return "";
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
