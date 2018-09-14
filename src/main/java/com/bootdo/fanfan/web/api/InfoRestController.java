@@ -2,15 +2,20 @@ package com.bootdo.fanfan.web.api;
 
 import com.bootdo.common.config.BootdoConfig;
 import com.bootdo.common.domain.FileDO;
+import com.bootdo.common.extend.EMapper;
 import com.bootdo.common.service.FileService;
 import com.bootdo.common.utils.FileType;
 import com.bootdo.common.utils.FileUtil;
 import com.bootdo.common.utils.R;
 import com.bootdo.common.utils.StringUtils;
 import com.bootdo.fanfan.domain.QrcodeDO;
+import com.bootdo.fanfan.domain.ShopDO;
 import com.bootdo.fanfan.domain.enumDO.DictionaryEnum;
 import com.bootdo.fanfan.service.DictionaryService;
 import com.bootdo.fanfan.service.QrcodeService;
+import com.bootdo.fanfan.service.ShopService;
+import com.bootdo.fanfan.vo.APIShopVO;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.HttpStatus;
@@ -39,30 +44,32 @@ public class InfoRestController extends ApiBaseRestController {
     @Autowired
     private FileService sysFileService;
 
+    @Autowired
+    ShopService shopService;
+
+    @Autowired
+    EMapper eMapper;
+
     /**
      * 初始化信息
      * @return
      */
     @GetMapping("/")
     public R initInfo(@RequestParam(required = false) String qrcode){
-
-
         Integer customerId = getBaseModel().getCustomerId();
 
-        //字典信息
-        Map<Integer,String> resultMap = new HashMap<>();
-
-        QrcodeDO qrcodeDO=null;
+        //返回信息
+        Map<String,Object> resultMap = new HashMap<>();
 
         if(StringUtils.isNotEmpty(qrcode)){
-            qrcodeDO = qrcodeService.get(qrcode);
+            QrcodeDO qrcodeDO = qrcodeService.get(qrcode);
             if(qrcodeDO.getCustomerId()!=null){
                 if(qrcodeDO.getCustomerId()!=null) {
                     customerId = qrcodeDO.getCustomerId();
                 }
                 //设置桌号
                 if(qrcodeDO.getDeskId()!=null) {
-                    resultMap.put(DictionaryEnum.deskId.getVal(), qrcodeDO.getDeskId() + "");
+                    resultMap.put("deskId", qrcodeDO.getDeskId());
                 }
             }
         }
@@ -71,27 +78,17 @@ public class InfoRestController extends ApiBaseRestController {
             customerId=132;
         }
 
-        //字典信息
-        Map<Integer,String> dictionaryDOList = dictionaryService.queryByKeys(customerId,
-                DictionaryEnum.businessEndTime.getVal(),
-                DictionaryEnum.businessStartTime.getVal(),
-                DictionaryEnum.minOrderPrice.getVal(),
-                DictionaryEnum.shopName.getVal()
-        );
-
-        //合并Map
-        if(dictionaryDOList!=null){
-            resultMap.putAll(dictionaryDOList);
+        ShopDO shopDO = shopService.getByCustomerId(customerId);
+        //店铺信息
+        if(shopDO!=null){
+            APIShopVO shopVO = eMapper.map(shopDO, APIShopVO.class);
+            resultMap.put("shop",shopVO);
         }
 
         //设置customerId
-        resultMap.put(DictionaryEnum.customerId.getVal(),customerId+"");
+        resultMap.put("customerId",customerId);
 
-        //返回的结果集
-        Map<String,Object> resultData = new HashMap<>();
-        resultData.put("dict",resultMap);
-
-        return R.ok().put("data",resultData);
+        return R.ok().put("data",resultMap);
     }
 
     /**
@@ -105,6 +102,10 @@ public class InfoRestController extends ApiBaseRestController {
         return R.ok().put("data",dicMap.get(DictionaryEnum.htmlVersion.getVal()));
     }
 
+    /**
+     * 下载新版本
+     * @return
+     */
     @GetMapping("/www.zip")
     public ResponseEntity<byte[]> downLoadZip(){
 
@@ -113,6 +114,12 @@ public class InfoRestController extends ApiBaseRestController {
        return  new ResponseEntity<byte[]>(fileBytes, HttpStatus.OK);
     }
 
+    /**
+     * 上传文件
+     * @param file
+     * @param request
+     * @return
+     */
     @PostMapping("/upload")
     public R uploadFile(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
         String fileName = file.getOriginalFilename();
@@ -120,16 +127,27 @@ public class InfoRestController extends ApiBaseRestController {
         FileDO sysFile = new FileDO(FileType.fileType(fileName), fileName, new Date());
         try {
             FileUtil.uploadFile(file.getBytes(), bootdoConfig.getUploadPath(), fileName);
+            String [] tempName= fileName.split("\\.");
+            //缩小图片
+            if(tempName.length==2){
+                fileName = tempName[0] + ".min." + tempName[1];
+                Thumbnails.of(file.getInputStream()).scale(0.6f).outputQuality(0.5).toFile(bootdoConfig.getUploadPath() + fileName);
+            }
         } catch (Exception e) {
             return R.error();
         }
 
         if (sysFileService.save(sysFile) > 0) {
-            return R.ok().put("data",bootdoConfig.getStaticUrl()+sysFile.getUrl());
+            return R.ok().put("data",bootdoConfig.getStaticUrl()+ fileName);
         }
         return R.error();
     }
 
+    /**
+     * 扫码入口
+     * @param qrCodeId
+     * @return
+     */
     @GetMapping("/qrcode/{qrcode}")
     public R qrcode(@PathVariable("qrcode") String qrCodeId){
         return R.ok();

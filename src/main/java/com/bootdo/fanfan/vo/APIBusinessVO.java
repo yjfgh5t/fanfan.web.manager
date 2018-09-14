@@ -26,4 +26,9 @@ public class APIBusinessVO {
      * 地址
      */
     private String picPath;
+
+    /**
+     * 店鋪Id
+     */
+    private Integer shopId;
 }

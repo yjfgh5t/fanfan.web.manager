@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bootdo.fanfan.dao.ShopDao">
+
+	<select id="get" resultType="com.bootdo.fanfan.domain.ShopDO">
+		select `id`,`name`,`business_start`,`business_end`,`logo`,`state`,`min_order_price`,`address`,`create_time`,`modify_time`,`customer_id` from ff_shop where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.bootdo.fanfan.domain.ShopDO">
+		select `id`,`name`,`business_start`,`business_end`,`logo`,`state`,`min_order_price`,`address`,`create_time`,`modify_time`,`customer_id` from ff_shop
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="name != null and name != ''"> and name = #{name} </if>
+		  		  <if test="businessStart != null and businessStart != ''"> and business_start = #{businessStart} </if>
+		  		  <if test="businessEnd != null and businessEnd != ''"> and business_end = #{businessEnd} </if>
+		  		  <if test="logo != null and logo != ''"> and logo = #{logo} </if>
+		  		  <if test="state != null and state != ''"> and state = #{state} </if>
+		  		  <if test="minOrderPrice != null and minOrderPrice != ''"> and min_order_price = #{minOrderPrice} </if>
+		  		  <if test="address != null and address != ''"> and address = #{address} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		  <if test="modifyTime != null and modifyTime != ''"> and modify_time = #{modifyTime} </if>
+		  		  <if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from ff_shop
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="name != null and name != ''"> and name = #{name} </if>
+		  		  <if test="businessStart != null and businessStart != ''"> and business_start = #{businessStart} </if>
+		  		  <if test="businessEnd != null and businessEnd != ''"> and business_end = #{businessEnd} </if>
+		  		  <if test="logo != null and logo != ''"> and logo = #{logo} </if>
+		  		  <if test="state != null and state != ''"> and state = #{state} </if>
+		  		  <if test="minOrderPrice != null and minOrderPrice != ''"> and min_order_price = #{minOrderPrice} </if>
+		  		  <if test="address != null and address != ''"> and address = #{address} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		  <if test="modifyTime != null and modifyTime != ''"> and modify_time = #{modifyTime} </if>
+		  		  <if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.bootdo.fanfan.domain.ShopDO">
+		insert into ff_shop
+		(
+			`name`, 
+			`business_start`, 
+			`business_end`, 
+			`logo`, 
+			`state`, 
+			`min_order_price`, 
+			`address`, 
+			`create_time`, 
+			`modify_time`, 
+			`customer_id`
+		)
+		values
+		(
+			#{name}, 
+			#{businessStart}, 
+			#{businessEnd}, 
+			#{logo}, 
+			#{state}, 
+			#{minOrderPrice}, 
+			#{address}, 
+			#{createTime}, 
+			#{modifyTime}, 
+			#{customerId}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.bootdo.fanfan.domain.ShopDO">
+		update ff_shop 
+		<set>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="businessStart != null">`business_start` = #{businessStart}, </if>
+			<if test="businessEnd != null">`business_end` = #{businessEnd}, </if>
+			<if test="logo != null">`logo` = #{logo}, </if>
+			<if test="state != null">`state` = #{state}, </if>
+			<if test="minOrderPrice != null">`min_order_price` = #{minOrderPrice}, </if>
+			<if test="address != null">`address` = #{address}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="modifyTime != null">`modify_time` = #{modifyTime}, </if>
+			<if test="customerId != null">`customer_id` = #{customerId}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from ff_shop where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from ff_shop where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

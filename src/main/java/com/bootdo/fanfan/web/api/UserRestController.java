@@ -63,6 +63,8 @@ public class UserRestController extends ApiBaseRestController {
             userPwd = MD5Utils.encrypt(userVO.getUsername(), userPwd);
             //判断密码输入是否正确
             if (userPwd.equals(userDOS.get(0).getPassword())) {
+                //查詢店鋪Id
+
                 return R.ok().put("data", userVO);
             }
         }

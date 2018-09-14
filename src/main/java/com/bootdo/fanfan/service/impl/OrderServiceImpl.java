@@ -56,6 +56,9 @@ public class OrderServiceImpl implements OrderService {
 	private BootdoConfig bootdoConfig;
 
 	@Autowired
+	private AlipayKeyService alipayKeyService;
+
+	@Autowired
 	XGPushManager xgPushManager;
 
 	@Autowired
@@ -292,7 +295,7 @@ public class OrderServiceImpl implements OrderService {
 				item.setOrderStateText(OrderStateEnum.get(item.getOrderState()).getText());
 				item.setCommoditImg(item.getCommoditImg());
 				//待支付状态
-				if(item.getOrderState()==OrderStateEnum.userWaitPay.getVal()){
+				if(item.getOrderState().equals(OrderStateEnum.userWaitPay.getVal())){
 					//剩余支付秒数
 					item.setLastPayTime(getLastPaySecond(item.getId()));
 					//支付宝支付字符串
@@ -466,7 +469,13 @@ public class OrderServiceImpl implements OrderService {
      */
 	private boolean createAlipayOrder(APIOrderRequVO orderRequVO,OrderDO  orderDO){
 
-	    OrderAlipayDO alipayDO =  new OrderAlipayDO();
+		AlipayKeyDO alipayKeyDO = alipayKeyService.getByCustomerId(orderRequVO.getCustomerId());
+
+		if(alipayKeyDO==null){
+			throw new SecurityException("商户未配置支付宝密钥");
+		}
+
+		OrderAlipayDO alipayDO =  new OrderAlipayDO();
 	    alipayDO.setId(orderDO.getId());
 	    alipayDO.setBody(StringUtils.join(orderRequVO.getDetailList().stream().map(m->m.getOutTitle()).toArray()));
         alipayDO.setGoodsType("1");
@@ -474,12 +483,12 @@ public class OrderServiceImpl implements OrderService {
         alipayDO.setPassbackParams(orderDO.getId().toString());
         alipayDO.setProductCode("QUICK_MSECURITY_PAY");
         alipayDO.setStoreId("");
-        alipayDO.setSubject("饭饭点餐");
+        alipayDO.setSubject("小熊点餐");
         alipayDO.setTimeoutExpress("15m");
         alipayDO.setTotalAmount(orderDO.getOrderTotal().toString());
         alipayDO.setTradeNo(orderDO.getOrderNum());
 
-        String backStr = alipayManager.createTradePay(alipayDO);
+        String backStr = alipayManager.createTradePay(alipayDO,alipayKeyDO.getAppId(), alipayKeyDO.getPrivateKey(),alipayKeyDO.getPublicTbKey());
         if(backStr==""){
             throw  new  SecurityException("创建支付宝预付单失败");
         }

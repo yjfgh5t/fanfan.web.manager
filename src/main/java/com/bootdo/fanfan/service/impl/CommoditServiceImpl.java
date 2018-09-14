@@ -61,8 +61,9 @@ public class CommoditServiceImpl implements CommoditService {
 	@Override
 	public List<CommoditDO> queryByIdarry(List<Integer> idArry){
 
-		if(CollectionUtils.isEmpty(idArry))
+		if(CollectionUtils.isEmpty(idArry)) {
 			return null;
+		}
 
 		String strIdarry= StringUtils.join(idArry,",");
 

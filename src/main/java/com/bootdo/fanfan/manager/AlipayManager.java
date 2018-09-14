@@ -25,8 +25,6 @@ import java.util.Map;
 @Component
 public class AlipayManager {
 
-    private static final String alipayToken="alipay_token",accessToken="alipay_access_token",refshToken="alipay_refsh_token";
-
     private static final Logger logger = LoggerFactory.getLogger(RefshOrderJob.class);
 
     private  final String authToken="201809BB4de9a2bfd3134b02a45cfe07470ebX33";
@@ -97,9 +95,9 @@ public class AlipayManager {
      * @param alipayDO
      * @return
      */
-    public String  createTradePay(OrderAlipayDO alipayDO){
+    public String  createTradePay(OrderAlipayDO alipayDO,String appId,String privateKey,String tbPublicKey){
         //实例化客户端
-        AlipayClient alipayClient = AlipayConfig.getPayClient();
+        AlipayClient alipayClient = AlipayConfig.getPayClient(appId,privateKey,tbPublicKey);
         //实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.trade.app.pay
         AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
         //SDK已经封装掉了公共参数，这里只需要传入业务参数。以下方法为sdk的model入参方式(model和biz_content同时存在的情况下取biz_content)。

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bootdo.fanfan.dao.AlipayKeyDao">
+
+	<select id="get" resultType="com.bootdo.fanfan.domain.AlipayKeyDO">
+		select `id`,`public_key`,`private_key`,`app_id`,`public_tb_key`,`customer_id`,`create_time` from ff_alipay_key where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.bootdo.fanfan.domain.AlipayKeyDO">
+		select `id`,`public_key`,`private_key`,`app_id`,`public_tb_key`,`customer_id`,`create_time` from ff_alipay_key
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="publicKey != null and publicKey != ''"> and public_key = #{publicKey} </if>
+		  		  <if test="privateKey != null and privateKey != ''"> and private_key = #{privateKey} </if>
+		  		  <if test="appId != null and appId != ''"> and app_id = #{appId} </if>
+		  		  <if test="publicTbKey != null and publicTbKey != ''"> and public_tb_key = #{publicTbKey} </if>
+		  		  <if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from ff_alipay_key
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="publicKey != null and publicKey != ''"> and public_key = #{publicKey} </if>
+		  		  <if test="privateKey != null and privateKey != ''"> and private_key = #{privateKey} </if>
+		  		  <if test="appId != null and appId != ''"> and app_id = #{appId} </if>
+		  		  <if test="publicTbKey != null and publicTbKey != ''"> and public_tb_key = #{publicTbKey} </if>
+		  		  <if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.bootdo.fanfan.domain.AlipayKeyDO" useGeneratedKeys="true" keyProperty="id">
+		insert into ff_alipay_key
+		(
+			`public_key`, 
+			`private_key`, 
+			`app_id`, 
+			`public_tb_key`, 
+			`customer_id`, 
+			`create_time`
+		)
+		values
+		(
+			#{publicKey}, 
+			#{privateKey}, 
+			#{appId}, 
+			#{publicTbKey}, 
+			#{customerId}, 
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.bootdo.fanfan.domain.AlipayKeyDO">
+		update ff_alipay_key 
+		<set>
+			<if test="publicKey != null">`public_key` = #{publicKey}, </if>
+			<if test="privateKey != null">`private_key` = #{privateKey}, </if>
+			<if test="appId != null">`app_id` = #{appId}, </if>
+			<if test="publicTbKey != null">`public_tb_key` = #{publicTbKey}, </if>
+			<if test="customerId != null">`customer_id` = #{customerId}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from ff_alipay_key where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from ff_alipay_key where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>
