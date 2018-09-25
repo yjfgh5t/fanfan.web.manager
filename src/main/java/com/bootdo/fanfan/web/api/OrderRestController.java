@@ -247,10 +247,10 @@ public class OrderRestController extends ApiBaseRestController {
         if (hasPay) {
             return R.ok().put("data", true);
         }
-        String orderNum = orderService.get(id).getOrderNum();
+        OrderDO orderDO = orderService.get(id);
 
         //查询支付宝订单
-        AlipayTradeQueryResponse tradeQueryResponse = alipayManager.queryTradePay(orderNum,null);
+        AlipayTradeQueryResponse tradeQueryResponse = alipayManager.queryTradePay(orderDO.getOrderNum(),orderDO.getCustomerId());
 
         //判断是否支付成功
         if (tradeQueryResponse != null && tradeQueryResponse.isSuccess()) {
@@ -305,7 +305,7 @@ public class OrderRestController extends ApiBaseRestController {
         XGPushModel pushModel = new XGPushModel(XGPushModel.MsgType.payOrder, apiOrderRequVO.getCustomerId().longValue());
         pushModel.setMsgTitle("您有新的订单");
         pushModel.setMsgContent("订单总额："+new Random().nextInt());
-        pushModel.setNotification(false);
+        pushModel.setNotification(true);
         //数据转换
         APIPrintOrderVO data = mapper.map(apiOrderRequVO, APIPrintOrderVO.class);
         if(apiOrderRequVO.getDetailList()!=null){

@@ -49,23 +49,23 @@ function load() {
 								},
 																{
 									field : 'id', 
-									title : '' 
+									title : '主键'
 								},
 																{
 									field : 'customerId', 
-									title : '' 
+									title : '商户ID'
 								},
 																{
 									field : 'deskId', 
-									title : '' 
+									title : '桌号ID'
 								},
 																{
 									field : 'createTime', 
-									title : '' 
+									title : '创建时间'
 								},
 																{
 									field : 'modifyTime', 
-									title : '' 
+									title : '修改时间'
 								},
 																{
 									title : '操作',

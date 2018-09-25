@@ -54,18 +54,18 @@ public class DeskRestController extends ApiBaseRestController {
             deskService.save(deskDO);
         }else {
             deskService.update(deskDO);
-            //修改二维码
-            if(StringUtils.isNotEmpty(deskVO.getQrCodeId())){
-                QrcodeDO qrcode = new QrcodeDO();
-                qrcode.setId(deskVO.getQrCodeId());
-                qrcode.setCustomerId(getBaseModel().getCustomerId());
-                qrcode.setDeskId(deskVO.getId());
-                //去除原有的标记
-                qrcodeService.removeOldDesk(qrcode.getCustomerId(),qrcode.getDeskId());
-                //设置新的标记
-                qrcodeService.update(qrcode);
-            }
         }
+
+        //修改二维码
+        if(StringUtils.isNotEmpty(deskVO.getQrCodeId())){
+            QrcodeDO qrcode = new QrcodeDO();
+            qrcode.setId(deskVO.getQrCodeId());
+            qrcode.setCustomerId(getBaseModel().getCustomerId());
+            qrcode.setDeskId(deskDO.getId());
+            //设置新的标记
+            qrcodeService.update(qrcode);
+        }
+
         return R.ok();
     }
 

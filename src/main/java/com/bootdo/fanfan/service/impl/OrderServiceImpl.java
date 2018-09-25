@@ -161,6 +161,7 @@ public class OrderServiceImpl implements OrderService {
             if(createAlipayOrder(orderVO, orderDO)){
             	//订单状态
             	orderDO.setOrderState(OrderStateEnum.userWaitPay.getVal());
+				orderDO.setCustomerId(orderVO.getCustomerId());
             	//更新订单状态
 				updateOrderState(orderDO);
 			}
@@ -275,8 +276,14 @@ public class OrderServiceImpl implements OrderService {
 		pushModel.setMsgTitle("您有新的订单");
 		pushModel.setMsgContent("订单总额："+orderRequVO.getOrderTotal().toString());
 		pushModel.addParams("data",orderRequVO);
+		pushModel.setNotification(false);
 		//推送消息
 		xgPushManager.put(pushModel);
+	}
+
+	@Override
+	public Integer getCustomerIdById(Integer id) {
+		return orderDao.queryCustomerIdById(id);
 	}
 
 	/**
@@ -468,13 +475,6 @@ public class OrderServiceImpl implements OrderService {
      * @param orderDO
      */
 	private boolean createAlipayOrder(APIOrderRequVO orderRequVO,OrderDO  orderDO){
-
-		AlipayKeyDO alipayKeyDO = alipayKeyService.getByCustomerId(orderRequVO.getCustomerId());
-
-		if(alipayKeyDO==null){
-			throw new SecurityException("商户未配置支付宝密钥");
-		}
-
 		OrderAlipayDO alipayDO =  new OrderAlipayDO();
 	    alipayDO.setId(orderDO.getId());
 	    alipayDO.setBody(StringUtils.join(orderRequVO.getDetailList().stream().map(m->m.getOutTitle()).toArray()));
@@ -488,7 +488,7 @@ public class OrderServiceImpl implements OrderService {
         alipayDO.setTotalAmount(orderDO.getOrderTotal().toString());
         alipayDO.setTradeNo(orderDO.getOrderNum());
 
-        String backStr = alipayManager.createTradePay(alipayDO,alipayKeyDO.getAppId(), alipayKeyDO.getPrivateKey(),alipayKeyDO.getPublicTbKey());
+        String backStr = alipayManager.createTradePay(alipayDO,orderRequVO.getCustomerId());
         if(backStr==""){
             throw  new  SecurityException("创建支付宝预付单失败");
         }

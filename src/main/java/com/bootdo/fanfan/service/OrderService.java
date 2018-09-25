@@ -5,6 +5,7 @@ import com.bootdo.fanfan.domain.enumDO.OrderStateEnum;
 import com.bootdo.fanfan.vo.APIOrderListCustomerVO;
 import com.bootdo.fanfan.vo.APIOrderListVO;
 import com.bootdo.fanfan.vo.APIOrderRequVO;
+import org.omg.PortableInterceptor.INACTIVE;
 
 import java.util.List;
 import java.util.Map;
@@ -84,4 +85,11 @@ public interface OrderService {
 	 * @param orderId
 	 */
 	void sendOrderNotification(Integer orderId);
+
+	/**
+	 * 查询商户Id
+	 * @param orderId
+	 * @return
+	 */
+	Integer getCustomerIdById(Integer orderId);
 }

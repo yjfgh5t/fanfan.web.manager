@@ -83,6 +83,9 @@ public interface OrderDao {
 	@Update("update ff_order set order_state=#{orderState}, order_date_num=#{orderDateNum}, order_time = NOW() where id=#{id}")
 	int updateOrderStatePay(@Param("orderState") Integer orderState, @Param("id") Integer id, @Param("orderDateNum") String dateNum);
 
+	@Select("select customer_id from ff_order where id = #{id}")
+	Integer queryCustomerIdById(@Param("id") Integer id);
+
 	/**
 	 * 查询订单列表
 	 * @param map

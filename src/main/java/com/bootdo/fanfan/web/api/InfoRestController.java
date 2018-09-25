@@ -4,10 +4,7 @@ import com.bootdo.common.config.BootdoConfig;
 import com.bootdo.common.domain.FileDO;
 import com.bootdo.common.extend.EMapper;
 import com.bootdo.common.service.FileService;
-import com.bootdo.common.utils.FileType;
-import com.bootdo.common.utils.FileUtil;
-import com.bootdo.common.utils.R;
-import com.bootdo.common.utils.StringUtils;
+import com.bootdo.common.utils.*;
 import com.bootdo.fanfan.domain.QrcodeDO;
 import com.bootdo.fanfan.domain.ShopDO;
 import com.bootdo.fanfan.domain.enumDO.DictionaryEnum;
@@ -24,9 +21,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.File;
+import java.io.InputStream;
+import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 @RestController
 @RequestMapping("/api/info")

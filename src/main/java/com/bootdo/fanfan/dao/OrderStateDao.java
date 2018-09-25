@@ -45,6 +45,6 @@ public interface OrderStateDao {
 	 * 查询超时 待支付的订单
 	 * @return
 	 */
-	@Select("select os.order_id,os.create_time,o.order_num from ff_order_state os join ff_order o on os.order_id = o.id where os.order_state=#{orderState} and o.order_state=#{orderState}")
+	@Select("select os.order_id,os.create_time,o.order_num,o.customer_id from ff_order_state os join ff_order o on os.order_id = o.id where os.order_state=#{orderState} and o.order_state=#{orderState}")
 	List<OrderRefreshDTO> queryAwaitPayOrder(@Param("orderState") Integer orderState);
 }

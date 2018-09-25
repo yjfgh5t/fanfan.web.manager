@@ -27,7 +27,6 @@ function save() {
 			} else {
 				parent.layer.alert(data.msg)
 			}
-
 		}
 	});
 

@@ -33,13 +33,16 @@ public class TpUserServiceImpl implements TpUserService {
 	@Autowired
 	private UserService userService;
 
+	@Autowired
+	private AlipayConfig alipayConfig;
+
 	@Override
 	public TpUserDO get(Integer id){
 		return tpUserDao.get(id);
 	}
 
 	@Override
-	@Transactional(rollbackFor = {NumberFormatException.class})
+	@Transactional(rollbackFor = {SecurityException.class})
 	public TpUserDO getTPInfo(String code, int type) {
 
 		TpUserDO tpUserDO = getTpUserDO(code, type);
@@ -57,14 +60,13 @@ public class TpUserServiceImpl implements TpUserService {
 		UserDO userDO = eMapper.map(tpUserDO,UserDO.class);
 
 		//添加用户至信息表
-		int  userId = userService.save(userDO);
-		if(userId==0){
+		if(userService.save(userDO)<0){
 			//抛出异常
-			Integer.parseInt("AS");
+			throw new SecurityException("保存用户失败");
 		}
 
 		//添加至TpUser表
-		tpUserDO.setUserId(userId);
+		tpUserDO.setUserId(userDO.getId());
 
 		//保存 并设置 Id
 		tpUserDO.setId(this.save(tpUserDO));
@@ -122,7 +124,7 @@ public class TpUserServiceImpl implements TpUserService {
 			if(alipayUserInfoShareResponse!=null) {
 				tpUserDO = eMapper.map(alipayUserInfoShareResponse, TpUserDO.class);
 				tpUserDO.setTpType(type);
-				tpUserDO.setTpAppId(AlipayConfig.appId);
+				tpUserDO.setTpAppId(alipayConfig.appId);
 				//设置性别
 				tpUserDO.setTpSex(alipayUserInfoShareResponse.getGender().toLowerCase().equals("M")?2:3);
 			}

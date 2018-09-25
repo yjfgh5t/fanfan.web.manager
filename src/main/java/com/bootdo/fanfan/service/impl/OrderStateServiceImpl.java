@@ -2,6 +2,7 @@ package com.bootdo.fanfan.service.impl;
 
 import com.bootdo.fanfan.domain.DTO.OrderRefreshDTO;
 import com.bootdo.fanfan.domain.enumDO.OrderStateEnum;
+import com.bootdo.fanfan.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,9 @@ import javax.annotation.PostConstruct;
 public class OrderStateServiceImpl implements OrderStateService {
 	@Autowired
 	private OrderStateDao orderStateDao;
+
+	@Autowired
+	OrderService orderService;
 
 	/**
 	 * 待支付的订单集合
@@ -128,11 +132,13 @@ public class OrderStateServiceImpl implements OrderStateService {
 		if(orderState.getOrderState().equals(OrderStateEnum.userWaitPay.getVal())){
 			OrderRefreshDTO refreshDTO = new OrderRefreshDTO();
 			refreshDTO.setCreateTime(orderState.getCreateTime());
-			refreshDTO.setOrderId(orderState.getCreateId());
+			refreshDTO.setOrderId(orderState.getOrderId());
 			refreshDTO.setOrderNum(orderNum);
+			//查询商户id
+			Integer customerId = orderService.getCustomerIdById(orderState.getOrderId());
+			refreshDTO.setCustomerId(customerId);
 			awaitPayOrders.put(orderState.getOrderId(),refreshDTO);
 		}
-
 	}
 
 }

@@ -4,12 +4,14 @@ import com.bootdo.common.msgQueue.AbstractMsgQueue;
 import com.bootdo.common.task.RefshOrderJob;
 import com.bootdo.common.utils.DateUtils;
 import com.bootdo.common.utils.StringUtils;
+import com.bootdo.fanfan.domain.AlipayRecordDO;
 import com.bootdo.fanfan.domain.DTO.FormUserDTO;
 import com.bootdo.fanfan.domain.DTO.TemplateMsgDTO;
 import com.bootdo.fanfan.domain.DTO.TemplateMsgMQDTO;
 import com.bootdo.fanfan.domain.OrderDO;
 import com.bootdo.fanfan.domain.enumDO.OrderPayType;
 import com.bootdo.fanfan.domain.enumDO.PlatformEnum;
+import com.bootdo.fanfan.service.AlipayRecordService;
 import com.bootdo.fanfan.service.FormIdService;
 import com.bootdo.fanfan.service.OrderService;
 import org.slf4j.Logger;
@@ -34,6 +36,9 @@ public class TemplateMsgManager extends AbstractMsgQueue<TemplateMsgMQDTO> {
 
     @Autowired
     FormIdService formIdService;
+
+    @Autowired
+    AlipayRecordService alipayRecordService;
 
     @Override
     protected void runCallback(TemplateMsgMQDTO item) {
@@ -62,13 +67,13 @@ public class TemplateMsgManager extends AbstractMsgQueue<TemplateMsgMQDTO> {
         if (orderDO != null && PlatformEnum.AlipayMiniprogram.getVal().equals(orderDO.getOrderPayType())) {
 
             //获取FormId
-            FormUserDTO formUserDTO = formIdService.getCanUseFormId(PlatformEnum.AlipayMiniprogram, orderDO.getUserId());
+            AlipayRecordDO recordDO = alipayRecordService.getByOutTradeNo(orderDO.getOrderNum());
 
             builder.append("1.推送支付宝模板消息 userId:"+orderDO.getUserId());
-            if (formUserDTO!=null) {
+            if (recordDO!=null) {
                 TemplateMsgDTO templateMsgDTO = new TemplateMsgDTO();
-                templateMsgDTO.setFormId(formUserDTO.getFormId());
-                templateMsgDTO.setToUserId(formUserDTO.getTpId());
+                templateMsgDTO.setFormId(recordDO.getTradeNo());
+                templateMsgDTO.setToUserId(recordDO.getBuyerId());
                 //订单号、
                 templateMsgDTO.setKeyword1(orderDO.getOrderDateNum());
                 //退款金额、
@@ -95,12 +100,12 @@ public class TemplateMsgManager extends AbstractMsgQueue<TemplateMsgMQDTO> {
         OrderDO orderDO = orderService.get(item.getOrderId());
         if (orderDO != null && OrderPayType.Alipay.getId().equals(orderDO.getOrderPayType())) {
             //获取FormId
-            FormUserDTO formUserDTO = formIdService.getCanUseFormId(PlatformEnum.AlipayMiniprogram, orderDO.getUserId());
+            AlipayRecordDO recordDO = alipayRecordService.getByOutTradeNo(orderDO.getOrderNum());
             builder.append("1.推送支付宝模板消息 userId:"+orderDO.getUserId());
-            if (formUserDTO!=null) {
+            if (recordDO!=null) {
                 TemplateMsgDTO templateMsgDTO = new TemplateMsgDTO();
-                templateMsgDTO.setFormId(formUserDTO.getFormId());
-                templateMsgDTO.setToUserId(formUserDTO.getTpId());
+                templateMsgDTO.setFormId(recordDO.getTradeNo());
+                templateMsgDTO.setToUserId(recordDO.getBuyerId());
                 //订单号码
                 templateMsgDTO.setKeyword1(orderDO.getOrderDateNum());
                 //订单金额、

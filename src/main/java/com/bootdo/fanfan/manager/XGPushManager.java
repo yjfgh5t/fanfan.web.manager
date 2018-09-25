@@ -65,6 +65,8 @@ public class XGPushManager extends AbstractMsgQueue<XGPushModel> {
         JSONObject jsonObject = xingeApp.pushSingleAccount(0,item.getUserId().toString(),message);
 
         builder.append("推送结果："+jsonObject.toString());
+
+        logger.info("信鸽推送："+builder.toString());
     }
 
     /**

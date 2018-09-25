@@ -28,7 +28,12 @@ public class AlipayRecordServiceImpl implements AlipayRecordService {
 	public AlipayRecordDO get(Integer id){
 		return alipayRecordDao.get(id);
 	}
-	
+
+	@Override
+	public AlipayRecordDO getByOutTradeNo(String outTradeNo) {
+		return alipayRecordDao.getByOutTradeNo(outTradeNo);
+	}
+
 	@Override
 	public List<AlipayRecordDO> list(Map<String, Object> map){
 		return alipayRecordDao.list(map);

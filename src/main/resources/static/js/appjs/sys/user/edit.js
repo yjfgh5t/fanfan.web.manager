@@ -1,6 +1,10 @@
 // 以下为官方示例
 $().ready(function() {
-	validateRule();
+    $.validator.addMethod("isMobile", function(value, element) {
+        var length = value.length;
+        return this.optional(element) || (length == 11);
+    }, "请正确填写手机号码");
+    validateRule();
 	// $("#signupForm").validate();
 });
 
@@ -80,9 +84,13 @@ function validateRule() {
 				equalTo : "#password"
 			},
 			email : {
-				required : true,
+				required : false,
 				email : true
 			},
+            mobile : {
+                required : true,
+                isMobile : true
+            },
 			topic : {
 				required : "#newsletter:checked",
 				minlength : 2
@@ -106,6 +114,10 @@ function validateRule() {
 				required : icon + "请再次输入密码",
 				minlength : icon + "密码必须6个字符以上",
 				equalTo : icon + "两次输入的密码不一致"
+			},
+            mobile:{
+				required: icon + "请输入您的手机号",
+                isMobile: icon + "输入的手机号格式不正确",
 			},
 			email : icon + "请输入您的E-mail",
 		}

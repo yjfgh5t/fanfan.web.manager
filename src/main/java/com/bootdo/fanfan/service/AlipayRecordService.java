@@ -15,6 +15,8 @@ import java.util.Map;
 public interface AlipayRecordService {
 	
 	AlipayRecordDO get(Integer id);
+
+	AlipayRecordDO getByOutTradeNo(String outTradeNo);
 	
 	List<AlipayRecordDO> list(Map<String, Object> map);
 	

@@ -3,14 +3,13 @@ package com.bootdo.fanfan.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import com.bootdo.fanfan.dao.AlipayKeyDao;
 import com.bootdo.fanfan.domain.AlipayKeyDO;
 import com.bootdo.fanfan.service.AlipayKeyService;
-
-
 
 @Service
 public class AlipayKeyServiceImpl implements AlipayKeyService {
@@ -24,7 +23,7 @@ public class AlipayKeyServiceImpl implements AlipayKeyService {
 
 	@Override
 	public AlipayKeyDO getByCustomerId(Integer customerId) {
-		return null;
+		return alipayKeyDao.getByCustomerId(customerId);
 	}
 
 	@Override
@@ -39,6 +38,7 @@ public class AlipayKeyServiceImpl implements AlipayKeyService {
 	
 	@Override
 	public int save(AlipayKeyDO alipayKey){
+		alipayKey.setCreateTime(new Date());
 		return alipayKeyDao.save(alipayKey);
 	}
 	

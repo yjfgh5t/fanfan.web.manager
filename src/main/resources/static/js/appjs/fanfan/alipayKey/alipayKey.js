@@ -51,25 +51,13 @@ function load() {
 									field : 'id', 
 									title : '主键' 
 								},
-																{
-									field : 'publicKey', 
-									title : '公钥' 
+								{
+									field : 'customerId',
+									title : '商户Id'
 								},
-																{
-									field : 'privateKey', 
-									title : '私钥' 
-								},
-																{
-									field : 'appId', 
-									title : 'appId' 
-								},
-																{
-									field : 'publicTbKey', 
-									title : '支付宝公钥' 
-								},
-																{
-									field : 'customerId', 
-									title : '商户Id' 
+								{
+									field : 'appId',
+									title : '应用Id'
 								},
 																{
 									field : 'createTime', 

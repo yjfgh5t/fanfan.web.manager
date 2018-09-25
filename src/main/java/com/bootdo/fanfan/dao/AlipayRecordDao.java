@@ -39,4 +39,8 @@ public interface AlipayRecordDao {
 	 */
 	@Select("SELECT count(1) from ff_alipay_record where trade_no=#{tradeNo}")
 	int queryByTradeNo(@Param("tradeNo") String tradeNo);
+
+	@Select("SELECT * from ff_alipay_record where out_trade_no=#{outTradeNo}")
+	AlipayRecordDO getByOutTradeNo(@Param("outTradeNo") String outTradeNo);
+
 }

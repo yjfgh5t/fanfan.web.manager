@@ -1,8 +1,8 @@
 bootdo:
   uploadPath: D:/var/uploaded_files/
   staticUrl: http://192.168.2.68:8081/files/ # http://192.168.2.68:8081
-  xgAccessId: 2100294106
-  xgSecretKey: ca6d4a13c88c7a96ee3692ac8fa6223d
+  xgAccessId: 2100311367
+  xgSecretKey: 03bc79adf9ad6abcb1ef0c5c4407bf2b
 logging:
   level:
     root: error

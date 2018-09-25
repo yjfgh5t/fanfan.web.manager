@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Component
@@ -27,10 +28,13 @@ public class AlipayManager {
 
     private static final Logger logger = LoggerFactory.getLogger(RefshOrderJob.class);
 
-    private  final String authToken="201809BB4de9a2bfd3134b02a45cfe07470ebX33";
+    private  final String authToken=null;//"201809BB4de9a2bfd3134b02a45cfe07470ebX33";
 
     @Autowired
     static BootdoConfig bootdoConfig;
+
+    @Autowired
+    AlipayConfig alipayConfig;
 
     /**
      * 获取用信息
@@ -38,7 +42,7 @@ public class AlipayManager {
      */
     public String getToken(String code,String authToken){
 
-        AlipayClient alipayClient = AlipayConfig.getDefaultClient();
+        AlipayClient alipayClient = alipayConfig.getDefaultClient();
         //请求对象
         AlipaySystemOauthTokenRequest request = new AlipaySystemOauthTokenRequest();
         //当有code时 更具code获取token
@@ -65,7 +69,7 @@ public class AlipayManager {
      * @return
      */
     public AlipayUserInfoShareResponse getUserInfo(String  code,String authToken){
-        AlipayClient alipayClient = AlipayConfig.getDefaultClient();
+        AlipayClient alipayClient = alipayConfig.getDefaultClient();
         AlipayUserInfoShareRequest request = new AlipayUserInfoShareRequest();
         AlipayUserInfoShareResponse response = null;
 
@@ -95,9 +99,9 @@ public class AlipayManager {
      * @param alipayDO
      * @return
      */
-    public String  createTradePay(OrderAlipayDO alipayDO,String appId,String privateKey,String tbPublicKey){
+    public String  createTradePay(OrderAlipayDO alipayDO,Integer customerId){
         //实例化客户端
-        AlipayClient alipayClient = AlipayConfig.getPayClient(appId,privateKey,tbPublicKey);
+        AlipayClient alipayClient = alipayConfig.getCustomerClient(customerId);
         //实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.trade.app.pay
         AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
         //SDK已经封装掉了公共参数，这里只需要传入业务参数。以下方法为sdk的model入参方式(model和biz_content同时存在的情况下取biz_content)。
@@ -129,7 +133,7 @@ public class AlipayManager {
      * 退款
      */
     public boolean tradeRefund(String orderNum,String refundAmount,String authToken){
-        AlipayClient alipayClient = AlipayConfig.getDefaultClient();
+        AlipayClient alipayClient = alipayConfig.getDefaultClient();
         AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
         request.setBizContent("{" +
                 "\"out_trade_no\":\""+orderNum+"\"," +
@@ -155,7 +159,7 @@ public class AlipayManager {
     public String createQRCode(QRCodeDTO codeDTO,String authToken){
 
         //实例化客户端
-        AlipayClient alipayClient = AlipayConfig.getDefaultClient();
+        AlipayClient alipayClient = alipayConfig.getDefaultClient();
         AlipayOpenAppQrcodeCreateRequest request = new AlipayOpenAppQrcodeCreateRequest();
         request.setBizContent("{" +
                 "\"url_param\":\""+codeDTO.getUrlParam()+"\"," +
@@ -178,7 +182,7 @@ public class AlipayManager {
      */
     public boolean closeTradePay(String tradeNo,String outTradeNo,String authToken){
 
-        AlipayClient alipayClient = AlipayConfig.getDefaultClient();
+        AlipayClient alipayClient = alipayConfig.getDefaultClient();
         AlipayTradeCloseRequest request = new AlipayTradeCloseRequest();
         request.setBizContent("{" +
                 "\"trade_no\":\""+tradeNo+"\"," +
@@ -202,14 +206,14 @@ public class AlipayManager {
      * @param tradeNo
      * @return
      */
-    public AlipayTradeQueryResponse queryTradePay(String tradeNo,String authToken){
+    public AlipayTradeQueryResponse queryTradePay(String tradeNo,Integer customerId){
 
-        AlipayClient alipayClient = AlipayConfig.getDefaultClient();
+        AlipayClient alipayClient = alipayConfig.getCustomerClient(customerId);
         AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
-        request.setBizContent("{\"trade_no\":\""+tradeNo+"\"}");
+        request.setBizContent("{\"out_trade_no\":\""+tradeNo+"\"}");
         AlipayTradeQueryResponse response = null;
         try {
-            response = alipayClient.execute(request,null,this.authToken);
+            response = alipayClient.execute(request);
         } catch (AlipayApiException e) {
             logger.error("查询支付宝交易异常- ->{}",e);
         }
@@ -220,7 +224,7 @@ public class AlipayManager {
      * 推送支付宝模板消息
      */
     public boolean sendTemplateMsg(TemplateMsgDTO templateModel,String authToken){
-        AlipayClient alipayClient = AlipayConfig.getDefaultClient();
+        AlipayClient alipayClient = alipayConfig.getDefaultClient();
         AlipayOpenAppMiniTemplatemessageSendRequest request =new AlipayOpenAppMiniTemplatemessageSendRequest();
         request.setBizContent(templateModel.build());
         AlipayOpenAppMiniTemplatemessageSendResponse response = null;
@@ -246,7 +250,7 @@ public class AlipayManager {
      */
     public boolean checkSign(Map<String,String> params){
         try {
-            return AlipaySignature.rsaCheckV1(params,AlipayConfig.publicKey,"utf-8","RSA2");
+            return AlipaySignature.rsaCheckV1(params,alipayConfig.publicKey,"utf-8","RSA2");
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }

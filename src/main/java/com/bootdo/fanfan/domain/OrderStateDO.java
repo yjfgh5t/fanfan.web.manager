@@ -20,7 +20,7 @@ public class OrderStateDO implements Serializable {
 	private Integer orderState;
 	//创建时间
 	private Date createTime;
-	//用户主键
+	//商户主键
 	private Integer createId;
 
 	public OrderStateDO(){

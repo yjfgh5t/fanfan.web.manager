@@ -16,4 +16,6 @@ public class OrderRefreshDTO {
     private Date createTime;
 
     private String orderNum;
+
+    private Integer customerId;
 }
