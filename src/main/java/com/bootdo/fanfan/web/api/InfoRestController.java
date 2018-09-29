@@ -15,6 +15,8 @@ import com.bootdo.fanfan.vo.APIShopVO;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +30,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 @RestController
+@CacheConfig(cacheNames = "api_info")
 @RequestMapping("/api/info")
 public class InfoRestController extends ApiBaseRestController {
 
@@ -148,7 +151,9 @@ public class InfoRestController extends ApiBaseRestController {
      * @return
      */
     @GetMapping("/qrcode/{qrcode}")
+    @Cacheable(value = "qrcode",keyGenerator = "keyGenerator")
     public R qrcode(@PathVariable("qrcode") String qrCodeId){
+        System.out.println("访问"+qrCodeId);
         return R.ok();
     }
 }
