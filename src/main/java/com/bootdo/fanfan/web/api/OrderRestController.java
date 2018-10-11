@@ -1,5 +1,6 @@
 package com.bootdo.fanfan.web.api;
 
+import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.bootdo.common.config.BootdoConfig;
 import com.bootdo.common.extend.EMapper;
@@ -248,7 +249,6 @@ public class OrderRestController extends ApiBaseRestController {
             return R.ok().put("data", true);
         }
         OrderDO orderDO = orderService.get(id);
-
         //查询支付宝订单
         AlipayTradeQueryResponse tradeQueryResponse = alipayManager.queryTradePay(orderDO.getOrderNum(),orderDO.getCustomerId());
 
@@ -256,6 +256,7 @@ public class OrderRestController extends ApiBaseRestController {
         if (tradeQueryResponse != null && tradeQueryResponse.isSuccess()) {
             AlipayRecordDO recordDO = mapper.map(tradeQueryResponse, AlipayRecordDO.class);
             recordDO.setPassbackParams(id + "");
+            recordDO.setBuyerId(tradeQueryResponse.getBuyerUserId());
             //保存数据
             alipayRecordService.save(recordDO);
 

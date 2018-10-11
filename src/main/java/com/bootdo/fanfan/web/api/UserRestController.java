@@ -3,6 +3,7 @@ package com.bootdo.fanfan.web.api;
 import com.bootdo.common.extend.EMapper;
 import com.bootdo.common.utils.MD5Utils;
 import com.bootdo.common.utils.R;
+import com.bootdo.common.utils.StringUtils;
 import com.bootdo.fanfan.domain.TpUserDO;
 import com.bootdo.fanfan.domain.UserDO;
 import com.bootdo.fanfan.service.TpUserService;
@@ -11,7 +12,9 @@ import com.bootdo.system.service.UserService;
 import com.bootdo.system.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -70,5 +73,30 @@ public class UserRestController extends ApiBaseRestController {
         }
 
         return R.ok().put("data","");
+    }
+
+    @PostMapping("customer/save")
+    public R customerSave(@RequestBody APIBusinessVO model){
+
+        com.bootdo.system.domain.UserDO userDO = eMapper.map(model, com.bootdo.system.domain.UserDO.class);
+
+        int success=0;
+
+        if(model.getUserId()!=0){
+
+            com.bootdo.system.domain.UserDO oldModel = userService.get(model.getUserId());
+
+            if(StringUtils.isNotEmpty(userDO.getPassword())){
+                userDO.setPassword(MD5Utils.encrypt(oldModel.getUsername(),userDO.getPassword()));
+            }
+            
+            success = userService.simpleSave(userDO);
+        }
+
+        if(success>0) {
+            return R.ok().put("data", model);
+        }else {
+            return R.error(1,"保存失败");
+        }
     }
 }

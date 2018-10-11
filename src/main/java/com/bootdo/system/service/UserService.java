@@ -24,6 +24,8 @@ public interface UserService {
 
 	int update(UserDO user);
 
+	int simpleSave(UserDO userDO);
+
 	int remove(Long userId);
 
 	int batchRemove(Long[] userIds);

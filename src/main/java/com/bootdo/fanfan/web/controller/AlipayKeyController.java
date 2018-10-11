@@ -3,6 +3,8 @@ package com.bootdo.fanfan.web.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.bootdo.common.config.AlipayConfig;
+import com.bootdo.fanfan.manager.AlipayManager;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -34,7 +36,10 @@ import com.bootdo.common.utils.R;
 public class AlipayKeyController {
 	@Autowired
 	private AlipayKeyService alipayKeyService;
-	
+
+	@Autowired
+	private AlipayConfig alipayConfig;
+
 	@GetMapping()
 	@RequiresPermissions("fanfan:alipayKey:alipayKey")
 	String AlipayKey(){
@@ -87,6 +92,8 @@ public class AlipayKeyController {
 	@RequiresPermissions("fanfan:alipayKey:edit")
 	public R update( AlipayKeyDO alipayKey){
 		alipayKeyService.update(alipayKey);
+		//删除
+		alipayConfig.removeCustomer(alipayKey.getCustomerId());
 		return R.ok();
 	}
 	

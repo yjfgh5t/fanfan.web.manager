@@ -56,5 +56,10 @@ public class AlipayKeyServiceImpl implements AlipayKeyService {
 	public int batchRemove(Integer[] ids){
 		return alipayKeyDao.batchRemove(ids);
 	}
-	
+
+	@Override
+	public String getPublicTBKey(String appId) {
+		return alipayKeyDao.getPublicTBKey(appId);
+	}
+
 }

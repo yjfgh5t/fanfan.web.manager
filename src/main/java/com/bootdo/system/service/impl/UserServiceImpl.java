@@ -102,6 +102,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public int simpleSave(UserDO userDO){
+		userDO.setGmtModified(new Date());
+		return userMapper.update(userDO);
+	}
+
+	@Override
 	public int remove(Long userId) {
 		userRoleMapper.removeByUserId(userId);
 		return userMapper.remove(userId);

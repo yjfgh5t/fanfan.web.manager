@@ -124,7 +124,7 @@ public class TpUserServiceImpl implements TpUserService {
 			if(alipayUserInfoShareResponse!=null) {
 				tpUserDO = eMapper.map(alipayUserInfoShareResponse, TpUserDO.class);
 				tpUserDO.setTpType(type);
-				tpUserDO.setTpAppId(alipayConfig.appId);
+				tpUserDO.setTpAppId(alipayConfig.getAppId());
 				//设置性别
 				tpUserDO.setTpSex(alipayUserInfoShareResponse.getGender().toLowerCase().equals("M")?2:3);
 			}

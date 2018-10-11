@@ -29,4 +29,11 @@ public interface AlipayKeyService {
 	int remove(Integer id);
 	
 	int batchRemove(Integer[] ids);
+
+	/**
+	 * 获取支付秘密
+	 * @param appId
+	 * @return
+	 */
+	String getPublicTBKey(String appId);
 }

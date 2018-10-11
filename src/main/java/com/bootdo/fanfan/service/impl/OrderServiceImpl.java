@@ -53,10 +53,7 @@ public class OrderServiceImpl implements OrderService {
 	private OrderAlipayService  orderAlipayService;
 
 	@Autowired
-	private BootdoConfig bootdoConfig;
-
-	@Autowired
-	private AlipayKeyService alipayKeyService;
+	private ShopService shopService;
 
 	@Autowired
 	XGPushManager xgPushManager;
@@ -475,6 +472,10 @@ public class OrderServiceImpl implements OrderService {
      * @param orderDO
      */
 	private boolean createAlipayOrder(APIOrderRequVO orderRequVO,OrderDO  orderDO){
+
+		//查询店铺名称
+		ShopDO shopDO = shopService.getByCustomerId(orderRequVO.getCustomerId());
+
 		OrderAlipayDO alipayDO =  new OrderAlipayDO();
 	    alipayDO.setId(orderDO.getId());
 	    alipayDO.setBody(StringUtils.join(orderRequVO.getDetailList().stream().map(m->m.getOutTitle()).toArray()));
@@ -482,8 +483,10 @@ public class OrderServiceImpl implements OrderService {
         alipayDO.setCreateTime(Calendar.getInstance().getTime());
         alipayDO.setPassbackParams(orderDO.getId().toString());
         alipayDO.setProductCode("QUICK_MSECURITY_PAY");
-        alipayDO.setStoreId("");
-        alipayDO.setSubject("小熊点餐");
+        //店铺id
+        alipayDO.setStoreId(shopDO.getId()+"");
+		//店铺名称
+        alipayDO.setSubject(shopDO.getName());
         alipayDO.setTimeoutExpress("15m");
         alipayDO.setTotalAmount(orderDO.getOrderTotal().toString());
         alipayDO.setTradeNo(orderDO.getOrderNum());

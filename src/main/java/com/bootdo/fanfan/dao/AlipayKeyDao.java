@@ -34,4 +34,7 @@ public interface AlipayKeyDao {
 
 	@Select("select * from ff_alipay_key where customer_id = #{customerId}")
 	AlipayKeyDO getByCustomerId(@Param("customerId") Integer customerId);
+
+	@Select("select public_tb_key from ff_alipay_key where app_id = #{appId}")
+	String getPublicTBKey(@Param("appId") String appId);
 }

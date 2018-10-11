@@ -69,7 +69,7 @@ public class TemplateMsgManager extends AbstractMsgQueue<TemplateMsgMQDTO> {
             //获取FormId
             AlipayRecordDO recordDO = alipayRecordService.getByOutTradeNo(orderDO.getOrderNum());
 
-            builder.append("1.推送支付宝模板消息 userId:"+orderDO.getUserId());
+            builder.append("1.推送支付宝模板消息 userId:"+recordDO.getBuyerId());
             if (recordDO!=null) {
                 TemplateMsgDTO templateMsgDTO = new TemplateMsgDTO();
                 templateMsgDTO.setFormId(recordDO.getTradeNo());
@@ -101,7 +101,7 @@ public class TemplateMsgManager extends AbstractMsgQueue<TemplateMsgMQDTO> {
         if (orderDO != null && OrderPayType.Alipay.getId().equals(orderDO.getOrderPayType())) {
             //获取FormId
             AlipayRecordDO recordDO = alipayRecordService.getByOutTradeNo(orderDO.getOrderNum());
-            builder.append("1.推送支付宝模板消息 userId:"+orderDO.getUserId());
+            builder.append("1.推送支付宝模板消息 userId:"+recordDO.getBuyerId());
             if (recordDO!=null) {
                 TemplateMsgDTO templateMsgDTO = new TemplateMsgDTO();
                 templateMsgDTO.setFormId(recordDO.getTradeNo());

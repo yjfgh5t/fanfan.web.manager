@@ -43,8 +43,12 @@ public class AlipayRestController {
  
          //数据转换
          request.getParameterMap().forEach((key,val)->{
-             mapParams.put(key,val[0]);
-             convertParams.put(StringUtils.lineToHump(key),val[0]);
+             String valueStr = "";
+             for (int i = 0; i < val.length; i++) {
+                 valueStr = (i == val.length - 1) ? valueStr + val[i]: valueStr + val[i] + ",";
+             }
+             mapParams.put(key,valueStr);
+             convertParams.put(StringUtils.lineToHump(key),valueStr);
          });
 
        if(!alipayManager.checkSign(mapParams)) {

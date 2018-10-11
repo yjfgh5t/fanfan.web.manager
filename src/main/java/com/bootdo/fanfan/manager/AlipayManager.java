@@ -15,6 +15,7 @@ import com.bootdo.common.task.RefshOrderJob;
 import com.bootdo.fanfan.domain.DTO.QRCodeDTO;
 import com.bootdo.fanfan.domain.DTO.TemplateMsgDTO;
 import com.bootdo.fanfan.domain.OrderAlipayDO;
+import com.bootdo.fanfan.service.AlipayKeyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,9 @@ public class AlipayManager {
 
     @Autowired
     AlipayConfig alipayConfig;
+
+    @Autowired
+    AlipayKeyService alipayKeyService;
 
     /**
      * 获取用信息
@@ -132,8 +136,8 @@ public class AlipayManager {
     /**
      * 退款
      */
-    public boolean tradeRefund(String orderNum,String refundAmount,String authToken){
-        AlipayClient alipayClient = alipayConfig.getDefaultClient();
+    public boolean tradeRefund(String orderNum,String refundAmount,Integer customerId){
+        AlipayClient alipayClient = alipayConfig.getCustomerClient(customerId);
         AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
         request.setBizContent("{" +
                 "\"out_trade_no\":\""+orderNum+"\"," +
@@ -142,7 +146,7 @@ public class AlipayManager {
         AlipayTradeRefundResponse response = null;
         try {
             //执行退款
-            response = alipayClient.execute(request,null,this.authToken);
+            response = alipayClient.execute(request);
             return  response.isSuccess() && response.getCode()=="10000";
 
         } catch (AlipayApiException e) {
@@ -250,7 +254,9 @@ public class AlipayManager {
      */
     public boolean checkSign(Map<String,String> params){
         try {
-            return AlipaySignature.rsaCheckV1(params,alipayConfig.publicKey,"utf-8","RSA2");
+            String appId = params.get("app_id");
+            String publicTBKey = alipayKeyService.getPublicTBKey(appId);
+            return AlipaySignature.rsaCheckV1(params,publicTBKey,"utf-8","RSA2");
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
