@@ -2,6 +2,9 @@ package com.bootdo.testDemo;
 
 import com.bootdo.common.utils.MD5Utils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author: JY
  * @date: 2018/5/29 15:07
@@ -10,8 +13,18 @@ public class Test {
 
     public static void main(String[] args) {
 
-        System.out.println(MD5Utils.encrypt("admin", "111111"));
+        Map<Integer,parent> test =new HashMap<>();
 
+        parent dd = new parent();
+        dd.setName("A");
+
+        test.put(1,dd);
+
+        dd = test.get(1);
+        test.get(1).setName("B");
+
+
+        System.out.println("结果集："+test.get(1).getName()+" 结果集2："+dd.getName());
     }
 
 

@@ -16,6 +16,7 @@ public enum  DictionaryEnum {
     fengNiaoDelivery(1032,"蜂鸟配送"),
 
     htmlVersion(9001,"html最新版本"),
+    androidVersion(9002,"android最新版本"),
 
     customerId(9101,"商户Id"),
     deskId(9102,"客桌Id");
