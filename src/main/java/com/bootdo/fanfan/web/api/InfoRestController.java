@@ -94,7 +94,7 @@ public class InfoRestController extends ApiBaseRestController {
      */
     @GetMapping("/version")
     public R htmlVersion(){
-        Map<Integer,String>  dicMap = dictionaryService.queryByKeys(0,DictionaryEnum.htmlVersion.getVal(),DictionaryEnum.androidVersion.getVal());
+        Map<Integer,String>  dicMap = dictionaryService.queryByKeys(1,DictionaryEnum.htmlVersion.getVal(),DictionaryEnum.androidVersion.getVal());
 
         Map<String,String> result = new HashMap<>();
         result.put(DictionaryEnum.htmlVersion.name(),dicMap.get(DictionaryEnum.htmlVersion.getVal()));
