@@ -6,6 +6,7 @@ import com.bootdo.fanfan.domain.CommoditDO;
 import java.util.List;
 import java.util.Map;
 
+import com.bootdo.fanfan.domain.CommodityWidthExtendDO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -34,8 +35,8 @@ public interface CommoditDao {
 	
 	int batchRemove(Integer[] ids);
 
-	@Select("select id,commodit_title,commodit_sale_price from ff_commodit where id in(${idArry}) and `status`=1 and `delete`=FALSE")
-	List<CommoditDO> queryByIdArry(@Param("idArry") String idArry);
+	@Select("select id,commodit_title,commodit_sale_price from ff_commodit where id in(${idArray}) and `status`=1 and `delete`=FALSE")
+	List<CommoditDO> queryByIdArry(@Param("idArry") String idArray);
 
 	/**
 	 * 修改商品状态
@@ -44,5 +45,12 @@ public interface CommoditDao {
 	 */
 	@Update("update ff_commodit set status=${status} where id=${id}")
 	int updateState(@Param("id") Integer id, @Param("status") Integer status);
+
+	/**
+	 * 查询商品和扩展信息
+	 * @param map
+	 * @return
+	 */
+	List<CommodityWidthExtendDO> queryExtends(Map<String,Object> map);
 
 }

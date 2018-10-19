@@ -3,6 +3,8 @@ package com.bootdo.fanfan.web.api;
 import com.bootdo.common.extend.EMapper;
 import com.bootdo.common.utils.R;
 import com.bootdo.fanfan.domain.CommoditDO;
+import com.bootdo.fanfan.domain.CommodityExtendDO;
+import com.bootdo.fanfan.domain.CommodityWidthExtendDO;
 import com.bootdo.fanfan.service.CommoditService;
 import com.bootdo.fanfan.vo.APICommoditySimpleVO;
 import com.bootdo.fanfan.vo.APICommodityVO;
@@ -34,7 +36,7 @@ public class CommoditRestController extends ApiBaseRestController {
         _map.put("sort","`order`");
         _map.put("customerId",getBaseModel().getCustomerId());
 
-        List<CommoditDO> list = commoditService.list(_map);
+        List<CommodityWidthExtendDO> list = commoditService.listExtend(_map);
         if(getBaseModel().getClientType().equals("Android")){
             return R.ok().put("data", mapper.mapArray(list, APICommodityVO.class));
         }else {

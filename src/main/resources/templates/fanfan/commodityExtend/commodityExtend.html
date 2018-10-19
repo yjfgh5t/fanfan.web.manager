@@ -9,15 +9,12 @@
 				<div class="ibox-body">
 					<div class="fixed-table-toolbar">
 						<div class="columns pull-left">
-							<button shiro:hasPermission="fanfan:qrcode:add" type="button" class="btn  btn-primary" onclick="add()">
+							<button shiro:hasPermission="fanfan:commodityExtend:add" type="button" class="btn  btn-primary" onclick="add()">
 								<i class="fa fa-plus" aria-hidden="true"></i>添加
 							</button>
-							<button shiro:hasPermission="fanfan:qrcode:batchRemove" type="button" class="btn  btn-danger"
+							<button shiro:hasPermission="fanfan:commodityExtend:batchRemove" type="button" class="btn  btn-danger"
 								onclick="batchRemove()">
 								<i class="fa fa-trash" aria-hidden="true"></i>删除
-							</button>
-							<button  type="button" class="btn  btn-primary" onclick="downAll()">
-								<i class="fa fa-plus" aria-hidden="true"></i>下载二维码
 							</button>
 						</div>
 						<div class="columns pull-right">
@@ -42,35 +39,23 @@
 				var s_resetPwd_h = 'hidden';
 			</script>
 		</div>
-		<div shiro:hasPermission="fanfan:qrcode:edit">
+		<div shiro:hasPermission="fanfan:commodityExtend:edit">
 			<script type="text/javascript">
 				s_edit_h = '';
 			</script>
 		</div>
-		<div shiro:hasPermission="fanfan:qrcode:remove">
+		<div shiro:hasPermission="fanfan:commodityExtend:remove">
 			<script type="text/javascript">
 				var s_remove_h = '';
 			</script>
 		</div>
-		<div shiro:hasPermission="fanfan:qrcode:resetPwd">
+		<div shiro:hasPermission="fanfan:commodityExtend:resetPwd">
 			<script type="text/javascript">
 				var s_resetPwd_h = '';
 			</script>
 		</div>
 	</div>
 	<div th:include="include :: footer"></div>
-
-	<script type="text/html" id="temp-items">
-		<div style="width: 510px;overflow: hidden;position: relative;height: 510px;" id="div-img-html">
-			<img src="/img/img_back_code.png" height="510" width="510"/>
-			<div style="position: absolute;z-index: 1;background: red;width: 231px;height: 233px; top: 160px;left: 40px;overflow: hidden;">
-				<img src="/img/img_code.png" id="img-code" style="width: 250px;position: absolute;top: -8px;left: -8px;"/>
-			</div>
-			<img src="/img/img_code_icon.png"style="width: 45px;position: absolute;z-index: 2;top: 255px;left: 130px;"/>
-		</div>
-	</script>
-	<!--下载图片 -->
-	<a href="" download="canvas_love.png" id="a-save-img" ></a>
-        <script type="text/javascript" src="/js/appjs/fanfan/qrcode/qrcode.js"></script>
-    </body>
-    </html>
+	<script type="text/javascript" src="/js/appjs/fanfan/commodityExtend/commodityExtend.js"></script>
+</body>
+</html>

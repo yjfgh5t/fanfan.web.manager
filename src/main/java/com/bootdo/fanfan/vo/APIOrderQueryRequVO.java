@@ -17,9 +17,14 @@ public class APIOrderQueryRequVO {
     private Integer userId;
 
     /**
-     * 分页条数
+     * 分页数
      */
     private Integer pageIndex;
+
+    /**
+     * 分页条数
+     */
+    private Integer pageSize;
 
     /**
      * 商户Id

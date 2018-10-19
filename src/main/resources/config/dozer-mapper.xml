@@ -9,7 +9,7 @@
 
     <!--商品DO VO转换-->
     <mapping>
-        <class-a>com.bootdo.fanfan.domain.CommoditDO</class-a>
+        <class-a>com.bootdo.fanfan.domain.CommodityWidthExtendDO</class-a>
         <class-b>com.bootdo.fanfan.vo.APICommoditySimpleVO</class-b>
         <field>
             <a>commoditTitle</a>
@@ -42,7 +42,7 @@
 
     <!--商品DO VO转换-->
     <mapping>
-        <class-a>com.bootdo.fanfan.domain.CommoditDO</class-a>
+        <class-a>com.bootdo.fanfan.domain.CommodityWidthExtendDO</class-a>
         <class-b>com.bootdo.fanfan.vo.APICommodityVO</class-b>
         <field>
             <a>commoditTitle</a>
@@ -83,6 +83,12 @@
             <b>saleType</b>
         </field>
 
+    </mapping>
+
+    <!--商品扩展DO VO转换-->
+    <mapping>
+        <class-a>com.bootdo.fanfan.domain.CommodityExtendDO</class-a>
+        <class-b>com.bootdo.fanfan.vo.APICommodityExtendVO</class-b>
     </mapping>
 
     <!-- 支付宝用户信息转换-->

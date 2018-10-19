@@ -81,7 +81,6 @@ public class InfoRestController extends ApiBaseRestController {
             APIShopVO shopVO = eMapper.map(shopDO, APIShopVO.class);
             resultMap.put("shop",shopVO);
         }
-
         //设置customerId
         resultMap.put("customerId",customerId);
 

@@ -1,5 +1,5 @@
 
-var prefix = "/fanfan/qrcode"
+var prefix = "/fanfan/commodityExtend"
 $(function() {
 	load();
 });
@@ -49,23 +49,31 @@ function load() {
 								},
 																{
 									field : 'id', 
-									title : '主键'
+									title : '主键' 
 								},
 																{
-									field : 'customerId', 
-									title : '商户ID'
+									field : 'commodityId', 
+									title : '商品id' 
 								},
 																{
-									field : 'deskId', 
-									title : '桌号ID'
+									field : 'commoditPrice', 
+									title : '商品价格' 
+								},
+																{
+									field : 'type', 
+									title : '类型 [1:规格] ..' 
+								},
+																{
+									field : 'title', 
+									title : '名称' 
 								},
 																{
 									field : 'createTime', 
-									title : '创建时间'
+									title : '创建时间' 
 								},
 																{
-									field : 'modifyTime', 
-									title : '修改时间'
+									field : 'delete', 
+									title : '是否删除 [0:否][1:是]' 
 								},
 																{
 									title : '操作',
@@ -78,10 +86,10 @@ function load() {
 										var d = '<a class="btn btn-warning btn-sm '+s_remove_h+'" href="#" title="删除"  mce_href="#" onclick="remove(\''
 												+ row.id
 												+ '\')"><i class="fa fa-remove"></i></a> ';
-										var f = '<a class="btn btn-success btn-sm" href="#" title="生成二维码"  mce_href="#" onclick="showImg(\''
+										var f = '<a class="btn btn-success btn-sm" href="#" title="备用"  mce_href="#" onclick="resetPwd(\''
 												+ row.id
-												+ '\')"><i class="fa fa-qrcode"></i></a> ';
-										return e + d +f;
+												+ '\')"><i class="fa fa-key"></i></a> ';
+										return e + d ;
 									}
 								} ]
 					});
@@ -131,52 +139,8 @@ function remove(id) {
 	})
 }
 
-function showImg(id,callback) {
-
-    layer.open({
-        type: 1,
-        title: "生成图片",
-        closeBtn: 0,
-        shadeClose: true,
-        area:['600px','610px'],
-        btn:["下载","取消"],
-        content: $("#temp-items").html(),
-        yes:function (index) {
-            html2canvas(document.getElementById('div-img-html')).then(function(canvas) {
-                var imgData = canvas.toDataURL("image/png");
-                $("#a-save-img").attr("href",imgData).attr("download",id+".png");
-                document.getElementById("a-save-img").click();
-                layer.close(index);
-                if(callback){
-                	callback();
-				}
-            });
-        }
-    });
-	$("#img-code").attr("src","qrcode/qrcode?width=287&context="+encodeURIComponent('http://wxcard.com.cn/api/info/qrcode?qrcode='+id));
+function resetPwd(id) {
 }
-
-function downAll() {
-    var rows = $('#exampleTable').bootstrapTable('getSelections'); // 返回所有选择的行，当没有选择的记录时，返回一个空数组
-    if (rows.length == 0) {
-        layer.msg("请选择要删除的数据");
-        return;
-    }
-
-    var index =0;
-    var callback = function () {
-    	++index;
-    	if(index<rows.length){
-    		window.setTimeout(function () {
-                showImg(rows[index]["id"],callback);
-            },500)
-        }
-    }
-
-	//
-    showImg(rows[index]["id"],callback);
-}
-
 function batchRemove() {
 	var rows = $('#exampleTable').bootstrapTable('getSelections'); // 返回所有选择的行，当没有选择的记录时，返回一个空数组
 	if (rows.length == 0) {

@@ -1,8 +1,15 @@
 package com.bootdo.fanfan.web.controller;
 
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
+import com.bootdo.common.config.BootdoConfig;
+import com.bootdo.common.utils.QrCodeUtils;
+import com.google.zxing.WriterException;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -21,6 +28,9 @@ import com.bootdo.common.utils.PageUtils;
 import com.bootdo.common.utils.Query;
 import com.bootdo.common.utils.R;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 
  * 
@@ -34,7 +44,10 @@ import com.bootdo.common.utils.R;
 public class QrcodeController {
 	@Autowired
 	private QrcodeService qrcodeService;
-	
+
+	@Autowired
+	BootdoConfig bootdoConfig;
+
 	@GetMapping()
 	@RequiresPermissions("fanfan:qrcode:qrcode")
 	String Qrcode(){
@@ -113,5 +126,17 @@ public class QrcodeController {
 		qrcodeService.batchRemove(ids);
 		return R.ok();
 	}
-	
+
+	@RequestMapping("/qrcode")
+	public void getQRCode(String context,Integer width, HttpServletResponse response) throws IOException, WriterException {
+		try {
+			byte[] data = QrCodeUtils.createQrCode(width, URLDecoder.decode(context),"png");
+			ServletOutputStream outputStream = response.getOutputStream();
+			outputStream.write(data);
+			outputStream.flush();
+			outputStream.close();
+		}catch (IOException ex){
+			ex.printStackTrace();
+		}
+	}
 }

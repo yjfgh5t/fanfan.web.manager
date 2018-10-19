@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bootdo.fanfan.dao.CommodityExtendDao">
+
+	<select id="get" resultType="com.bootdo.fanfan.domain.CommodityExtendDO">
+		select `id`,`commodity_id`,`commodity_price`,`type`,`title`,`create_time`,`delete` from ff_commodity_extend where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.bootdo.fanfan.domain.CommodityExtendDO">
+		select `id`,`commodity_id`,`commodity_price`,`type`,`title`,`create_time`,`delete` from ff_commodity_extend
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="commodityId != null and commodityId != ''"> and commodity_id = #{commodityId} </if>
+		  		  <if test="commodityPrice != null and commodityPrice != ''"> and commodity_price = #{commodityPrice} </if>
+		  		  <if test="type != null and type != ''"> and type = #{type} </if>
+		  		  <if test="title != null and title != ''"> and title = #{title} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		  <if test="delete != null and delete != ''"> and delete = #{delete} </if>
+		 </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from ff_commodity_extend
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="commodityId != null and commodityId != ''"> and commodity_id = #{commodityId} </if>
+		  		  <if test="commodityPrice != null and commodityPrice != ''"> and commodity_price = #{commodityPrice} </if>
+		  		  <if test="type != null and type != ''"> and type = #{type} </if>
+		  		  <if test="title != null and title != ''"> and title = #{title} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		  <if test="delete != null and delete != ''"> and delete = #{delete} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.bootdo.fanfan.domain.CommodityExtendDO" useGeneratedKeys="true" keyProperty="id">
+		insert into ff_commodity_extend
+		(
+			`commodity_id`, 
+			`commodity_price`, 
+			`type`, 
+			`title`, 
+			`create_time`, 
+			`delete`
+		)
+		values
+		(
+			#{commodityId}, 
+			#{commodityPrice},
+			#{type}, 
+			#{title}, 
+			#{createTime}, 
+			#{delete}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.bootdo.fanfan.domain.CommodityExtendDO">
+		update ff_commodity_extend 
+		<set>
+			<if test="commodityId != null">`commodity_id` = #{commodityId}, </if>
+			<if test="commodityPrice != null">`commodity_price` = #{commodityPrice}, </if>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="title != null">`title` = #{title}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="delete != null">`delete` = #{delete}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from ff_commodity_extend where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from ff_commodity_extend where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

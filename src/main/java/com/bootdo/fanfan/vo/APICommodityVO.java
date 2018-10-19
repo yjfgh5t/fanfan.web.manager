@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class APICommodityVO {
@@ -45,4 +46,9 @@ public class APICommodityVO {
 
     //是否必点
     private Integer mustOrder;
+
+    /**
+     * 扩展信息
+     */
+    private List<APICommodityExtendVO> extendList;
 }

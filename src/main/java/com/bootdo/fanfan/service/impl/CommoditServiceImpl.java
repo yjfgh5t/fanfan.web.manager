@@ -2,6 +2,7 @@ package com.bootdo.fanfan.service.impl;
 
 import com.bootdo.common.config.BootdoConfig;
 import com.bootdo.common.utils.StringUtils;
+import com.bootdo.fanfan.domain.CommodityWidthExtendDO;
 import com.bootdo.fanfan.domain.enumDO.BooleanEnum;
 import com.bootdo.fanfan.domain.enumDO.CommoditStateEnum;
 import com.bootdo.fanfan.domain.enumDO.OrderStateEnum;
@@ -34,6 +35,11 @@ public class CommoditServiceImpl implements CommoditService {
 	public List<CommoditDO> list(Map<String, Object> map){
 
 		return commoditDao.list(map);
+	}
+
+	@Override
+	public List<CommodityWidthExtendDO> listExtend(Map<String,Object> map){
+		return commoditDao.queryExtends(map);
 	}
 	
 	@Override

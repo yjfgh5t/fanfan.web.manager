@@ -3,6 +3,11 @@
 
 <mapper namespace="com.bootdo.fanfan.dao.CommoditDao">
 
+	<resultMap id="CommodityResultMap" type="com.bootdo.fanfan.domain.CommodityWidthExtendDO">
+		<collection property="extendList" select="queryExtendDetail" ofType="com.bootdo.fanfan.domain.CommodityExtendDO" column="commodityId={id}" />
+	</resultMap>
+	<resultMap id="ExtendResultMap" type="com.bootdo.fanfan.domain.CommodityExtendDO"></resultMap>
+
 	<select id="get" resultType="com.bootdo.fanfan.domain.CommoditDO">
 		select `id`,`category_id`,`commodit_title`,`commodit_img`,`commodit_price`,`commodit_sale_price`,`commodit_remark`,`commodit_fiex_num`,`commodit_unit`,`status`,`create_time`,`customer_id`,`order`,`commodit_type`,`delete`,`must_order` from ff_commodit where id = #{value}
 	</select>
@@ -13,7 +18,7 @@
 		  		  <if test="id != null and id != ''"> and id = #{id} </if>
 		  		  <if test="commoditTitle != null and commoditTitle != ''"> and commodit_title = #{commoditTitle} </if>
 		  		  <if test="commoditImg != null and commoditImg != ''"> and commodit_img = #{commoditImg} </if>
-		  		  <if test="commoditPrice != null and commoditPrice != ''"> and commodit_price = #{commoditPrice} </if>
+		  		  <if test="commodityPrice != null and commodityPrice != ''"> and commodit_price = #{commodityPrice} </if>
 		  		  <if test="commoditSalePrice != null and commoditSalePrice != ''"> and commodit_sale_price = #{commoditSalePrice} </if>
 		  		  <if test="commoditRemark != null and commoditRemark != ''"> and commodit_remark = #{commoditRemark} </if>
 		  		  <if test="commoditFiexNum != null and commoditFiexNum != ''"> and commodit_fiex_num = #{commoditFiexNum} </if>
@@ -42,7 +47,7 @@
 		  		  <if test="id != null and id != ''"> and id = #{id} </if>
 		  		  <if test="commoditTitle != null and commoditTitle != ''"> and commodit_title = #{commoditTitle} </if>
 		  		  <if test="commoditImg != null and commoditImg != ''"> and commodit_img = #{commoditImg} </if>
-		  		  <if test="commoditPrice != null and commoditPrice != ''"> and commodit_price = #{commoditPrice} </if>
+		  		  <if test="commodityPrice != null and commodityPrice != ''"> and commodit_price = #{commodityPrice} </if>
 		  		  <if test="commoditSalePrice != null and commoditSalePrice != ''"> and commodit_sale_price = #{commoditSalePrice} </if>
 		  		  <if test="commoditRemark != null and commoditRemark != ''"> and commodit_remark = #{commoditRemark} </if>
 		  		  <if test="commoditFiexNum != null and commoditFiexNum != ''"> and commodit_fiex_num = #{commoditFiexNum} </if>
@@ -79,7 +84,7 @@
 			#{categoryId},
 			#{commoditTitle}, 
 			#{commoditImg}, 
-			#{commoditPrice}, 
+			#{commodityPrice},
 			#{commoditSalePrice}, 
 			#{commoditRemark}, 
 			#{commoditFiexNum},
@@ -100,7 +105,7 @@
 			<if test="categoryId != null">`category_id` = #{categoryId}, </if>
 			<if test="commoditTitle != null">`commodit_title` = #{commoditTitle}, </if>
 			<if test="commoditImg != null">`commodit_img` = #{commoditImg}, </if>
-			<if test="commoditPrice != null">`commodit_price` = #{commoditPrice}, </if>
+			<if test="commodityPrice != null">`commodit_price` = #{commodityPrice}, </if>
 			<if test="commoditSalePrice != null">`commodit_sale_price` = #{commoditSalePrice}, </if>
 			<if test="commoditRemark != null">`commodit_remark` = #{commoditRemark}, </if>
 			<if test="commoditFiexNum != null">`commodit_fiex_num` = #{commoditFiexNum}, </if>
@@ -127,4 +132,19 @@
 		</foreach>
 	</delete>
 
+	<select id="queryExtends" resultMap="CommodityResultMap">
+		SELECT `id`,`category_id`,`commodit_title`,`commodit_img`,`commodit_price`,`commodit_sale_price`,`commodit_remark`,`commodit_fiex_num`,`commodit_unit`,`status`,`customer_id`,`order`,`commodit_type`,`must_order` from ff_commodit
+		WHERE  `delete` = 0
+		<if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
+		<choose>
+			<when test="sort != null and sort.trim() != ''">
+				order by ${sort} ${order}
+			</when>
+		</choose>
+	</select>
+
+	<select id="queryExtendDetail" resultMap="ExtendResultMap">
+		select `id`,`commodity_price`,`type`,`commodity_id`,``title` from ff_commodity_extend where `delete` = 0 AND commodity_id = #{commodityId}
+	</select>
+	
 </mapper>

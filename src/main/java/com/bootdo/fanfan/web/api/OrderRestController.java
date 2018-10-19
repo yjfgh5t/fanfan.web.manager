@@ -81,7 +81,7 @@ public class OrderRestController extends ApiBaseRestController {
         if (orderQueryRequVO.getPageIndex() == null)
             return R.error("参数不能未空");
 
-        int page = orderQueryRequVO.getPageIndex() * 10;
+        int offSet = (orderQueryRequVO.getPageIndex() -1) * orderQueryRequVO.getPageSize();
 
         //设置参数
         Map<String, Object> params = new HashMap<>();
@@ -101,8 +101,8 @@ public class OrderRestController extends ApiBaseRestController {
             params.put("orderState", orderQueryRequVO.getOrderState());
         }
 
-        params.put("offset", page - 10);
-        params.put("limit", page);
+        params.put("offset", offSet);
+        params.put("limit", orderQueryRequVO.getPageSize());
 
         //参数数量不够
         if (params.size() < 3) {
