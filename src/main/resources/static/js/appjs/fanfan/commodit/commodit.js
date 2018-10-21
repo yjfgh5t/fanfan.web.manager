@@ -56,19 +56,19 @@ function load() {
                                     field : 'order',
                                     title : '排序号'
                                 },{
-									field : 'commoditTitle',
+									field : 'commodityTitle',
 									title : '商品标题'
 								},{
-									field : 'commoditPrice', 
+									field : 'commodityPrice',
 									title : '商品原价' 
 								},{
-									field : 'commoditSalePrice', 
+									field : 'commoditySalePrice',
 									title : '商品售价' 
 								},						{
-									field : 'commoditRemark',
+									field : 'commodityRemark',
 									title : '商品描述'
 								},{
-									field : 'commoditFiexNum', 
+									field : 'commodityFiexNum',
 									title : '最大日销量'
 								},{
 									field : 'status', 
@@ -77,7 +77,7 @@ function load() {
 										return val==1?"有效":"下架";
                                     }
 								},{
-                                    field : 'commoditType',
+                                    field : 'commodityType',
                                     title : '商品类型',
                                     formatter:function (val) {
                                         return val==1?"可售商品":"非卖品";

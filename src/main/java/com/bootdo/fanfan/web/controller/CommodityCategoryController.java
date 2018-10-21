@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.bootdo.common.controller.BaseController;
+import com.bootdo.fanfan.service.CommodityCategoryService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -15,8 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.bootdo.fanfan.domain.CommoditCategoryDO;
-import com.bootdo.fanfan.service.CommoditCategoryService;
+import com.bootdo.fanfan.domain.CommodityCategoryDO;
 import com.bootdo.common.utils.PageUtils;
 import com.bootdo.common.utils.Query;
 import com.bootdo.common.utils.R;
@@ -31,9 +31,9 @@ import com.bootdo.common.utils.R;
  
 @Controller
 @RequestMapping("/fanfan/commoditCategory")
-public class CommoditCategoryController extends BaseController {
+public class CommodityCategoryController extends BaseController {
 	@Autowired
-	private CommoditCategoryService commoditCategoryService;
+	private CommodityCategoryService commodityCategoryService;
 	
 	@GetMapping()
 	@RequiresPermissions("fanfan:commoditCategory:commoditCategory")
@@ -51,8 +51,8 @@ public class CommoditCategoryController extends BaseController {
 		query.put("order","asc");
 		query.put("delete","0");
 		query.put("customerId",getUserId());
-		List<CommoditCategoryDO> commoditCategoryList = commoditCategoryService.list(query);
-		int total = commoditCategoryService.count(query);
+		List<CommodityCategoryDO> commoditCategoryList = commodityCategoryService.list(query);
+		int total = commodityCategoryService.count(query);
 		PageUtils pageUtils = new PageUtils(commoditCategoryList, total);
 		return pageUtils;
 	}
@@ -66,14 +66,14 @@ public class CommoditCategoryController extends BaseController {
 	@GetMapping("/edit/{id}")
 	@RequiresPermissions("fanfan:commoditCategory:edit")
 	String edit(@PathVariable("id") Integer id,Model model){
-		CommoditCategoryDO commoditCategory =null;
+		CommodityCategoryDO commoditCategory =null;
 
 		if(id>0) {
-			commoditCategory = commoditCategoryService.get(id);
+			commoditCategory = commodityCategoryService.get(id);
 		}
 
 		if(commoditCategory==null) {
-			commoditCategory = new CommoditCategoryDO();
+			commoditCategory = new CommodityCategoryDO();
 			commoditCategory.setId(0);
 		}
 
@@ -87,9 +87,9 @@ public class CommoditCategoryController extends BaseController {
 	@ResponseBody
 	@PostMapping("/save")
 	@RequiresPermissions("fanfan:commoditCategory:add")
-	public R save( CommoditCategoryDO commoditCategory){
+	public R save( CommodityCategoryDO commoditCategory){
 
-		if(commoditCategoryService.save(commoditCategory)>0){
+		if(commodityCategoryService.save(commoditCategory)>0){
 			return R.ok();
 		}
 		return R.error();
@@ -100,12 +100,12 @@ public class CommoditCategoryController extends BaseController {
 	@ResponseBody
 	@RequestMapping("/update")
 	@RequiresPermissions("fanfan:commoditCategory:edit")
-	public R update( CommoditCategoryDO commoditCategory){
+	public R update( CommodityCategoryDO commoditCategory){
 		if(commoditCategory.getId()==0){
 			commoditCategory.setCustomerId(this.getUserId().intValue());
-			commoditCategoryService.save(commoditCategory);
+			commodityCategoryService.save(commoditCategory);
 		}else {
-			commoditCategoryService.update(commoditCategory);
+			commodityCategoryService.update(commoditCategory);
 		}
 		return R.ok();
 	}
@@ -117,7 +117,7 @@ public class CommoditCategoryController extends BaseController {
 	@ResponseBody
 	@RequiresPermissions("fanfan:commoditCategory:remove")
 	public R remove( Integer id){
-		if(commoditCategoryService.remove(id)>0){
+		if(commodityCategoryService.remove(id)>0){
 		return R.ok();
 		}
 		return R.error();
@@ -130,7 +130,7 @@ public class CommoditCategoryController extends BaseController {
 	@ResponseBody
 	@RequiresPermissions("fanfan:commoditCategory:batchRemove")
 	public R remove(@RequestParam("ids[]") Integer[] ids){
-		commoditCategoryService.batchRemove(ids);
+		commodityCategoryService.batchRemove(ids);
 		return R.ok();
 	}
 	

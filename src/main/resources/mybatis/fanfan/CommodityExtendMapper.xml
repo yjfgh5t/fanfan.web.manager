@@ -10,20 +10,20 @@
 	<select id="list" resultType="com.bootdo.fanfan.domain.CommodityExtendDO">
 		select `id`,`commodity_id`,`commodity_price`,`type`,`title`,`create_time`,`delete` from ff_commodity_extend
         <where>  
-		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="id != null and id != ''"> and `id` = #{id} </if>
 		  		  <if test="commodityId != null and commodityId != ''"> and commodity_id = #{commodityId} </if>
 		  		  <if test="commodityPrice != null and commodityPrice != ''"> and commodity_price = #{commodityPrice} </if>
-		  		  <if test="type != null and type != ''"> and type = #{type} </if>
+		  		  <if test="type != null and type != ''"> and `type` = #{type} </if>
 		  		  <if test="title != null and title != ''"> and title = #{title} </if>
 		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
-		  		  <if test="delete != null and delete != ''"> and delete = #{delete} </if>
+		  		  <if test="delete != null and delete != ''"> and `delete` = #{delete} </if>
 		 </where>
         <choose>
             <when test="sort != null and sort.trim() != ''">
                 order by ${sort} ${order}
             </when>
 			<otherwise>
-                order by id desc
+                order by id
 			</otherwise>
         </choose>
 		<if test="offset != null and limit != null">

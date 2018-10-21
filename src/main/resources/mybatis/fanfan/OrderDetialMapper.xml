@@ -3,12 +3,12 @@
 
 <mapper namespace="com.bootdo.fanfan.dao.OrderDetialDao">
 
-	<select id="get" resultType="com.bootdo.fanfan.domain.OrderDetialDO">
-		select `id`,`order_id`,`out_id`,`out_title`,`out_price`,`out_size`,`out_type` from ff_order_detial where id = #{value}
+	<select id="get" resultType="com.bootdo.fanfan.domain.OrderDetailDO">
+		select `id`,`order_id`,`out_id`,`out_title`,`out_price`,`out_size`,`out_type`,`commodity_id` from ff_order_detail where id = #{value}
 	</select>
 
-	<select id="list" resultType="com.bootdo.fanfan.domain.OrderDetialDO">
-		select `id`,`order_id`,`out_id`,`out_title`,`out_price`,`out_size`,`out_type` from ff_order_detial
+	<select id="list" resultType="com.bootdo.fanfan.domain.OrderDetailDO">
+		select `id`,`order_id`,`out_id`,`out_title`,`out_price`,`out_size`,`out_type`,`commodity_id` from ff_order_detail
         <where>  
 		  		  <if test="id != null and id != ''"> and id = #{id} </if>
 		  		  <if test="orderId != null and orderId != ''"> and order_id = #{orderId} </if>
@@ -32,7 +32,7 @@
 	</select>
 	
  	<select id="count" resultType="int">
-		select count(*) from ff_order_detial
+		select count(*) from ff_order_detail
 		 <where>  
 		  		  <if test="id != null and id != ''"> and id = #{id} </if>
 		  		  <if test="orderId != null and orderId != ''"> and order_id = #{orderId} </if>
@@ -44,15 +44,16 @@
 		  		</where>
 	</select>
 	 
-	<insert id="save" parameterType="com.bootdo.fanfan.domain.OrderDetialDO" useGeneratedKeys="true" keyProperty="id">
-		insert into ff_order_detial
+	<insert id="save" parameterType="com.bootdo.fanfan.domain.OrderDetailDO" useGeneratedKeys="true" keyProperty="id">
+		insert into ff_order_detail
 		(
 			`order_id`, 
 			`out_id`, 
 			`out_title`, 
 			`out_price`, 
 			`out_size`, 
-			`out_type`
+			`out_type`,
+			`commodity_id`
 		)
 		values
 		(
@@ -61,12 +62,13 @@
 			#{outTitle}, 
 			#{outPrice}, 
 			#{outSize}, 
-			#{outType}
+			#{outType},
+			#{commodityId}
 		)
 	</insert>
 	 
-	<update id="update" parameterType="com.bootdo.fanfan.domain.OrderDetialDO">
-		update ff_order_detial 
+	<update id="update" parameterType="com.bootdo.fanfan.domain.OrderDetailDO">
+		update ff_order_detail 
 		<set>
 			<if test="orderId != null">`order_id` = #{orderId}, </if>
 			<if test="outId != null">`out_id` = #{outId}, </if>
@@ -74,27 +76,29 @@
 			<if test="outPrice != null">`out_price` = #{outPrice}, </if>
 			<if test="outSize != null">`out_size` = #{outSize}, </if>
 			<if test="outType != null">`out_type` = #{outType}</if>
+			<if test="outType != null">`commodity_id` = #{commodityId}</if>
 		</set>
 		where id = #{id}
 	</update>
 	
 	<delete id="remove">
-		delete from ff_order_detial where id = #{value}
+		delete from ff_order_detail where id = #{value}
 	</delete>
 	
 	<delete id="batchRemove">
-		delete from ff_order_detial where id in 
+		delete from ff_order_detail where id in 
 		<foreach item="id" collection="array" open="(" separator="," close=")">
 			#{id}
 		</foreach>
 	</delete>
 
 	<select id="queryCommodityImgByOrderId" resultType="java.lang.String">
-		select commodit_img  from ff_commodit where id= (select min(out_id) from ff_order_detial where order_id=#{orderId} and out_type=1)
+		select commodity_img  from ff_commodity where
+		id= (select min(commodity_id) from ff_order_detail where order_id=#{orderId} and (out_type=1 or out_type=5))
 	</select>
 
-	<select id="queryByOrderIdArray" resultType="com.bootdo.fanfan.domain.OrderDetialDO">
-		select order_id,out_title,out_price,out_size,out_type from ff_order_detial where order_id in
+	<select id="queryByOrderIdArray" resultType="com.bootdo.fanfan.domain.OrderDetailDO">
+		select order_id,out_title,out_price,out_size,out_type from ff_order_detail,commodity_id where order_id in
 		<foreach collection="orderIdArray" item="item" open="(" close=")" separator=",">
 			#{item}
 		</foreach>

@@ -9,7 +9,7 @@ import java.util.List;
  * @date: 2018/10/19 17:38
  */
 @Data
-public class CommodityWidthExtendDO extends CommoditDO {
+public class CommodityWidthExtendDO extends CommodityDO {
 
     private List<CommodityExtendDO> extendList;
 }

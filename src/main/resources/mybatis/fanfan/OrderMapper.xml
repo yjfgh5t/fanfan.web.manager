@@ -152,7 +152,7 @@
 	</delete>
 
 	<select id="queryOrderByUser" resultType="com.bootdo.fanfan.vo.APIOrderListVO">
-		select A.id, A.`order_num`,A.`order_state`,A.`order_type`,A.`order_pay`,A.`order_commodity_total` as `commodity_total`,B.`out_title` as `title`,A.`create_time`,C.commodit_img,A.`order_date_num`    from
+		select A.id, A.`order_num`,A.`order_state`,A.`order_type`,A.`order_pay`,A.`order_commodity_total` as `commodity_total`,B.`out_title` as `title`,A.`create_time`,C.commodity_img,A.`order_date_num`    from
 		(select `id`,`order_num`,`order_state`,`order_type`,`order_pay`,`order_commodity_total`,`create_time`,`order_date_num` from ff_order
 		<where>
 			order_state!=101
@@ -170,8 +170,8 @@
 			limit #{offset}, #{limit}
 		</if>
 		) as A
-		LEFT JOIN ff_order_detial B on A.id  =  B.order_id and B.id=(select min(id) from ff_order_detial where order_id=A.id and out_type=1)
-        LEFT JOIN ff_commodit C
+		LEFT JOIN ff_order_detail B on A.id  =  B.order_id and B.id=(select min(id) from ff_order_detail where order_id=A.id and out_type=1)
+        LEFT JOIN ff_commodity C
         on C.id  = B.out_id
 	</select>
 

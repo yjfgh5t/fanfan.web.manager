@@ -126,7 +126,7 @@ public class InfoRestController extends ApiBaseRestController {
         fileName = FileUtil.renameToUUID(fileName);
         FileDO sysFile = new FileDO(FileType.fileType(fileName), fileName, new Date());
         try {
-            FileUtil.uploadFile(file.getBytes(), bootdoConfig.getUploadPath(), fileName);
+            FileUtil.uploadFile(file.getBytes(), bootdoConfig.getUploadImgPath(), fileName);
             String [] tempName= fileName.split("\\.");
             //缩小图片
             if(tempName.length==2){

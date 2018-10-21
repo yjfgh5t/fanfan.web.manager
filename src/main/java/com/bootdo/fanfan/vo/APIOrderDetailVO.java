@@ -23,4 +23,6 @@ public class APIOrderDetailVO {
     private Integer outSize;
 
     private Integer outType;
+
+    private Integer commodityId;
 }

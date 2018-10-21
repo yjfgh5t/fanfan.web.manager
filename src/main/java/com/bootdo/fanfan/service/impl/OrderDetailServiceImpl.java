@@ -7,23 +7,23 @@ import java.util.List;
 import java.util.Map;
 
 import com.bootdo.fanfan.dao.OrderDetialDao;
-import com.bootdo.fanfan.domain.OrderDetialDO;
+import com.bootdo.fanfan.domain.OrderDetailDO;
 import com.bootdo.fanfan.service.OrderDetialService;
 
 
 
 @Service
-public class OrderDetialServiceImpl implements OrderDetialService {
+public class OrderDetailServiceImpl implements OrderDetialService {
 	@Autowired
 	private OrderDetialDao orderDetialDao;
 	
 	@Override
-	public OrderDetialDO get(Integer id){
+	public OrderDetailDO get(Integer id){
 		return orderDetialDao.get(id);
 	}
 	
 	@Override
-	public List<OrderDetialDO> list(Map<String, Object> map){
+	public List<OrderDetailDO> list(Map<String, Object> map){
 		return orderDetialDao.list(map);
 	}
 	
@@ -33,12 +33,12 @@ public class OrderDetialServiceImpl implements OrderDetialService {
 	}
 	
 	@Override
-	public int save(OrderDetialDO orderDetial) {
+	public int save(OrderDetailDO orderDetial) {
 			return orderDetialDao.save(orderDetial);
 	}
 
 	@Override
-	public List<OrderDetialDO> queryByOrderId(Integer orderId){
+	public List<OrderDetailDO> queryByOrderId(Integer orderId){
 		return orderDetialDao.queryByOrderId(orderId);
 	}
 
@@ -48,26 +48,26 @@ public class OrderDetialServiceImpl implements OrderDetialService {
 	 * @return
 	 */
 	@Override
-	public List<OrderDetialDO> queryByOrderIdArray(List<Integer> orderIdArray) {
+	public List<OrderDetailDO> queryByOrderIdArray(List<Integer> orderIdArray) {
 		return orderDetialDao.queryByOrderIdArray(orderIdArray);
 	}
 
 	@Override
-	public void batchSave(List<OrderDetialDO> detialDOList) {
-		for (OrderDetialDO orderDetialDO  :  detialDOList){
+	public void batchSave(List<OrderDetailDO> detialDOList) {
+		for (OrderDetailDO orderDetailDO :  detialDOList){
 			Integer id =null;
 			//判断改商品是否已经添加
-			if(orderDetialDO.getOrderId()!=null) {
-				id = orderDetialDao.queryHasSave(orderDetialDO.getOrderId(), orderDetialDO.getOutId());
+			if(orderDetailDO.getOrderId()!=null) {
+				id = orderDetialDao.queryHasSave(orderDetailDO.getOrderId(), orderDetailDO.getOutId());
 			}
 			//判断是否存在
 			if(id==null)
-				save(orderDetialDO);
+				save(orderDetailDO);
 		}
 	}
 
 	@Override
-	public int update(OrderDetialDO orderDetial){
+	public int update(OrderDetailDO orderDetial){
 		return orderDetialDao.update(orderDetial);
 	}
 	

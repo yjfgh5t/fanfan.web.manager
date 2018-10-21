@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.bootdo.common.controller.BaseController;
 import com.bootdo.common.extend.EMapper;
-import com.bootdo.fanfan.domain.OrderDetialDO;
+import com.bootdo.fanfan.domain.OrderDetailDO;
 import com.bootdo.fanfan.domain.OrderReceiverDO;
 import com.bootdo.fanfan.domain.UserDO;
 import com.bootdo.fanfan.domain.enumDO.OrderStateEnum;
@@ -110,7 +110,7 @@ public class OrderController extends BaseController {
 		}
 
 		//订单详情
-		List<OrderDetialDO> detialDOList = orderDetialService.queryByOrderId(id);
+		List<OrderDetailDO> detialDOList = orderDetialService.queryByOrderId(id);
 
 		//收件人信息
 		OrderReceiverDO receiverDO = orderReceiverService.queryById(id);

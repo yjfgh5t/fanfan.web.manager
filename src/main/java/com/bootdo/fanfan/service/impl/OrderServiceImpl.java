@@ -1,12 +1,12 @@
 package com.bootdo.fanfan.service.impl;
 
-import com.bootdo.common.config.BootdoConfig;
 import com.bootdo.common.extend.EMapper;
 import com.bootdo.common.utils.RedisUtils;
 import com.bootdo.common.utils.StringUtils;
 import com.bootdo.fanfan.domain.*;
 import com.bootdo.fanfan.domain.DTO.TemplateMsgMQDTO;
 import com.bootdo.fanfan.domain.enumDO.OrderDetailEnum;
+import com.bootdo.fanfan.domain.enumDO.OrderDetailType;
 import com.bootdo.fanfan.domain.enumDO.OrderStateEnum;
 import com.bootdo.fanfan.manager.AlipayManager;
 import com.bootdo.fanfan.manager.TemplateMsgManager;
@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 
 import com.bootdo.fanfan.dao.OrderDao;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 
 @Service
@@ -41,7 +42,7 @@ public class OrderServiceImpl implements OrderService {
 	private OrderDetialService  orderDetialService;
 
 	@Autowired
-	private CommoditService commoditService;
+	private CommodityService commodityService;
 
 	@Autowired
 	private OrderReceiverService  orderReceiverService;
@@ -119,7 +120,7 @@ public class OrderServiceImpl implements OrderService {
 		calculateOrder(orderVO,orderDO);
 
 		//订单商品明细
-		List<OrderDetialDO> orderDetialDOList =eMapper.mapArray(orderVO.getDetailList(),OrderDetialDO.class);
+		List<OrderDetailDO> orderDetailDOList =eMapper.mapArray(orderVO.getDetailList(),OrderDetailDO.class);
 
 		//收货人地址
 		OrderReceiverDO orderReceiverDO = eMapper.map(orderVO.getReceiver(),OrderReceiverDO.class);
@@ -128,7 +129,7 @@ public class OrderServiceImpl implements OrderService {
 		if(StringUtils.isEmpty(orderVO.getOrderNum()))
 		{
 			//生成订单号
-			orderDO.setOrderNum(this.getOrderNum(orderDO.getCustomerId()));
+			orderDO.setOrderNum(this.getOrderNum());
 			//获取实体
 			orderDO.setOrderState(OrderStateEnum.userCreate.getVal());
 			orderDO.setCreateTime(Calendar.getInstance().getTime());
@@ -140,17 +141,19 @@ public class OrderServiceImpl implements OrderService {
 		}
 
 		//设置订单号
-		orderDetialDOList.forEach(f->{ f.setOrderId(orderDO.getId()); });
+		orderDetailDOList.forEach(f->{ f.setOrderId(orderDO.getId()); });
 
 		//保存订单详情
-		orderDetialService.batchSave(orderDetialDOList);
+		orderDetialService.batchSave(orderDetailDOList);
 
 		//保存订单状态
 		orderStateService.save(new OrderStateDO(orderDO.getId(),orderDO.getOrderState(),orderDO.getCustomerId()),orderDO.getOrderNum());
 
 		//保存订单收货人信息
-		orderReceiverDO.setId(orderDO.getId());
-		orderReceiverService.save(orderReceiverDO);
+		if(!StringUtils.isEmpty(orderReceiverDO.getAddr())) {
+			orderReceiverDO.setId(orderDO.getId());
+			orderReceiverService.save(orderReceiverDO);
+		}
 
 		//创建支付宝预付单
         if(orderDO.getOrderState().equals(OrderStateEnum.userRequestPay.getVal())) {
@@ -181,13 +184,13 @@ public class OrderServiceImpl implements OrderService {
 		}
 
 		//查询商品详情
-		List<OrderDetialDO> orderDetialDOList = orderDetialService.queryByOrderId(orderDO.getId());
+		List<OrderDetailDO> orderDetailDOList = orderDetialService.queryByOrderId(orderDO.getId());
 
 		//对象转换
 		APIOrderRequVO apiOrderRequVO =  eMapper.map(orderDO,APIOrderRequVO.class);
 
 		//订单详情转换
-		apiOrderRequVO.setDetailList(eMapper.mapArray(orderDetialDOList,APIOrderDetailVO.class));
+		apiOrderRequVO.setDetailList(eMapper.mapArray(orderDetailDOList,APIOrderDetailVO.class));
 
 		//订单收货人信息
 		OrderReceiverDO receiverDO = orderReceiverService.queryById(orderDO.getId());
@@ -319,14 +322,14 @@ public class OrderServiceImpl implements OrderService {
 		if(list!=null && list.size()>0){
 			List<Integer> idArray = list.stream().map(APIOrderListCustomerVO::getId).collect(Collectors.toList());
 			//查询订单商品
-			List<OrderDetialDO> detialDOList = orderDetialService.queryByOrderIdArray(idArray);
+			List<OrderDetailDO> detialDOList = orderDetialService.queryByOrderIdArray(idArray);
 
 			//遍历
 			if(detialDOList!=null && detialDOList.size()>0){
 				//遍历订单
 				list.forEach((item)->{
 					//获取订单对应的商品
-					List<OrderDetialDO> temList = detialDOList.stream().filter((detail)-> detail.getOrderId().equals(item.getId())).collect(Collectors.toList());
+					List<OrderDetailDO> temList = detialDOList.stream().filter((detail)-> detail.getOrderId().equals(item.getId())).collect(Collectors.toList());
 
 					//设置订单详情
 					if(temList!=null && temList.size()>0){
@@ -408,24 +411,29 @@ public class OrderServiceImpl implements OrderService {
 	private void  calculateOrder(APIOrderRequVO orderRequVO,OrderDO  orderDO) {
 
 		//用户提交的的商品Id
-		List<Integer> commodityIdArry = orderRequVO.getDetailList()
+		List<Integer> commodityIdArray = orderRequVO.getDetailList()
 				.stream()
-				//outType:1 商品
-				.filter(f->{return(f.getOutType()!=null  && f.getOutType()==1);})
+				//outType[1:商品 5:商品規格]
+				.filter(f->{return(f.getOutType()!=null  && (f.getOutType()== OrderDetailType.Commodity.getId() || f.getOutType()==OrderDetailType.CommodityNorms.getId()));})
 				//获取商品 id
-				.map(m -> m.getOutId()).collect(Collectors.toList());
+				.map(m -> m.getCommodityId()).collect(Collectors.toList());
+
+		//去除重复id
+		HashSet<Integer> hashSet = new HashSet<>(commodityIdArray);
+		commodityIdArray.clear();
+		commodityIdArray.addAll(hashSet);
 
 		//查询所有有效的商品
-		List<CommoditDO> commoditDOList = commoditService.queryByIdarry(commodityIdArry);
+		List<CommodityWidthExtendDO> commodityDOList = commodityService.queryByIdArray(commodityIdArray);
 
 		//提交的商品信息不对
-		if (commodityIdArry.size() != commoditDOList.size()) {
+		if (commodityIdArray.size() != commodityDOList.size()) {
 			//有效的商品Id
-			List<Integer> validComodityIdArry = commoditDOList.stream().map(m -> m.getId()).collect(Collectors.toList());
+			List<Integer> validCommodityIdArray = commodityDOList.stream().map(m -> m.getId()).collect(Collectors.toList());
 
 			//查询失效的商品Id
-			List<Integer> unvalidComodityIdArry = commodityIdArry.stream().filter(f -> {
-				return !validComodityIdArry.contains(f);
+			List<Integer> unvalidComodityIdArry = commodityIdArray.stream().filter(f -> {
+				return !validCommodityIdArray.contains(f);
 			}).collect(Collectors.toList());
 
 			throw new SecurityException("商品已售空" + unvalidComodityIdArry);
@@ -435,24 +443,36 @@ public class OrderServiceImpl implements OrderService {
 		Integer commodityTotal = 0;
 
 		//商品总额
-		BigDecimal orderTotail = new BigDecimal(0);
+		BigDecimal orderTotal = new BigDecimal(0);
 
 		//计算总数量
 		for (APIOrderDetailVO detail : orderRequVO.getDetailList()) {
-
-			if (detail.getOutType() == null || detail.getOutType() != 1) {
-				continue;
-			}
-
-			//计算总数量
-			commodityTotal += detail.getOutSize();
-
-			for (CommoditDO itemDo : commoditDOList) {
-				if (itemDo.getId().equals(detail.getOutId())) {
-					//总额 加 商品价格 乘 商品数量
-					orderTotail = orderTotail.add(itemDo.getCommoditSalePrice().multiply(new BigDecimal(detail.getOutSize())));
-					detail.setOutTitle(itemDo.getCommoditTitle());
-					detail.setOutPrice(itemDo.getCommoditSalePrice());
+			if (detail.getOutType()== OrderDetailType.Commodity.getId() || detail.getOutType()==OrderDetailType.CommodityNorms.getId()) {
+				//计算总数量
+				commodityTotal += detail.getOutSize();
+				for (CommodityWidthExtendDO itemDo : commodityDOList) {
+					if (itemDo.getId().equals(detail.getCommodityId())) {
+						//总额 加 商品价格 乘 商品数量
+						BigDecimal price =null;
+						if(detail.getOutType()==OrderDetailType.Commodity.getId()){
+							price = itemDo.getCommoditySalePrice();
+							detail.setOutTitle(itemDo.getCommodityTitle());
+							detail.setOutPrice(itemDo.getCommoditySalePrice());
+						}else if(detail.getOutType()==OrderDetailType.CommodityNorms.getId()) {
+							if (!CollectionUtils.isEmpty(itemDo.getExtendList())) {
+								//查询符合规则数据
+								CommodityExtendDO normalModel = itemDo.getExtendList().stream().filter((f) -> f.getId().equals(detail.getOutId())).findFirst().get();
+								if(normalModel!=null){
+									price = normalModel.getCommodityPrice();
+									detail.setOutTitle(itemDo.getCommodityTitle()+"-"+normalModel.getTitle());
+									detail.setOutPrice(normalModel.getCommodityPrice());
+								}
+							}
+						}
+						if(price!=null) {
+							orderTotal = orderTotal.add(price.multiply(new BigDecimal(detail.getOutSize())));
+						}
+					}
 				}
 			}
 		}
@@ -461,7 +481,7 @@ public class OrderServiceImpl implements OrderService {
 		//设置优惠总额
 		orderDO.setOrderDiscountTotal(new BigDecimal(0));
 		//设置订单总额
-		orderDO.setOrderTotal(orderTotail);
+		orderDO.setOrderTotal(orderTotal);
 		//设置支付总额  订单总额-支付总额
 		orderDO.setOrderPay(orderDO.getOrderTotal().subtract(orderDO.getOrderDiscountTotal()));
 	}
@@ -503,13 +523,12 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 获取订单号
-     * @param userId
+     * @param
      * @return
      */
-	private String getOrderNum(Integer userId){
+	private String getOrderNum(){
 		Long time = System.currentTimeMillis();
-
-		return time+""+(userId*100231%100000);
+		return time+""+ (int)Math.random()*1000;
 	}
 
 

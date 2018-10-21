@@ -20,7 +20,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">商品标题：</label>
                             <div class="col-sm-8">
-                                <input id="commoditTitle" name="commoditTitle" th:value="${commodit.commoditTitle}"
+                                <input id="commodityTitle" name="commodityTitle" th:value="${commodit.commodityTitle}"
                                        class="form-control" type="text">
                             </div>
                         </div>
@@ -36,8 +36,8 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">商品图片：</label>
                             <div class="col-sm-8">
-                                <input type="hidden" id="commoditImg" name="commoditImg" th:value="${commodit.commoditImg}" />
-                                <img id="img-commoditImg" style="width: 40px;" src="" th:src="${commodit.commoditImg}" class="img-rounded" />
+                                <input type="hidden" id="commodityImg" name="commodityImg" th:value="${commodit.commodityImg}" />
+                                <img id="img-commodityImg" style="width: 40px;" src="" th:src="${commodit.commodityImg}" class="img-rounded" />
                                 <button type="button" class="btn btn-def" id="uploadImg">上传</button>
                             </div>
                         </div>
@@ -51,15 +51,15 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">商品售价：</label>
                             <div class="col-sm-8">
-                                <input id="commoditSalePrice" name="commoditSalePrice"
-                                       th:value="${commodit.commoditSalePrice}" class="form-control" type="text">
+                                <input id="commoditySalePrice" name="commoditySalePrice"
+                                       th:value="${commodit.commoditySalePrice}" class="form-control" type="text">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">最大日销量：</label>
                             <div class="col-sm-8">
-                                <input id="commoditFiexNum" name="commoditFiexNum"
-                                       th:value="${commodit.commoditFiexNum}" class="form-control" type="number" />
+                                <input id="commodityFiexNum" name="commodityFiexNum"
+                                       th:value="${commodit.commodityFiexNum}" class="form-control" type="number" />
                             </div>
                         </div>
                         <div class="form-group">
@@ -72,7 +72,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">商品描述：</label>
                             <div class="col-sm-8">
-                                <textarea id="commoditRemark" name="commoditRemark" th:text="${commodit.commoditRemark}"class="form-control" ></textarea>
+                                <textarea id="commodityRemark" name="commodityRemark" th:text="${commodit.commodityRemark}"class="form-control" ></textarea>
                             </div>
                         </div>
                         <div class="form-group">
@@ -87,7 +87,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">商品类型</label>
                             <div class="col-sm-8">
-                                <select class="form-control" id="commoditType" name="commoditType" th:value="${commodit.commoditType}">
+                                <select class="form-control" id="commodityType" name="commodityType" th:value="${commodit.commodityType}">
                                     <option value="1">可售商品</option>
                                     <option value="2">非卖品</option>
                                 </select>

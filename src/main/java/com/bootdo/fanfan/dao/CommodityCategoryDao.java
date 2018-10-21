@@ -1,6 +1,6 @@
 package com.bootdo.fanfan.dao;
 
-import com.bootdo.fanfan.domain.CommoditCategoryDO;
+import com.bootdo.fanfan.domain.CommodityCategoryDO;
 
 import java.util.List;
 import java.util.Map;
@@ -14,17 +14,17 @@ import org.apache.ibatis.annotations.Mapper;
  * @date 2018-06-20 11:12:04
  */
 @Mapper
-public interface CommoditCategoryDao {
+public interface CommodityCategoryDao {
 
-	CommoditCategoryDO get(Integer id);
+	CommodityCategoryDO get(Integer id);
 	
-	List<CommoditCategoryDO> list(Map<String, Object> map);
+	List<CommodityCategoryDO> list(Map<String, Object> map);
 	
 	int count(Map<String, Object> map);
 	
-	int save(CommoditCategoryDO commoditCategory);
+	int save(CommodityCategoryDO commodityCategory);
 	
-	int update(CommoditCategoryDO commoditCategory);
+	int update(CommodityCategoryDO commodityCategory);
 	
 	int remove(Integer id);
 	

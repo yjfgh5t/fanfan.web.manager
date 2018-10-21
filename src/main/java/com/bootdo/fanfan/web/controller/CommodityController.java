@@ -5,8 +5,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.bootdo.common.controller.BaseController;
-import com.bootdo.fanfan.domain.CommoditCategoryDO;
-import com.bootdo.fanfan.service.CommoditCategoryService;
+import com.bootdo.fanfan.domain.CommodityCategoryDO;
+import com.bootdo.fanfan.domain.CommodityDO;
+import com.bootdo.fanfan.service.CommodityCategoryService;
+import com.bootdo.fanfan.service.CommodityService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -19,8 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.bootdo.fanfan.domain.CommoditDO;
-import com.bootdo.fanfan.service.CommoditService;
 import com.bootdo.common.utils.PageUtils;
 import com.bootdo.common.utils.Query;
 import com.bootdo.common.utils.R;
@@ -35,12 +35,12 @@ import com.bootdo.common.utils.R;
  
 @Controller
 @RequestMapping("/fanfan/commodit")
-public class CommoditController extends BaseController {
+public class CommodityController extends BaseController {
 	@Autowired
-	private CommoditService commoditService;
+	private CommodityService commodityService;
 
 	@Autowired
-	private CommoditCategoryService commoditCategoryService;
+	private CommodityCategoryService commodityCategoryService;
 	
 	@GetMapping()
 	@RequiresPermissions("fanfan:commodit:commodit")
@@ -58,8 +58,8 @@ public class CommoditController extends BaseController {
 		query.put("sort","`order`");
 		query.put("order","asc");
 		query.put("customerId",getUserId());
-		List<CommoditDO> commoditList = commoditService.list(query);
-		int total = commoditService.count(query);
+		List<CommodityDO> commoditList = commodityService.list(query);
+		int total = commodityService.count(query);
 		PageUtils pageUtils = new PageUtils(commoditList, total);
 		return pageUtils;
 	}
@@ -71,7 +71,7 @@ public class CommoditController extends BaseController {
 		//查询分类列表
 		Map<String,Object> queryParams = new HashMap<>();
 		queryParams.put("customer_id",this.getUserId().intValue());
-		List<CommoditCategoryDO> categoryDOList = commoditCategoryService.list(queryParams);
+		List<CommodityCategoryDO> categoryDOList = commodityCategoryService.list(queryParams);
 
 		modelMap.put("categoryTypes",categoryDOList);
 
@@ -81,13 +81,13 @@ public class CommoditController extends BaseController {
 	@GetMapping("/edit/{id}")
 	@RequiresPermissions("fanfan:commodit:edit")
 	String edit(@PathVariable("id") Integer id,Model model){
-		CommoditDO commodit =null;
+		CommodityDO commodit =null;
 		if(id>0) {
-			commodit = commoditService.get(id);
+			commodit = commodityService.get(id);
 		}
 
 		if(commodit==null){
-			commodit = new CommoditDO();
+			commodit = new CommodityDO();
 			commodit.setId(id);
 		}
 
@@ -96,7 +96,7 @@ public class CommoditController extends BaseController {
 		//查询分类列表
 		Map<String,Object> queryParams = new HashMap<>();
 		queryParams.put("customer_id",this.getUserId().intValue());
-		List<CommoditCategoryDO> categoryDOList = commoditCategoryService.list(queryParams);
+		List<CommodityCategoryDO> categoryDOList = commodityCategoryService.list(queryParams);
 		model.addAttribute("categoryTypes",categoryDOList);
 
 	    return "fanfan/commodit/edit";
@@ -108,8 +108,8 @@ public class CommoditController extends BaseController {
 	@ResponseBody
 	@PostMapping("/save")
 	@RequiresPermissions("fanfan:commodit:add")
-	public R save( CommoditDO commodit){
-		if(commoditService.save(commodit)>0){
+	public R save( CommodityDO commodit){
+		if(commodityService.save(commodit)>0){
 			return R.ok();
 		}
 		return R.error();
@@ -120,13 +120,13 @@ public class CommoditController extends BaseController {
 	@ResponseBody
 	@RequestMapping("/update")
 	@RequiresPermissions("fanfan:commodit:edit")
-	public R update( CommoditDO commodit){
+	public R update( CommodityDO commodit){
 		if(commodit.getId()==0) {
 			commodit.setCustomerId(getUserId().intValue());
 			commodit.setDelete(0);
-			commoditService.save(commodit);
+			commodityService.save(commodit);
 		}else {
-			commoditService.update(commodit);
+			commodityService.update(commodit);
 		}
 		return R.ok();
 	}
@@ -138,7 +138,7 @@ public class CommoditController extends BaseController {
 	@ResponseBody
 	@RequiresPermissions("fanfan:commodit:remove")
 	public R remove( Integer id){
-		if(commoditService.remove(id)>0){
+		if(commodityService.remove(id)>0){
 		return R.ok();
 		}
 		return R.error();
@@ -151,7 +151,7 @@ public class CommoditController extends BaseController {
 	@ResponseBody
 	@RequiresPermissions("fanfan:commodit:batchRemove")
 	public R remove(@RequestParam("ids[]") Integer[] ids){
-		commoditService.batchRemove(ids);
+		commodityService.batchRemove(ids);
 		return R.ok();
 	}
 	

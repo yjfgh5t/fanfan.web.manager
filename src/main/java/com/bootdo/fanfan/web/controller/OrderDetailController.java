@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.bootdo.fanfan.domain.OrderDetialDO;
+import com.bootdo.fanfan.domain.OrderDetailDO;
 import com.bootdo.fanfan.service.OrderDetialService;
 import com.bootdo.common.utils.PageUtils;
 import com.bootdo.common.utils.Query;
@@ -30,7 +30,7 @@ import com.bootdo.common.utils.R;
  
 @Controller
 @RequestMapping("/fanfan/orderDetial")
-public class OrderDetialController {
+public class OrderDetailController {
 	@Autowired
 	private OrderDetialService orderDetialService;
 	
@@ -46,7 +46,7 @@ public class OrderDetialController {
 	public PageUtils list(@RequestParam Map<String, Object> params){
 		//查询列表数据
         Query query = new Query(params);
-		List<OrderDetialDO> orderDetialList = orderDetialService.list(query);
+		List<OrderDetailDO> orderDetialList = orderDetialService.list(query);
 		int total = orderDetialService.count(query);
 		PageUtils pageUtils = new PageUtils(orderDetialList, total);
 		return pageUtils;
@@ -61,7 +61,7 @@ public class OrderDetialController {
 	@GetMapping("/edit/{id}")
 	@RequiresPermissions("fanfan:orderDetial:edit")
 	String edit(@PathVariable("id") Integer id,Model model){
-		OrderDetialDO orderDetial = orderDetialService.get(id);
+		OrderDetailDO orderDetial = orderDetialService.get(id);
 		model.addAttribute("orderDetial", orderDetial);
 	    return "fanfan/orderDetial/edit";
 	}
@@ -72,7 +72,7 @@ public class OrderDetialController {
 	@ResponseBody
 	@PostMapping("/save")
 	@RequiresPermissions("fanfan:orderDetial:add")
-	public R save( OrderDetialDO orderDetial){
+	public R save( OrderDetailDO orderDetial){
 		if(orderDetialService.save(orderDetial)>0){
 			return R.ok();
 		}
@@ -84,7 +84,7 @@ public class OrderDetialController {
 	@ResponseBody
 	@RequestMapping("/update")
 	@RequiresPermissions("fanfan:orderDetial:edit")
-	public R update( OrderDetialDO orderDetial){
+	public R update( OrderDetailDO orderDetial){
 		orderDetialService.update(orderDetial);
 		return R.ok();
 	}

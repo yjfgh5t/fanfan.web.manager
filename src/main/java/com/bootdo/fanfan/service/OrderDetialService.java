@@ -1,6 +1,6 @@
 package com.bootdo.fanfan.service;
 
-import com.bootdo.fanfan.domain.OrderDetialDO;
+import com.bootdo.fanfan.domain.OrderDetailDO;
 
 import java.util.List;
 import java.util.Map;
@@ -14,36 +14,36 @@ import java.util.Map;
  */
 public interface OrderDetialService {
 	
-	OrderDetialDO get(Integer id);
+	OrderDetailDO get(Integer id);
 	
-	List<OrderDetialDO> list(Map<String, Object> map);
+	List<OrderDetailDO> list(Map<String, Object> map);
 	
 	int count(Map<String, Object> map);
 	
-	int save(OrderDetialDO orderDetial);
+	int save(OrderDetailDO orderDetial);
 
 	/**
 	 * 根据订id查询订单详情
 	 * @param orderId
 	 * @return
 	 */
-	List<OrderDetialDO> queryByOrderId(Integer orderId);
+	List<OrderDetailDO> queryByOrderId(Integer orderId);
 
 	/**
 	 * 根据订单id查询商品
 	 * @param orderIdArry
 	 * @return
 	 */
-	List<OrderDetialDO> queryByOrderIdArray(List<Integer> orderIdArry);
+	List<OrderDetailDO> queryByOrderIdArray(List<Integer> orderIdArry);
 
 	/**
 	 * 批量保存
 	 * @param detialDOList
 	 * @return
 	 */
-	void  batchSave(List<OrderDetialDO> detialDOList);
+	void  batchSave(List<OrderDetailDO> detialDOList);
 	
-	int update(OrderDetialDO orderDetial);
+	int update(OrderDetailDO orderDetial);
 	
 	int remove(Integer id);
 	

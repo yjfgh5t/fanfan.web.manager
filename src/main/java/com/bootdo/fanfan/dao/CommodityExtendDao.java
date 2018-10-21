@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 /**
  * 
@@ -29,4 +31,13 @@ public interface CommodityExtendDao {
 	int remove(Integer id);
 	
 	int batchRemove(Integer[] ids);
+
+	/**
+	 * 修改客户端删除的规格
+	 * @param idArray
+	 * @param commodityId
+	 * @return
+	 */
+	@Update("update ff_commodity_extend set `delete`=1 where commodity_id=#{commodityId} and `id` not in(${idArray})")
+	int updateDeletes(@Param("idArray") String idArray, @Param("commodityId") Integer commodityId);
 }

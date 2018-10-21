@@ -1,6 +1,6 @@
 package com.bootdo.fanfan.service;
 
-import com.bootdo.fanfan.domain.CommoditDO;
+import com.bootdo.fanfan.domain.CommodityDO;
 import com.bootdo.fanfan.domain.CommodityWidthExtendDO;
 
 import java.util.List;
@@ -13,19 +13,21 @@ import java.util.Map;
  * @email 1992lcg@163.com
  * @date 2018-03-30 22:53:17
  */
-public interface CommoditService {
+public interface CommodityService {
 	
-	CommoditDO get(Integer id);
+	CommodityDO get(Integer id);
 	
-	List<CommoditDO> list(Map<String, Object> map);
+	List<CommodityDO> list(Map<String, Object> map);
+
+	CommodityWidthExtendDO getExtend(Integer id);
 
 	List<CommodityWidthExtendDO> listExtend(Map<String,Object> map);
 	
 	int count(Map<String, Object> map);
 	
-	int save(CommoditDO commodit);
+	int save(CommodityDO commodit);
 	
-	int update(CommoditDO commodit);
+	int update(CommodityDO commodit);
 	
 	int remove(Integer id);
 
@@ -41,8 +43,8 @@ public interface CommoditService {
 
 	/**
 	 * 根据Id集合查询商品
-	 * @param idArry
+	 * @param idArray
 	 * @return
 	 */
-	List<CommoditDO> queryByIdarry(List<Integer> idArry);
+	List<CommodityWidthExtendDO> queryByIdArray(List<Integer> idArray);
 }

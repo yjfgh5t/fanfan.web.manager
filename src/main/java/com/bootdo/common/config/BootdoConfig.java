@@ -52,6 +52,10 @@ public class BootdoConfig {
 		return uploadPath;
 	}
 
+	public String getUploadImgPath(){
+		return  uploadPath+"img/";
+	}
+
 	public void setUploadPath(String uploadPath) {
 		this.uploadPath = uploadPath;
 	}

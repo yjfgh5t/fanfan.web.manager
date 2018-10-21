@@ -23,7 +23,11 @@ public interface CommodityExtendService {
 	int save(CommodityExtendDO commodityExtend);
 	
 	int update(CommodityExtendDO commodityExtend);
-	
+
+	boolean updateDeletes(List<Integer> idArrays,Integer commodityId);
+
+	List<CommodityExtendDO> listByCommodityId(Integer commodityId);
+
 	int remove(Integer id);
 	
 	int batchRemove(Integer[] ids);

@@ -1,7 +1,7 @@
 package com.bootdo.testDemo;
 
 import com.bootdo.fanfan.domain.CommodityWidthExtendDO;
-import com.bootdo.fanfan.service.CommoditService;
+import com.bootdo.fanfan.service.CommodityService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ import java.util.Map;
 public class TestCommodity {
 
     @Autowired
-    private CommoditService commoditService;
+    private CommodityService commodityService;
 
 
     @Test
@@ -33,7 +33,7 @@ public class TestCommodity {
         _map.put("sort","`order`");
         _map.put("customerId",132);
 
-        List<CommodityWidthExtendDO> list = commoditService.listExtend(_map);
+        List<CommodityWidthExtendDO> list = commodityService.listExtend(_map);
 
         System.out.println(list.toString());
     }

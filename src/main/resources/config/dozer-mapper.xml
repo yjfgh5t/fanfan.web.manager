@@ -12,30 +12,30 @@
         <class-a>com.bootdo.fanfan.domain.CommodityWidthExtendDO</class-a>
         <class-b>com.bootdo.fanfan.vo.APICommoditySimpleVO</class-b>
         <field>
-            <a>commoditTitle</a>
+            <a>commodityTitle</a>
             <b>title</b>
         </field>
 
         <field>
-            <a>commoditImg</a>
+            <a>commodityImg</a>
             <b>icon</b>
         </field>
 
         <field>
-            <a>commoditPrice</a>
+            <a>commodityPrice</a>
             <b>price</b>
         </field>
         <field>
-            <a>commoditUnit</a>
+            <a>commodityUnit</a>
             <b>unit</b>
         </field>
         <field>
-            <a>commoditSalePrice</a>
+            <a>commoditySalePrice</a>
             <b>salePrice</b>
         </field>
 
         <field>
-            <a>commoditRemark</a>
+            <a>commodityRemark</a>
             <b>desc</b>
         </field>
     </mapping>
@@ -45,41 +45,41 @@
         <class-a>com.bootdo.fanfan.domain.CommodityWidthExtendDO</class-a>
         <class-b>com.bootdo.fanfan.vo.APICommodityVO</class-b>
         <field>
-            <a>commoditTitle</a>
+            <a>commodityTitle</a>
             <b>title</b>
         </field>
 
         <field>
-            <a>commoditImg</a>
+            <a>commodityImg</a>
             <b>icon</b>
         </field>
 
         <field>
-            <a>commoditPrice</a>
+            <a>commodityPrice</a>
             <b>price</b>
         </field>
 
         <field>
-            <a>commoditUnit</a>
+            <a>commodityUnit</a>
             <b>unit</b>
         </field>
 
         <field>
-            <a>commoditSalePrice</a>
+            <a>commoditySalePrice</a>
             <b>salePrice</b>
         </field>
 
         <field>
-            <a>commoditRemark</a>
+            <a>commodityRemark</a>
             <b>desc</b>
         </field>
 
         <field>
-            <a>commoditFiexNum</a>
+            <a>commodityFiexNum</a>
             <b>inventory</b>
         </field>
         <field>
-            <a>commoditType</a>
+            <a>commodityType</a>
             <b>saleType</b>
         </field>
 
