@@ -1,7 +1,13 @@
 package com.bootdo.testDemo;
 
+import com.alibaba.fastjson.JSON;
 import com.bootdo.common.utils.MD5Utils;
+import com.bootdo.fanfan.domain.OrderDO;
+import com.bootdo.fanfan.vo.APIOrderRequVO;
+import lombok.Data;
+import lombok.Getter;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,18 +19,11 @@ public class Test {
 
     public static void main(String[] args) {
 
-        Map<Integer,parent> test =new HashMap<>();
+        String ff = "{\"orderTime\":\"2018-10-22 21:31:46\",\"orderDeskNum\":\"\",\"orderRemark\":\"\",\"orderNum\":\"15402150872460\",\"orderDateNum\":\"2\",\"details\":[{\"outPrice\":12,\"outTitle\":\"小鸟一只\",\"outSize\":1,\"outType\":1},{\"outPrice\":8,\"outTitle\":\"咖啡一杯-小份\",\"outSize\":1,\"outType\":5}],\"orderPay\":20,\"orderTotal\":20}";
 
-        parent dd = new parent();
-        dd.setName("A");
+        APIOrderRequVO model =  JSON.parseObject(ff, APIOrderRequVO.class);
 
-        test.put(1,dd);
-
-        dd = test.get(1);
-        test.get(1).setName("B");
-
-
-        System.out.println("结果集："+test.get(1).getName()+" 结果集2："+dd.getName());
+        System.out.println(model);
     }
 
 

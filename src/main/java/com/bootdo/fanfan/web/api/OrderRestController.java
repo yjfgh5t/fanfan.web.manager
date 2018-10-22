@@ -306,7 +306,7 @@ public class OrderRestController extends ApiBaseRestController {
         XGPushModel pushModel = new XGPushModel(XGPushModel.MsgType.payOrder, apiOrderRequVO.getCustomerId().longValue());
         pushModel.setMsgTitle("您有新的订单");
         pushModel.setMsgContent("订单总额："+new Random().nextInt());
-        pushModel.setNotification(true);
+        pushModel.setNotification(false);
         //数据转换
         APIPrintOrderVO data = mapper.map(apiOrderRequVO, APIPrintOrderVO.class);
         if(apiOrderRequVO.getDetailList()!=null){
@@ -326,7 +326,7 @@ public class OrderRestController extends ApiBaseRestController {
 
         boolean hasPay = orderStateService.orderHasPay(id);
         if (hasPay) {
-            return R.ok().put("data", true);
+            return R.ok().put("data", "订单已经支付");
         }
         OrderDO orderInfo = orderService.get(id);
 

@@ -25,10 +25,10 @@ public class ApiBaseRestController {
     private void headerAttribute(@RequestHeader(name = "base",required = false) String base, HttpServletResponse response) throws IOException {
         if(!StringUtils.isEmpty(base)) {
             APIBaseVO baseModel = JSONObject.parseObject(base, APIBaseVO.class);
-            if(checkSign(baseModel)){
-                response.sendError(500,"签名失败");
-                return;
-            }
+//            if(!checkSign(baseModel)){
+//                response.sendError(500,"签名失败");
+//                return;
+//            }
             local.set(baseModel);
         }
     }

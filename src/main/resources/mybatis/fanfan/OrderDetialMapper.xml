@@ -98,7 +98,7 @@
 	</select>
 
 	<select id="queryByOrderIdArray" resultType="com.bootdo.fanfan.domain.OrderDetailDO">
-		select order_id,out_title,out_price,out_size,out_type from ff_order_detail,commodity_id where order_id in
+		select order_id,out_title,out_price,out_size,out_type,commodity_id from ff_order_detail where order_id in
 		<foreach collection="orderIdArray" item="item" open="(" close=")" separator=",">
 			#{item}
 		</foreach>
