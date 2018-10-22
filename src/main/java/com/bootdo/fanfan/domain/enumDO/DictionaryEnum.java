@@ -17,6 +17,7 @@ public enum  DictionaryEnum {
 
     htmlVersion(9001,"html最新版本"),
     androidVersion(9002,"android最新版本"),
+    showContact(9003,"是否显示联系我们"),
 
     customerId(9101,"商户Id"),
     deskId(9102,"客桌Id");

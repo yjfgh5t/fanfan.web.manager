@@ -75,14 +75,21 @@ public class InfoRestController extends ApiBaseRestController {
             customerId=132;
         }
 
-        ShopDO shopDO = shopService.getByCustomerId(customerId);
         //店铺信息
+        ShopDO shopDO = shopService.getByCustomerId(customerId);
         if(shopDO!=null){
             APIShopVO shopVO = eMapper.map(shopDO, APIShopVO.class);
             resultMap.put("shop",shopVO);
         }
+
         //设置customerId
         resultMap.put("customerId",customerId);
+
+        //配置信息
+        Map<Integer,String> configMaps = dictionaryService.queryByKeys(1,DictionaryEnum.showContact.getVal());
+        if(configMaps!=null){
+            resultMap.put("showContact",configMaps.get(DictionaryEnum.showContact.getVal()));
+        }
 
         return R.ok().put("data",resultMap);
     }

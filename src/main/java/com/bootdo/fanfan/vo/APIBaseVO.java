@@ -24,4 +24,19 @@ public class APIBaseVO {
      */
     private Integer customerId;
 
+    /**
+     * 版本
+     */
+    private String version;
+
+    /**
+     * 时间
+     */
+    private Long time;
+
+    /**
+     * 签名
+     */
+    private String sign;
+
 }
