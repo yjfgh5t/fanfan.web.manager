@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,5 +37,17 @@ public class TestCommodity {
         List<CommodityWidthExtendDO> list = commodityService.listExtend(_map);
 
         System.out.println(list.toString());
+    }
+
+    @Test
+    public void extenList(){
+
+        List<Integer> idArrays = new ArrayList<>();
+        idArrays.add(14);
+
+        List<CommodityWidthExtendDO> list = commodityService.queryByIdArray(idArrays);
+
+        System.out.println(list);
+
     }
 }

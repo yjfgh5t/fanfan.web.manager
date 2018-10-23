@@ -1,5 +1,6 @@
 package com.bootdo.fanfan.web.api;
 
+import com.alibaba.fastjson.JSONObject;
 import com.bootdo.common.extend.EMapper;
 import com.bootdo.common.utils.R;
 import com.bootdo.fanfan.domain.ContactDO;
@@ -7,11 +8,18 @@ import com.bootdo.fanfan.domain.ReceiverDO;
 import com.bootdo.fanfan.service.ContactService;
 import com.bootdo.fanfan.vo.APIConcatVO;
 import com.bootdo.fanfan.vo.APIReceiverVO;
+import com.google.common.io.CharStreams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 /**
  * @author: JY
@@ -29,16 +37,13 @@ public class ConcatRestController extends ApiBaseRestController {
 
     /**
      * 保存收货地址
-     * @param concatVO
+     * @param
      * @return
      */
     @PostMapping("/")
-    public R save(@RequestBody APIConcatVO concatVO){
-
+    public R save(APIConcatVO concatVO){
         ContactDO contactDO  = eMapper.map(concatVO,ContactDO.class);
-
         contactService.save(contactDO);
-
         return R.ok();
     }
 

@@ -18,7 +18,7 @@ public class WebLogAspect {
 
     private static final Logger logger = LoggerFactory.getLogger(WebLogAspect.class);
 
-    @Pointcut("execution( * com.bootdo..controller.*.*(..))")//两个..代表所有子目录，最后括号里的两个..代表所有参数
+    @Pointcut("execution( * com.bootdo..*Controller.*(..))")//两个..代表所有子目录，最后括号里的两个..代表所有参数
     public void logPointCut() {
     }
 
@@ -27,18 +27,19 @@ public class WebLogAspect {
     public void doBefore(JoinPoint joinPoint) throws Throwable {
         // 接收到请求，记录请求内容
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = attributes.getRequest();
+        if (attributes != null) {
+            HttpServletRequest request = attributes.getRequest();
 
-        // 记录下请求内容
-        logger.info("请求地址 : " + request.getRequestURL().toString());
-        logger.info("HTTP METHOD : " + request.getMethod());
-        // 获取真实的ip地址
-        //logger.info("IP : " + IPAddressUtil.getClientIpAddress(request));
-        logger.info("CLASS_METHOD : " + joinPoint.getSignature().getDeclaringTypeName() + "."
-                + joinPoint.getSignature().getName());
-        logger.info("参数 : " + Arrays.toString(joinPoint.getArgs()));
+            // 记录下请求内容
+            logger.info("请求地址 : " + request.getRequestURL().toString());
+            logger.info("HTTP METHOD : " + request.getMethod());
+            // 获取真实的ip地址
+            //logger.info("IP : " + IPAddressUtil.getClientIpAddress(request));
+            logger.info("CLASS_METHOD : " + joinPoint.getSignature().getDeclaringTypeName() + "."
+                    + joinPoint.getSignature().getName());
+            logger.info("参数 : " + Arrays.toString(joinPoint.getArgs()));
 //        loggger.info("参数 : " + joinPoint.getArgs());
-
+        }
     }
 
     @AfterReturning(returning = "ret", pointcut = "logPointCut()")// returning的值和doAfterReturning的参数名一致

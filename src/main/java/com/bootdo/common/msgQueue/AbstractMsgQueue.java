@@ -68,8 +68,6 @@ public abstract class AbstractMsgQueue<T> implements MsgQueue<T> {
         threadPoolExecutor = new ThreadPoolExecutor(threadCoreSize,threadPoolSize,30, TimeUnit.SECONDS,linkedQueueRunnable);
         //销毁超时线程
         threadPoolExecutor.allowCoreThreadTimeOut(true);
-        //初始启动消费任务
-        startThread(minActiveThread);
     }
 
     /**
@@ -118,7 +116,7 @@ public abstract class AbstractMsgQueue<T> implements MsgQueue<T> {
     public synchronized int startThread(int size){
 
         //执行任务
-        for(int i=0;i<size;i++) {
+        for(int i=0;i<minActiveThread;i++) {
             //线程池中添加线程
             System.out.println("活动线程数："+threadPoolExecutor.getActiveCount()+" 线程大小："+threadPoolExecutor.getMaximumPoolSize());
             if(threadPoolExecutor.getActiveCount()==0 || threadPoolExecutor.getActiveCount() < threadPoolExecutor.getMaximumPoolSize()) {

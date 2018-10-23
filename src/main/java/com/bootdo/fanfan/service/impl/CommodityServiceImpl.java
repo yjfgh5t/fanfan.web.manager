@@ -82,7 +82,7 @@ public class CommodityServiceImpl implements CommodityService {
 
 	/**
 	 * 根据Id集合查询商品
-	 * @param idArry
+	 * @param idArray
 	 * @return
 	 */
 	@Override
