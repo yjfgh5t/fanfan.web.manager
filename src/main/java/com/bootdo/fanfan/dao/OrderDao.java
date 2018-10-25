@@ -1,5 +1,6 @@
 package com.bootdo.fanfan.dao;
 
+import com.bootdo.fanfan.domain.DTO.OrderStatisticsDTO;
 import com.bootdo.fanfan.domain.OrderDO;
 
 import java.util.List;
@@ -87,16 +88,23 @@ public interface OrderDao {
 	Integer queryCustomerIdById(@Param("id") Integer id);
 
 	/**
-	 * 查询订单列表
+	 * 查询订单列表-用户
 	 * @param map
 	 * @return
 	 */
 	List<APIOrderListVO> queryOrderByUser(Map<String,Object> map);
 
 	/**
-	 * 查询订单列表
+	 * 查询订单列表-商家
+	 * 未支付的订单不会查出来 只有已支付的订单才会有order_time值
 	 * @param map
 	 * @return
 	 */
 	List<APIOrderListCustomerVO> queryOrderByCustomer(Map<String,Object> map);
+
+	/**
+	 * 查询订单统计信息
+	 * @param map
+	 */
+	OrderStatisticsDTO queryOrderStatistics(Map<String,Object> map);
 }

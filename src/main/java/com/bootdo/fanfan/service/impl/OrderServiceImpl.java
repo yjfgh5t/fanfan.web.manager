@@ -4,6 +4,7 @@ import com.bootdo.common.extend.EMapper;
 import com.bootdo.common.utils.RedisUtils;
 import com.bootdo.common.utils.StringUtils;
 import com.bootdo.fanfan.domain.*;
+import com.bootdo.fanfan.domain.DTO.OrderStatisticsDTO;
 import com.bootdo.fanfan.domain.DTO.TemplateMsgMQDTO;
 import com.bootdo.fanfan.domain.enumDO.OrderDetailEnum;
 import com.bootdo.fanfan.domain.enumDO.OrderDetailType;
@@ -346,6 +347,17 @@ public class OrderServiceImpl implements OrderService {
 		}
 
 		return list;
+	}
+
+	/**
+	 * 查询订单统计信息
+	 * @param map
+	 * @return
+	 */
+	@Override
+	public OrderStatisticsDTO queryOrderStatistics(Map<String,Object> map){
+
+		return orderDao.queryOrderStatistics(map);
 	}
 
 

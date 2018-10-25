@@ -182,6 +182,7 @@
 		</foreach>
 	</select>
 
+	<!-- 未支付的订单不会查出来 只有已支付的订单才会有order_time值-->
 	<select id="queryOrderByCustomer" resultType="com.bootdo.fanfan.vo.APIOrderListCustomerVO">
 		SELECT a.id,a.order_num,a.order_state,a.order_type,a.order_total,a.order_pay,a.order_date_num,a.order_desk_num,a.order_time,b.user_nick,b.user_icon from ff_order  as a
 		left JOIN ff_user as b
@@ -202,4 +203,13 @@
 		ORDER BY a.id DESC
 	</select>
 
+	<select id="queryOrderStatistics" resultType="com.bootdo.fanfan.domain.DTO.OrderStatisticsDTO">
+		SELECT count(1) as orderCount, sum(order_pay) as orderTotal FROM ff_order
+		WHERE order_state in
+		<foreach collection="stateArray" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+		AND order_time BETWEEN #{startTime} and #{endTime}
+		AND customer_id=#{customerId}
+	</select>
 </mapper>

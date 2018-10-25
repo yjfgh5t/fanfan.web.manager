@@ -130,10 +130,10 @@ public class InfoRestController extends ApiBaseRestController {
     @PostMapping("/upload")
     public R uploadFile(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
         String fileName = file.getOriginalFilename();
-        fileName = FileUtil.renameToUUID(fileName);
+        fileName = "img/"+FileUtil.renameToUUID(fileName);
         FileDO sysFile = new FileDO(FileType.fileType(fileName), fileName, new Date());
         try {
-            FileUtil.uploadFile(file.getBytes(), bootdoConfig.getUploadImgPath(), fileName);
+            FileUtil.uploadFile(file.getBytes(), bootdoConfig.getUploadPath(), fileName);
             String [] tempName= fileName.split("\\.");
             //缩小图片
             if(tempName.length==2){

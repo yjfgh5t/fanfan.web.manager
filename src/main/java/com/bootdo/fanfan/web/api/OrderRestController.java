@@ -7,7 +7,9 @@ import com.bootdo.common.extend.EMapper;
 import com.bootdo.common.utils.R;
 import com.bootdo.common.utils.StringUtils;
 import com.bootdo.fanfan.domain.AlipayRecordDO;
+import com.bootdo.fanfan.domain.DTO.OrderStatisticsDTO;
 import com.bootdo.fanfan.domain.OrderDO;
+import com.bootdo.fanfan.domain.enumDO.OrderPayType;
 import com.bootdo.fanfan.domain.enumDO.OrderStateEnum;
 import com.bootdo.fanfan.domain.enumDO.OrderTypeEnum;
 import com.bootdo.fanfan.manager.AlipayManager;
@@ -48,7 +50,6 @@ public class OrderRestController extends ApiBaseRestController {
 
     /**
      * 创建订单
-     *
      * @return
      */
     @PostMapping("/")
@@ -123,6 +124,14 @@ public class OrderRestController extends ApiBaseRestController {
     @PostMapping("/query/{date}")
     public R queryDayOrder(@PathVariable("date") @DateTimeFormat(pattern = "YYYY-MM-dd") Date date, APIOrderDayQueryRequVO dayQueryRequVO) {
 
+        //时间为1970-01-01 则设为当前时间
+        if(dayQueryRequVO.getNewOrder()){
+            date = new Date();
+            date.setHours(0);
+            date.setMinutes(0);
+            date.setSeconds(0);
+        }
+
         dayQueryRequVO.setDate(date);
 
         Map<String, Object> params = new HashMap<>();
@@ -154,6 +163,42 @@ public class OrderRestController extends ApiBaseRestController {
         List<APIOrderListCustomerVO> listCustomerVOS = orderService.queryOrderByCustomer(params);
 
         return R.ok().put("data", listCustomerVOS);
+    }
+
+    /**
+     * 查询订单统计信息
+     * @param date
+     * @return
+     */
+    @GetMapping("/statistics/{date}")
+    public R queryStatistics(@PathVariable("date") @DateTimeFormat(pattern = "YYYY-MM-dd") Date date){
+
+        APIOrderStatisticsVO result = new APIOrderStatisticsVO();
+
+        Map<String,Object> params = new HashMap<>();
+        params.put("customerId",getBaseModel().getCustomerId());
+        //开始日期
+        params.put("startTime",date);
+        //结束日期
+        Date endDate = DateUtils.addDays(date, 1);
+        params.put("endTime",endDate);
+        //查询状态
+        Integer[] states = new Integer[]{OrderStateEnum.userPaid.getVal(),OrderStateEnum.orderSuccess.getVal()};
+        params.put("stateArray",states);
+
+        //查询成功的订单数
+        OrderStatisticsDTO statisticsDTO = orderService.queryOrderStatistics(params);
+        result.setOrderCount(statisticsDTO.getOrderCount());
+        result.setOrderTotal(statisticsDTO.getOrderTotal());
+
+        //查询取消的订单数
+        states = new Integer[]{OrderStateEnum.businessCancel.getVal()};
+        params.put("stateArray",states);
+        statisticsDTO = orderService.queryOrderStatistics(params);
+        result.setCancelOrderCount(statisticsDTO.getOrderCount());
+        result.setCancelOrderTotal(statisticsDTO.getOrderTotal());
+
+        return R.ok().put("data",result);
     }
 
     /**
@@ -348,9 +393,6 @@ public class OrderRestController extends ApiBaseRestController {
             recordDO.setPassbackParams(id + "");
             //保存数据
             alipayRecordService.save(recordDO);
-
-            //发送消息
-            debugPush(id);
 
             return R.ok().put("data", "true");
         }

@@ -84,6 +84,50 @@
         </field>
 
     </mapping>
+    <!--商品DO VO转换-->
+    <mapping>
+        <class-a>com.bootdo.fanfan.domain.CommodityDO</class-a>
+        <class-b>com.bootdo.fanfan.vo.APICommodityVO</class-b>
+        <field>
+            <a>commodityTitle</a>
+            <b>title</b>
+        </field>
+
+        <field>
+            <a>commodityImg</a>
+            <b>icon</b>
+        </field>
+
+        <field>
+            <a>commodityPrice</a>
+            <b>price</b>
+        </field>
+
+        <field>
+            <a>commodityUnit</a>
+            <b>unit</b>
+        </field>
+
+        <field>
+            <a>commoditySalePrice</a>
+            <b>salePrice</b>
+        </field>
+
+        <field>
+            <a>commodityRemark</a>
+            <b>desc</b>
+        </field>
+
+        <field>
+            <a>commodityFiexNum</a>
+            <b>inventory</b>
+        </field>
+        <field>
+            <a>commodityType</a>
+            <b>saleType</b>
+        </field>
+
+    </mapping>
 
     <!--商品扩展DO VO转换-->
     <mapping>

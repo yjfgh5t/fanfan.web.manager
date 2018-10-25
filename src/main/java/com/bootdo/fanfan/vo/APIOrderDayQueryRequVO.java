@@ -29,6 +29,11 @@ public class APIOrderDayQueryRequVO {
     private Boolean isMax;
 
     /**
+     * 查询新订单--默认为当日订单
+     */
+    private Boolean newOrder;
+
+    /**
      * 订单状态
      */
     private Integer orderState;

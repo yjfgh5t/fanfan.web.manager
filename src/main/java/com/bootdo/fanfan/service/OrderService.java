@@ -1,5 +1,6 @@
 package com.bootdo.fanfan.service;
 
+import com.bootdo.fanfan.domain.DTO.OrderStatisticsDTO;
 import com.bootdo.fanfan.domain.OrderDO;
 import com.bootdo.fanfan.domain.enumDO.OrderStateEnum;
 import com.bootdo.fanfan.vo.APIOrderListCustomerVO;
@@ -92,4 +93,11 @@ public interface OrderService {
 	 * @return
 	 */
 	Integer getCustomerIdById(Integer orderId);
+
+	/**
+	 * 查询订单统计信息
+	 * @param map
+	 * @return
+	 */
+	OrderStatisticsDTO queryOrderStatistics(Map<String,Object> map);
 }

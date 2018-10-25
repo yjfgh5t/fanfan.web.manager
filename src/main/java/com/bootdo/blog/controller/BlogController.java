@@ -38,6 +38,11 @@ public class BlogController {
 		return pageUtils;
 	}
 
+	@GetMapping("/open/download")
+	public String download(){
+		return "blog/index/download";
+	}
+
 	@GetMapping("/open/post/{cid}")
 	String post(@PathVariable("cid") Long cid, Model model) {
 		ContentDO bContentDO = bContentService.get(cid);
