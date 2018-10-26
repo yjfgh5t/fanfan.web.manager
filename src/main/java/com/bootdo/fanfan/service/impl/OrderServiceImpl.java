@@ -9,6 +9,7 @@ import com.bootdo.fanfan.domain.DTO.TemplateMsgMQDTO;
 import com.bootdo.fanfan.domain.enumDO.OrderDetailEnum;
 import com.bootdo.fanfan.domain.enumDO.OrderDetailType;
 import com.bootdo.fanfan.domain.enumDO.OrderStateEnum;
+import com.bootdo.fanfan.domain.enumDO.OrderTypeEnum;
 import com.bootdo.fanfan.manager.AlipayManager;
 import com.bootdo.fanfan.manager.TemplateMsgManager;
 import com.bootdo.fanfan.manager.XGPushManager;
@@ -111,28 +112,23 @@ public class OrderServiceImpl implements OrderService {
 	@Transactional(rollbackFor = {SecurityException.class,Exception.class})
 	public Integer createOrder(APIOrderRequVO orderVO){
 
-		//验证
-		validateOrder(orderVO);
+		//计算价格、转换信息
+		calculateOrder(orderVO);
 
 		//获取订单主体信息
 		OrderDO orderDO = eMapper.map(orderVO,OrderDO.class);
-
-		//计算价格
-		calculateOrder(orderVO,orderDO);
-
 		//订单商品明细
 		List<OrderDetailDO> orderDetailDOList =eMapper.mapArray(orderVO.getDetailList(),OrderDetailDO.class);
-
 		//收货人地址
 		OrderReceiverDO orderReceiverDO = eMapper.map(orderVO.getReceiver(),OrderReceiverDO.class);
 
 		//1.订单是否创建
-		if(StringUtils.isEmpty(orderVO.getOrderNum()))
+		if(StringUtils.isEmpty(orderDO.getOrderNum()))
 		{
 			//生成订单号
 			orderDO.setOrderNum(this.getOrderNum());
 			//获取实体
-			orderDO.setOrderState(OrderStateEnum.userCreate.getVal());
+			orderDO.setOrderState(OrderStateEnum.userRequestPay.getVal());
 			orderDO.setCreateTime(Calendar.getInstance().getTime());
 			//保存订单
 			save(orderDO);
@@ -151,7 +147,7 @@ public class OrderServiceImpl implements OrderService {
 		orderStateService.save(new OrderStateDO(orderDO.getId(),orderDO.getOrderState(),orderDO.getCustomerId()),orderDO.getOrderNum());
 
 		//保存订单收货人信息
-		if(!StringUtils.isEmpty(orderReceiverDO.getAddr())) {
+		if(orderReceiverDO!=null && !StringUtils.isEmpty(orderReceiverDO.getAddr())) {
 			orderReceiverDO.setId(orderDO.getId());
 			orderReceiverService.save(orderReceiverDO);
 		}
@@ -159,16 +155,133 @@ public class OrderServiceImpl implements OrderService {
 		//创建支付宝预付单
         if(orderDO.getOrderState().equals(OrderStateEnum.userRequestPay.getVal())) {
         	//创建预付单成功
-            if(createAlipayOrder(orderVO, orderDO)){
+            if(createAlipayOrder(orderDetailDOList, orderDO)){
             	//订单状态
             	orderDO.setOrderState(OrderStateEnum.userWaitPay.getVal());
-				orderDO.setCustomerId(orderVO.getCustomerId());
+				orderDO.setCustomerId(orderDO.getCustomerId());
             	//更新订单状态
 				updateOrderState(orderDO);
 			}
         }
 
 		return orderDO.getId();
+	}
+
+	/**
+	 * 计算价格
+	 * @param orderRequVO
+	 */
+	@Override
+	public APIOrderRequVO calculateOrder(APIOrderRequVO orderRequVO) {
+
+		//验证
+		validateOrder(orderRequVO);
+
+		//用户提交的的商品Id
+		List<Integer> commodityIdArray = orderRequVO.getDetailList()
+				.stream()
+				//outType[1:商品 5:商品規格]
+				.filter(f->{return(f.getOutType()!=null  && (OrderDetailType.Commodity.getId().equals(f.getOutType()) || OrderDetailType.CommodityNorms.getId().equals(f.getOutType())));})
+				//获取商品 id
+				.map(m -> m.getCommodityId()).collect(Collectors.toList());
+
+		//去除重复id
+		HashSet<Integer> hashSet = new HashSet<>(commodityIdArray);
+		commodityIdArray.clear();
+		commodityIdArray.addAll(hashSet);
+
+		//查询所有有效的商品
+		List<CommodityWidthExtendDO> commodityDOList = commodityService.queryByIdArray(commodityIdArray);
+
+		//提交的商品信息不对
+		if (commodityIdArray.size() != commodityDOList.size()) {
+			//有效的商品Id
+			List<Integer> validCommodityIdArray = commodityDOList.stream().map(m -> m.getId()).collect(Collectors.toList());
+
+			//查询失效的商品Id
+			List<Integer> unvalidComodityIdArry = commodityIdArray.stream().filter(f -> {
+				return !validCommodityIdArray.contains(f);
+			}).collect(Collectors.toList());
+
+			throw new SecurityException("商品已售空" + unvalidComodityIdArry);
+		}
+
+		// 商品总数量
+		Integer commodityTotal = 0;
+
+		//商品总额
+		BigDecimal orderTotal = new BigDecimal(0),packageTotal = new BigDecimal(0),zeroDecimal = new BigDecimal(0);
+
+		//计算总数量
+		for (APIOrderDetailVO detail : orderRequVO.getDetailList()) {
+			if (OrderDetailType.Commodity.getId().equals(detail.getOutType()) || OrderDetailType.CommodityNorms.getId().equals(detail.getOutType())) {
+				//计算总数量
+				commodityTotal += detail.getOutSize();
+				for (CommodityWidthExtendDO itemDo : commodityDOList) {
+					if (itemDo.getId().equals(detail.getCommodityId())) {
+						//总额 加 商品价格 乘 商品数量
+						BigDecimal price =null;
+
+						//普通商品
+						if(OrderDetailType.Commodity.getId().equals(detail.getOutType())){
+							price = itemDo.getCommoditySalePrice();
+							detail.setOutTitle(itemDo.getCommodityTitle());
+							detail.setOutPrice(itemDo.getCommoditySalePrice());
+						}else if(OrderDetailType.CommodityNorms.getId().equals(detail.getOutType())) {
+							//规格商品
+							if (!CollectionUtils.isEmpty(itemDo.getExtendList())) {
+								//查询符合规则数据
+								CommodityExtendDO normalModel = itemDo.getExtendList().stream().filter((f) -> f.getId().equals(detail.getOutId())).findFirst().get();
+								if(normalModel!=null){
+									price = normalModel.getCommodityPrice();
+									detail.setOutTitle(itemDo.getCommodityTitle()+"-"+normalModel.getTitle());
+									detail.setOutPrice(normalModel.getCommodityPrice());
+								}
+							}
+						}
+
+						//打包费用
+						if(zeroDecimal.compareTo(itemDo.getCommodityPackagePrice())!=0){
+							//打包费用乘以商品数量
+							packageTotal = packageTotal.add(itemDo.getCommodityPackagePrice().multiply(new BigDecimal(detail.getOutSize())));
+						}
+
+						if(price!=null) {
+							//商品价格乘以商品数量
+							orderTotal = orderTotal.add(price.multiply(new BigDecimal(detail.getOutSize())));
+						}
+					}
+				}
+			}
+		}
+
+		//添加堂吃 打包费用
+		if(OrderTypeEnum.Pack.getVal().equals(orderRequVO.getOrderType()) && zeroDecimal.compareTo(packageTotal)!=0){
+			APIOrderDetailVO packageModel = new APIOrderDetailVO();
+			packageModel.setOutTitle("餐盒");
+			packageModel.setOutPrice(packageTotal);
+			packageModel.setCommodityId(0);
+			packageModel.setOutId(0);
+			packageModel.setOutSize(0);
+			packageModel.setOutType(OrderDetailType.Package.getId());
+			//去除已经包含的餐盒费
+			orderRequVO.getDetailList().removeIf(item -> OrderDetailType.Package.getId().equals(item.getOutType()));
+			orderRequVO.getDetailList().add(packageModel);
+			//添加餐盒费用
+			orderTotal = orderTotal.add(packageTotal);
+		}
+
+
+		//设置总数量
+		orderRequVO.setOrderCommodityTotal(commodityTotal);
+		//设置优惠总额
+		orderRequVO.setOrderDiscountTotal(new BigDecimal(0));
+		//设置订单总额
+		orderRequVO.setOrderTotal(orderTotal);
+		//设置支付总额  订单总额-支付总额
+		orderRequVO.setOrderPay(orderRequVO.getOrderTotal().subtract(orderRequVO.getOrderDiscountTotal()));
+
+		return orderRequVO;
 	}
 
 	/**
@@ -384,10 +497,6 @@ public class OrderServiceImpl implements OrderService {
 			return;
 		}
 
-		if(orderRequVO.getOrderState()>101  && StringUtils.isEmpty(orderRequVO.getOrderNum())){
-			throw new SecurityException("无效的订单状态");
-		}
-
 		//查询订单
 		OrderDO orderDO =orderDao.getIdByOrderNum(orderRequVO.getOrderNum());
 
@@ -415,102 +524,19 @@ public class OrderServiceImpl implements OrderService {
 
 	}
 
-	/**
-	 * 计算价格
-	 * @param orderDO
-	 * @param orderRequVO
-	 */
-	private void  calculateOrder(APIOrderRequVO orderRequVO,OrderDO  orderDO) {
-
-		//用户提交的的商品Id
-		List<Integer> commodityIdArray = orderRequVO.getDetailList()
-				.stream()
-				//outType[1:商品 5:商品規格]
-				.filter(f->{return(f.getOutType()!=null  && (f.getOutType()== OrderDetailType.Commodity.getId() || f.getOutType()==OrderDetailType.CommodityNorms.getId()));})
-				//获取商品 id
-				.map(m -> m.getCommodityId()).collect(Collectors.toList());
-
-		//去除重复id
-		HashSet<Integer> hashSet = new HashSet<>(commodityIdArray);
-		commodityIdArray.clear();
-		commodityIdArray.addAll(hashSet);
-
-		//查询所有有效的商品
-		List<CommodityWidthExtendDO> commodityDOList = commodityService.queryByIdArray(commodityIdArray);
-
-		//提交的商品信息不对
-		if (commodityIdArray.size() != commodityDOList.size()) {
-			//有效的商品Id
-			List<Integer> validCommodityIdArray = commodityDOList.stream().map(m -> m.getId()).collect(Collectors.toList());
-
-			//查询失效的商品Id
-			List<Integer> unvalidComodityIdArry = commodityIdArray.stream().filter(f -> {
-				return !validCommodityIdArray.contains(f);
-			}).collect(Collectors.toList());
-
-			throw new SecurityException("商品已售空" + unvalidComodityIdArry);
-		}
-
-		// 商品总数量
-		Integer commodityTotal = 0;
-
-		//商品总额
-		BigDecimal orderTotal = new BigDecimal(0);
-
-		//计算总数量
-		for (APIOrderDetailVO detail : orderRequVO.getDetailList()) {
-			if (detail.getOutType()== OrderDetailType.Commodity.getId() || detail.getOutType()==OrderDetailType.CommodityNorms.getId()) {
-				//计算总数量
-				commodityTotal += detail.getOutSize();
-				for (CommodityWidthExtendDO itemDo : commodityDOList) {
-					if (itemDo.getId().equals(detail.getCommodityId())) {
-						//总额 加 商品价格 乘 商品数量
-						BigDecimal price =null;
-						if(detail.getOutType()==OrderDetailType.Commodity.getId()){
-							price = itemDo.getCommoditySalePrice();
-							detail.setOutTitle(itemDo.getCommodityTitle());
-							detail.setOutPrice(itemDo.getCommoditySalePrice());
-						}else if(detail.getOutType()==OrderDetailType.CommodityNorms.getId()) {
-							if (!CollectionUtils.isEmpty(itemDo.getExtendList())) {
-								//查询符合规则数据
-								CommodityExtendDO normalModel = itemDo.getExtendList().stream().filter((f) -> f.getId().equals(detail.getOutId())).findFirst().get();
-								if(normalModel!=null){
-									price = normalModel.getCommodityPrice();
-									detail.setOutTitle(itemDo.getCommodityTitle()+"-"+normalModel.getTitle());
-									detail.setOutPrice(normalModel.getCommodityPrice());
-								}
-							}
-						}
-						if(price!=null) {
-							orderTotal = orderTotal.add(price.multiply(new BigDecimal(detail.getOutSize())));
-						}
-					}
-				}
-			}
-		}
-		//设置总数量
-		orderDO.setOrderCommodityTotal(commodityTotal);
-		//设置优惠总额
-		orderDO.setOrderDiscountTotal(new BigDecimal(0));
-		//设置订单总额
-		orderDO.setOrderTotal(orderTotal);
-		//设置支付总额  订单总额-支付总额
-		orderDO.setOrderPay(orderDO.getOrderTotal().subtract(orderDO.getOrderDiscountTotal()));
-	}
-
     /**
      * 创建支付宝预付单
-     * @param orderRequVO
+     * @param detailDOList
      * @param orderDO
      */
-	private boolean createAlipayOrder(APIOrderRequVO orderRequVO,OrderDO  orderDO){
+	private boolean createAlipayOrder(List<OrderDetailDO> detailDOList,OrderDO  orderDO){
 
 		//查询店铺名称
-		ShopDO shopDO = shopService.getByCustomerId(orderRequVO.getCustomerId());
+		ShopDO shopDO = shopService.getByCustomerId(orderDO.getCustomerId());
 
 		OrderAlipayDO alipayDO =  new OrderAlipayDO();
 	    alipayDO.setId(orderDO.getId());
-	    alipayDO.setBody(StringUtils.join(orderRequVO.getDetailList().stream().map(m->m.getOutTitle()).toArray()));
+	    alipayDO.setBody(StringUtils.join(detailDOList.stream().map(m->m.getOutTitle()).toArray()));
         alipayDO.setGoodsType("1");
         alipayDO.setCreateTime(Calendar.getInstance().getTime());
         alipayDO.setPassbackParams(orderDO.getId().toString());
@@ -523,7 +549,7 @@ public class OrderServiceImpl implements OrderService {
         alipayDO.setTotalAmount(orderDO.getOrderTotal().toString());
         alipayDO.setTradeNo(orderDO.getOrderNum());
 
-        String backStr = alipayManager.createTradePay(alipayDO,orderRequVO.getCustomerId());
+        String backStr = alipayManager.createTradePay(alipayDO,orderDO.getCustomerId());
         if(backStr==""){
             throw  new  SecurityException("创建支付宝预付单失败");
         }

@@ -9,7 +9,7 @@
 	<resultMap id="ExtendResultMap" type="com.bootdo.fanfan.domain.CommodityExtendDO"></resultMap>
 
 	<select id="get" resultType="com.bootdo.fanfan.domain.CommodityDO">
-		select `id`,`category_id`,`commodity_title`,`commodity_img`,`commodity_price`,`commodity_sale_price`,`commodity_remark`,`commodity_fiex_num`,`commodity_unit`,`status`,`create_time`,`customer_id`,`order`,`commodity_type`,`delete`,`must_order` from ff_commodity where id = #{value}
+		select `id`,`category_id`,`commodity_title`,`commodity_img`,`commodity_price`,`commodity_sale_price`,`commodity_remark`,`commodity_fiex_num`,`commodity_package_price`,`commodity_unit`,`status`,`create_time`,`customer_id`,`order`,`commodity_type`,`delete`,`must_order` from ff_commodity where id = #{value}
 	</select>
 
 	<select id="list" resultType="com.bootdo.fanfan.domain.CommodityDO">
@@ -70,6 +70,7 @@
 			`commodity_sale_price`, 
 			`commodity_remark`, 
 			`commodity_fiex_num`,
+			`commodity_package_price`,
 			`commodity_unit`,
 			`status`, 
 			`create_time`, 
@@ -88,6 +89,7 @@
 			#{commoditySalePrice},
 			#{commodityRemark},
 			#{commodityFiexNum},
+			#{commodityPackagePrice}
 			#{commodityUnit},
 			#{status}, 
 			#{createTime}, 
@@ -109,6 +111,7 @@
 			<if test="commoditySalePrice != null">`commodity_sale_price` = #{commoditySalePrice}, </if>
 			<if test="commodityRemark != null">`commodity_remark` = #{commodityRemark}, </if>
 			<if test="commodityFiexNum != null">`commodity_fiex_num` = #{commodityFiexNum}, </if>
+			<if test="commodityPackagePrice != null">`commodity_package_price` = #{commodityPackagePrice}, </if>
 			<if test="commodityUnit != null">`commodity_unit` = #{commodityUnit}, </if>
 			<if test="status != null">`status` = #{status}, </if>
 			<if test="createTime != null">`create_time` = #{createTime}, </if>
@@ -133,7 +136,7 @@
 	</delete>
 
 	<select id="queryExtends" resultMap="CommodityResultMap">
-		SELECT `id`,`category_id`,`commodity_title`,`commodity_img`,`commodity_price`,`commodity_sale_price`,`commodity_remark`,`commodity_fiex_num`,`commodity_unit`,`status`,`customer_id`,`order`,`commodity_type`,`must_order` from ff_commodity
+		SELECT `id`,`category_id`,`commodity_title`,`commodity_img`,`commodity_price`,`commodity_sale_price`,`commodity_remark`,`commodity_fiex_num`,`commodity_package_price`,`commodity_unit`,`status`,`customer_id`,`order`,`commodity_type`,`must_order` from ff_commodity
 		WHERE  `delete` = 0
 		<if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
 		<if test="idArray !=null and idArray !=''"> and `id` in(${idArray})</if>

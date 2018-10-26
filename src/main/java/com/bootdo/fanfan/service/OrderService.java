@@ -41,6 +41,13 @@ public interface OrderService {
 	Integer createOrder(APIOrderRequVO orderVO);
 
 	/**
+	 * 订单计价
+	 * @param orderVO
+	 * @return
+	 */
+	APIOrderRequVO calculateOrder(APIOrderRequVO orderVO);
+
+	/**
 	 * 查询当个订单
 	 * @param orderId
 	 * @return

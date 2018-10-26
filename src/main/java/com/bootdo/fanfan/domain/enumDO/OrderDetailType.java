@@ -23,7 +23,12 @@ public enum OrderDetailType {
     /**
      * 商品规格
      */
-    CommodityNorms(5);
+    CommodityNorms(5),
+    /**
+     * 餐盒
+     */
+    Package(6)
+    ;
 
     private Integer id;
     OrderDetailType(Integer id){

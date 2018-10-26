@@ -37,6 +37,8 @@ public class APIOrderRequVO {
     private String orderRemark;
     //订单发票信息
     private String orderInvoice;
+    //订单商品总数
+    private Integer orderCommodityTotal;
     //商户id
     private Integer customerId;
     //收货人信息

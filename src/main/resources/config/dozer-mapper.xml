@@ -33,7 +33,6 @@
             <a>commoditySalePrice</a>
             <b>salePrice</b>
         </field>
-
         <field>
             <a>commodityRemark</a>
             <b>desc</b>
@@ -67,6 +66,11 @@
         <field>
             <a>commoditySalePrice</a>
             <b>salePrice</b>
+        </field>
+
+        <field>
+            <a>commodityPackagePrice</a>
+            <b>packagePrice</b>
         </field>
 
         <field>
@@ -111,6 +115,11 @@
         <field>
             <a>commoditySalePrice</a>
             <b>salePrice</b>
+        </field>
+
+        <field>
+            <a>commodityPackagePrice</a>
+            <b>packagePrice</b>
         </field>
 
         <field>

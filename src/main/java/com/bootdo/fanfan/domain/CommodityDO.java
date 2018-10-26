@@ -33,6 +33,8 @@ public class CommodityDO{
 	private String commodityRemark;
 	//每天/每餐 商品库存量
 	private Integer commodityFiexNum;
+	//商品打包费用
+	private BigDecimal commodityPackagePrice;
 	//商品单位
 	private String commodityUnit;
 	//1:有效 2:下架

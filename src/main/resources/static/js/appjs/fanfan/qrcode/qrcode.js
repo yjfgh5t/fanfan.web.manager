@@ -173,7 +173,7 @@ function downAll() {
         }
     }
 
-	//
+	//展示二维码
     showImg(rows[index]["id"],callback);
 }
 

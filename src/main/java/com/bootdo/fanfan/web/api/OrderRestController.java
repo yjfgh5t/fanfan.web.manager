@@ -71,6 +71,19 @@ public class OrderRestController extends ApiBaseRestController {
     }
 
     /**
+     * 订单计算价格
+     * @param orderModel
+     * @return
+     */
+    @PostMapping("/calculate")
+    public R calculateOrder(@RequestBody APIOrderRequVO orderModel){
+        //计算订单价格
+        orderModel = orderService.calculateOrder(orderModel);
+
+        return R.ok().put("data",orderModel);
+    }
+
+    /**
      * 查询用户订单列表
      *
      * @param orderQueryRequVO

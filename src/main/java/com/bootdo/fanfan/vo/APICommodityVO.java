@@ -26,6 +26,9 @@ public class APICommodityVO {
     //商品售价
     private BigDecimal salePrice;
 
+    //商品售价
+    private BigDecimal packagePrice;
+
     //商品描述
     private String desc;
 
