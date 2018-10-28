@@ -89,7 +89,7 @@
 			#{commoditySalePrice},
 			#{commodityRemark},
 			#{commodityFiexNum},
-			#{commodityPackagePrice}
+			#{commodityPackagePrice},
 			#{commodityUnit},
 			#{status}, 
 			#{createTime}, 
