@@ -38,7 +38,7 @@ public class TestSendTemplate {
     public void SendMessage(){
 
         TemplateMsgDTO templateMsgDTO = new TemplateMsgDTO();
-        templateMsgDTO.setFormId("2018092122001474790588363666");
+        templateMsgDTO.setFormId("2018103022001474791006993587");
         templateMsgDTO.setToUserId("2088802637374794");
         //订单号、
         templateMsgDTO.setKeyword1("222002220022");
@@ -61,6 +61,15 @@ public class TestSendTemplate {
         AlipayTradeQueryResponse alipayTradeQueryResponse = alipayManager.queryTradePay(tradeNo, customerId);
 
         System.out.println(alipayTradeQueryResponse.getBody());
+    }
+
+    @Test
+    public void tradeRefund(){
+
+       boolean sucess = alipayManager.tradeRefund("15408920514530",0.01,132);
+
+        System.out.println("退款："+sucess);
+
     }
 
 }

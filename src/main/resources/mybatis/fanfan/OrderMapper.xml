@@ -4,7 +4,7 @@
 <mapper namespace="com.bootdo.fanfan.dao.OrderDao">
 
 	<select id="get" resultType="com.bootdo.fanfan.domain.OrderDO">
-		select `id`,`user_id`,`order_num`,`order_date_num`,`order_desk_num`,`order_state`,`order_total`,`order_pay`,`order_discount_total`,`order_commodity_total`,`order_pay_type`,`order_meals_num`,`order_remark`,`order_customer_remark`,`order_invoice`,`order_time`,`customer_id`,`create_time` from ff_order where id = #{value}
+		select `id`,`user_id`,`order_num`,`order_date_num`,`order_desk_num`,`order_state`,`order_type`,`order_total`,`order_pay`,`order_discount_total`,`order_commodity_total`,`order_pay_type`,`order_meals_num`,`order_remark`,`order_customer_remark`,`order_invoice`,`order_time`,`customer_id`,`create_time` from ff_order where id = #{value}
 	</select>
 
 	<select id="list" resultType="com.bootdo.fanfan.domain.OrderDO">
@@ -184,7 +184,7 @@
 
 	<!-- 未支付的订单不会查出来 只有已支付的订单才会有order_time值-->
 	<select id="queryOrderByCustomer" resultType="com.bootdo.fanfan.vo.APIOrderListCustomerVO">
-		SELECT a.id,a.order_num,a.order_state,a.order_type,a.order_total,a.order_pay,a.order_date_num,a.order_desk_num,a.order_time,b.user_nick,b.user_icon from ff_order  as a
+		SELECT a.id,a.order_num,a.order_state,a.order_type,a.order_total,a.order_total,a.order_pay,a.order_date_num,a.order_desk_num,a.order_time,a.order_remark,b.user_nick,b.user_icon from ff_order  as a
 		left JOIN ff_user as b
 		on a.user_id = b.id
 		where  a.customer_id=#{customerId}

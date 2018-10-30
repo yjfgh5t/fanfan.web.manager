@@ -27,7 +27,7 @@ import java.util.Map;
 @Component
 public class AlipayManager {
 
-    private static final Logger logger = LoggerFactory.getLogger(RefshOrderJob.class);
+    private static final Logger logger = LoggerFactory.getLogger(AlipayManager.class);
 
     private  final String authToken=null;//"201809BB4de9a2bfd3134b02a45cfe07470ebX33";
 
@@ -140,7 +140,7 @@ public class AlipayManager {
     /**
      * 退款
      */
-    public boolean tradeRefund(String orderNum,String refundAmount,Integer customerId){
+    public boolean tradeRefund(String orderNum,double refundAmount,Integer customerId){
         AlipayClient alipayClient = alipayConfig.getCustomerClient(customerId);
         AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
         request.setBizContent("{" +
@@ -151,7 +151,7 @@ public class AlipayManager {
         try {
             //执行退款
             response = alipayClient.execute(request);
-            logger.info("退款-返回：{}",response);
+            logger.info("退款-返回：{}",response.getBody());
             if(response.isSuccess()){
                 return response.getCode().equals("10000");
             }else{
@@ -269,7 +269,7 @@ public class AlipayManager {
                 logger.error("支付宝验证签名-失败 AppId:{},TBKey:{} 参数：{}", appId, publicTBKey, params);
             }
         } catch (AlipayApiException e) {
-            logger.error("支付宝验证签名-异常 {} {}", params, e);
+            logger.error("支付宝验证签名-异常 {} {}", JSON.toJSONString(params), e);
         }
         return false;
     }

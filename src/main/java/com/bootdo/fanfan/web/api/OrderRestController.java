@@ -371,7 +371,7 @@ public class OrderRestController extends ApiBaseRestController {
             List<APIPrintOrderDetailVO> detailVOS = mapper.mapArray(apiOrderRequVO.getDetailList(), APIPrintOrderDetailVO.class);
             data.setDetails(detailVOS);
         }
-        pushModel.addParams("data", data);
+        pushModel.addParams("data", JSONObject.toJSONString(data));
         pushModel.addParams("time",Calendar.getInstance().getTime());
 
         //推送消息

@@ -20,7 +20,9 @@ public class Test {
 
     public static void main(String[] args) {
 
-        BigDecimal zero = new BigDecimal(0),two = new BigDecimal(2);
+        BigDecimal zero = new BigDecimal(0),two = new BigDecimal(2.03);
+
+        System.out.println(two.doubleValue());
 
         zero.add(two);
 

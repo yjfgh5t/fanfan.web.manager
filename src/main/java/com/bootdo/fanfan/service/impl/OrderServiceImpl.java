@@ -1,5 +1,6 @@
 package com.bootdo.fanfan.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.bootdo.common.extend.EMapper;
 import com.bootdo.common.utils.RedisUtils;
 import com.bootdo.common.utils.StringUtils;
@@ -16,6 +17,8 @@ import com.bootdo.fanfan.manager.XGPushManager;
 import com.bootdo.fanfan.service.*;
 import com.bootdo.fanfan.vo.*;
 import com.bootdo.fanfan.vo.model.XGPushModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +34,9 @@ import org.springframework.util.CollectionUtils;
 
 @Service
 public class OrderServiceImpl implements OrderService {
+
+	private static final Logger logger = LoggerFactory.getLogger(AlipayManager.class);
+
 	@Autowired
 	private OrderDao orderDao;
 
@@ -306,6 +312,10 @@ public class OrderServiceImpl implements OrderService {
 		//订单详情转换
 		apiOrderRequVO.setDetailList(eMapper.mapArray(orderDetailDOList,APIOrderDetailVO.class));
 
+		if(orderDO.getOrderType()!=null){
+			apiOrderRequVO.setOrderTypeText(OrderTypeEnum.get(orderDO.getOrderType()).getText());
+		}
+
 		//订单收货人信息
 		OrderReceiverDO receiverDO = orderReceiverService.queryById(orderDO.getId());
 		if(receiverDO!=null){
@@ -333,29 +343,36 @@ public class OrderServiceImpl implements OrderService {
 	@Transactional(rollbackFor = {Exception.class})
 	public void updateOrderState(OrderDO orderDO){
 		//保存订单状态
-		orderStateService.save(new OrderStateDO(orderDO.getId(),orderDO.getOrderState(),orderDO.getCustomerId()),orderDO.getOrderNum());
-		//顾客支付
-		if(orderDO.getOrderState().equals(OrderStateEnum.userPaid.getVal())){
-			//查询customerId
-			Integer customerId = orderDao.getCustomerIdById(orderDO.getId());
-			String dateNum = dateNum(customerId);
-			//更新订单信息
-			orderDao.updateOrderStatePay(orderDO.getOrderState(),orderDO.getId(),dateNum);
-			//推送消息队列-下单通知-给顾客
-			templateMsgManager.put(new TemplateMsgMQDTO().buildOrderPayMQ(orderDO.getId()));
-			//推送下单通知-给商户
-			sendOrderNotification(orderDO.getId());
-		//商户取消订单
-		}else if(orderDO.getOrderState().equals(OrderStateEnum.businessCancel)){
-			//支付宝退款
-			alipayManager.tradeRefund(orderDO.getOrderNum(),orderDO.getOrderPay().toString(),null);
-			//更新状态
-			orderDao.updateOrderStateCancel(orderDO.getOrderState(),orderDO.getId(),orderDO.getOrderCustomerRemark());
-			//推送消息队列-取消订单通知
-			templateMsgManager.put(new TemplateMsgMQDTO().buildOrderCancleMQ(orderDO.getId()));
-		}else{
-			//其它交易状态
-			orderDao.updateOrderState(orderDO.getOrderState(),orderDO.getId());
+		if(orderStateService.save(new OrderStateDO(orderDO.getId(),orderDO.getOrderState(),orderDO.getCustomerId()),orderDO.getOrderNum())>0) {
+			//顾客支付
+			if (orderDO.getOrderState().equals(OrderStateEnum.userPaid.getVal())) {
+				//查询customerId
+				Integer customerId = orderDao.getCustomerIdById(orderDO.getId());
+				String dateNum = dateNum(customerId);
+				//更新订单信息
+				orderDao.updateOrderStatePay(orderDO.getOrderState(), orderDO.getId(), dateNum);
+				//推送消息队列-下单通知-给顾客
+				templateMsgManager.put(new TemplateMsgMQDTO().buildOrderPayMQ(orderDO.getId()));
+				//推送下单通知-给商户
+				sendOrderNotification(orderDO.getId());
+				//商户取消订单
+			} else if (orderDO.getOrderState().equals(OrderStateEnum.businessCancel)) {
+				//更新状态
+				if (orderDao.updateOrderStateCancel(orderDO.getOrderState(), orderDO.getId(), orderDO.getOrderCustomerRemark()) > 0) {
+					//支付宝退款
+					if (!alipayManager.tradeRefund(orderDO.getOrderNum(), orderDO.getOrderPay().doubleValue(), null)) {
+						throw new SecurityException("支付宝退款失败");
+					}
+					//推送消息队列-取消订单通知
+					templateMsgManager.put(new TemplateMsgMQDTO().buildOrderCancleMQ(orderDO.getId()));
+				} else {
+					//支付宝退款成功 订单修改失败
+					throw new SecurityException("退款失败，请稍后重试");
+				}
+			} else {
+				//其它交易状态
+				orderDao.updateOrderState(orderDO.getOrderState(), orderDO.getId());
+			}
 		}
 	}
 
@@ -385,11 +402,17 @@ public class OrderServiceImpl implements OrderService {
 		if(orderRequVO==null){
 			return;
 		}
-
 		XGPushModel pushModel = new XGPushModel(XGPushModel.MsgType.payOrder,orderRequVO.getCustomerId().longValue());
 		pushModel.setMsgTitle("您有新的订单");
-		pushModel.setMsgContent("订单总额："+orderRequVO.getOrderTotal().toString());
-		pushModel.addParams("data",orderRequVO);
+		pushModel.setMsgContent("订单总额："+orderRequVO.getOrderTotal().doubleValue());
+
+		//数据转换
+		APIPrintOrderVO data = eMapper.map(orderRequVO, APIPrintOrderVO.class);
+		if(orderRequVO.getDetailList()!=null){
+			List<APIPrintOrderDetailVO> detailVOS = eMapper.mapArray(orderRequVO.getDetailList(), APIPrintOrderDetailVO.class);
+			data.setDetails(detailVOS);
+		}
+		pushModel.addParams("data", JSONObject.toJSONString(data));
 		pushModel.setNotification(false);
 		//推送消息
 		xgPushManager.put(pushModel);
@@ -455,6 +478,8 @@ public class OrderServiceImpl implements OrderService {
 
 					//设置状态文本
 					item.setOrderStateText(OrderStateEnum.get(item.getOrderState()).getText());
+					//堂吃类型文本
+					item.setOrderTypeText(OrderTypeEnum.get(item.getOrderType()).getText());
 				});
 			}
 		}

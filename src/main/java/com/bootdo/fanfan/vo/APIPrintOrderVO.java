@@ -34,6 +34,11 @@ public class APIPrintOrderVO {
     private String orderDateNum;
 
     /**
+     * 打包、堂吃、外卖
+     */
+    private String orderTypeText;
+
+    /**
      * 备注
      */
     private String orderRemark;

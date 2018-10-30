@@ -34,9 +34,21 @@ public class APIOrderListCustomerVO {
     private String  orderStateText;
 
     /**
-     * 订单金额
+     * 堂吃、外卖、打包
+     */
+    private String orderTypeText;
+
+    private Integer orderType;
+
+    /**
+     * 用户支付金额
      */
     private BigDecimal orderPay;
+
+    /**
+     * 订单总金额
+     */
+    private BigDecimal orderTotal;
 
     /**
      * 订单桌号
@@ -62,6 +74,11 @@ public class APIOrderListCustomerVO {
      * 用户头像
      */
     private String userIcon;
+
+    /**
+     * 描述
+     */
+    private String orderRemark;
 
     /**
      * 订单详情列表
