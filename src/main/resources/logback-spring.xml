@@ -33,4 +33,8 @@
         <appender-ref ref="logFile" />
     </root>
 
+    <root name="com.bootdo.fanfan.manager.AlipayManager" level="info" additivity="false">
+        <appender-ref ref="logFile" />
+    </root>
+
 </configuration>

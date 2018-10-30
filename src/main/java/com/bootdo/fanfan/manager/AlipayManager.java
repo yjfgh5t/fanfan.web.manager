@@ -80,7 +80,8 @@ public class AlipayManager {
         try {
             String _token  =  this.getToken(code,this.authToken);
             if(_token==null){
-                System.out.println("获取token失败");
+                logger.error("获取用户信息--获取Token失败");
+                return null;
             }
 
             response = alipayClient.execute(request,_token,this.authToken);
@@ -89,11 +90,11 @@ public class AlipayManager {
                 System.out.println(response.getUserName());
                 return response;
             } else {
-                System.out.println("调用失败");
+                logger.error("获取用户信息--调用失败:{}",response);
             }
 
         } catch (AlipayApiException e) {
-            e.printStackTrace();
+            logger.error("获取用户信息-异常：{}",e);
         }
         return null;
     }
@@ -122,13 +123,16 @@ public class AlipayManager {
         try {
             //这里和普通的接口调用不同，使用的是sdkExecute
             AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);
-            logger.info("预付单返回："+response.getBody());
+            logger.info("创建预付单-返回："+response.getBody());
             if(response.isSuccess()) {
-                return response.getBody();//就是orderString 可以直接给客户端请求，无需再做处理。
+                //就是orderString 可以直接给客户端请求，无需再做处理。
+                return response.getBody();
+            }else{
+                logger.error("创建预付单-失败 {} {}",request.getBizContent(),response.getBody());
             }
             return "";
         } catch (AlipayApiException e) {
-            e.printStackTrace();
+            logger.error("创建预付单-异常：{} {}",request.getBizContent(), e);
         }
         return "";
     }
@@ -147,10 +151,14 @@ public class AlipayManager {
         try {
             //执行退款
             response = alipayClient.execute(request);
-            return  response.isSuccess() && response.getCode()=="10000";
-
+            logger.info("退款-返回：{}",response);
+            if(response.isSuccess()){
+                return response.getCode().equals("10000");
+            }else{
+                logger.error("退款-失败 {} {}",request.getBizContent(),response.getBody());
+            }
         } catch (AlipayApiException e) {
-            e.printStackTrace();
+            logger.error("退款-异常：{} {}",request.getBizContent(),e);
         }
 
         return false;
@@ -219,7 +227,7 @@ public class AlipayManager {
         try {
             response = alipayClient.execute(request);
         } catch (AlipayApiException e) {
-            logger.error("查询支付宝交易异常- ->{}",e);
+            logger.error("查询交易-异常：{} {}",request.getBizContent(),e);
         }
         return response;
     }
@@ -235,13 +243,13 @@ public class AlipayManager {
         try {
             response = alipayClient.execute(request,null,this.authToken);
         } catch (AlipayApiException e) {
-            e.printStackTrace();
+           logger.error("推送支付宝模板-异常：{},{}",request.getBizContent(),e);
         }
+
         if(response.isSuccess()){
-            logger.info("模板发送成功");
             return true;
         }else{
-            logger.error("模板发送失败--{}", JSON.toJSONString(response));
+            logger.error("推送支付宝模板-失败 {}", response.getBody());
         }
 
         return false;
@@ -252,15 +260,17 @@ public class AlipayManager {
      * @param params
      * @return
      */
-    public boolean checkSign(Map<String,String> params){
+    public boolean checkSign(Map<String,String> params) {
         try {
             String appId = params.get("app_id");
             String publicTBKey = alipayKeyService.getPublicTBKey(appId);
-            return AlipaySignature.rsaCheckV1(params,publicTBKey,"utf-8","RSA2");
+            boolean success = AlipaySignature.rsaCheckV1(params, publicTBKey, "utf-8", "RSA2");
+            if (!success) {
+                logger.error("支付宝验证签名-失败 AppId:{},TBKey:{} 参数：{}", appId, publicTBKey, params);
+            }
         } catch (AlipayApiException e) {
-            e.printStackTrace();
+            logger.error("支付宝验证签名-异常 {} {}", params, e);
         }
-
         return false;
     }
 
