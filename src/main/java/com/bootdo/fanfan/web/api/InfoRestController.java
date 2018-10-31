@@ -5,6 +5,7 @@ import com.bootdo.common.domain.FileDO;
 import com.bootdo.common.extend.EMapper;
 import com.bootdo.common.service.FileService;
 import com.bootdo.common.utils.*;
+import com.bootdo.fanfan.constant.RedisConstant;
 import com.bootdo.fanfan.domain.QrcodeDO;
 import com.bootdo.fanfan.domain.ShopDO;
 import com.bootdo.fanfan.domain.enumDO.DictionaryEnum;
@@ -21,7 +22,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.*;
 
 @RestController
@@ -46,6 +50,9 @@ public class InfoRestController extends ApiBaseRestController {
 
     @Autowired
     EMapper eMapper;
+
+    @Autowired
+    RedisUtils redisUtils;
 
     /**
      * 初始化信息
@@ -160,5 +167,23 @@ public class InfoRestController extends ApiBaseRestController {
     public R qrcode(@PathVariable("qrcode") String qrCodeId){
         System.out.println("访问"+qrCodeId);
         return R.ok();
+    }
+
+    /**
+     * 图片二维码
+     * @param mobile
+     */
+    @GetMapping("/imgcode/{mobile}")
+    public void imgCode(@PathVariable("mobile") String mobile, HttpServletResponse response) throws IOException {
+        //创建图片验证码
+        ImgCodeUtils codeUtils = ImgCodeUtils.build().createCode();
+        //获验证码
+        String code = codeUtils.getCode();
+        //保存至缓存
+        redisUtils.hset(RedisConstant.IMG_CODE_KEY,mobile,code,20*60);
+        ServletOutputStream outputStream = response.getOutputStream();
+        outputStream.write(codeUtils.getByte());
+        outputStream.flush();
+        outputStream.close();
     }
 }

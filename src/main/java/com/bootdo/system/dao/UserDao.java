@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * 
@@ -32,4 +33,6 @@ public interface UserDao {
 	
 	Long[] listAllDept();
 
+	@Select("select user_id from sys_user where status=1 and mobile=#{mobile} limit 1")
+	Long checkMobile(String mobile);
 }

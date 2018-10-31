@@ -101,10 +101,43 @@ public class UserServiceImpl implements UserService {
 		return r;
 	}
 
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public int simpleSave(UserDO userDO){
+
+		//验证信息
+		checkRegister(userDO);
+
 		userDO.setGmtModified(new Date());
-		return userMapper.update(userDO);
+
+		int success =-1;
+
+		//设置密码
+		if(StringUtils.isNotEmpty(userDO.getPassword())) {
+			//用户昵称-系统
+			userDO.setUsername("system-auto-create");
+			//密码加密
+			userDO.setPassword(MD5Utils.encrypt(userDO.getUsername(), userDO.getPassword()));
+		}
+
+		//创建时间
+		if(userDO.getUserId().equals(-1)){
+			userDO.setGmtCreate(new Date());
+			success = userMapper.save(userDO);
+			//数据插入成功
+			if(success>0){
+				//插入用户权限
+				UserRoleDO userRoleDO = new UserRoleDO();
+				userRoleDO.setUserId(userDO.getUserId());
+				userRoleDO.setRoleId(60L);
+				userRoleMapper.save(userRoleDO);
+			}
+
+		}else{
+			success = userMapper.update(userDO);
+		}
+
+		return success;
 	}
 
 	@Override
@@ -138,6 +171,7 @@ public class UserServiceImpl implements UserService {
 			throw new Exception("你修改的不是你登录的账号！");
 		}
 	}
+
 	@Override
 	public int adminResetPwd(UserVO userVO) throws Exception {
 		UserDO userDO =get(userVO.getUserDO().getUserId());
@@ -242,4 +276,30 @@ public class UserServiceImpl implements UserService {
 		return result;
     }
 
+	/**
+	 * 验证注册
+	 */
+	private void checkRegister(UserDO userDO){
+		//姓名
+		if(StringUtils.isEmpty(userDO.getName())){
+			throw new SecurityException("用户姓名不能为空");
+		}
+
+		//手机号
+		if(StringUtils.isEmpty(userDO.getMobile())){
+			throw new SecurityException("手机号不能为空");
+		}
+
+		//密码
+		if(userDO.getUserId()>0 &&  StringUtils.isEmpty(userDO.getMobile())){
+			throw new SecurityException("密码不能为空");
+		}
+
+		//查询号码是否注册
+		Long registerId = userMapper.checkMobile(userDO.getMobile());
+
+		if(registerId!=null && !userDO.getUserId().equals(registerId)){
+			throw new SecurityException("手机号已经注册");
+		}
+	}
 }

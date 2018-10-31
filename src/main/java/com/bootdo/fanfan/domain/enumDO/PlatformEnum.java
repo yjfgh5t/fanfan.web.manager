@@ -11,20 +11,26 @@ public enum PlatformEnum {
     /**
      * 支付宝小程序
      */
-    AlipayMiniprogram(1,"支付宝小程序"),
+    AlipayMiniprogram(1,"支付宝小程序","AlipayMiniprogram"),
 
     /**
      * 微信小程序
      */
-    WechatMiniprogram(2,"微信小程序"),
+    WechatMiniprogram(2,"微信小程序","WechatMiniprogram"),
     /**
      * Android商户端
      */
-    CustomerAndroid(3,"Android商户端");
+    CustomerAndroid(3,"Android商户端","CustomerAndroid");
 
     private Integer val;
 
     private String  text;
+
+    private String code;
+
+    public String getCode(){
+        return code;
+    }
 
     public String getText() {
         return text;
@@ -34,9 +40,10 @@ public enum PlatformEnum {
         return val;
     }
 
-    PlatformEnum(Integer val,String text){
+    PlatformEnum(Integer val,String text,String code){
         this.text=text;
         this.val=val;
+        this.code = code;
     }
 
 }

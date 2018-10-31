@@ -33,9 +33,9 @@ public class FormIdRestController extends ApiBaseRestController {
         formIdDO.setUserId(getBaseModel().getUserId());
 
         //判断客户端类型
-        if(PlatformEnum.AlipayMiniprogram.toString().equals(getBaseModel().getClientType())){
+        if(PlatformEnum.AlipayMiniprogram==getBaseModel().getClientType()){
             formIdDO.setFormType(PlatformEnum.AlipayMiniprogram.getVal());
-        }else{
+        }else if(PlatformEnum.WechatMiniprogram == getBaseModel().getClientType()){
             formIdDO.setFormType(PlatformEnum.WechatMiniprogram.getVal());
         }
 

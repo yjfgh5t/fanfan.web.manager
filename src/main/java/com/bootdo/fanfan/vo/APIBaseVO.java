@@ -1,5 +1,6 @@
 package com.bootdo.fanfan.vo;
 
+import com.bootdo.fanfan.domain.enumDO.PlatformEnum;
 import lombok.Data;
 
 /**
@@ -10,9 +11,9 @@ import lombok.Data;
 public class APIBaseVO {
 
     /**
-     * 客户端类型[Android Alipay Wechat]
+     * 客户端类型 PlatformEnum [Android Alipay Wechat]
      */
-    private String clientType;
+    private PlatformEnum clientType;
 
     /**
      * 客户端用户id
