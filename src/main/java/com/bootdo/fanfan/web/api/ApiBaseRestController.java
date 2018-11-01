@@ -1,6 +1,7 @@
 package com.bootdo.fanfan.web.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.bootdo.common.exception.BDException;
 import com.bootdo.common.utils.MD5Utils;
 import com.bootdo.common.utils.R;
 import com.bootdo.common.utils.StringUtils;
@@ -72,7 +73,7 @@ public class ApiBaseRestController {
         if(result.hasErrors()){
             List<ObjectError> allErrors = result.getAllErrors();
             if(allErrors!=null && allErrors.size()>0){
-                throw new SecurityException(allErrors.get(0).getDefaultMessage());
+                throw new BDException(allErrors.get(0).getDefaultMessage(),BDException.VERIFY_ERROR_CODE);
             }
         }
     }

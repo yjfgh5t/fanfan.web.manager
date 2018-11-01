@@ -3,6 +3,7 @@ package com.bootdo.common.config;
 import com.alibaba.druid.util.StringUtils;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
+import com.bootdo.common.exception.BDException;
 import com.bootdo.fanfan.domain.AlipayKeyDO;
 import com.bootdo.fanfan.service.AlipayKeyService;
 import lombok.Getter;
@@ -70,7 +71,7 @@ public class AlipayConfig {
                         "RSA2");
                 alipayClientMap.put(customerId, defaultAlipayClient);
             }else{
-                throw new SecurityException("商户未配置支付宝密钥");
+                throw new BDException("商户未配置支付宝密钥",BDException.VERIFY_ERROR_CODE);
             }
         }
 

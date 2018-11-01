@@ -170,7 +170,7 @@ public class InfoRestController extends ApiBaseRestController {
     }
 
     /**
-     * 图片二维码
+     * 图片验证码
      * @param mobile
      */
     @GetMapping("/imgcode/{mobile}")
@@ -180,7 +180,7 @@ public class InfoRestController extends ApiBaseRestController {
         //获验证码
         String code = codeUtils.getCode();
         //保存至缓存
-        redisUtils.hset(RedisConstant.IMG_CODE_KEY,mobile,code,20*60);
+        redisUtils.hset(RedisConstant.IMG_CODE_KEY,mobile,code,10*60);
         ServletOutputStream outputStream = response.getOutputStream();
         outputStream.write(codeUtils.getByte());
         outputStream.flush();

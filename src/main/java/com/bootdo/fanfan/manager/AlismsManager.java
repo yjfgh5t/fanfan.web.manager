@@ -21,6 +21,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * @author: JY阿里
@@ -54,14 +55,21 @@ public class AlismsManager {
     public boolean sendSMSCode(String mobile) {
         try {
             Map<String,String> params = new HashMap<>();
-            String code = (int)Math.random()*10000+"";
+            String code = 1000+new Random().nextInt(999)+"";
             params.put("code",code);
             //组装请求对象
             SendSmsRequest request = getSendSmsRequest(mobile,params);
             //必填:短信模板-可在短信控制台中找到，发送国际/港澳台消息时，请使用国际/港澳台短信模版
             request.setTemplateCode("SMS_149920014");
             //请求失败这里会抛ClientException异常
-            SendSmsResponse sendSmsResponse = getClient().getAcsResponse(request);
+            //执行发送
+            SendSmsResponse sendSmsResponse =null;
+            if(1==1){
+                sendSmsResponse = new SendSmsResponse();
+                sendSmsResponse.setCode("OK");
+            }else{
+                sendSmsResponse =getClient().getAcsResponse(request);
+            }
             if (sendSmsResponse.getCode() != null && sendSmsResponse.getCode().equals("OK")) {
                 //将二维码放入缓存
                 redisUtils.hset(RedisConstant.MOBILE_CODE_KEY,mobile,code,60*5);
@@ -84,7 +92,14 @@ public class AlismsManager {
     public boolean checkCode(String mobile,String code){
         String strCode = (String) redisUtils.hget(RedisConstant.MOBILE_CODE_KEY, mobile);
 
-        return code.equals(strCode);
+        boolean success = code.equals(strCode);
+
+        //验证成功需删除
+        if(success){
+            redisUtils.hdel(RedisConstant.MOBILE_CODE_KEY,mobile);
+        }
+
+        return success;
     }
 
     /**
@@ -99,7 +114,14 @@ public class AlismsManager {
             //必填:短信模板-可在短信控制台中找到，发送国际/港澳台消息时，请使用国际/港澳台短信模版
             request.setTemplateCode("SMS_149417820");
             //执行发送
-            SendSmsResponse sendSmsResponse = getClient().getAcsResponse(request);
+            SendSmsResponse sendSmsResponse =null;
+            if(1==1){
+                sendSmsResponse = new SendSmsResponse();
+                sendSmsResponse.setCode("OK");
+            }else{
+                sendSmsResponse =getClient().getAcsResponse(request);
+            }
+
             if (sendSmsResponse.getCode() != null && sendSmsResponse.getCode().equals("OK")) {
                 return true;
             }

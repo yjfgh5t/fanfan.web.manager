@@ -2,6 +2,7 @@ package com.bootdo.fanfan.service.impl;
 
 import com.alipay.api.response.AlipayUserInfoShareResponse;
 import com.bootdo.common.config.AlipayConfig;
+import com.bootdo.common.exception.BDException;
 import com.bootdo.common.extend.EMapper;
 import com.bootdo.fanfan.domain.UserDO;
 import com.bootdo.fanfan.manager.AlipayManager;
@@ -42,7 +43,7 @@ public class TpUserServiceImpl implements TpUserService {
 	}
 
 	@Override
-	@Transactional(rollbackFor = {SecurityException.class})
+	@Transactional(rollbackFor = {Exception.class})
 	public TpUserDO getTPInfo(String code, int type) {
 
 		TpUserDO tpUserDO = getTpUserDO(code, type);
@@ -62,7 +63,7 @@ public class TpUserServiceImpl implements TpUserService {
 		//添加用户至信息表
 		if(userService.save(userDO)<0){
 			//抛出异常
-			throw new SecurityException("保存用户失败");
+			throw new BDException("保存用户失败",BDException.BUSINESS_ERROR_CODE);
 		}
 
 		//添加至TpUser表

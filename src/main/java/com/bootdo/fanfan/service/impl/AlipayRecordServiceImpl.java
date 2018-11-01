@@ -45,7 +45,7 @@ public class AlipayRecordServiceImpl implements AlipayRecordService {
 	}
 	
 	@Override
-	@Transactional(rollbackFor = {SecurityException.class,Exception.class})
+	@Transactional(rollbackFor = {Exception.class})
 	public int save(AlipayRecordDO alipayRecord){
 
 		//支付宝信息是否保存

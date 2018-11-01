@@ -6,6 +6,7 @@ import java.util.*;
 
 import com.bootdo.common.config.BootdoConfig;
 import com.bootdo.common.domain.FileDO;
+import com.bootdo.common.exception.BDException;
 import com.bootdo.common.service.FileService;
 import com.bootdo.common.utils.*;
 import com.bootdo.system.vo.UserVO;
@@ -115,13 +116,13 @@ public class UserServiceImpl implements UserService {
 		//设置密码
 		if(StringUtils.isNotEmpty(userDO.getPassword())) {
 			//用户昵称-系统
-			userDO.setUsername("system-auto-create");
+			userDO.setUsername(userDO.getMobile());
 			//密码加密
 			userDO.setPassword(MD5Utils.encrypt(userDO.getUsername(), userDO.getPassword()));
 		}
 
 		//创建时间
-		if(userDO.getUserId().equals(-1)){
+		if(userDO.getUserId()<1){
 			userDO.setGmtCreate(new Date());
 			success = userMapper.save(userDO);
 			//数据插入成功
@@ -132,7 +133,6 @@ public class UserServiceImpl implements UserService {
 				userRoleDO.setRoleId(60L);
 				userRoleMapper.save(userRoleDO);
 			}
-
 		}else{
 			success = userMapper.update(userDO);
 		}
@@ -282,24 +282,24 @@ public class UserServiceImpl implements UserService {
 	private void checkRegister(UserDO userDO){
 		//姓名
 		if(StringUtils.isEmpty(userDO.getName())){
-			throw new SecurityException("用户姓名不能为空");
+			throw new BDException("用户姓名不能为空",BDException.VERIFY_ERROR_CODE);
 		}
 
 		//手机号
 		if(StringUtils.isEmpty(userDO.getMobile())){
-			throw new SecurityException("手机号不能为空");
+			throw new BDException("手机号不能为空",BDException.VERIFY_ERROR_CODE);
 		}
 
 		//密码
 		if(userDO.getUserId()>0 &&  StringUtils.isEmpty(userDO.getMobile())){
-			throw new SecurityException("密码不能为空");
+			throw new BDException("密码不能为空",BDException.VERIFY_ERROR_CODE);
 		}
 
 		//查询号码是否注册
 		Long registerId = userMapper.checkMobile(userDO.getMobile());
 
 		if(registerId!=null && !userDO.getUserId().equals(registerId)){
-			throw new SecurityException("手机号已经注册");
+			throw new BDException("手机号已经注册",BDException.VERIFY_ERROR_CODE);
 		}
 	}
 }

@@ -17,7 +17,7 @@ public class R extends HashMap<String, Object> {
 	}
 
 	public static R error(String msg) {
-		return error(500, msg);
+		return error(1, msg);
 	}
 
 	public static R error(int code, String msg) {

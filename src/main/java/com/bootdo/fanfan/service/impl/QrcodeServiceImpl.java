@@ -1,5 +1,6 @@
 package com.bootdo.fanfan.service.impl;
 
+import com.bootdo.common.exception.BDException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,7 +56,7 @@ public class QrcodeServiceImpl implements QrcodeService {
 
 		//不能修改店铺信息
 		if(qrcodeDO.getCustomerId()!=null && !qrcodeDO.getCustomerId().equals(qrcode.getCustomerId())){
-			throw new SecurityException("不能修改店铺信息");
+			throw new BDException("不能修改店铺信息",BDException.BUSINESS_ERROR_CODE);
 		}
 
 		qrcode.setModifyTime(new Date());

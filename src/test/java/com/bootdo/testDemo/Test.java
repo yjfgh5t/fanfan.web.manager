@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * @author: JY
@@ -20,13 +21,15 @@ public class Test {
 
     public static void main(String[] args) {
 
-        BigDecimal zero = new BigDecimal(0),two = new BigDecimal(2.03);
+        System.out.println(1000+new Random().nextInt(999)+"");
 
-        System.out.println(two.doubleValue());
-
-        zero.add(two);
-
-        System.out.println(zero.toBigInteger().intValue());
+//        BigDecimal zero = new BigDecimal(0),two = new BigDecimal(2.03);
+//
+//        System.out.println(two.doubleValue());
+//
+//        zero.add(two);
+//
+//        System.out.println(zero.toBigInteger().intValue());
     }
 
 

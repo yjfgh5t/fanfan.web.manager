@@ -8,7 +8,14 @@ public class BDException extends RuntimeException {
 	
     private String msg;
     private int code = 500;
-    
+
+	/**
+	 * 验证异常
+	 */
+	public static int VERIFY_ERROR_CODE=1;
+
+	public static int BUSINESS_ERROR_CODE=2;
+
     public BDException(String msg) {
 		super(msg);
 		this.msg = msg;

@@ -1,5 +1,6 @@
 package com.bootdo.fanfan.service.impl;
 
+import com.bootdo.common.exception.BDException;
 import com.bootdo.fanfan.domain.DTO.OrderRefreshDTO;
 import com.bootdo.fanfan.domain.enumDO.OrderStateEnum;
 import com.bootdo.fanfan.service.OrderService;
@@ -64,7 +65,7 @@ public class OrderStateServiceImpl implements OrderStateService {
 		Integer id =  orderStateDao.queryHasSave(orderState.getOrderId(), orderState.getOrderState());
 
 		if (id != null) {
-			throw  new SecurityException("订单状态已存在不可重复添加");
+			throw  new BDException("订单状态已存在不可重复添加",BDException.BUSINESS_ERROR_CODE);
 		}
 
 		//设置当前时间

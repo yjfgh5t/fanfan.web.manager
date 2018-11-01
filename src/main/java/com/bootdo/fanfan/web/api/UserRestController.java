@@ -88,6 +88,32 @@ public class UserRestController extends ApiBaseRestController {
     }
 
     /**
+     * 商户登入-手机验证码
+     * @param code
+     * @return
+     */
+    @PostMapping("customer/codeLogin")
+    public R customerCodeLogin(@Param("mobile") String mobile,@Param("code") String code){
+
+        //手机验证码
+        if(StringUtils.isEmpty(mobile+code) || !alismsManager.checkCode(mobile,code)){
+            return R.error("验证码输入不正确");
+        }
+
+        Map<String,Object> params = new HashMap<>();
+        params.put("mobile",mobile);
+
+        List<com.bootdo.system.domain.UserDO> userDOS =userService.list(params);
+
+        if(userDOS!=null && userDOS.size()>0) {
+            APICustomerVO userVO = eMapper.map(userDOS.get(0), APICustomerVO.class);
+            return R.ok().put("data", userVO);
+        }
+
+        return R.ok().put("data","");
+    }
+
+    /**
      * 保存商户信息
      * @param model
      * @param result
@@ -132,7 +158,7 @@ public class UserRestController extends ApiBaseRestController {
 
         //手机验证码
         if(!alismsManager.checkCode(registerVO.getMobile(),registerVO.getCode())){
-            return R.error("手机验证码输入有误");
+            return R.error("验证码输入不正确");
         }
 
         com.bootdo.system.domain.UserDO userDO = eMapper.map(registerVO, com.bootdo.system.domain.UserDO.class);
@@ -175,7 +201,7 @@ public class UserRestController extends ApiBaseRestController {
 
             String cacheImgCode = (String) redisUtils.hget(RedisConstant.IMG_CODE_KEY,mobile);
 
-            if(!imgCode.equals(cacheImgCode)){
+            if(StringUtils.isEmpty(cacheImgCode) || !imgCode.toLowerCase().equals(cacheImgCode.toLowerCase())){
                 return R.error("图片验证码输入不正确");
             }
         }

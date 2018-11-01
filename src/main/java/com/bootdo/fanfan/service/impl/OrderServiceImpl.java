@@ -1,6 +1,7 @@
 package com.bootdo.fanfan.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.bootdo.common.exception.BDException;
 import com.bootdo.common.extend.EMapper;
 import com.bootdo.common.utils.RedisUtils;
 import com.bootdo.common.utils.StringUtils;
@@ -115,7 +116,7 @@ public class OrderServiceImpl implements OrderService {
 	 * 创建订单
 	 */
 	@Override
-	@Transactional(rollbackFor = {SecurityException.class,Exception.class})
+	@Transactional(rollbackFor = {Exception.class})
 	public Integer createOrder(APIOrderRequVO orderVO){
 
 		//计算价格、转换信息
@@ -209,7 +210,7 @@ public class OrderServiceImpl implements OrderService {
 				return !validCommodityIdArray.contains(f);
 			}).collect(Collectors.toList());
 
-			throw new SecurityException("商品已售空" + unvalidComodityIdArry);
+			throw new BDException("商品已售空" + unvalidComodityIdArry,BDException.VERIFY_ERROR_CODE);
 		}
 
 		// 商品总数量
@@ -361,13 +362,13 @@ public class OrderServiceImpl implements OrderService {
 				if (orderDao.updateOrderStateCancel(orderDO.getOrderState(), orderDO.getId(), orderDO.getOrderCustomerRemark()) > 0) {
 					//支付宝退款
 					if (!alipayManager.tradeRefund(orderDO.getOrderNum(), orderDO.getOrderPay().doubleValue(), null)) {
-						throw new SecurityException("支付宝退款失败");
+						throw new BDException("支付宝退款失败",BDException.BUSINESS_ERROR_CODE);
 					}
 					//推送消息队列-取消订单通知
 					templateMsgManager.put(new TemplateMsgMQDTO().buildOrderCancleMQ(orderDO.getId()));
 				} else {
 					//支付宝退款成功 订单修改失败
-					throw new SecurityException("退款失败，请稍后重试");
+					throw new BDException("退款失败，请稍后重试",BDException.BUSINESS_ERROR_CODE);
 				}
 			} else {
 				//其它交易状态
@@ -507,15 +508,15 @@ public class OrderServiceImpl implements OrderService {
 	 */
 	private void  validateOrder(APIOrderRequVO orderRequVO){
 		if(orderRequVO==null){
-			throw new SecurityException("订单信息不能为空");
+			throw new BDException("订单信息不能为空",BDException.VERIFY_ERROR_CODE);
 		}
 
 		if(orderRequVO.getDetailList()==null || orderRequVO.getDetailList().size()==0){
-			throw new SecurityException("订单商品信息不能为空");
+			throw new BDException("订单商品信息不能为空",BDException.VERIFY_ERROR_CODE);
 		}
 
 		if(orderRequVO.getUserId()==null){
-			throw  new SecurityException("用户信息不能为空");
+			throw  new BDException("用户信息不能为空",BDException.VERIFY_ERROR_CODE);
 		}
 
 		if(orderRequVO.getOrderState()==null || orderRequVO.getOrderState()==101 ){
@@ -526,12 +527,12 @@ public class OrderServiceImpl implements OrderService {
 		OrderDO orderDO =orderDao.getIdByOrderNum(orderRequVO.getOrderNum());
 
         if(orderDO==null) {
-            throw new SecurityException("无效的订单号");
+            throw new BDException("无效的订单号",BDException.VERIFY_ERROR_CODE);
         }
 
         //设置订单状态
 		if(orderRequVO.getOrderState()<orderDO.getOrderState()){
-        	throw new SecurityException("无效的订单状态");
+        	throw new BDException("无效的订单状态",BDException.VERIFY_ERROR_CODE);
 		}
 
         //设置Id
@@ -544,7 +545,7 @@ public class OrderServiceImpl implements OrderService {
         };
 
         if(Arrays.asList(notModifyState).contains(orderRequVO.getOrderState())) {
-            throw new SecurityException(OrderStateEnum.get(orderRequVO.getOrderState()).getText());
+            throw new BDException(OrderStateEnum.get(orderRequVO.getOrderState()).getText(),BDException.BUSINESS_ERROR_CODE);
         }
 
 	}
@@ -576,7 +577,7 @@ public class OrderServiceImpl implements OrderService {
 
         String backStr = alipayManager.createTradePay(alipayDO,orderDO.getCustomerId());
         if(backStr==""){
-            throw  new  SecurityException("创建支付宝预付单失败");
+            throw  new  BDException("创建支付宝预付单失败",BDException.VERIFY_ERROR_CODE);
         }
         alipayDO.setCreateBackBody(backStr);
 

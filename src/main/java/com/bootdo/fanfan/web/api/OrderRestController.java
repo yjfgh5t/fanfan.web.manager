@@ -54,20 +54,15 @@ public class OrderRestController extends ApiBaseRestController {
      */
     @PostMapping("/")
     public R createOrder(@RequestBody APIOrderRequVO orderModel) {
-        try {
+        orderModel.setCustomerId(getBaseModel().getCustomerId());
 
-            orderModel.setCustomerId(getBaseModel().getCustomerId());
+        //创建订单
+        Integer orderId = orderService.createOrder(orderModel);
 
-            //创建订单
-            Integer orderId = orderService.createOrder(orderModel);
+        //查询订单
+        APIOrderRequVO requVO = orderService.queryOrder(orderId);
 
-            //查询订单
-            APIOrderRequVO requVO = orderService.queryOrder(orderId);
-
-            return R.ok().put("data", requVO);
-        } catch (SecurityException ex) {
-            return R.error(1, ex.getMessage());
-        }
+        return R.ok().put("data", requVO);
     }
 
     /**
