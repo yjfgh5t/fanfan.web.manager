@@ -51,6 +51,14 @@ public interface OrderDao {
 	Integer getCustomerIdById(@Param("id") Integer id);
 
 	/**
+	 * 查询退款信息
+	 * @param id
+	 * @return
+	 */
+	@Select("select order_num,customer_id,order_pay from  ff_order  where id=#{id}")
+	OrderDO getOrderTrande(@Param("id") Integer id);
+
+	/**
 	 * 查询订单状态
 	 * @param idArray
 	 * @return

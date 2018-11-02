@@ -348,7 +348,10 @@ public class OrderServiceImpl implements OrderService {
 			//顾客支付
 			if (orderDO.getOrderState().equals(OrderStateEnum.userPaid.getVal())) {
 				//查询customerId
-				Integer customerId = orderDao.getCustomerIdById(orderDO.getId());
+				Integer customerId =orderDO.getCustomerId();
+				if(customerId==null) {
+					customerId = orderDao.getCustomerIdById(orderDO.getId());
+				}
 				String dateNum = dateNum(customerId);
 				//更新订单信息
 				orderDao.updateOrderStatePay(orderDO.getOrderState(), orderDO.getId(), dateNum);
@@ -357,11 +360,12 @@ public class OrderServiceImpl implements OrderService {
 				//推送下单通知-给商户
 				sendOrderNotification(orderDO.getId());
 				//商户取消订单
-			} else if (orderDO.getOrderState().equals(OrderStateEnum.businessCancel)) {
+			} else if (orderDO.getOrderState().equals(OrderStateEnum.businessCancel.getVal())) {
 				//更新状态
 				if (orderDao.updateOrderStateCancel(orderDO.getOrderState(), orderDO.getId(), orderDO.getOrderCustomerRemark()) > 0) {
+					OrderDO temModel = orderDao.getOrderTrande(orderDO.getId());
 					//支付宝退款
-					if (!alipayManager.tradeRefund(orderDO.getOrderNum(), orderDO.getOrderPay().doubleValue(), null)) {
+					if (!alipayManager.tradeRefund(temModel.getOrderNum(), temModel.getOrderPay().doubleValue(), temModel.getCustomerId())) {
 						throw new BDException("支付宝退款失败",BDException.BUSINESS_ERROR_CODE);
 					}
 					//推送消息队列-取消订单通知
