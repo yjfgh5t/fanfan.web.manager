@@ -29,4 +29,13 @@ public class TestSendSMS {
 
     }
 
+    @Test
+    public void sendSMSNotify(){
+
+        boolean success = alismsManager.sendSMSDownloadApk("15821243531");
+
+        System.out.println("发送："+success);
+
+    }
+
 }

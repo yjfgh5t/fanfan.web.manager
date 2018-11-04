@@ -124,6 +124,7 @@ public class UserServiceImpl implements UserService {
 		//创建时间
 		if(userDO.getUserId()<1){
 			userDO.setGmtCreate(new Date());
+			userDO.setStatus(1);
 			success = userMapper.save(userDO);
 			//数据插入成功
 			if(success>0){

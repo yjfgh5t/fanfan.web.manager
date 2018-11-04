@@ -79,7 +79,11 @@ public class TemplateMsgManager extends AbstractMsgQueue<TemplateMsgMQDTO> {
                 //退款金额、
                 templateMsgDTO.setKeyword2(orderDO.getOrderPay().toString());
                 //退款原因
-                templateMsgDTO.setKeyword3(orderDO.getOrderCustomerRemark());
+                String remark = orderDO.getOrderCustomerRemark();
+                if(StringUtils.isEmpty(remark)){
+                    remark ="商家取消订单";
+                }
+                templateMsgDTO.setKeyword3(remark);
 
                 //发送模板消息
                boolean send = alipayManager.sendTemplateMsg(templateMsgDTO.buildCancelPayOrder(item.getOrderId()),null);

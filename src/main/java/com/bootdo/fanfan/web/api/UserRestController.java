@@ -108,9 +108,9 @@ public class UserRestController extends ApiBaseRestController {
         if(userDOS!=null && userDOS.size()>0) {
             APICustomerVO userVO = eMapper.map(userDOS.get(0), APICustomerVO.class);
             return R.ok().put("data", userVO);
+        }else{
+            return R.error("手机号还未注册");
         }
-
-        return R.ok().put("data","");
     }
 
     /**

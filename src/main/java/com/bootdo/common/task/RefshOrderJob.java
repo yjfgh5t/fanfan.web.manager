@@ -81,7 +81,8 @@ public class RefshOrderJob implements Job {
                         OrderDO orderDO = new OrderDO();
                         orderDO.setOrderState(OrderStateEnum.userPayOvertime.getVal());
                         orderDO.setId(entry.getKey());
-
+                        orderDO.setCustomerId(model.getCustomerId());
+                        orderDO.setId(model.getOrderId());
                         //设置订单超时未支付
                         orderService.updateOrderState(orderDO);
                     }

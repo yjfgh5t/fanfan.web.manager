@@ -275,6 +275,7 @@ public class OrderRestController extends ApiBaseRestController {
 
         //更新状态
         orderDO.setOrderState(stateEnum.getVal());
+        orderDO.setCustomerId(getBaseModel().getCustomerId());
         orderService.updateOrderState(orderDO);
 
         //返回状态
