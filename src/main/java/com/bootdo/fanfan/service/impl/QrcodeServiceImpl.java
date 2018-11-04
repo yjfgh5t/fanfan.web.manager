@@ -56,10 +56,13 @@ public class QrcodeServiceImpl implements QrcodeService {
 
 		//不能修改店铺信息
 		if(qrcodeDO.getCustomerId()!=null && !qrcodeDO.getCustomerId().equals(qrcode.getCustomerId())){
-			throw new BDException("不能修改店铺信息",BDException.BUSINESS_ERROR_CODE);
+			throw new BDException("不能设置非本店铺二维码",BDException.BUSINESS_ERROR_CODE);
 		}
 
-		qrcode.setModifyTime(new Date());
+		//去除之前设置的二维码
+		removeOldDesk(qrcode.getCustomerId(),qrcode.getDeskId());
+		qrcodeDO.setCustomerId(qrcode.getCustomerId());
+		qrcodeDO.setDeskId(qrcode.getDeskId());
 
 		return qrcodeDao.update(qrcode);
 	}

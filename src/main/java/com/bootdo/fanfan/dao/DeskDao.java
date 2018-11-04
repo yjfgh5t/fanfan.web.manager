@@ -33,6 +33,6 @@ public interface DeskDao {
 	
 	int batchRemove(Integer[] ids);
 
-	@Select("select fd.*,fq.id as qr_code_id from ff_desk as fd LEFT JOIN ff_qrcode fq on fd.id = fq.desk_id where fd.customer_id=#{customerId} order by fd.id")
+	@Select("select fd.*,fq.id as qr_code_id from ff_desk as fd INNER JOIN ff_qrcode fq on fd.id = fq.desk_id where fd.customer_id=#{customerId} order by fd.id")
 	List<DeskDTO> queryList(@Param("customerId") Integer customerId);
 }
