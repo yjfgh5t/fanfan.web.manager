@@ -166,7 +166,7 @@ public class UserRestController extends ApiBaseRestController {
         if(userService.simpleSave(userDO)>0){
 
             //如果是支付宝小程序注册成功 向商户发送下载Apk
-            if(getBaseModel().getClientType() == PlatformEnum.AlipayMiniprogram){
+            if(getBaseModel().getClientEnumType() == PlatformEnum.AlipayMiniprogram){
                 alismsManager.sendSMSDownloadApk(userDO.getMobile());
             }
 

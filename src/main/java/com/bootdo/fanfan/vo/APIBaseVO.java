@@ -9,11 +9,10 @@ import lombok.Data;
  */
 @Data
 public class APIBaseVO {
-
     /**
      * 客户端类型 PlatformEnum [Android Alipay Wechat]
      */
-    private PlatformEnum clientType;
+    private String clientType;
 
     /**
      * 客户端用户id
@@ -40,4 +39,11 @@ public class APIBaseVO {
      */
     private String sign;
 
+    public PlatformEnum getClientEnumType(){
+        switch (this.clientType){
+            case "AlipayMiniprogram": return PlatformEnum.AlipayMiniprogram;
+            case "Android":return PlatformEnum.CustomerAndroid;
+        }
+        return null;
+    }
 }

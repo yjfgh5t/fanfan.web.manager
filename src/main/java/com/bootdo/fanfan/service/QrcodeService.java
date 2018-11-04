@@ -1,5 +1,6 @@
 package com.bootdo.fanfan.service;
 
+import com.bootdo.fanfan.domain.DTO.QRCodeDeskDTO;
 import com.bootdo.fanfan.domain.QrcodeDO;
 
 import java.util.List;
@@ -15,7 +16,9 @@ import java.util.Map;
 public interface QrcodeService {
 	
 	QrcodeDO get(String id);
-	
+
+	QRCodeDeskDTO getById(String id);
+
 	List<QrcodeDO> list(Map<String, Object> map);
 	
 	int count(Map<String, Object> map);

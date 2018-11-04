@@ -6,6 +6,7 @@ import com.bootdo.common.extend.EMapper;
 import com.bootdo.common.service.FileService;
 import com.bootdo.common.utils.*;
 import com.bootdo.fanfan.constant.RedisConstant;
+import com.bootdo.fanfan.domain.DTO.QRCodeDeskDTO;
 import com.bootdo.fanfan.domain.QrcodeDO;
 import com.bootdo.fanfan.domain.ShopDO;
 import com.bootdo.fanfan.domain.enumDO.DictionaryEnum;
@@ -43,9 +44,6 @@ public class InfoRestController extends ApiBaseRestController {
     QrcodeService qrcodeService;
 
     @Autowired
-    private FileService sysFileService;
-
-    @Autowired
     ShopService shopService;
 
     @Autowired
@@ -53,6 +51,9 @@ public class InfoRestController extends ApiBaseRestController {
 
     @Autowired
     RedisUtils redisUtils;
+
+    @Autowired
+    FileService sysFileService;
 
     /**
      * 初始化信息
@@ -66,14 +67,14 @@ public class InfoRestController extends ApiBaseRestController {
         Map<String,Object> resultMap = new HashMap<>();
 
         if(StringUtils.isNotEmpty(qrcode)){
-            QrcodeDO qrcodeDO = qrcodeService.get(qrcode);
+            QRCodeDeskDTO qrcodeDO = qrcodeService.getById(qrcode);
             if(qrcodeDO.getCustomerId()!=null){
                 if(qrcodeDO.getCustomerId()!=null) {
                     customerId = qrcodeDO.getCustomerId();
                 }
                 //设置桌号
                 if(qrcodeDO.getDeskId()!=null) {
-                    resultMap.put("deskId", qrcodeDO.getDeskId());
+                    resultMap.put("deskNum", qrcodeDO.getDeskText());
                 }
             }
         }

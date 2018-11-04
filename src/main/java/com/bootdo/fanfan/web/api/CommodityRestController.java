@@ -43,7 +43,7 @@ public class CommodityRestController extends ApiBaseRestController {
         _map.put("customerId",getBaseModel().getCustomerId());
 
         List<CommodityWidthExtendDO> list = commodityService.listExtend(_map);
-        if(getBaseModel().getClientType() == PlatformEnum.CustomerAndroid){
+        if(getBaseModel().getClientEnumType() == PlatformEnum.CustomerAndroid){
             return R.ok().put("data", mapper.mapArray(list, APICommodityVO.class));
         }else {
             return R.ok().put("data", mapper.mapArray(list, APICommoditySimpleVO.class));
@@ -60,7 +60,7 @@ public class CommodityRestController extends ApiBaseRestController {
         //查询商品详情
         CommodityWidthExtendDO model = commodityService.getExtend(id);
 
-        if(getBaseModel().getClientType()==PlatformEnum.CustomerAndroid){
+        if(getBaseModel().getClientEnumType()==PlatformEnum.CustomerAndroid){
             return R.ok().put("data", mapper.map(model, APICommodityVO.class));
         }else {
             return R.ok().put("data", mapper.map(model, APICommoditySimpleVO.class));

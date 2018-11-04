@@ -1,6 +1,8 @@
 package com.bootdo.fanfan.service.impl;
 
 import com.bootdo.common.exception.BDException;
+import com.bootdo.fanfan.domain.DTO.QRCodeDeskDTO;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +26,12 @@ public class QrcodeServiceImpl implements QrcodeService {
 	public QrcodeDO get(String id){
 		return qrcodeDao.get(id);
 	}
-	
+
+	@Override
+	public QRCodeDeskDTO getById( String id){
+		return qrcodeDao.getById(id);
+	}
+
 	@Override
 	public List<QrcodeDO> list(Map<String, Object> map){
 		return qrcodeDao.list(map);

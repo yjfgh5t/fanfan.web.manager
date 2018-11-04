@@ -50,7 +50,7 @@ public class ApiBaseRestController {
 
         StringBuilder stringBuilder = new StringBuilder();
         //支付宝小程序
-        if(baseVO.getClientType()== PlatformEnum.AlipayMiniprogram) {
+        if(baseVO.getClientEnumType()== PlatformEnum.AlipayMiniprogram) {
             stringBuilder.append(baseVO.getClientType());
             stringBuilder.append(baseVO.getUserId());
             stringBuilder.append(baseVO.getCustomerId());
