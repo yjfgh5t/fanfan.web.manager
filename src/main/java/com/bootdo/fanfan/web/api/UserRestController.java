@@ -51,7 +51,7 @@ public class UserRestController extends ApiBaseRestController {
     @PostMapping("/")
     public R getUser(@Param("code") String code,@Param("type") Integer type){
 
-        TpUserDO tpUserDO = tpUserService.getTPInfo(code,type);
+        TpUserDO tpUserDO = tpUserService.getTPInfo(code,type,getBaseModel().getCustomerId());
 
         if(tpUserDO!=null) {
            return R.ok().put("data", eMapper.map(tpUserDO, UserDO.class));

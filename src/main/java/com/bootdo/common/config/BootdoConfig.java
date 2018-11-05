@@ -24,6 +24,19 @@ public class BootdoConfig {
 	 */
 	private String xgSecretKey;
 
+	/**
+	 * 默认custoemrId
+	 */
+	private Integer defaultCustomerId;
+
+	public Integer getDefaultCustomerId() {
+		return defaultCustomerId;
+	}
+
+	public void setDefaultCustomerId(Integer defaultCustomerId) {
+		this.defaultCustomerId = defaultCustomerId;
+	}
+
 	public Integer getXgAccessId() {
 		return xgAccessId;
 	}

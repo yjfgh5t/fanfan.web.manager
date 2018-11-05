@@ -20,4 +20,9 @@ public class RedisConstant {
      * 验证码发送记录
      */
     public static final String SMS_SEND_RECORD="FANFAN_SMS_SEND_RECORD";
+
+    /**
+     * 商户Token
+     */
+    public static final String CUSTOMER_TOKEN_KEY="CUSTOMER_TOKEN_KEY";
 }

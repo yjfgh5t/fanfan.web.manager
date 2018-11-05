@@ -3,8 +3,6 @@ package com.bootdo.fanfan.web.controller;
 import java.util.List;
 import java.util.Map;
 
-import com.bootdo.common.config.AlipayConfig;
-import com.bootdo.fanfan.manager.AlipayManager;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -17,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.bootdo.fanfan.domain.AlipayKeyDO;
-import com.bootdo.fanfan.service.AlipayKeyService;
+import com.bootdo.fanfan.domain.TokenDO;
+import com.bootdo.fanfan.service.TokenService;
 import com.bootdo.common.utils.PageUtils;
 import com.bootdo.common.utils.Query;
 import com.bootdo.common.utils.R;
@@ -28,48 +26,45 @@ import com.bootdo.common.utils.R;
  * 
  * @author jy
  * @email 1992lcg@163.com
- * @date 2018-09-18 14:36:00
+ * @date 2018-11-05 14:23:08
  */
  
 @Controller
-@RequestMapping("/fanfan/alipayKey")
-public class AlipayKeyController {
+@RequestMapping("/fanfan/token")
+public class TokenController {
 	@Autowired
-	private AlipayKeyService alipayKeyService;
-
-	@Autowired
-	private AlipayConfig alipayConfig;
-
+	private TokenService tokenService;
+	
 	@GetMapping()
-	@RequiresPermissions("fanfan:alipayKey:alipayKey")
-	String AlipayKey(){
-	    return "fanfan/alipayKey/alipayKey";
+	@RequiresPermissions("fanfan:token:token")
+	String Token(){
+	    return "fanfan/token/token";
 	}
 	
 	@ResponseBody
 	@GetMapping("/list")
-	@RequiresPermissions("fanfan:alipayKey:alipayKey")
+	@RequiresPermissions("fanfan:token:token")
 	public PageUtils list(@RequestParam Map<String, Object> params){
 		//查询列表数据
         Query query = new Query(params);
-		List<AlipayKeyDO> alipayKeyList = alipayKeyService.list(query);
-		int total = alipayKeyService.count(query);
-		PageUtils pageUtils = new PageUtils(alipayKeyList, total);
+		List<TokenDO> tokenList = tokenService.list(query);
+		int total = tokenService.count(query);
+		PageUtils pageUtils = new PageUtils(tokenList, total);
 		return pageUtils;
 	}
 	
 	@GetMapping("/add")
-	@RequiresPermissions("fanfan:alipayKey:add")
+	@RequiresPermissions("fanfan:token:add")
 	String add(){
-	    return "fanfan/alipayKey/add";
+	    return "fanfan/token/add";
 	}
 
 	@GetMapping("/edit/{id}")
-	@RequiresPermissions("fanfan:alipayKey:edit")
+	@RequiresPermissions("fanfan:token:edit")
 	String edit(@PathVariable("id") Integer id,Model model){
-		AlipayKeyDO alipayKey = alipayKeyService.get(id);
-		model.addAttribute("alipayKey", alipayKey);
-	    return "fanfan/alipayKey/edit";
+		TokenDO token = tokenService.get(id);
+		model.addAttribute("token", token);
+	    return "fanfan/token/edit";
 	}
 	
 	/**
@@ -77,9 +72,9 @@ public class AlipayKeyController {
 	 */
 	@ResponseBody
 	@PostMapping("/save")
-	@RequiresPermissions("fanfan:alipayKey:add")
-	public R save( AlipayKeyDO alipayKey){
-		if(alipayKeyService.save(alipayKey)>0){
+	@RequiresPermissions("fanfan:token:add")
+	public R save( TokenDO token){
+		if(tokenService.save(token)>0){
 			return R.ok();
 		}
 		return R.error();
@@ -89,11 +84,9 @@ public class AlipayKeyController {
 	 */
 	@ResponseBody
 	@RequestMapping("/update")
-	@RequiresPermissions("fanfan:alipayKey:edit")
-	public R update( AlipayKeyDO alipayKey){
-		alipayKeyService.update(alipayKey);
-		//删除
-		//alipayConfig.removeCustomer(alipayKey.getCustomerId());
+	@RequiresPermissions("fanfan:token:edit")
+	public R update( TokenDO token){
+		tokenService.update(token);
 		return R.ok();
 	}
 	
@@ -102,9 +95,9 @@ public class AlipayKeyController {
 	 */
 	@PostMapping( "/remove")
 	@ResponseBody
-	@RequiresPermissions("fanfan:alipayKey:remove")
+	@RequiresPermissions("fanfan:token:remove")
 	public R remove( Integer id){
-		if(alipayKeyService.remove(id)>0){
+		if(tokenService.remove(id)>0){
 		return R.ok();
 		}
 		return R.error();
@@ -115,9 +108,9 @@ public class AlipayKeyController {
 	 */
 	@PostMapping( "/batchRemove")
 	@ResponseBody
-	@RequiresPermissions("fanfan:alipayKey:batchRemove")
+	@RequiresPermissions("fanfan:token:batchRemove")
 	public R remove(@RequestParam("ids[]") Integer[] ids){
-		alipayKeyService.batchRemove(ids);
+		tokenService.batchRemove(ids);
 		return R.ok();
 	}
 	

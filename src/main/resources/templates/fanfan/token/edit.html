@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+						<input id="id" name="id" th:value="${token.id}"  type="hidden">
+							<div class="form-group">	
+								<label class="col-sm-3 control-label">商户Id：</label>
+								<div class="col-sm-8">
+									<input id="customerId" name="customerId" th:value="${token.customerId}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">APPID：</label>
+								<div class="col-sm-8">
+									<input id="appId" name="appId" th:value="${token.appId}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">令牌：</label>
+								<div class="col-sm-8">
+									<input id="appToken" name="appToken" th:value="${token.appToken}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">刷新的令牌：</label>
+								<div class="col-sm-8">
+									<input id="appRefreshToken" name="appRefreshToken" th:value="${token.appRefreshToken}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">Token到期时间：</label>
+								<div class="col-sm-8">
+									<input id="appExpries" name="appExpries" th:value="${token.appExpries}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">授权用户Id：</label>
+								<div class="col-sm-8">
+									<input id="appUserId" name="appUserId" th:value="${token.appUserId}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">Token类型：</label>
+								<div class="col-sm-8">
+									<input id="platformType" name="platformType" th:value="${token.platformType}" class="form-control" type="text">
+								</div>
+							</div>
+																					<div class="form-group">
+								<div class="col-sm-8 col-sm-offset-3">
+									<button type="submit" class="btn btn-primary">提交</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+	</div>
+	</div>
+	<div th:include="include::footer"></div>
+	<script type="text/javascript" src="/js/appjs/fanfan/token/edit.js">
+	</script>
+</body>
+</html>

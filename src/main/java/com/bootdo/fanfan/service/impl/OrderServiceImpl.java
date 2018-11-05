@@ -579,7 +579,7 @@ public class OrderServiceImpl implements OrderService {
         alipayDO.setTotalAmount(orderDO.getOrderTotal().toString());
         alipayDO.setTradeNo(orderDO.getOrderNum());
 
-        String backStr = alipayManager.createTradePay(alipayDO,orderDO.getCustomerId());
+        String backStr = alipayManager.createTradePayByAuth(alipayDO,orderDO.getCustomerId());
         if(backStr==""){
             throw  new  BDException("创建支付宝预付单失败",BDException.VERIFY_ERROR_CODE);
         }

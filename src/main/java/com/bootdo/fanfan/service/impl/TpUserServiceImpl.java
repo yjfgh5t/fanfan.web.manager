@@ -44,9 +44,9 @@ public class TpUserServiceImpl implements TpUserService {
 
 	@Override
 	@Transactional(rollbackFor = {Exception.class})
-	public TpUserDO getTPInfo(String code, int type) {
+	public TpUserDO getTPInfo(String code, int type,Integer customerId) {
 
-		TpUserDO tpUserDO = getTpUserDO(code, type);
+		TpUserDO tpUserDO = getTpUserDO(code, type,customerId);
 
 		if(tpUserDO==null)
 			return null;
@@ -114,13 +114,13 @@ public class TpUserServiceImpl implements TpUserService {
 	 * @param type
 	 * @return
 	 */
-	private TpUserDO getTpUserDO(String code, int type) {
+	private TpUserDO getTpUserDO(String code, int type,Integer customerId) {
 		TpUserDO tpUserDO=null;
 
 		if(type==1)
 		{
 			//调用接口返回
-			AlipayUserInfoShareResponse alipayUserInfoShareResponse = alipayManager.getUserInfo(code,null);
+			AlipayUserInfoShareResponse alipayUserInfoShareResponse = alipayManager.getUserInfo(code,customerId);
 			//数据转换
 			if(alipayUserInfoShareResponse!=null) {
 				tpUserDO = eMapper.map(alipayUserInfoShareResponse, TpUserDO.class);

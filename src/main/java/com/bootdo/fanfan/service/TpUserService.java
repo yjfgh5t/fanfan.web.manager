@@ -22,7 +22,7 @@ public interface TpUserService {
 	 * @param type  类型 1：支付宝 2：微信
 	 * @return
 	 */
-	TpUserDO getTPInfo(String code,int type);
+	TpUserDO getTPInfo(String code,int type,Integer customerId);
 	
 	List<TpUserDO> list(Map<String, Object> map);
 	

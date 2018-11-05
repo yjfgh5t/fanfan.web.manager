@@ -20,6 +20,10 @@ public enum  DictionaryEnum {
     showContact(9003,"是否显示联系我们"),
     aliDYKeyId(9004,"阿里大鱼Key"),
     aliDYKeySecret(9005,"阿里大鱼Secret"),
+    aliPayPublicKey(9006,"公钥"),
+    aliPayPrivateKey(9007,"私钥"),
+    aliPayKey(9008,"支付宝公钥"),
+    appId(9009,"APPID"),
 
     customerId(9101,"商户Id"),
     deskId(9102,"客桌Id");

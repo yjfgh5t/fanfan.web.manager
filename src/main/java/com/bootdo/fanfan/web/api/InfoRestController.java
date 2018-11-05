@@ -80,7 +80,7 @@ public class InfoRestController extends ApiBaseRestController {
         }
 
         if(customerId==-1){
-            customerId=132;
+            customerId=1;
         }
 
         //店铺信息
