@@ -39,6 +39,19 @@ public class BootdoConfig {
 	 */
 	private String alipayUrl;
 
+	/**
+	 * 授权地址
+	 */
+	private String authorizeUrl;
+
+	public String getAuthorizeUrl() {
+		return authorizeUrl;
+	}
+
+	public void setAuthorizeUrl(String authorizeUrl) {
+		this.authorizeUrl = authorizeUrl;
+	}
+
 	public String getAlipayUrl() {
 		return alipayUrl;
 	}

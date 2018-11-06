@@ -6,6 +6,7 @@ bootdo:
   defaultAlipayCustomerId: 1
   defaultAilpayPlatformCustomerId: 2
   alipayUrl: https://openapi.alipay.com/gateway.do
+  authorizeUrl: https://openauth.alipay.com/oauth2/appToAppAuth.htm?app_id=2018072060650548&redirect_uri=http%3A%2F%2Fwxcard.com.cn%2Fapi%2Falipay%2FauthRedirect%3Fcustomer_id%3D
 logging:
   level:
     root: error

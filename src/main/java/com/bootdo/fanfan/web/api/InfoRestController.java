@@ -14,6 +14,7 @@ import com.bootdo.fanfan.service.DictionaryService;
 import com.bootdo.fanfan.service.QrcodeService;
 import com.bootdo.fanfan.service.ShopService;
 import com.bootdo.fanfan.vo.APIShopVO;
+import com.google.zxing.WriterException;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
@@ -27,6 +28,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.*;
 
 @RestController
@@ -168,6 +170,19 @@ public class InfoRestController extends ApiBaseRestController {
     public R qrcode(@PathVariable("qrcode") String qrCodeId){
         System.out.println("访问"+qrCodeId);
         return R.ok();
+    }
+
+    @RequestMapping("/qrCodeImg")
+    public void getQRCode(String context,Integer width, HttpServletResponse response) throws IOException, WriterException {
+        try {
+            byte[] data = QrCodeUtils.createQrCode(width, URLDecoder.decode(context),"png");
+            ServletOutputStream outputStream = response.getOutputStream();
+            outputStream.write(data);
+            outputStream.flush();
+            outputStream.close();
+        }catch (IOException ex){
+            ex.printStackTrace();
+        }
     }
 
     /**
