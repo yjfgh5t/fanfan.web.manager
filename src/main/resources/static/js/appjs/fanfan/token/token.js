@@ -72,6 +72,10 @@ function load() {
 									title : 'Token到期时间' 
 								},
 																{
+									field : 'appUserAuthId', 
+									title : '授权商户的AppId' 
+								},
+																{
 									field : 'appUserId', 
 									title : '授权用户Id' 
 								},

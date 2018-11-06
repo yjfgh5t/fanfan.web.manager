@@ -1,6 +1,7 @@
 package com.bootdo.fanfan.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.bootdo.common.config.AlipayConfig;
 import com.bootdo.common.exception.BDException;
 import com.bootdo.common.extend.EMapper;
 import com.bootdo.common.utils.RedisUtils;
@@ -73,6 +74,12 @@ public class OrderServiceImpl implements OrderService {
 
 	@Autowired
 	RedisUtils redisUtils;
+
+	@Autowired
+	TpUserService tpUserService;
+
+	@Autowired
+	AlipayConfig alipayConfig;
 
 	//region 默认方法
 	@Override
@@ -578,7 +585,8 @@ public class OrderServiceImpl implements OrderService {
         alipayDO.setTimeoutExpress("15m");
         alipayDO.setTotalAmount(orderDO.getOrderTotal().toString());
         alipayDO.setTradeNo(orderDO.getOrderNum());
-
+		String buyerId = tpUserService.getTpId(orderDO.getUserId(),alipayConfig.getAppId());
+		alipayDO.setBuyerId(buyerId);
         String backStr = alipayManager.createTradePayByAuth(alipayDO,orderDO.getCustomerId());
         if(backStr==""){
             throw  new  BDException("创建支付宝预付单失败",BDException.VERIFY_ERROR_CODE);

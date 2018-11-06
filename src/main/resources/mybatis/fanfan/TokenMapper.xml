@@ -4,11 +4,11 @@
 <mapper namespace="com.bootdo.fanfan.dao.TokenDao">
 
 	<select id="get" resultType="com.bootdo.fanfan.domain.TokenDO">
-		select `id`,`customer_id`,`app_id`,`app_token`,`app_refresh_token`,`app_expries`,`app_user_id`,`platform_type` from ff_token where id = #{value}
+		select `id`,`customer_id`,`app_id`,`app_token`,`app_refresh_token`,`app_expries`,`app_user_auth_id`,`app_user_id`,`platform_type` from ff_token where id = #{value}
 	</select>
 
 	<select id="list" resultType="com.bootdo.fanfan.domain.TokenDO">
-		select `id`,`customer_id`,`app_id`,`app_token`,`app_refresh_token`,`app_expries`,`app_user_id`,`platform_type` from ff_token
+		select `id`,`customer_id`,`app_id`,`app_token`,`app_refresh_token`,`app_expries`,`app_user_auth_id`,`app_user_id`,`platform_type` from ff_token
         <where>  
 		  		  <if test="id != null and id != ''"> and id = #{id} </if>
 		  		  <if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
@@ -16,6 +16,7 @@
 		  		  <if test="appToken != null and appToken != ''"> and app_token = #{appToken} </if>
 		  		  <if test="appRefreshToken != null and appRefreshToken != ''"> and app_refresh_token = #{appRefreshToken} </if>
 		  		  <if test="appExpries != null and appExpries != ''"> and app_expries = #{appExpries} </if>
+		  		  <if test="appUserAuthId != null and appUserAuthId != ''"> and app_user_auth_id = #{appUserAuthId} </if>
 		  		  <if test="appUserId != null and appUserId != ''"> and app_user_id = #{appUserId} </if>
 		  		  <if test="platformType != null and platformType != ''"> and platform_type = #{platformType} </if>
 		  		</where>
@@ -41,6 +42,7 @@
 		  		  <if test="appToken != null and appToken != ''"> and app_token = #{appToken} </if>
 		  		  <if test="appRefreshToken != null and appRefreshToken != ''"> and app_refresh_token = #{appRefreshToken} </if>
 		  		  <if test="appExpries != null and appExpries != ''"> and app_expries = #{appExpries} </if>
+		  		  <if test="appUserAuthId != null and appUserAuthId != ''"> and app_user_auth_id = #{appUserAuthId} </if>
 		  		  <if test="appUserId != null and appUserId != ''"> and app_user_id = #{appUserId} </if>
 		  		  <if test="platformType != null and platformType != ''"> and platform_type = #{platformType} </if>
 		  		</where>
@@ -54,6 +56,7 @@
 			`app_token`, 
 			`app_refresh_token`, 
 			`app_expries`, 
+			`app_user_auth_id`, 
 			`app_user_id`, 
 			`platform_type`
 		)
@@ -64,6 +67,7 @@
 			#{appToken}, 
 			#{appRefreshToken}, 
 			#{appExpries}, 
+			#{appUserAuthId}, 
 			#{appUserId}, 
 			#{platformType}
 		)
@@ -77,6 +81,7 @@
 			<if test="appToken != null">`app_token` = #{appToken}, </if>
 			<if test="appRefreshToken != null">`app_refresh_token` = #{appRefreshToken}, </if>
 			<if test="appExpries != null">`app_expries` = #{appExpries}, </if>
+			<if test="appUserAuthId != null">`app_user_auth_id` = #{appUserAuthId}, </if>
 			<if test="appUserId != null">`app_user_id` = #{appUserId}, </if>
 			<if test="platformType != null">`platform_type` = #{platformType}</if>
 		</set>

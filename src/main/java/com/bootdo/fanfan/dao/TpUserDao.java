@@ -34,4 +34,13 @@ public interface TpUserDao {
 
 	@Select("select * from ff_tp_user where tp_id=${tpId}")
 	TpUserDO getByTpId(@Param("tpId") String tpId);
+
+	/**
+	 * 获取第三方用户Id
+	 * @param userId
+	 * @param appId
+	 * @return
+	 */
+	@Select("select tp_id from ff_tp_user where user_id=#{userId} and tp_app_id=${appId}")
+	String getTpId(@Param("userId") Integer userId,@Param("appId") String appId);
 }

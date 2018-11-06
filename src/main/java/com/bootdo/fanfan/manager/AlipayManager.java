@@ -48,13 +48,13 @@ public class AlipayManager {
     TokenService tokenService;
 
     /**
-     * 获取商户授权Token
+     * 第三方平台授权Token
      *
      * @param code
      */
     public AlipayOpenAuthTokenAppResponse getOpenToken(String code) {
 
-        AlipayClient alipayClient = alipayConfig.getDefaultClient();
+        AlipayClient alipayClient = alipayConfig.getDefaultPlatformClient();
         //请求对象
         AlipayOpenAuthTokenAppRequest request = new AlipayOpenAuthTokenAppRequest();
         //当有code时 更具code获取token
@@ -76,13 +76,13 @@ public class AlipayManager {
 
 
     /**
-     * 获取用户授权Token
+     * 小程序用户授权Token
      *
      * @param code
      */
-    public AlipaySystemOauthTokenResponse getToken(String code,Integer customerId) {
+    public AlipaySystemOauthTokenResponse getToken(String code) {
 
-        AlipayClient alipayClient = alipayConfig.getDefaultClient();
+        AlipayClient alipayClient =  alipayConfig.getDefaultClient();
         //请求对象
         AlipaySystemOauthTokenRequest request = new AlipaySystemOauthTokenRequest();
         //当有code时 更具code获取token
@@ -114,13 +114,13 @@ public class AlipayManager {
         AlipayUserInfoShareRequest request = new AlipayUserInfoShareRequest();
         AlipayUserInfoShareResponse response = null;
         try {
-            AlipaySystemOauthTokenResponse tokenResponse = this.getToken(code,customerId);
+            AlipaySystemOauthTokenResponse tokenResponse = this.getToken(code);
             if (tokenResponse == null) {
                 logger.error("获取用户信息--获取Token失败");
                 return null;
             }
 
-            response = alipayClient.execute(request, tokenResponse.getAccessToken(),getAuthToken(customerId));
+            response = alipayClient.execute(request, tokenResponse.getAccessToken());
 
             if (response.isSuccess()) {
                 System.out.println("授权成功，用户姓名："+response.getUserName());
@@ -136,7 +136,7 @@ public class AlipayManager {
     }
 
     /**
-     * 创建支付预付单
+     * 小程序支付
      *
      * @param alipayDO
      * @return
@@ -174,10 +174,16 @@ public class AlipayManager {
         return "";
     }
 
+    /**
+     * 第三方平台支付
+     * @param alipayDO
+     * @param customerId
+     * @return
+     */
     public String createTradePayByAuth(OrderAlipayDO alipayDO, Integer customerId) {
 
         //实例化客户端
-        AlipayClient alipayClient = alipayConfig.getDefaultClient();
+        AlipayClient alipayClient =  alipayConfig.getDefaultPlatformClient();
         //实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.trade.create.
         AlipayTradeCreateRequest request = new AlipayTradeCreateRequest();
         //SDK已经封装掉了公共参数，这里只需要传入业务参数。以下方法为sdk的model入参方式(model和biz_content同时存在的情况下取biz_content)。
@@ -196,16 +202,15 @@ public class AlipayManager {
                 "\"out_trade_no\":\"" + alipayDO.getTradeNo() + "\"," +
                 "\"total_amount\":" + alipayDO.getTotalAmount() + "," +
                 "\"subject\":\"" + alipayDO.getSubject() + "\"," +
-                "\"buyer_id\":\"用户pid\"" +
+                "\"buyer_id\":\"2088602121036890\"" +
                 "}");
         try {
             //使用的是execute
-            AlipayTradeCreateResponse response = alipayClient.execute(request, null, "201811BB5b5b7b78427c4357b3bc2d403ae93X33");
+            AlipayTradeCreateResponse response = alipayClient.execute(request, null, getAuthToken(customerId));
             return response.getTradeNo();//获取返回的tradeNO。
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
@@ -295,12 +300,12 @@ public class AlipayManager {
      */
     public AlipayTradeQueryResponse queryTradePay(String tradeNo, Integer customerId) {
 
-        AlipayClient alipayClient = alipayConfig.getDefaultClient();
+        AlipayClient alipayClient = alipayConfig.getDefaultPlatformClient();
         AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
         request.setBizContent("{\"out_trade_no\":\"" + tradeNo + "\"}");
         AlipayTradeQueryResponse response = null;
         try {
-            response = alipayClient.execute(request);
+            response = alipayClient.execute(request,null,getAuthToken(customerId));
         } catch (AlipayApiException e) {
             logger.error("查询交易-异常：{} {}", request.getBizContent(), e);
         }
@@ -316,7 +321,7 @@ public class AlipayManager {
         request.setBizContent(templateModel.build());
         AlipayOpenAppMiniTemplatemessageSendResponse response = null;
         try {
-            response = alipayClient.execute(request, null, this.authToken);
+            response = alipayClient.execute(request);
         } catch (AlipayApiException e) {
             logger.error("推送支付宝模板-异常：{},{}", request.getBizContent(), e);
         }
@@ -356,15 +361,8 @@ public class AlipayManager {
      * @return
      */
     private String getAuthToken(Integer customerId){
-        if(1==1){
-            return null;
-        }
         TokenDO cacheModel = tokenService.getCacheModel(customerId, PlatformEnum.AlipayMiniprogram);
         if(cacheModel==null){
-            //如果是体验商户 则可以无需Token
-            if(bootdoConfig.getDefaultCustomerId().equals(customerId)){
-                return null;
-            }
             throw new BDException("商户未授权");
         }
 

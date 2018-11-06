@@ -45,6 +45,7 @@ public class TokenServiceImpl implements TokenService {
 		Map<String,Object> map = new HashMap<>();
 		map.put("customerId",token.getCustomerId());
 		map.put("platformType",token.getPlatformType());
+		map.put("appId",token.getAppId());
 		List<TokenDO> list = list(map);
 		if(list.size()>0){
 			token.setId(list.get(0).getId());

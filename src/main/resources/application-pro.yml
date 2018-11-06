@@ -4,6 +4,7 @@ bootdo:
   xgAccessId: 2100311367
   xgSecretKey: 03bc79adf9ad6abcb1ef0c5c4407bf2b
   defaultCustomerId: 1
+  alipayUrl: https://openapi.alipay.com/gateway.do
 logging:
   level:
     root: error

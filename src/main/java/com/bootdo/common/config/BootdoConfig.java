@@ -25,16 +25,42 @@ public class BootdoConfig {
 	private String xgSecretKey;
 
 	/**
-	 * 默认custoemrId
+	 * 默认支付宝小程序
 	 */
-	private Integer defaultCustomerId;
+	private Integer defaultAlipayCustomerId;
 
-	public Integer getDefaultCustomerId() {
-		return defaultCustomerId;
+	/**
+	 * 默认支付宝平台
+	 */
+	private Integer defaultAilpayPlatformCustomerId;
+
+	/**
+	 * 支付宝地址
+	 */
+	private String alipayUrl;
+
+	public String getAlipayUrl() {
+		return alipayUrl;
 	}
 
-	public void setDefaultCustomerId(Integer defaultCustomerId) {
-		this.defaultCustomerId = defaultCustomerId;
+	public void setAlipayUrl(String alipayUrl) {
+		this.alipayUrl = alipayUrl;
+	}
+
+	public Integer getDefaultAlipayCustomerId() {
+		return defaultAlipayCustomerId;
+	}
+
+	public void setDefaultAlipayCustomerId(Integer defaultAlipayCustomerId) {
+		this.defaultAlipayCustomerId = defaultAlipayCustomerId;
+	}
+
+	public Integer getDefaultAilpayPlatformCustomerId() {
+		return defaultAilpayPlatformCustomerId;
+	}
+
+	public void setDefaultAilpayPlatformCustomerId(Integer defaultAilpayPlatformCustomerId) {
+		this.defaultAilpayPlatformCustomerId = defaultAilpayPlatformCustomerId;
 	}
 
 	public Integer getXgAccessId() {

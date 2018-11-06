@@ -92,7 +92,8 @@ public class AlipayRestController {
 
         if(tokenResponse!=null){
             tokenDO.setAppExpries(DateUtils.parseDate("2100-01-01","yyyy-MM-dd"));
-            tokenDO.setAppId(tokenResponse.getAuthAppId());
+            tokenDO.setAppId(appId);
+            tokenDO.setAppUserId(tokenResponse.getAuthAppId());
             tokenDO.setAppRefreshToken(tokenResponse.getAppRefreshToken());
             tokenDO.setAppToken(tokenResponse.getAppAuthToken());
             tokenDO.setAppUserId(tokenResponse.getUserId());

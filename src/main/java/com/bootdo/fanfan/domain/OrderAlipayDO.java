@@ -41,7 +41,17 @@ public class OrderAlipayDO implements Serializable {
 	private Date createTime;
 	//服务回调时间
 	private Date backTime;
+	//购买人
 
+	public String getBuyerId() {
+		return buyerId;
+	}
+
+	public void setBuyerId(String buyerId) {
+		this.buyerId = buyerId;
+	}
+
+	private String buyerId;
 	/**
 	 * 设置：订单表主键
 	 */

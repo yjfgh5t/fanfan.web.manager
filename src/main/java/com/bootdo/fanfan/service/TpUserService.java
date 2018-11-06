@@ -1,6 +1,7 @@
 package com.bootdo.fanfan.service;
 
 import com.bootdo.fanfan.domain.TpUserDO;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Map;
@@ -35,4 +36,12 @@ public interface TpUserService {
 	int remove(Integer id);
 	
 	int batchRemove(Integer[] ids);
+
+	/**
+	 * 获取第三方用户Id
+	 * @param userid
+	 * @param appId
+	 * @return
+	 */
+	String getTpId(Integer userid,String appId);
 }

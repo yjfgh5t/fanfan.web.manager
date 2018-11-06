@@ -10,7 +10,7 @@ import java.util.Date;
  * 
  * @author jy
  * @email 1992lcg@163.com
- * @date 2018-11-05 15:07:45
+ * @date 2018-11-06 10:28:01
  */
 public class TokenDO implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -27,6 +27,8 @@ public class TokenDO implements Serializable {
 	private String appRefreshToken;
 	//Token到期时间
 	private Date appExpries;
+	//授权商户的AppId
+	private String appUserAuthId;
 	//授权用户Id
 	private String appUserId;
 	//Token类型
@@ -103,6 +105,18 @@ public class TokenDO implements Serializable {
 	 */
 	public Date getAppExpries() {
 		return appExpries;
+	}
+	/**
+	 * 设置：授权商户的AppId
+	 */
+	public void setAppUserAuthId(String appUserAuthId) {
+		this.appUserAuthId = appUserAuthId;
+	}
+	/**
+	 * 获取：授权商户的AppId
+	 */
+	public String getAppUserAuthId() {
+		return appUserAuthId;
 	}
 	/**
 	 * 设置：授权用户Id

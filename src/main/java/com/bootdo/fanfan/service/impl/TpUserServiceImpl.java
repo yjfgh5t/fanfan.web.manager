@@ -106,6 +106,17 @@ public class TpUserServiceImpl implements TpUserService {
 		return tpUserDao.batchRemove(ids);
 	}
 
+	/**
+	 * 获取第三方用户Id
+	 * @param userid
+	 * @param appId
+	 * @return
+	 */
+	@Override
+	public String getTpId(Integer userid,String appId){
+		return tpUserDao.getTpId(userid,appId);
+	}
+
 	//region 私有方法
 
 	/**
