@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.*;
 
 @RestController
@@ -174,15 +175,18 @@ public class InfoRestController extends ApiBaseRestController {
 
     @RequestMapping("/qrCodeImg")
     public void getQRCode(String context,Integer width, HttpServletResponse response) throws IOException, WriterException {
-        try {
+
+            int redirectIndex = context.indexOf("redirect_uri");
+            //编码
+            if(redirectIndex>0){
+                context = context.substring(0,redirectIndex+13) + URLEncoder.encode(context.substring(redirectIndex+13,context.length()),"utf-8");
+            }
+
             byte[] data = QrCodeUtils.createQrCode(width, URLDecoder.decode(context),"png");
             ServletOutputStream outputStream = response.getOutputStream();
             outputStream.write(data);
             outputStream.flush();
             outputStream.close();
-        }catch (IOException ex){
-            ex.printStackTrace();
-        }
     }
 
     /**

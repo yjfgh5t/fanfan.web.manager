@@ -52,7 +52,7 @@ public class AlipayManager {
      *
      * @param code
      */
-    public AlipayOpenAuthTokenAppResponse getOpenToken(String code) {
+    public AlipayOpenAuthTokenAppResponse getTokenPlatform(String code) {
 
         AlipayClient alipayClient = alipayConfig.getDefaultPlatformClient();
         //请求对象
@@ -73,7 +73,6 @@ public class AlipayManager {
         }
         return null;
     }
-
 
     /**
      * 小程序用户授权Token
@@ -175,12 +174,12 @@ public class AlipayManager {
     }
 
     /**
-     * 第三方平台支付
+     * 第三方平台创建预付单
      * @param alipayDO
      * @param customerId
      * @return
      */
-    public String createTradePayByAuth(OrderAlipayDO alipayDO, Integer customerId) {
+    public String createTradePayPlatform(OrderAlipayDO alipayDO, Integer customerId) {
 
         //实例化客户端
         AlipayClient alipayClient =  alipayConfig.getDefaultPlatformClient();

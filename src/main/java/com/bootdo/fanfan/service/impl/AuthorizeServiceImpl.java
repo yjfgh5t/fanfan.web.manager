@@ -3,6 +3,7 @@ package com.bootdo.fanfan.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +22,17 @@ public class AuthorizeServiceImpl implements AuthorizeService {
 	public AuthorizeDO get(Integer id){
 		return authorizeDao.get(id);
 	}
-	
+
+	@Override
+	public AuthorizeDO getByCustomerId(Integer customerId) {
+		return authorizeDao.getByCustomerId(customerId);
+	}
+
+	@Override
+	public	AuthorizeDO getState(Integer id){
+		return authorizeDao.getState(id);
+	}
+
 	@Override
 	public List<AuthorizeDO> list(Map<String, Object> map){
 		return authorizeDao.list(map);
@@ -34,7 +45,26 @@ public class AuthorizeServiceImpl implements AuthorizeService {
 	
 	@Override
 	public int save(AuthorizeDO authorize){
-		return authorizeDao.save(authorize);
+
+		if(null == authorize.getId()){
+			//查询改商户是否授权
+			Integer id = authorizeDao.getId(authorize.getCustomerId());
+			if(null != id){
+				authorize.setId(id);
+			}
+		}
+
+		int success = -1;
+
+		if(null == authorize.getId()){
+			authorize.setCreateTime(new Date());
+			success = authorizeDao.save(authorize);
+		}else {
+			authorize.setModifyTime(new Date());
+			success = update(authorize);
+		}
+
+		return success;
 	}
 	
 	@Override

@@ -62,7 +62,7 @@ public class AlipayConfig {
      * @param customerId
      * @return
      */
-    public  AlipayClient getCustomerClient(Integer customerId){
+    public AlipayClient getCustomerClient(Integer customerId){
 
         if(!alipayClientMap.containsKey(customerId)) {
             AlipayKeyDO alipayKeyDO = alipayKeyService.getByCustomerId(customerId);

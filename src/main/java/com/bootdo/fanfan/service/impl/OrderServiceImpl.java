@@ -587,7 +587,7 @@ public class OrderServiceImpl implements OrderService {
         alipayDO.setTradeNo(orderDO.getOrderNum());
 		String buyerId = tpUserService.getTpId(orderDO.getUserId(),alipayConfig.getAppId());
 		alipayDO.setBuyerId(buyerId);
-        String backStr = alipayManager.createTradePayByAuth(alipayDO,orderDO.getCustomerId());
+        String backStr = alipayManager.createTradePayPlatform(alipayDO,orderDO.getCustomerId());
         if(backStr==""){
             throw  new  BDException("创建支付宝预付单失败",BDException.VERIFY_ERROR_CODE);
         }

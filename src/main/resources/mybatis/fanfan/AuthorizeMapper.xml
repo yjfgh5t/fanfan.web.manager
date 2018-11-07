@@ -4,20 +4,24 @@
 <mapper namespace="com.bootdo.fanfan.dao.AuthorizeDao">
 
 	<select id="get" resultType="com.bootdo.fanfan.domain.AuthorizeDO">
-		select `id`,`authorize_state`,`identification_state`,`payee_id`,`business_license`,`id_card`,`fail_remark`,`identification_url`,`create_time`,`modify_time` from ff_authorize where id = #{value}
+		select `id`,`authorize_state`,`identification_state`,`payee_id`,`payee_name`,`business_license_photo`,`business_license_date`,`id_card_photo`,`shop_photo`,`fail_remark`,`identification_url`,`customer_id`,`create_time`,`modify_time` from ff_authorize where id = #{value}
 	</select>
 
 	<select id="list" resultType="com.bootdo.fanfan.domain.AuthorizeDO">
-		select `id`,`authorize_state`,`identification_state`,`payee_id`,`business_license`,`id_card`,`fail_remark`,`identification_url`,`create_time`,`modify_time` from ff_authorize
+		select `id`,`authorize_state`,`identification_state`,`payee_id`,`payee_name`,`business_license_photo`,`business_license_date`,`id_card_photo`,`shop_photo`,`fail_remark`,`identification_url`,`customer_id`,`create_time`,`modify_time` from ff_authorize
         <where>  
 		  		  <if test="id != null and id != ''"> and id = #{id} </if>
 		  		  <if test="authorizeState != null and authorizeState != ''"> and authorize_state = #{authorizeState} </if>
 		  		  <if test="identificationState != null and identificationState != ''"> and identification_state = #{identificationState} </if>
 		  		  <if test="payeeId != null and payeeId != ''"> and payee_id = #{payeeId} </if>
-		  		  <if test="businessLicense != null and businessLicense != ''"> and business_license = #{businessLicense} </if>
-		  		  <if test="idCard != null and idCard != ''"> and id_card = #{idCard} </if>
+		  		  <if test="payeeName != null and payeeName != ''"> and payee_name = #{payeeName} </if>
+		  		  <if test="businessLicensePhoto != null and businessLicensePhoto != ''"> and business_license_photo = #{businessLicensePhoto} </if>
+		  		  <if test="businessLicenseDate != null and businessLicenseDate != ''"> and business_license_date = #{businessLicenseDate} </if>
+		  		  <if test="idCardPhoto != null and idCardPhoto != ''"> and id_card_photo = #{idCardPhoto} </if>
+		  		  <if test="shopPhoto != null and shopPhoto != ''"> and shop_photo = #{shopPhoto} </if>
 		  		  <if test="failRemark != null and failRemark != ''"> and fail_remark = #{failRemark} </if>
 		  		  <if test="identificationUrl != null and identificationUrl != ''"> and identification_url = #{identificationUrl} </if>
+		  		  <if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
 		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
 		  		  <if test="modifyTime != null and modifyTime != ''"> and modify_time = #{modifyTime} </if>
 		  		</where>
@@ -41,39 +45,49 @@
 		  		  <if test="authorizeState != null and authorizeState != ''"> and authorize_state = #{authorizeState} </if>
 		  		  <if test="identificationState != null and identificationState != ''"> and identification_state = #{identificationState} </if>
 		  		  <if test="payeeId != null and payeeId != ''"> and payee_id = #{payeeId} </if>
-		  		  <if test="businessLicense != null and businessLicense != ''"> and business_license = #{businessLicense} </if>
-		  		  <if test="idCard != null and idCard != ''"> and id_card = #{idCard} </if>
+		  		  <if test="payeeName != null and payeeName != ''"> and payee_name = #{payeeName} </if>
+		  		  <if test="businessLicensePhoto != null and businessLicensePhoto != ''"> and business_license_photo = #{businessLicensePhoto} </if>
+		  		  <if test="businessLicenseDate != null and businessLicenseDate != ''"> and business_license_date = #{businessLicenseDate} </if>
+		  		  <if test="idCardPhoto != null and idCardPhoto != ''"> and id_card_photo = #{idCardPhoto} </if>
+		  		  <if test="shopPhoto != null and shopPhoto != ''"> and shop_photo = #{shopPhoto} </if>
 		  		  <if test="failRemark != null and failRemark != ''"> and fail_remark = #{failRemark} </if>
 		  		  <if test="identificationUrl != null and identificationUrl != ''"> and identification_url = #{identificationUrl} </if>
+		  		  <if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
 		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
 		  		  <if test="modifyTime != null and modifyTime != ''"> and modify_time = #{modifyTime} </if>
 		  		</where>
 	</select>
 	 
-	<insert id="save" parameterType="com.bootdo.fanfan.domain.AuthorizeDO">
+	<insert id="save" parameterType="com.bootdo.fanfan.domain.AuthorizeDO" useGeneratedKeys="true" keyProperty="id">
 		insert into ff_authorize
 		(
-			`id`, 
 			`authorize_state`, 
 			`identification_state`, 
 			`payee_id`, 
-			`business_license`, 
-			`id_card`, 
+			`payee_name`, 
+			`business_license_photo`, 
+			`business_license_date`, 
+			`id_card_photo`, 
+			`shop_photo`, 
 			`fail_remark`, 
 			`identification_url`, 
+			`customer_id`, 
 			`create_time`, 
 			`modify_time`
 		)
 		values
 		(
-			#{id}, 
 			#{authorizeState}, 
 			#{identificationState}, 
 			#{payeeId}, 
-			#{businessLicense}, 
-			#{idCard}, 
+			#{payeeName}, 
+			#{businessLicensePhoto}, 
+			#{businessLicenseDate}, 
+			#{idCardPhoto}, 
+			#{shopPhoto}, 
 			#{failRemark}, 
 			#{identificationUrl}, 
+			#{customerId}, 
 			#{createTime}, 
 			#{modifyTime}
 		)
@@ -85,10 +99,14 @@
 			<if test="authorizeState != null">`authorize_state` = #{authorizeState}, </if>
 			<if test="identificationState != null">`identification_state` = #{identificationState}, </if>
 			<if test="payeeId != null">`payee_id` = #{payeeId}, </if>
-			<if test="businessLicense != null">`business_license` = #{businessLicense}, </if>
-			<if test="idCard != null">`id_card` = #{idCard}, </if>
+			<if test="payeeName != null">`payee_name` = #{payeeName}, </if>
+			<if test="businessLicensePhoto != null">`business_license_photo` = #{businessLicensePhoto}, </if>
+			<if test="businessLicenseDate != null">`business_license_date` = #{businessLicenseDate}, </if>
+			<if test="idCardPhoto != null">`id_card_photo` = #{idCardPhoto}, </if>
+			<if test="shopPhoto != null">`shop_photo` = #{shopPhoto}, </if>
 			<if test="failRemark != null">`fail_remark` = #{failRemark}, </if>
 			<if test="identificationUrl != null">`identification_url` = #{identificationUrl}, </if>
+			<if test="customerId != null">`customer_id` = #{customerId}, </if>
 			<if test="createTime != null">`create_time` = #{createTime}, </if>
 			<if test="modifyTime != null">`modify_time` = #{modifyTime}</if>
 		</set>

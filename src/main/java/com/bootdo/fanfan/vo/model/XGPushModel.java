@@ -92,6 +92,10 @@ public class XGPushModel {
         /**
          * 签收订单
          */
-        signOrder
+        signOrder,
+        /**
+         * 授权通知
+         */
+        authorizeNotify
     }
 }

@@ -15,7 +15,16 @@ import java.util.Map;
 public interface AuthorizeService {
 	
 	AuthorizeDO get(Integer id);
-	
+
+	AuthorizeDO getByCustomerId(Integer customerId);
+
+	/**
+	 * 查询审核状态
+	 * @param id
+	 * @return
+	 */
+	AuthorizeDO getState(Integer id);
+
 	List<AuthorizeDO> list(Map<String, Object> map);
 	
 	int count(Map<String, Object> map);

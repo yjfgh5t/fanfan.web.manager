@@ -10,7 +10,7 @@ import java.util.Date;
  * 
  * @author jy
  * @email 1992lcg@163.com
- * @date 2018-11-06 23:58:43
+ * @date 2018-11-07 12:12:49
  */
 public class AuthorizeDO implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -23,14 +23,22 @@ public class AuthorizeDO implements Serializable {
 	private Integer identificationState;
 	//收款账号
 	private String payeeId;
+	//收款人姓名
+	private String payeeName;
 	//营业执照
-	private String businessLicense;
+	private String businessLicensePhoto;
+	//营业执照截止时间
+	private Date businessLicenseDate;
 	//身份证照
-	private String idCard;
+	private String idCardPhoto;
+	//店铺门面照
+	private String shopPhoto;
 	//审核失败原因
 	private String failRemark;
 	//认证成功地址
 	private String identificationUrl;
+	//商户Id
+	private Integer customerId;
 	//创建时间
 	private Date createTime;
 	//修改时间
@@ -85,28 +93,64 @@ public class AuthorizeDO implements Serializable {
 		return payeeId;
 	}
 	/**
+	 * 设置：收款人姓名
+	 */
+	public void setPayeeName(String payeeName) {
+		this.payeeName = payeeName;
+	}
+	/**
+	 * 获取：收款人姓名
+	 */
+	public String getPayeeName() {
+		return payeeName;
+	}
+	/**
 	 * 设置：营业执照
 	 */
-	public void setBusinessLicense(String businessLicense) {
-		this.businessLicense = businessLicense;
+	public void setBusinessLicensePhoto(String businessLicensePhoto) {
+		this.businessLicensePhoto = businessLicensePhoto;
 	}
 	/**
 	 * 获取：营业执照
 	 */
-	public String getBusinessLicense() {
-		return businessLicense;
+	public String getBusinessLicensePhoto() {
+		return businessLicensePhoto;
+	}
+	/**
+	 * 设置：营业执照截止时间
+	 */
+	public void setBusinessLicenseDate(Date businessLicenseDate) {
+		this.businessLicenseDate = businessLicenseDate;
+	}
+	/**
+	 * 获取：营业执照截止时间
+	 */
+	public Date getBusinessLicenseDate() {
+		return businessLicenseDate;
 	}
 	/**
 	 * 设置：身份证照
 	 */
-	public void setIdCard(String idCard) {
-		this.idCard = idCard;
+	public void setIdCardPhoto(String idCardPhoto) {
+		this.idCardPhoto = idCardPhoto;
 	}
 	/**
 	 * 获取：身份证照
 	 */
-	public String getIdCard() {
-		return idCard;
+	public String getIdCardPhoto() {
+		return idCardPhoto;
+	}
+	/**
+	 * 设置：店铺门面照
+	 */
+	public void setShopPhoto(String shopPhoto) {
+		this.shopPhoto = shopPhoto;
+	}
+	/**
+	 * 获取：店铺门面照
+	 */
+	public String getShopPhoto() {
+		return shopPhoto;
 	}
 	/**
 	 * 设置：审核失败原因
@@ -131,6 +175,18 @@ public class AuthorizeDO implements Serializable {
 	 */
 	public String getIdentificationUrl() {
 		return identificationUrl;
+	}
+	/**
+	 * 设置：商户Id
+	 */
+	public void setCustomerId(Integer customerId) {
+		this.customerId = customerId;
+	}
+	/**
+	 * 获取：商户Id
+	 */
+	public Integer getCustomerId() {
+		return customerId;
 	}
 	/**
 	 * 设置：创建时间

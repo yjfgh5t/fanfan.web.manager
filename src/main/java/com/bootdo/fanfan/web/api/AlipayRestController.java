@@ -5,11 +5,17 @@ import com.alipay.api.response.AlipayOpenAuthTokenAppResponse;
 import com.bootdo.common.extend.EMapper;
 import com.bootdo.common.utils.StringUtils;
 import com.bootdo.fanfan.domain.AlipayRecordDO;
+import com.bootdo.fanfan.domain.AuthorizeDO;
 import com.bootdo.fanfan.domain.TokenDO;
+import com.bootdo.fanfan.domain.enumDO.BooleanEnum;
+import com.bootdo.fanfan.domain.enumDO.IdentificationEnum;
 import com.bootdo.fanfan.domain.enumDO.PlatformEnum;
 import com.bootdo.fanfan.manager.AlipayManager;
+import com.bootdo.fanfan.manager.XGPushManager;
 import com.bootdo.fanfan.service.AlipayRecordService;
+import com.bootdo.fanfan.service.AuthorizeService;
 import com.bootdo.fanfan.service.TokenService;
+import com.bootdo.fanfan.vo.model.XGPushModel;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -18,8 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping(value = "/api/alipay")
@@ -36,6 +41,12 @@ public class AlipayRestController {
 
     @Autowired
     TokenService tokenService;
+
+    @Autowired
+    AuthorizeService authorizeService;
+
+    @Autowired
+    XGPushManager xgPushManager;
 
     Log log = LogFactory.getLog(AlipayRestController.class);
 
@@ -87,8 +98,7 @@ public class AlipayRestController {
 
         TokenDO tokenDO = new TokenDO();
         tokenDO.setCustomerId(customerId);
-
-        AlipayOpenAuthTokenAppResponse tokenResponse = alipayManager.getOpenToken(appAuthCode);
+        AlipayOpenAuthTokenAppResponse tokenResponse = alipayManager.getTokenPlatform(appAuthCode);
 
         if(tokenResponse!=null){
             tokenDO.setAppExpries(DateUtils.parseDate("2100-01-01","yyyy-MM-dd"));
@@ -98,7 +108,31 @@ public class AlipayRestController {
             tokenDO.setAppToken(tokenResponse.getAppAuthToken());
             tokenDO.setAppUserId(tokenResponse.getUserId());
             tokenDO.setPlatformType(PlatformEnum.AlipayMiniprogram.getVal());
+            //保存Token
             tokenService.save(tokenDO);
+
+            //设置商户授权成功
+            AuthorizeDO authorizeDO = new AuthorizeDO();
+            authorizeDO.setCustomerId(customerId);
+            authorizeDO.setAuthorizeState(BooleanEnum.True.getVal());
+            //如用户重新授权 需重置认证状态
+            authorizeDO.setIdentificationState(IdentificationEnum.NoIdentification.getVal());
+            authorizeDO.setPayeeId("");
+            authorizeDO.setPayeeName("");
+            //保存授权信息
+            int success  = authorizeService.save(authorizeDO);
+
+            //推送授权成功消息
+            if(success>0){
+                XGPushModel pushModel = new XGPushModel(XGPushModel.MsgType.authorizeNotify, customerId.longValue());
+                pushModel.setMsgTitle("授权通知");
+                pushModel.setMsgContent("支付宝授权成功");
+                pushModel.setNotification(true);
+                pushModel.addParams("data", "success");
+                pushModel.addParams("time", Calendar.getInstance().getTime());
+                //推送消息
+                xgPushManager.put(pushModel);
+            }
         }
 
         return "success";

@@ -64,12 +64,24 @@ function load() {
 									title : '收款账号' 
 								},
 																{
-									field : 'businessLicense', 
+									field : 'payeeName', 
+									title : '收款人姓名' 
+								},
+																{
+									field : 'businessLicensePhoto', 
 									title : '营业执照' 
 								},
 																{
-									field : 'idCard', 
+									field : 'businessLicenseDate', 
+									title : '营业执照截止时间' 
+								},
+																{
+									field : 'idCardPhoto', 
 									title : '身份证照' 
+								},
+																{
+									field : 'shopPhoto', 
+									title : '店铺门面照' 
 								},
 																{
 									field : 'failRemark', 
@@ -78,6 +90,10 @@ function load() {
 																{
 									field : 'identificationUrl', 
 									title : '认证成功地址' 
+								},
+																{
+									field : 'customerId', 
+									title : '商户Id' 
 								},
 																{
 									field : 'createTime', 

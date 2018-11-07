@@ -29,15 +29,33 @@
 								</div>
 							</div>
 														<div class="form-group">	
+								<label class="col-sm-3 control-label">收款人姓名：</label>
+								<div class="col-sm-8">
+									<input id="payeeName" name="payeeName" th:value="${authorize.payeeName}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
 								<label class="col-sm-3 control-label">营业执照：</label>
 								<div class="col-sm-8">
-									<input id="businessLicense" name="businessLicense" th:value="${authorize.businessLicense}" class="form-control" type="text">
+									<input id="businessLicensePhoto" name="businessLicensePhoto" th:value="${authorize.businessLicensePhoto}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">营业执照截止时间：</label>
+								<div class="col-sm-8">
+									<input id="businessLicenseDate" name="businessLicenseDate" th:value="${authorize.businessLicenseDate}" class="form-control" type="text">
 								</div>
 							</div>
 														<div class="form-group">	
 								<label class="col-sm-3 control-label">身份证照：</label>
 								<div class="col-sm-8">
-									<input id="idCard" name="idCard" th:value="${authorize.idCard}" class="form-control" type="text">
+									<input id="idCardPhoto" name="idCardPhoto" th:value="${authorize.idCardPhoto}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">店铺门面照：</label>
+								<div class="col-sm-8">
+									<input id="shopPhoto" name="shopPhoto" th:value="${authorize.shopPhoto}" class="form-control" type="text">
 								</div>
 							</div>
 														<div class="form-group">	
@@ -50,6 +68,12 @@
 								<label class="col-sm-3 control-label">认证成功地址：</label>
 								<div class="col-sm-8">
 									<input id="identificationUrl" name="identificationUrl" th:value="${authorize.identificationUrl}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">商户Id：</label>
+								<div class="col-sm-8">
+									<input id="customerId" name="customerId" th:value="${authorize.customerId}" class="form-control" type="text">
 								</div>
 							</div>
 														<div class="form-group">	
