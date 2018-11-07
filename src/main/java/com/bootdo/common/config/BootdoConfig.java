@@ -1,8 +1,10 @@
 package com.bootdo.common.config;
 
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+@Data
 @Component
 @ConfigurationProperties(prefix="bootdo")
 public class BootdoConfig {
@@ -25,90 +27,31 @@ public class BootdoConfig {
 	private String xgSecretKey;
 
 	/**
-	 * 默认支付宝小程序
+	 * 默认支付宝小程序Id
 	 */
-	private Integer defaultAlipayCustomerId;
+	private String aliPayAppId;
 
 	/**
 	 * 默认支付宝平台
 	 */
-	private Integer defaultAilpayPlatformCustomerId;
+	private String aliPayPlatformAppId;
 
 	/**
 	 * 支付宝地址
 	 */
-	private String alipayUrl;
+	private String aliPayUrl;
 
 	/**
 	 * 授权地址
 	 */
 	private String authorizeUrl;
 
-	public String getAuthorizeUrl() {
-		return authorizeUrl;
-	}
-
-	public void setAuthorizeUrl(String authorizeUrl) {
-		this.authorizeUrl = authorizeUrl;
-	}
-
-	public String getAlipayUrl() {
-		return alipayUrl;
-	}
-
-	public void setAlipayUrl(String alipayUrl) {
-		this.alipayUrl = alipayUrl;
-	}
-
-	public Integer getDefaultAlipayCustomerId() {
-		return defaultAlipayCustomerId;
-	}
-
-	public void setDefaultAlipayCustomerId(Integer defaultAlipayCustomerId) {
-		this.defaultAlipayCustomerId = defaultAlipayCustomerId;
-	}
-
-	public Integer getDefaultAilpayPlatformCustomerId() {
-		return defaultAilpayPlatformCustomerId;
-	}
-
-	public void setDefaultAilpayPlatformCustomerId(Integer defaultAilpayPlatformCustomerId) {
-		this.defaultAilpayPlatformCustomerId = defaultAilpayPlatformCustomerId;
-	}
-
-	public Integer getXgAccessId() {
-		return xgAccessId;
-	}
-
-	public void setXgAccessId(Integer xgAccessId) {
-		this.xgAccessId = xgAccessId;
-	}
-
-	public String getXgSecretKey() {
-		return xgSecretKey;
-	}
-
-	public void setXgSecretKey(String xgSecretKey) {
-		this.xgSecretKey = xgSecretKey;
-	}
-
-	public String getStaticUrl() {
-		return staticUrl;
-	}
-
-	public void setStaticUrl(String staticUrl) {
-		this.staticUrl = staticUrl;
-	}
-
-	public String getUploadPath() {
-		return uploadPath;
-	}
+	/**
+	 * 默认展示的商户
+	 */
+	private Integer defaultCustomerId;
 
 	public String getUploadImgPath(){
 		return  uploadPath+"img/";
-	}
-
-	public void setUploadPath(String uploadPath) {
-		this.uploadPath = uploadPath;
 	}
 }

@@ -46,16 +46,23 @@ function load() {
 						columns : [
 								{
 									checkbox : true
-								},{
+								},
+																{
 									field : 'id', 
-									title : '序号'
-								},{
-									field : 'keyText',
-									title : '标题'
-								},{
-									field : 'val',
-									title : '对应值'
-								},{
+									title : '' 
+								},
+                                {
+                                    field : 'keyText',
+                                    title : '名称' },
+																{
+									field : 'key', 
+									title : '键'
+								},
+																{
+									field : 'val', 
+									title : '值'
+								},
+																{
 									title : '操作',
 									field : 'id',
 									align : 'center',
@@ -71,7 +78,7 @@ function load() {
 												+ '\')"><i class="fa fa-key"></i></a> ';
 										return e + d ;
 									}
-								}]
+								} ]
 					});
 }
 function reLoad() {

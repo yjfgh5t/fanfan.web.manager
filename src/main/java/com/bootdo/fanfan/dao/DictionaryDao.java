@@ -33,9 +33,8 @@ public interface DictionaryDao {
 
 	/**
 	 * 查询多个key
-	 * @param appCustomerId
 	 * @param Keys
 	 * @return
 	 */
-	List<DictionaryDO> queryByKeys(@Param("appCustomerId") Integer appCustomerId,@Param("keys") Integer ...Keys);
+	List<DictionaryDO> queryByKeys(@Param("keys") Integer ...Keys);
 }

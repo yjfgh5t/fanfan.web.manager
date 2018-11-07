@@ -46,4 +46,12 @@ public enum PlatformEnum {
         this.code = code;
     }
 
+    public static PlatformEnum get(Integer val){
+        for (PlatformEnum platformEnum : PlatformEnum.values()){
+            if(platformEnum.val.equals(val)){
+                return platformEnum;
+            }
+        }
+        return null;
+    }
 }

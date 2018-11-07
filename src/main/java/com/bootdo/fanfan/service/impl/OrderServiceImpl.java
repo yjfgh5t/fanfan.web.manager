@@ -123,7 +123,7 @@ public class OrderServiceImpl implements OrderService {
 	 * 创建订单
 	 */
 	@Override
-	@Transactional(rollbackFor = {Exception.class})
+	@Transactional(rollbackFor = {Exception.class,BDException.class})
 	public Integer createOrder(APIOrderRequVO orderVO){
 
 		//计算价格、转换信息
@@ -588,8 +588,8 @@ public class OrderServiceImpl implements OrderService {
 		String buyerId = tpUserService.getTpId(orderDO.getUserId(),alipayConfig.getAppId());
 		alipayDO.setBuyerId(buyerId);
         String backStr = alipayManager.createTradePayPlatform(alipayDO,orderDO.getCustomerId());
-        if(backStr==""){
-            throw  new  BDException("创建支付宝预付单失败",BDException.VERIFY_ERROR_CODE);
+        if(StringUtils.isEmpty(backStr)){
+            throw new BDException("创建订单失败",BDException.VERIFY_ERROR_CODE);
         }
         alipayDO.setCreateBackBody(backStr);
 

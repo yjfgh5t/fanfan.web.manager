@@ -19,8 +19,6 @@ public class DictionaryDO implements Serializable {
 	private Integer key;
 	//
 	private String val;
-	//
-	private Integer customerId;
 
 	/**
 	 * 设置：
@@ -57,17 +55,5 @@ public class DictionaryDO implements Serializable {
 	 */
 	public String getVal() {
 		return val;
-	}
-	/**
-	 * 设置：
-	 */
-	public void setCustomerId(Integer customerId) {
-		this.customerId = customerId;
-	}
-	/**
-	 * 获取：
-	 */
-	public Integer getCustomerId() {
-		return customerId;
 	}
 }

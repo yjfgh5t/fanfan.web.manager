@@ -58,8 +58,8 @@ public class AlipayKeyServiceImpl implements AlipayKeyService {
 	}
 
 	@Override
-	public String getPublicTBKey(String appId) {
-		return alipayKeyDao.getPublicTBKey(appId);
+	public AlipayKeyDO getByAppId(String appId) {
+		return alipayKeyDao.getByAppId(appId);
 	}
 
 }

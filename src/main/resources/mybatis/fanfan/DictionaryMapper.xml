@@ -4,16 +4,15 @@
 <mapper namespace="com.bootdo.fanfan.dao.DictionaryDao">
 
 	<select id="get" resultType="com.bootdo.fanfan.domain.DictionaryDO">
-		select `id`,`key`,`val`,`customer_id` from ff_dictionary where id = #{value}
+		select `id`,`key`,`val` from ff_dictionary where id = #{value}
 	</select>
 
 	<select id="list" resultType="com.bootdo.fanfan.domain.DictionaryDO">
-		select `id`,`key`,`val`,`customer_id` from ff_dictionary
+		select `id`,`key`,`val` from ff_dictionary
         <where>  
 		  		  <if test="id != null and id != ''"> and id = #{id} </if>
 		  		  <if test="key != null and key != ''"> and key = #{key} </if>
 		  		  <if test="val != null and val != ''"> and val = #{val} </if>
-		  		  <if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
 		  		</where>
         <choose>
             <when test="sort != null and sort.trim() != ''">
@@ -34,7 +33,6 @@
 		  		  <if test="id != null and id != ''"> and id = #{id} </if>
 		  		  <if test="key != null and key != ''"> and key = #{key} </if>
 		  		  <if test="val != null and val != ''"> and val = #{val} </if>
-		  		  <if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
 		  		</where>
 	</select>
 	 
@@ -42,14 +40,12 @@
 		insert into ff_dictionary
 		(
 			`key`, 
-			`val`, 
-			`customer_id`
+			`val`
 		)
 		values
 		(
 			#{key}, 
-			#{val}, 
-			#{customerId}
+			#{val}
 		)
 	</insert>
 	 
@@ -57,8 +53,7 @@
 		update ff_dictionary 
 		<set>
 			<if test="key != null">`key` = #{key}, </if>
-			<if test="val != null">`val` = #{val}, </if>
-			<if test="customerId != null">`customer_id` = #{customerId}</if>
+			<if test="val != null">`val` = #{val}</if>
 		</set>
 		where id = #{id}
 	</update>
@@ -75,13 +70,12 @@
 	</delete>
 
 	<select id="queryByKeys" resultType="com.bootdo.fanfan.domain.DictionaryDO">
-		select `key`,`val` from ff_dictionary where `customer_id`=#{appCustomerId}
+		select `key`,`val` from ff_dictionary where
 		<if test="keys!=null">
-			and `key` in
+			 `key` in
 			<foreach collection="keys" open="(" close=")" separator="," item="key">
 				#{key}
 			</foreach>
 		</if>
 	</select>
-
 </mapper>

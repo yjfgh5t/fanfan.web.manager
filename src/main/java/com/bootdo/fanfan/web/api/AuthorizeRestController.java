@@ -2,6 +2,7 @@ package com.bootdo.fanfan.web.api;
 
 import com.bootdo.common.config.BootdoConfig;
 import com.bootdo.common.extend.EMapper;
+import com.bootdo.common.utils.BDException;
 import com.bootdo.common.utils.R;
 import com.bootdo.fanfan.domain.AuthorizeDO;
 import com.bootdo.fanfan.domain.CommodityCategoryDO;
@@ -78,16 +79,16 @@ public class AuthorizeRestController extends ApiBaseRestController{
         if(authorizeDO.getIdentificationState().equals(IdentificationEnum.NoIdentification.getVal())
                 || authorizeDO.getIdentificationState().equals(IdentificationEnum.ConfirmIdentification.getVal())) {
             //todo 创建预付单 如果创建成功 则商户已经签约
-//            OrderAlipayDO alipayDO = new OrderAlipayDO();
-//            alipayDO.setSubject("验证是否签约");
-//            alipayDO.setTradeNo(System.currentTimeMillis() + "");
-//            alipayDO.setTotalAmount("0.01");
-//            String tradeNo = alipayManager.createTradePayPlatform(alipayDO, getBaseModel().getCustomerId());
-//            //创建预付单成功 表示商户已经签约
-//            if (tradeNo != null) {
-//                authorizeDO.setIdentificationState(IdentificationEnum.SuccessIdentification.getVal());
-//                authorizeService.save(authorizeDO);
-//            }
+            OrderAlipayDO alipayDO = new OrderAlipayDO();
+            alipayDO.setSubject("验证是否签约");
+            alipayDO.setTradeNo(System.currentTimeMillis() + "");
+            alipayDO.setTotalAmount("0.01");
+            String tradeNo = alipayManager.createTradePayPlatform(alipayDO, getBaseModel().getCustomerId());
+            //创建预付单成功 表示商户已经签约
+            if (tradeNo != null) {
+                authorizeDO.setIdentificationState(IdentificationEnum.SuccessIdentification.getVal());
+                authorizeService.save(authorizeDO);
+            }
         }
 
         APIAuthorizeVO result = eMapper.map(authorizeDO,APIAuthorizeVO.class);

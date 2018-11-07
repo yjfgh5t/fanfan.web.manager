@@ -69,6 +69,7 @@ public class InfoRestController extends ApiBaseRestController {
         //返回信息
         Map<String,Object> resultMap = new HashMap<>();
 
+        //根据code查询
         if(StringUtils.isNotEmpty(qrcode)){
             QRCodeDeskDTO qrcodeDO = qrcodeService.getById(qrcode);
             if(qrcodeDO.getCustomerId()!=null){
@@ -81,11 +82,10 @@ public class InfoRestController extends ApiBaseRestController {
                 }
             }
         }
-
+        //设置默认商户
         if(customerId==-1){
-            customerId=1;
+            customerId = bootdoConfig.getDefaultCustomerId();
         }
-
         //店铺信息
         ShopDO shopDO = shopService.getByCustomerId(customerId);
         if(shopDO!=null){
@@ -95,13 +95,13 @@ public class InfoRestController extends ApiBaseRestController {
 
         //设置customerId
         resultMap.put("customerId",customerId);
-
         //配置信息
-        Map<Integer,String> configMaps = dictionaryService.queryByKeys(1,DictionaryEnum.showContact.getVal());
-        if(configMaps!=null){
-            resultMap.put("showContact",configMaps.get(DictionaryEnum.showContact.getVal()));
+        if(customerId.equals(bootdoConfig.getDefaultCustomerId())) {
+            Map<Integer, String> configMaps = dictionaryService.queryByKeys(DictionaryEnum.showContact.getVal());
+            if (configMaps != null) {
+                resultMap.put("showContact", configMaps.get(DictionaryEnum.showContact.getVal()));
+            }
         }
-
         return R.ok().put("data",resultMap);
     }
 
@@ -140,23 +140,23 @@ public class InfoRestController extends ApiBaseRestController {
      */
     @PostMapping("/upload")
     public R uploadFile(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
-        String fileName = file.getOriginalFilename();
-        fileName = "img/"+FileUtil.renameToUUID(fileName);
-        FileDO sysFile = new FileDO(FileType.fileType(fileName), fileName, new Date());
+        String fileName = FileUtil.renameToUUID(file.getOriginalFilename());
+        String filePath = "img/"+DateUtils.format(new Date(),"yyyy-MM-dd")+"/";
+        FileDO sysFile = new FileDO(FileType.fileType(filePath), filePath+fileName, new Date());
         try {
-            FileUtil.uploadFile(file.getBytes(), bootdoConfig.getUploadPath(), fileName);
+            FileUtil.uploadFile(file.getBytes(), bootdoConfig.getUploadPath()+filePath, fileName);
             String [] tempName= fileName.split("\\.");
             //缩小图片
             if(tempName.length==2){
                 fileName = tempName[0] + ".min." + tempName[1];
-                Thumbnails.of(file.getInputStream()).scale(0.6f).outputQuality(0.5).toFile(bootdoConfig.getUploadPath() + fileName);
+                Thumbnails.of(file.getInputStream()).scale(0.6f).outputQuality(0.5).toFile(bootdoConfig.getUploadPath() + filePath+fileName);
             }
         } catch (Exception e) {
             return R.error();
         }
 
         if (sysFileService.save(sysFile) > 0) {
-            return R.ok().put("data",bootdoConfig.getStaticUrl()+ fileName);
+            return R.ok().put("data",bootdoConfig.getStaticUrl()+ filePath+fileName);
         }
         return R.error();
     }
@@ -174,19 +174,18 @@ public class InfoRestController extends ApiBaseRestController {
     }
 
     @RequestMapping("/qrCodeImg")
-    public void getQRCode(String context,Integer width, HttpServletResponse response) throws IOException, WriterException {
+    public void getQRCode(String context,Integer width, HttpServletResponse response) throws IOException {
+        int redirectIndex = context.indexOf("redirect_uri");
+        //编码
+        if (redirectIndex > 0) {
+            context = context.substring(0, redirectIndex + 13) + URLEncoder.encode(context.substring(redirectIndex + 13, context.length()), "utf-8");
+        }
 
-            int redirectIndex = context.indexOf("redirect_uri");
-            //编码
-            if(redirectIndex>0){
-                context = context.substring(0,redirectIndex+13) + URLEncoder.encode(context.substring(redirectIndex+13,context.length()),"utf-8");
-            }
-
-            byte[] data = QrCodeUtils.createQrCode(width, URLDecoder.decode(context),"png");
-            ServletOutputStream outputStream = response.getOutputStream();
-            outputStream.write(data);
-            outputStream.flush();
-            outputStream.close();
+        byte[] data = QrCodeUtils.createQrCode(width, URLDecoder.decode(context), "png");
+        ServletOutputStream outputStream = response.getOutputStream();
+        outputStream.write(data);
+        outputStream.flush();
+        outputStream.close();
     }
 
     /**

@@ -61,14 +61,13 @@ public class DictionaryServiceImpl implements DictionaryService {
 
 	/**
 	 * 查询多个集合
-	 * @param appCustomerId
 	 * @param keys
 	 * @return
 	 */
 	@Override
-	public Map<Integer,String> queryByKeys(Integer appCustomerId, Integer... keys) {
+	public Map<Integer,String> queryByKeys(Integer... keys) {
 
-		List<DictionaryDO> list = dictionaryDao.queryByKeys(appCustomerId, keys);
+		List<DictionaryDO> list = dictionaryDao.queryByKeys(keys);
 
 		if (list == null || list.size() == 0) {
 			return new HashMap<>();

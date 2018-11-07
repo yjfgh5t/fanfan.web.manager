@@ -35,5 +35,5 @@ public interface AlipayKeyService {
 	 * @param appId
 	 * @return
 	 */
-	String getPublicTBKey(String appId);
+	AlipayKeyDO getByAppId(String appId);
 }

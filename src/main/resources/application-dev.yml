@@ -1,11 +1,12 @@
 bootdo:
   uploadPath: D:/var/uploaded_files/
-  staticUrl: http://192.168.4.47:8081/files/ # http://192.168.2.68:8081
+  staticUrl: http://192.168.1.10:8081/files/ # http://192.168.2.68:8081
   xgAccessId: 2100311367
   xgSecretKey: 03bc79adf9ad6abcb1ef0c5c4407bf2b
-  defaultAlipayCustomerId: 1
-  defaultAilpayPlatformCustomerId: 2
-  alipayUrl: https://openapi.alipay.com/gateway.do
+  aliPayAppId: 2018033102482725
+  aliPayPlatformAppId: 2018072060650548
+  aliPayUrl: https://openapi.alipay.com/gateway.do
+  defaultCustomerId: 132
   authorizeUrl: "https://openauth.alipay.com/oauth2/appToAppAuth.htm?app_id=2018072060650548&redirect_uri=http%3A%2F%2Fwxcard.com.cn%2Fapi%2Falipay%2FauthRedirect%3Fcustomer_id%3D"
 logging:
   level:
@@ -43,7 +44,7 @@ spring:
   redis:
       host: 127.0.0.1
       port: 6379
-      password: 123456
+      password:
       # 连接超时时间（毫秒）123456
       timeout: 10000
       pool:

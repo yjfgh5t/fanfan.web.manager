@@ -93,7 +93,7 @@ public class AlipayKeyController {
 	public R update( AlipayKeyDO alipayKey){
 		alipayKeyService.update(alipayKey);
 		//删除
-		//alipayConfig.removeCustomer(alipayKey.getCustomerId());
+		//alipayConfig.removeAppConfig(alipayKey.getCustomerId());
 		return R.ok();
 	}
 	

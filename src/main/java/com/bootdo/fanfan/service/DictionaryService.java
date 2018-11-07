@@ -30,10 +30,9 @@ public interface DictionaryService {
 
 	/**
 	 * 查询多个key
-	 * @param appCustomerId
 	 * @param keys
 	 * @return
 	 */
-	Map<Integer,String> queryByKeys(Integer  appCustomerId,Integer  ...keys);
+	Map<Integer,String> queryByKeys(Integer  ...keys);
 
 }

@@ -5,6 +5,7 @@ import com.bootdo.common.config.AlipayConfig;
 import com.bootdo.common.exception.BDException;
 import com.bootdo.common.extend.EMapper;
 import com.bootdo.fanfan.domain.UserDO;
+import com.bootdo.fanfan.domain.enumDO.PlatformEnum;
 import com.bootdo.fanfan.manager.AlipayManager;
 import com.bootdo.fanfan.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,9 +45,9 @@ public class TpUserServiceImpl implements TpUserService {
 
 	@Override
 	@Transactional(rollbackFor = {Exception.class})
-	public TpUserDO getTPInfo(String code, int type,Integer customerId) {
+	public TpUserDO getTPInfo(String code, PlatformEnum platformEnum,Integer customerId) {
 
-		TpUserDO tpUserDO = getTpUserDO(code, type,customerId);
+		TpUserDO tpUserDO = getTpUserDO(code, platformEnum,customerId);
 
 		if(tpUserDO==null)
 			return null;
@@ -122,20 +123,20 @@ public class TpUserServiceImpl implements TpUserService {
 	/**
 	 * 获取第三方用户信息
 	 * @param code
-	 * @param type
+	 * @param platformEnum
 	 * @return
 	 */
-	private TpUserDO getTpUserDO(String code, int type,Integer customerId) {
+	private TpUserDO getTpUserDO(String code, PlatformEnum platformEnum, Integer customerId) {
 		TpUserDO tpUserDO=null;
 
-		if(type==1)
+		if(platformEnum==PlatformEnum.AlipayMiniprogram)
 		{
 			//调用接口返回
 			AlipayUserInfoShareResponse alipayUserInfoShareResponse = alipayManager.getUserInfo(code,customerId);
 			//数据转换
 			if(alipayUserInfoShareResponse!=null) {
 				tpUserDO = eMapper.map(alipayUserInfoShareResponse, TpUserDO.class);
-				tpUserDO.setTpType(type);
+				tpUserDO.setTpType(platformEnum.getVal());
 				tpUserDO.setTpAppId(alipayConfig.getAppId());
 				//设置性别
 				tpUserDO.setTpSex(alipayUserInfoShareResponse.getGender().toLowerCase().equals("M")?2:3);

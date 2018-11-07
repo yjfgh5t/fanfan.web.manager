@@ -3,9 +3,7 @@ package com.bootdo.common.config;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.bootdo.fanfan.domain.AlipayKeyDO;
-import com.bootdo.fanfan.domain.enumDO.DictionaryEnum;
 import com.bootdo.fanfan.service.AlipayKeyService;
-import com.bootdo.fanfan.service.DictionaryService;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -26,14 +24,14 @@ public class AlipayConfig {
     @Getter
     private String publicTBKey;
 
-    private  Map<Integer,AlipayClient> alipayClientMap = new HashMap<>();
+    private  Map<String,AlipayClient> aliPayClientMap = new HashMap<>();
 
     @Autowired
     AlipayKeyService alipayKeyService;
 
     @PostConstruct
     public void init(){
-        AlipayKeyDO alipayKeyDO = alipayKeyService.getByCustomerId(bootdoConfig.getDefaultAlipayCustomerId());
+        AlipayKeyDO alipayKeyDO = alipayKeyService.getByAppId(bootdoConfig.getAliPayAppId());
         if(alipayKeyDO!=null){
             publicKey = alipayKeyDO.getPublicKey();
             appId = alipayKeyDO.getAppId();
@@ -46,7 +44,7 @@ public class AlipayConfig {
      * @return
      */
     public  AlipayClient getDefaultClient(){
-        return getCustomerClient(bootdoConfig.getDefaultAlipayCustomerId());
+        return getAppClient(bootdoConfig.getAliPayAppId());
     }
 
     /**
@@ -54,44 +52,42 @@ public class AlipayConfig {
      * @return
      */
     public AlipayClient getDefaultPlatformClient(){
-        return getCustomerClient(bootdoConfig.getDefaultAilpayPlatformCustomerId());
+        return getAppClient(bootdoConfig.getAliPayPlatformAppId());
     }
 
     /**
      * 获取商户配置
-     * @param customerId
+     * @param appId
      * @return
      */
-    public AlipayClient getCustomerClient(Integer customerId){
+    public AlipayClient getAppClient(String appId){
 
-        if(!alipayClientMap.containsKey(customerId)) {
-            AlipayKeyDO alipayKeyDO = alipayKeyService.getByCustomerId(customerId);
-
+        if(!aliPayClientMap.containsKey(appId)) {
+            AlipayKeyDO alipayKeyDO = alipayKeyService.getByAppId(appId);
             if (alipayKeyDO != null) {
                 DefaultAlipayClient defaultAlipayClient = new DefaultAlipayClient(
-                        bootdoConfig.getAlipayUrl(),
+                        bootdoConfig.getAliPayUrl(),
                         alipayKeyDO.getAppId(),
                         alipayKeyDO.getPrivateKey(),
                         "JSON",
                         "utf-8",
                         alipayKeyDO.getPublicTbKey(),
                         "RSA2");
-                alipayClientMap.put(customerId, defaultAlipayClient);
+                aliPayClientMap.put(appId, defaultAlipayClient);
             }else{
                 throw new SecurityException("商户未配置支付宝密钥");
             }
         }
-
-        return alipayClientMap.get(customerId);
+        return aliPayClientMap.get(appId);
     }
 
     /**
      * 删除商户配置缓存
-     * @param customerId
+     * @param appId
      */
-    public void removeCustomer(Integer customerId){
-        if(alipayClientMap.containsKey(customerId)){
-            alipayClientMap.remove(customerId);
+    public void removeAppConfig(String appId){
+        if(aliPayClientMap.containsKey(appId)){
+            aliPayClientMap.remove(appId);
         }
     }
 }

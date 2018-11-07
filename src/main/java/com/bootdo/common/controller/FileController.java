@@ -144,10 +144,10 @@ public class FileController extends BaseController {
 			return R.error(1, "演示系统不允许修改,完整体验请部署程序");
 		}
 		String fileName = file.getOriginalFilename();
-		fileName = FileUtil.renameToUUID(fileName);
-		FileDO sysFile = new FileDO(FileType.fileType(fileName), "img/"+fileName, new Date());
+		String filePath = "img/"+DateUtils.format(new Date(),"yyyy-MM-dd")+"/"+FileUtil.renameToUUID(fileName);;
+		FileDO sysFile = new FileDO(FileType.fileType(filePath), filePath, new Date());
 		try {
-			FileUtil.uploadFile(file.getBytes(), bootdoConfig.getUploadImgPath(), fileName);
+			FileUtil.uploadFile(file.getBytes(), bootdoConfig.getUploadImgPath(), filePath);
 		} catch (Exception e) {
 			return R.error();
 		}

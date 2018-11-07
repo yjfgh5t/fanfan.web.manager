@@ -74,6 +74,52 @@ public class AlipayManager {
         return null;
     }
 
+
+    /**
+     * 第三方平台创建预付单
+     * @param alipayDO
+     * @param customerId
+     * @return
+     */
+    public String createTradePayPlatform(OrderAlipayDO alipayDO, Integer customerId) {
+
+        //实例化客户端
+        AlipayClient alipayClient =  alipayConfig.getDefaultPlatformClient();
+        //实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.trade.create.
+        AlipayTradeCreateRequest request = new AlipayTradeCreateRequest();
+        //SDK已经封装掉了公共参数，这里只需要传入业务参数。以下方法为sdk的model入参方式(model和biz_content同时存在的情况下取biz_content)。
+        AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
+        model.setBody(alipayDO.getBody());
+        model.setSubject(alipayDO.getSubject());
+        model.setOutTradeNo(alipayDO.getTradeNo());
+        model.setTimeoutExpress(alipayDO.getTimeoutExpress());
+        model.setTotalAmount(alipayDO.getTotalAmount());
+        model.setProductCode(alipayDO.getProductCode());
+        model.setPassbackParams(alipayDO.getPassbackParams());
+
+        //request.setBizModel(model);
+        //SDK已经封装掉了公共参数，这里只需要传入业务参数。
+        request.setBizContent("{" +
+                "\"out_trade_no\":\"" + alipayDO.getTradeNo() + "\"," +
+                "\"total_amount\":" + alipayDO.getTotalAmount() + "," +
+                "\"subject\":\"" + alipayDO.getSubject() + "\"," +
+                "\"buyer_id\":\"2088602121036890\"" +
+                "}");
+        try {
+            //使用的是execute
+            AlipayTradeCreateResponse response = alipayClient.execute(request, null, "201811BBac2e709baf5d453bb2c197af6dc61X33");
+            logger.info("平台创建预付单-返回：" + response.getBody());
+            if(response.isSuccess()) {
+                return response.getTradeNo();//获取返回的tradeNO。
+            }else {
+                logger.error("平台创建预付单-失败 {} {}", request.getBizContent(), response.getBody());
+            }
+        } catch (AlipayApiException e) {
+            logger.error("平台创建预付单-异常 {} {}", request.getBizContent(), e);
+        }
+        return null;
+    }
+
     /**
      * 小程序用户授权Token
      *
@@ -136,7 +182,6 @@ public class AlipayManager {
 
     /**
      * 小程序支付
-     *
      * @param alipayDO
      * @return
      */
@@ -171,46 +216,6 @@ public class AlipayManager {
             logger.error("创建预付单-异常：{} {}", request.getBizContent(), e);
         }
         return "";
-    }
-
-    /**
-     * 第三方平台创建预付单
-     * @param alipayDO
-     * @param customerId
-     * @return
-     */
-    public String createTradePayPlatform(OrderAlipayDO alipayDO, Integer customerId) {
-
-        //实例化客户端
-        AlipayClient alipayClient =  alipayConfig.getDefaultPlatformClient();
-        //实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.trade.create.
-        AlipayTradeCreateRequest request = new AlipayTradeCreateRequest();
-        //SDK已经封装掉了公共参数，这里只需要传入业务参数。以下方法为sdk的model入参方式(model和biz_content同时存在的情况下取biz_content)。
-        AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
-        model.setBody(alipayDO.getBody());
-        model.setSubject(alipayDO.getSubject());
-        model.setOutTradeNo(alipayDO.getTradeNo());
-        model.setTimeoutExpress(alipayDO.getTimeoutExpress());
-        model.setTotalAmount(alipayDO.getTotalAmount());
-        model.setProductCode(alipayDO.getProductCode());
-        model.setPassbackParams(alipayDO.getPassbackParams());
-
-        //request.setBizModel(model);
-        //SDK已经封装掉了公共参数，这里只需要传入业务参数。
-        request.setBizContent("{" +
-                "\"out_trade_no\":\"" + alipayDO.getTradeNo() + "\"," +
-                "\"total_amount\":" + alipayDO.getTotalAmount() + "," +
-                "\"subject\":\"" + alipayDO.getSubject() + "\"," +
-                "\"buyer_id\":\"2088602121036890\"" +
-                "}");
-        try {
-            //使用的是execute
-            AlipayTradeCreateResponse response = alipayClient.execute(request, null, getAuthToken(customerId));
-            return response.getTradeNo();//获取返回的tradeNO。
-        } catch (AlipayApiException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     /**

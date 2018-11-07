@@ -1,6 +1,7 @@
 package com.bootdo.fanfan.service;
 
 import com.bootdo.fanfan.domain.TpUserDO;
+import com.bootdo.fanfan.domain.enumDO.PlatformEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -20,10 +21,10 @@ public interface TpUserService {
 	/**
 	 * 获取第三方用户信息
 	 * @param code 令牌
-	 * @param type  类型 1：支付宝 2：微信
+	 * @param platformEnum  类型 支付宝、微信
 	 * @return
 	 */
-	TpUserDO getTPInfo(String code,int type,Integer customerId);
+	TpUserDO getTPInfo(String code, PlatformEnum platformEnum, Integer customerId);
 	
 	List<TpUserDO> list(Map<String, Object> map);
 	
