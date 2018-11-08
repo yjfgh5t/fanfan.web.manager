@@ -17,6 +17,13 @@ public interface CommodityCategoryService {
 	CommodityCategoryDO get(Integer id);
 	
 	List<CommodityCategoryDO> list(Map<String, Object> map);
+
+	/**
+	 * 查询菜单类别
+	 * @param customerId
+	 * @return
+	 */
+	List<CommodityCategoryDO> getByCustomerId(Integer customerId);
 	
 	int count(Map<String, Object> map);
 	

@@ -48,6 +48,25 @@ public class AlipayManager {
     TokenService tokenService;
 
     /**
+     * 已支付
+     */
+    public final String TRADE_SUCCESS ="TRADE_SUCCESS";
+    /**
+     * 待支付
+     */
+    public final String WAIT_BUYER_PAY ="WAIT_BUYER_PAY";
+
+    /**
+     * 未支付交易关闭
+     */
+    public final String TRADE_CLOSED ="TRADE_CLOSED";
+
+    /**
+     * 已支付、交易关闭
+     */
+    public final String TRADE_FINISHED ="TRADE_FINISHED";
+
+    /**
      * 第三方平台授权Token
      *
      * @param code
@@ -103,11 +122,11 @@ public class AlipayManager {
                 "\"out_trade_no\":\"" + alipayDO.getTradeNo() + "\"," +
                 "\"total_amount\":" + alipayDO.getTotalAmount() + "," +
                 "\"subject\":\"" + alipayDO.getSubject() + "\"," +
-                "\"buyer_id\":\"2088602121036890\"" +
+                "\"buyer_id\":\""+alipayDO.getBuyerId()+"\"" +
                 "}");
         try {
             //使用的是execute
-            AlipayTradeCreateResponse response = alipayClient.execute(request, null, "201811BBac2e709baf5d453bb2c197af6dc61X33");
+            AlipayTradeCreateResponse response = alipayClient.execute(request, null, getAuthToken(customerId));
             logger.info("平台创建预付单-返回：" + response.getBody());
             if(response.isSuccess()) {
                 return response.getTradeNo();//获取返回的tradeNO。

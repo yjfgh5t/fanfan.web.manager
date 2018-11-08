@@ -73,7 +73,7 @@ public class RefshOrderJob implements Job {
                     AlipayTradeQueryResponse tradeQueryResponse = alipayManager.queryTradePay(model.getOrderNum(),model.getCustomerId());
 
                     //已经支付
-                    if (tradeQueryResponse != null && tradeQueryResponse.isSuccess()) {
+                    if (tradeQueryResponse != null && tradeQueryResponse.isSuccess() && tradeQueryResponse.getTradeStatus().equals(alipayManager.TRADE_SUCCESS)) {
                         //保存数据
                         AlipayRecordDO recordDO = mapper.map(tradeQueryResponse, AlipayRecordDO.class);
                         alipayRecordService.save(recordDO);
