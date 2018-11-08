@@ -3,10 +3,7 @@ package com.bootdo.fanfan.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.bootdo.fanfan.dao.CommodityCategoryDao;
 import com.bootdo.fanfan.domain.CommodityCategoryDO;
@@ -27,11 +24,18 @@ public class CommodityCategoryServiceImpl implements CommodityCategoryService {
 	@Override
 	public List<CommodityCategoryDO> list(Map<String, Object> map){
 		List<CommodityCategoryDO> list = commodityCategoryDao.list(map);
-
-		if(list==null)
-			list = new ArrayList<>();
-
 		return list;
+	}
+
+	@Override
+	public List<CommodityCategoryDO> getByCustomerId(Integer customerId){
+		Map<String,Object> parmas = new HashMap<>();
+		parmas.put("sort","`order`");
+		parmas.put("order","asc");
+		parmas.put("delete","0");
+		parmas.put("customerId",customerId);
+
+		return list(parmas);
 	}
 	
 	@Override

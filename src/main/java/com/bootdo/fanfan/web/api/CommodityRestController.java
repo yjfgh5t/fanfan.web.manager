@@ -2,12 +2,15 @@ package com.bootdo.fanfan.web.api;
 
 import com.bootdo.common.extend.EMapper;
 import com.bootdo.common.utils.R;
+import com.bootdo.fanfan.domain.CommodityCategoryDO;
 import com.bootdo.fanfan.domain.CommodityDO;
 import com.bootdo.fanfan.domain.CommodityExtendDO;
 import com.bootdo.fanfan.domain.CommodityWidthExtendDO;
 import com.bootdo.fanfan.domain.enumDO.PlatformEnum;
+import com.bootdo.fanfan.service.CommodityCategoryService;
 import com.bootdo.fanfan.service.CommodityService;
 import com.bootdo.fanfan.service.CommodityExtendService;
+import com.bootdo.fanfan.vo.APICommodityCategoryRequVO;
 import com.bootdo.fanfan.vo.APICommoditySimpleVO;
 import com.bootdo.fanfan.vo.APICommodityVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +34,9 @@ public class CommodityRestController extends ApiBaseRestController {
     @Autowired
     CommodityExtendService commodityExtendService;
 
+    @Autowired
+    CommodityCategoryService commodityCategoryService;
+
     /**
      * 查询商品列表
      * @return
@@ -48,6 +54,35 @@ public class CommodityRestController extends ApiBaseRestController {
         }else {
             return R.ok().put("data", mapper.mapArray(list, APICommoditySimpleVO.class));
         }
+    }
+
+    /**
+     * 查询商品列表
+     * @return
+     */
+    @GetMapping("/commodityWithCategory")
+    public R commodityWithCategory(){
+
+        Map<String, Object> results = new HashMap<>();
+
+        Map<String, Object> _map = new HashMap<>();
+        _map.put("sort","`order`");
+        _map.put("customerId",getBaseModel().getCustomerId());
+        //查询商品数据
+        List<CommodityWidthExtendDO> list = commodityService.listExtend(_map);
+        //返回类型
+        if(getBaseModel().getClientEnumType() == PlatformEnum.CustomerAndroid){
+            results.put("commodity",mapper.mapArray(list, APICommodityVO.class));
+        }else {
+            results.put("commodity",mapper.mapArray(list, APICommoditySimpleVO.class));
+        }
+
+        //商品类别对象
+        List<CommodityCategoryDO> categoryDOList = commodityCategoryService.getByCustomerId(getBaseModel().getCustomerId());
+        List<APICommodityCategoryRequVO> categoryList = mapper.mapArray(categoryDOList, APICommodityCategoryRequVO.class);
+        results.put("category",categoryList);
+
+        return R.ok().put("data",results);
     }
 
     /**

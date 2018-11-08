@@ -307,7 +307,7 @@ public class OrderRestController extends ApiBaseRestController {
         AlipayTradeQueryResponse tradeQueryResponse = alipayManager.queryTradePay(orderDO.getOrderNum(),orderDO.getCustomerId());
 
         //判断是否支付成功
-        if (tradeQueryResponse != null && tradeQueryResponse.isSuccess()) {
+        if (tradeQueryResponse != null && tradeQueryResponse.isSuccess() && tradeQueryResponse.getTradeStatus().equals(alipayManager.TRADE_SUCCESS)) {
             AlipayRecordDO recordDO = mapper.map(tradeQueryResponse, AlipayRecordDO.class);
             recordDO.setPassbackParams(id + "");
             recordDO.setBuyerId(tradeQueryResponse.getBuyerUserId());

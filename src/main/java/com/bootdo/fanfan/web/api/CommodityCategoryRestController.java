@@ -3,15 +3,20 @@ package com.bootdo.fanfan.web.api;
 import com.bootdo.common.extend.EMapper;
 import com.bootdo.common.utils.R;
 import com.bootdo.fanfan.domain.CommodityCategoryDO;
+import com.bootdo.fanfan.domain.CommodityWidthExtendDO;
+import com.bootdo.fanfan.domain.enumDO.PlatformEnum;
 import com.bootdo.fanfan.service.CommodityCategoryService;
 import com.bootdo.fanfan.service.CommodityService;
 import com.bootdo.fanfan.vo.APICommodityCategoryRequVO;
+import com.bootdo.fanfan.vo.APICommoditySimpleVO;
+import com.bootdo.fanfan.vo.APICommodityVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/commodityCategory")
@@ -33,15 +38,13 @@ public class CommodityCategoryRestController extends ApiBaseRestController  {
     @GetMapping("/")
     public R list(){
 
-        Map<String,Object> parmas = new HashMap<>();
-        parmas.put("sort","`order`");
-        parmas.put("order","asc");
-        parmas.put("delete","0");
-        parmas.put("customerId",getBaseModel().getCustomerId());
+        List<CommodityCategoryDO> categoryDOList = commodityCategoryService.getByCustomerId(getBaseModel().getCustomerId());
 
-        List<APICommodityCategoryRequVO> commoditCategoryList =  mapper.mapArray(commodityCategoryService.list(parmas), APICommodityCategoryRequVO.class);
-        return R.ok().put("data", commoditCategoryList);
+        List<APICommodityCategoryRequVO> commodityCategoryList =  mapper.mapArray(categoryDOList, APICommodityCategoryRequVO.class);
+
+        return R.ok().put("data", commodityCategoryList);
     }
+
 
     /**
      * 保存商品
