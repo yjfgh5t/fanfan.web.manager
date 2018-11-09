@@ -176,7 +176,7 @@ public class MenuDO implements Serializable {
 				", perms='" + perms + '\'' +
 				", type=" + type +
 				", icon='" + icon + '\'' +
-				", orderNum=" + orderNum +
+				", createOrderNum=" + orderNum +
 				", gmtCreate=" + gmtCreate +
 				", gmtModified=" + gmtModified +
 				'}';

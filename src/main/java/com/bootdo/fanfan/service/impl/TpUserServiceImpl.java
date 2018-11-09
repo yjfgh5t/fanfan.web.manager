@@ -44,7 +44,7 @@ public class TpUserServiceImpl implements TpUserService {
 	}
 
 	@Override
-	@Transactional(rollbackFor = {Exception.class})
+	@Transactional(rollbackFor = {Exception.class,BDException.class})
 	public TpUserDO getTPInfo(String code, PlatformEnum platformEnum,Integer customerId) {
 
 		TpUserDO tpUserDO = getTpUserDO(code, platformEnum,customerId);

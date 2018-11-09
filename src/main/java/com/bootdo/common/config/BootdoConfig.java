@@ -51,6 +51,11 @@ public class BootdoConfig {
 	 */
 	private Integer defaultCustomerId;
 
+	/**
+	 * 支付成功通知地址
+	 */
+	private String payNotifyUrl;
+
 	public String getUploadImgPath(){
 		return  uploadPath+"img/";
 	}

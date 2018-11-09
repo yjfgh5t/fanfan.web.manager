@@ -1,5 +1,7 @@
 package com.bootdo.fanfan.domain;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -28,6 +30,7 @@ public class AuthorizeDO implements Serializable {
 	//营业执照
 	private String businessLicensePhoto;
 	//营业执照截止时间
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date businessLicenseDate;
 	//身份证照
 	private String idCardPhoto;

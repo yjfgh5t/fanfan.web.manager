@@ -3,16 +3,13 @@ package com.bootdo.fanfan.manager;
 import com.alibaba.fastjson.JSON;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
-import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
-import com.alipay.api.domain.ExtendParams;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.*;
 import com.alipay.api.response.*;
 import com.bootdo.common.config.AlipayConfig;
 import com.bootdo.common.config.BootdoConfig;
 import com.bootdo.common.exception.BDException;
-import com.bootdo.common.task.RefshOrderJob;
 import com.bootdo.fanfan.domain.DTO.QRCodeDTO;
 import com.bootdo.fanfan.domain.DTO.TemplateMsgDTO;
 import com.bootdo.fanfan.domain.OrderAlipayDO;
@@ -25,7 +22,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Component
@@ -36,7 +32,7 @@ public class AlipayManager {
     private final String authToken = null; //"201809BB4de9a2bfd3134b02a45cfe07470ebX33";
 
     @Autowired
-    static BootdoConfig bootdoConfig;
+    BootdoConfig bootdoConfig;
 
     @Autowired
     AlipayConfig alipayConfig;
@@ -115,8 +111,7 @@ public class AlipayManager {
         model.setTotalAmount(alipayDO.getTotalAmount());
         model.setProductCode(alipayDO.getProductCode());
         model.setPassbackParams(alipayDO.getPassbackParams());
-
-        //request.setBizModel(model);
+        request.setBizModel(model);
         //SDK已经封装掉了公共参数，这里只需要传入业务参数。
         request.setBizContent("{" +
                 "\"out_trade_no\":\"" + alipayDO.getTradeNo() + "\"," +
@@ -124,6 +119,7 @@ public class AlipayManager {
                 "\"subject\":\"" + alipayDO.getSubject() + "\"," +
                 "\"buyer_id\":\""+alipayDO.getBuyerId()+"\"" +
                 "}");
+        request.setNotifyUrl(bootdoConfig.getPayNotifyUrl());
         try {
             //使用的是execute
             AlipayTradeCreateResponse response = alipayClient.execute(request, null, getAuthToken(customerId));
@@ -219,7 +215,7 @@ public class AlipayManager {
         model.setProductCode(alipayDO.getProductCode());
         model.setPassbackParams(alipayDO.getPassbackParams());
         request.setBizModel(model);
-        request.setNotifyUrl("http://wxcard.com.cn/api/alipay/alipayReceiver");
+        request.setNotifyUrl(bootdoConfig.getPayNotifyUrl());
         try {
             //这里和普通的接口调用不同，使用的是sdkExecute
             AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);
@@ -360,17 +356,17 @@ public class AlipayManager {
 
     /**
      * 验证签名
-     *
      * @param params
      * @return
      */
     public boolean checkSign(Map<String, String> params) {
         try {
-            String publicTBKey = alipayConfig.getPublicTBKey();
+            String publicTBKey = alipayConfig.getPublicPlatformTBKey();
             boolean success = AlipaySignature.rsaCheckV1(params, publicTBKey, "utf-8", "RSA2");
             if (!success) {
                 logger.error("支付宝验证签名-失败 TBKey:{} 参数：{}", publicTBKey, params);
             }
+            return success;
         } catch (AlipayApiException e) {
             logger.error("支付宝验证签名-异常 {} {}", JSON.toJSONString(params), e);
         }

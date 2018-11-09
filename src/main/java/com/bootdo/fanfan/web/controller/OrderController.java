@@ -73,7 +73,7 @@ public class OrderController extends BaseController {
         if(getUserId()!=1) {
 			query.put("customerId", getUserId());
 		}
-		query.put("sort","`order`");
+		query.put("sort","`create_time`");
 		query.put("create_time","desc");
 		List<OrderDO> orderList = orderService.list(query);
 
@@ -118,6 +118,11 @@ public class OrderController extends BaseController {
 
 		//收件人信息
 		OrderReceiverDO receiverDO = orderReceiverService.queryById(id);
+		if(receiverDO==null){
+			receiverDO = new OrderReceiverDO();
+			receiverDO.setAddr("");
+			receiverDO.setAddrDetail("");
+		}
 
 		//下单人信息
 		UserDO userDO =userService.get(order.getCustomerId());
@@ -127,10 +132,20 @@ public class OrderController extends BaseController {
 		//设置订单状态Text
 		orderVO.setOrderStateText(OrderStateEnum.get(orderVO.getId()).getText());
 		//订单支付类型
-		switch (orderVO.getOrderPayType()){
-			case 1: orderVO.setOrderPayTypeText("支付宝"); break;
-			case 2: orderVO.setOrderPayTypeText("微信"); break;
-			default: orderVO.setOrderPayTypeText("现金"); break;
+		if(orderVO.getOrderPayType()!=null) {
+			switch (orderVO.getOrderPayType()) {
+				case 1:
+					orderVO.setOrderPayTypeText("支付宝");
+					break;
+				case 2:
+					orderVO.setOrderPayTypeText("微信");
+					break;
+				default:
+					orderVO.setOrderPayTypeText("现金");
+					break;
+			}
+		}else {
+			orderVO.setOrderPayTypeText("未知");
 		}
 
 		model.addAttribute("order", orderVO);

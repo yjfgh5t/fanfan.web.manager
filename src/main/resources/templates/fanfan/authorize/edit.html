@@ -13,82 +13,79 @@
 							<div class="form-group">	
 								<label class="col-sm-3 control-label">认证状态：</label>
 								<div class="col-sm-8">
-									<input id="authorizeState" name="authorizeState" th:value="${authorize.authorizeState}" class="form-control" type="text">
+									<select class="form-control" name="authorizeState">
+										<option th:selected="${authorize.authorizeState==0}" value="0">未认证</option>
+										<option th:selected="${authorize.authorizeState==1}" value="1">已认证</option>
+									</select>
 								</div>
 							</div>
-														<div class="form-group">	
+							<div class="form-group">
 								<label class="col-sm-3 control-label">审核状态：</label>
 								<div class="col-sm-8">
-									<input id="identificationState" name="identificationState" th:value="${authorize.identificationState}" class="form-control" type="text">
+									<select class="form-control" name="identificationState">
+										<option th:selected="${authorize.identificationState==0}" value="0">未认证</option>
+										<option th:selected="${authorize.identificationState==1}" value="1">认证中</option>
+										<option th:selected="${authorize.identificationState==2}" value="2">认证失败</option>
+										<option th:selected="${authorize.identificationState==3}" value="3">认证成功待确认</option>
+										<option th:selected="${authorize.identificationState==4}" value="4">已认证</option>
+									</select>
 								</div>
 							</div>
-														<div class="form-group">	
+							<div class="form-group">
 								<label class="col-sm-3 control-label">收款账号：</label>
 								<div class="col-sm-8">
-									<input id="payeeId" name="payeeId" th:value="${authorize.payeeId}" class="form-control" type="text">
+									<input id="payeeId" name="payeeId" readonly="readonly" th:value="${authorize.payeeId}" class="form-control" type="text">
 								</div>
 							</div>
 														<div class="form-group">	
 								<label class="col-sm-3 control-label">收款人姓名：</label>
 								<div class="col-sm-8">
-									<input id="payeeName" name="payeeName" th:value="${authorize.payeeName}" class="form-control" type="text">
+									<input id="payeeName" readonly="readonly" name="payeeName" th:value="${authorize.payeeName}" class="form-control" type="text">
 								</div>
 							</div>
 														<div class="form-group">	
 								<label class="col-sm-3 control-label">营业执照：</label>
 								<div class="col-sm-8">
-									<input id="businessLicensePhoto" name="businessLicensePhoto" th:value="${authorize.businessLicensePhoto}" class="form-control" type="text">
+									<input id="businessLicensePhoto" readonly="readonly" name="businessLicensePhoto" th:value="${authorize.businessLicensePhoto}" class="form-control" type="text">
 								</div>
 							</div>
 														<div class="form-group">	
 								<label class="col-sm-3 control-label">营业执照截止时间：</label>
 								<div class="col-sm-8">
-									<input id="businessLicenseDate" name="businessLicenseDate" th:value="${authorize.businessLicenseDate}" class="form-control" type="text">
+									<input id="businessLicenseDate" readonly="readonly" name="businessLicenseDate" th:value="${authorize.businessLicenseDate}" class="form-control" type="text">
 								</div>
 							</div>
 														<div class="form-group">	
 								<label class="col-sm-3 control-label">身份证照：</label>
 								<div class="col-sm-8">
-									<input id="idCardPhoto" name="idCardPhoto" th:value="${authorize.idCardPhoto}" class="form-control" type="text">
+									<input id="idCardPhoto" readonly="readonly" name="idCardPhoto" th:value="${authorize.idCardPhoto}" class="form-control" type="text">
 								</div>
 							</div>
 														<div class="form-group">	
 								<label class="col-sm-3 control-label">店铺门面照：</label>
 								<div class="col-sm-8">
-									<input id="shopPhoto" name="shopPhoto" th:value="${authorize.shopPhoto}" class="form-control" type="text">
+									<input id="shopPhoto" readonly="readonly" name="shopPhoto" th:value="${authorize.shopPhoto}" class="form-control" type="text">
 								</div>
 							</div>
-														<div class="form-group">	
+							<div class="form-group">
 								<label class="col-sm-3 control-label">审核失败原因：</label>
 								<div class="col-sm-8">
 									<input id="failRemark" name="failRemark" th:value="${authorize.failRemark}" class="form-control" type="text">
 								</div>
 							</div>
-														<div class="form-group">	
+							<div class="form-group">
 								<label class="col-sm-3 control-label">认证成功地址：</label>
 								<div class="col-sm-8">
 									<input id="identificationUrl" name="identificationUrl" th:value="${authorize.identificationUrl}" class="form-control" type="text">
 								</div>
 							</div>
-														<div class="form-group">	
+							<div class="form-group">
 								<label class="col-sm-3 control-label">商户Id：</label>
 								<div class="col-sm-8">
-									<input id="customerId" name="customerId" th:value="${authorize.customerId}" class="form-control" type="text">
+									<input id="customerId" readonly="readonly" name="customerId" th:value="${authorize.customerId}" class="form-control" type="text">
 								</div>
 							</div>
-														<div class="form-group">	
-								<label class="col-sm-3 control-label">创建时间：</label>
-								<div class="col-sm-8">
-									<input id="createTime" name="createTime" th:value="${authorize.createTime}" class="form-control" type="text">
-								</div>
-							</div>
-														<div class="form-group">	
-								<label class="col-sm-3 control-label">修改时间：</label>
-								<div class="col-sm-8">
-									<input id="modifyTime" name="modifyTime" th:value="${authorize.modifyTime}" class="form-control" type="text">
-								</div>
-							</div>
-																					<div class="form-group">
+							<div class="form-group">
 								<div class="col-sm-8 col-sm-offset-3">
 									<button type="submit" class="btn btn-primary">提交</button>
 								</div>

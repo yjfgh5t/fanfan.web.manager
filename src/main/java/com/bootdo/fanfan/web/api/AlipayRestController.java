@@ -23,6 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
 
@@ -51,7 +53,7 @@ public class AlipayRestController {
     Log log = LogFactory.getLog(AlipayRestController.class);
 
     /**
-     * 接收支付宝预付单消息
+     * 接收支付宝付款单消息
      * @return
      */
     @RequestMapping("/alipayReceiver")
@@ -71,7 +73,6 @@ public class AlipayRestController {
          });
 
        if(!alipayManager.checkSign(mapParams)) {
-           System.out.println("验证签名失败"+ JSON.toJSONString(mapParams));
            return "failure";
        }
 
@@ -94,8 +95,7 @@ public class AlipayRestController {
      * @return
      */
     @RequestMapping("authRedirect")
-    public String authRedirect(@RequestParam("app_id") String appId,@RequestParam("app_auth_code") String appAuthCode, @RequestParam("customer_id") Integer customerId) throws ParseException {
-
+    public void authRedirect(@RequestParam("app_id") String appId, @RequestParam("app_auth_code") String appAuthCode, @RequestParam("customer_id") Integer customerId,HttpServletResponse response) throws ParseException, IOException {
         TokenDO tokenDO = new TokenDO();
         tokenDO.setCustomerId(customerId);
         AlipayOpenAuthTokenAppResponse tokenResponse = alipayManager.getTokenPlatform(appAuthCode);
@@ -134,7 +134,7 @@ public class AlipayRestController {
                 xgPushManager.put(pushModel);
             }
         }
-
-        return "success";
+        //跳转授权成功页面
+        response.sendRedirect("/h5/authorize");
     }
 }

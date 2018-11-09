@@ -1,5 +1,6 @@
 package com.bootdo.fanfan.service.impl;
 
+import com.bootdo.common.exception.BDException;
 import com.bootdo.fanfan.domain.OrderDO;
 import com.bootdo.fanfan.domain.enumDO.OrderStateEnum;
 import com.bootdo.fanfan.service.OrderService;
@@ -45,7 +46,7 @@ public class AlipayRecordServiceImpl implements AlipayRecordService {
 	}
 	
 	@Override
-	@Transactional(rollbackFor = {Exception.class})
+	@Transactional(rollbackFor = {Exception.class, BDException.class})
 	public int save(AlipayRecordDO alipayRecord){
 
 		//支付宝信息是否保存
@@ -53,8 +54,7 @@ public class AlipayRecordServiceImpl implements AlipayRecordService {
 
 		//判断是否添加 支付宝同步和异步通知时
 		if(count==0) {
-			OrderDO orderDO = new OrderDO();
-			orderDO.setId(Integer.parseInt(alipayRecord.getPassbackParams()));
+			OrderDO orderDO = orderService.queryOrderByOrdernum(alipayRecord.getOutTradeNo());
 			orderDO.setOrderState(OrderStateEnum.userPaid.getVal());
 			//修改订单状态
 			orderService.updateOrderState(orderDO);

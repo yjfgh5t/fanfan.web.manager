@@ -1,5 +1,6 @@
 package com.bootdo.fanfan.service.impl;
 
+import com.bootdo.common.config.BootdoConfig;
 import com.bootdo.common.exception.BDException;
 import com.bootdo.fanfan.domain.DTO.QRCodeDeskDTO;
 import org.apache.ibatis.annotations.Param;
@@ -21,7 +22,10 @@ import com.bootdo.fanfan.service.QrcodeService;
 public class QrcodeServiceImpl implements QrcodeService {
 	@Autowired
 	private QrcodeDao qrcodeDao;
-	
+
+	@Autowired
+	private BootdoConfig bootdoConfig;
+
 	@Override
 	public QrcodeDO get(String id){
 		return qrcodeDao.get(id);
@@ -54,24 +58,19 @@ public class QrcodeServiceImpl implements QrcodeService {
 	
 	@Override
 	public int update(QrcodeDO qrcode){
+		QrcodeDO model = get(qrcode.getId());
 
-		QrcodeDO qrcodeDO = get(qrcode.getId());
-
-		if(qrcodeDO==null){
-			return -1;
+		if(model!=null){
+			//只能修改本店的二维码 或者默认店铺的二维码
+			if(bootdoConfig.getDefaultCustomerId().equals(model.getCustomerId()) || model.getCustomerId().equals(qrcode.getCustomerId())) {
+				//去除之前设置的二维码
+				removeOldDesk(qrcode.getCustomerId(), qrcode.getDeskId());
+				model.setCustomerId(qrcode.getCustomerId());
+				model.setDeskId(qrcode.getDeskId());
+				return qrcodeDao.update(qrcode);
+			}
 		}
-
-		//不能修改店铺信息
-		if(qrcodeDO.getCustomerId()!=null && !qrcodeDO.getCustomerId().equals(qrcode.getCustomerId())){
-			throw new BDException("不能设置非本店铺二维码",BDException.BUSINESS_ERROR_CODE);
-		}
-
-		//去除之前设置的二维码
-		removeOldDesk(qrcode.getCustomerId(),qrcode.getDeskId());
-		qrcodeDO.setCustomerId(qrcode.getCustomerId());
-		qrcodeDO.setDeskId(qrcode.getDeskId());
-
-		return qrcodeDao.update(qrcode);
+		return -1;
 	}
 
 	/**
@@ -80,6 +79,7 @@ public class QrcodeServiceImpl implements QrcodeService {
 	 * @param deskId
 	 * @return
 	 */
+	@Override
 	public int removeOldDesk(Integer customerId,Integer deskId){
 		return qrcodeDao.removeOldDesk(customerId,deskId);
 	}

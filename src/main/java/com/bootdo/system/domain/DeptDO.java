@@ -92,7 +92,7 @@ public class DeptDO implements Serializable {
 				"deptId=" + deptId +
 				", parentId=" + parentId +
 				", name='" + name + '\'' +
-				", orderNum=" + orderNum +
+				", createOrderNum=" + orderNum +
 				", delFlag=" + delFlag +
 				'}';
 	}

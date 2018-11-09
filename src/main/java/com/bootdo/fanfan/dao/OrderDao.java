@@ -36,11 +36,11 @@ public interface OrderDao {
 	
 	int batchRemove(Integer[] ids);
 
-	@Select("select  * from  ff_order  where order_num=#{orderNum}")
-	OrderDO getByOrderNum(@Param("orderNum") String orderNum);
+	@Select("select  * from  ff_order  where order_num=#{createOrderNum}")
+	OrderDO getByOrderNum(@Param("createOrderNum") String orderNum);
 
-	@Select("select id,order_state from  ff_order  where order_num=#{orderNum}")
-	OrderDO getIdByOrderNum(@Param("orderNum") String orderNum);
+	@Select("select id,order_state from ff_order where order_num=#{createOrderNum}")
+	OrderDO getIdByOrderNum(@Param("createOrderNum") String orderNum);
 
 	/**
 	 * 查询商户id

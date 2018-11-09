@@ -18,76 +18,62 @@ public class AlipayConfig {
     @Autowired
     BootdoConfig bootdoConfig;
 
-    private String publicKey;
+    /**
+     * 小程序Id
+     */
     @Getter
     private String appId;
-    @Getter
-    private String publicTBKey;
 
-    private  Map<String,AlipayClient> aliPayClientMap = new HashMap<>();
+    /**
+     * 平台TbKey
+     */
+    @Getter
+    private String publicPlatformTBKey;
+
+    /**
+     * 获取小程序请求客户端
+     */
+    @Getter
+    private AlipayClient defaultClient;
+
+    /**
+     * 获取平台小程序请求客户端
+     */
+    @Getter
+    private AlipayClient defaultPlatformClient;
+
 
     @Autowired
     AlipayKeyService alipayKeyService;
 
     @PostConstruct
     public void init(){
+        //初始化小程序Client
         AlipayKeyDO alipayKeyDO = alipayKeyService.getByAppId(bootdoConfig.getAliPayAppId());
-        if(alipayKeyDO!=null){
-            publicKey = alipayKeyDO.getPublicKey();
-            appId = alipayKeyDO.getAppId();
-            publicTBKey = alipayKeyDO.getPublicTbKey();
+        defaultClient = getAppClient(alipayKeyDO);
+        appId = alipayKeyDO.getAppId();
+
+        //初始化平台小程序Client
+        alipayKeyDO = alipayKeyService.getByAppId(bootdoConfig.getAliPayPlatformAppId());
+        defaultPlatformClient = getAppClient(alipayKeyDO);
+        publicPlatformTBKey = alipayKeyDO.getPublicTbKey();
+    }
+
+
+    private AlipayClient getAppClient(AlipayKeyDO alipayKeyDO) {
+        if (alipayKeyDO != null) {
+            DefaultAlipayClient defaultAlipayClient = new DefaultAlipayClient(
+                    bootdoConfig.getAliPayUrl(),
+                    alipayKeyDO.getAppId(),
+                    alipayKeyDO.getPrivateKey(),
+                    "JSON",
+                    "utf-8",
+                    alipayKeyDO.getPublicTbKey(),
+                    "RSA2");
+            return defaultAlipayClient;
+        } else {
+            throw new SecurityException("商户未配置支付宝密钥");
         }
     }
 
-    /**
-     * 获取小程序请求客户端
-     * @return
-     */
-    public  AlipayClient getDefaultClient(){
-        return getAppClient(bootdoConfig.getAliPayAppId());
-    }
-
-    /**
-     * 获取第三方平台请求客户端
-     * @return
-     */
-    public AlipayClient getDefaultPlatformClient(){
-        return getAppClient(bootdoConfig.getAliPayPlatformAppId());
-    }
-
-    /**
-     * 获取商户配置
-     * @param appId
-     * @return
-     */
-    public AlipayClient getAppClient(String appId){
-
-        if(!aliPayClientMap.containsKey(appId)) {
-            AlipayKeyDO alipayKeyDO = alipayKeyService.getByAppId(appId);
-            if (alipayKeyDO != null) {
-                DefaultAlipayClient defaultAlipayClient = new DefaultAlipayClient(
-                        bootdoConfig.getAliPayUrl(),
-                        alipayKeyDO.getAppId(),
-                        alipayKeyDO.getPrivateKey(),
-                        "JSON",
-                        "utf-8",
-                        alipayKeyDO.getPublicTbKey(),
-                        "RSA2");
-                aliPayClientMap.put(appId, defaultAlipayClient);
-            }else{
-                throw new SecurityException("商户未配置支付宝密钥");
-            }
-        }
-        return aliPayClientMap.get(appId);
-    }
-
-    /**
-     * 删除商户配置缓存
-     * @param appId
-     */
-    public void removeAppConfig(String appId){
-        if(aliPayClientMap.containsKey(appId)){
-            aliPayClientMap.remove(appId);
-        }
-    }
 }

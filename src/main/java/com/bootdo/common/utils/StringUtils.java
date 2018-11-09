@@ -1,5 +1,7 @@
 package com.bootdo.common.utils;
 
+import java.util.Date;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -51,6 +53,14 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils{
         }
         matcher.appendTail(sb);
         return sb.toString();
+    }
+
+    /**
+     * 获取订单号
+     * @return
+     */
+    public static String createOrderNum(){
+       return DateUtils.format(new Date(),"yyyyMMddHHmmssSSS")+(1000+new Random().nextInt(999));
     }
 
 }

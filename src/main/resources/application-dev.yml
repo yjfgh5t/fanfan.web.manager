@@ -8,6 +8,7 @@ bootdo:
   aliPayUrl: https://openapi.alipay.com/gateway.do
   defaultCustomerId: 132
   authorizeUrl: "https://openauth.alipay.com/oauth2/appToAppAuth.htm?app_id=2018072060650548&redirect_uri=http%3A%2F%2Fwxcard.com.cn%2Fapi%2Falipay%2FauthRedirect%3Fcustomer_id%3D"
+  payNotifyUrl: http://wxcard.com.cn/api/alipay/alipayReceiver
 logging:
   level:
     root: error
@@ -44,7 +45,7 @@ spring:
   redis:
       host: 127.0.0.1
       port: 6379
-      password:
+      password: 123456
       # 连接超时时间（毫秒）123456
       timeout: 10000
       pool:

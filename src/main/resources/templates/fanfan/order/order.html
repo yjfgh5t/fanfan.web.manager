@@ -3,65 +3,96 @@
 <meta charset="utf-8">
 <head th:include="include :: header"></head>
 <body class="gray-bg">
-	<div class="wrapper wrapper-content ">
-		<div class="col-sm-12">
-			<div class="ibox">
-				<div class="ibox-body">
-					<div class="fixed-table-toolbar">
-						<div class="columns pull-left">
-							<button shiro:hasPermission="fanfan:order:add" type="button" class="btn  btn-primary" onclick="add()">
-								<i class="fa fa-plus" aria-hidden="true"></i>添加
-							</button>
-							<button shiro:hasPermission="fanfan:order:batchRemove" type="button" class="btn  btn-danger"
-								onclick="batchRemove()">
-								<i class="fa fa-trash" aria-hidden="true"></i>删除
-							</button>
-						</div>
-						<div class="columns pull-right">
-							<button class="btn btn-success" onclick="reLoad()">查询</button>
-						</div>
-						<div class="columns pull-right col-md-2 nopadding">
-							<input id="searchName" type="text" class="form-control"
-								placeholder="">
-						</div>
-					</div>
-					<table id="exampleTable" data-mobile-responsive="true">
-					</table>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
-		<div>
-			<script type="text/javascript">
-				var s_edit_h = 'hidden';
-				var s_remove_h = 'hidden';
-				var s_resetPwd_h = 'hidden';
-                var s_detail_h = 'hidden';
-			</script>
-		</div>
-		<div shiro:hasPermission="fanfan:order:edit">
-			<script type="text/javascript">
-				s_edit_h = '';
-			</script>
-		</div>
-		<div shiro:hasPermission="fanfan:order:remove">
-			<script type="text/javascript">
-				var s_remove_h = '';
-			</script>
-		</div>
-		<div shiro:hasPermission="fanfan:order:resetPwd">
-			<script type="text/javascript">
-				var s_resetPwd_h = '';
-			</script>
-		</div>
-	<div shiro:hasPermission="fanfan:order:detail">
-		<script type="text/javascript">
+<div class="wrapper wrapper-content ">
+    <div class="col-sm-12">
+        <div class="ibox">
+            <div class="ibox-body">
+                <div class="fixed-table-toolbar">
+                    <div class="columns pull-left">
+                        <button shiro:hasPermission="fanfan:order:add" type="button" class="btn  btn-primary"
+                                onclick="add()">
+                            <i class="fa fa-plus" aria-hidden="true"></i>添加
+                        </button>
+                        <button shiro:hasPermission="fanfan:order:batchRemove" type="button" class="btn  btn-danger"
+                                onclick="batchRemove()">
+                            <i class="fa fa-trash" aria-hidden="true"></i>删除
+                        </button>
+                    </div>
+
+                    <div class="columns pull-right">
+                        <button class="btn btn-success" onclick="reLoad()">查询</button>
+                    </div>
+
+                    <div class="columns col-md-3">
+                        <div class="form-group">
+                            <label for="customerId" class="col-sm-4 control-label">商户Id</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="customerId" placeholder="请输入商户Id">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="columns col-md-3">
+                        <div class="form-group">
+                            <label for="orderNum" class="col-sm-4 control-label">订单号</label>
+                            <div class="col-sm-8">
+                                <input id="orderNum" class="form-control" placeholder="请输入订单号" value="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="columns col-md-3">
+                        <div class="form-group">
+                            <label for="orderNum" class="col-sm-4 control-label">订单状态</label>
+                            <div class="col-sm-8">
+                                <select id="orderState" class="form-control">
+                                    <option value="">所有</option>
+                                    <option value="103">待支付</option>
+                                    <option value="104">已支付</option>
+                                    <option value="105">超时未支付</option>
+                                    <option value="106">订单已取消</option>
+                                    <option value="203">商家取消订单</option>
+                                    <option value="999">订单完成</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <table id="exampleTable" data-mobile-responsive="true">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
+    <div>
+        <script type="text/javascript">
+            var s_edit_h = 'hidden';
+            var s_remove_h = 'hidden';
+            var s_resetPwd_h = 'hidden';
+            var s_detail_h = 'hidden';
+        </script>
+    </div>
+    <div shiro:hasPermission="fanfan:order:edit">
+        <script type="text/javascript">
+            s_edit_h = '';
+        </script>
+    </div>
+    <div shiro:hasPermission="fanfan:order:remove">
+        <script type="text/javascript">
+            var s_remove_h = '';
+        </script>
+    </div>
+    <div shiro:hasPermission="fanfan:order:resetPwd">
+        <script type="text/javascript">
+            var s_resetPwd_h = '';
+        </script>
+    </div>
+    <div shiro:hasPermission="fanfan:order:detail">
+        <script type="text/javascript">
             var s_detail_h = '';
-		</script>
-	</div>
-	</div>
-	<div th:include="include :: footer"></div>
-	<script type="text/javascript" src="/js/appjs/fanfan/order/order.js"></script>
+        </script>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script type="text/javascript" src="/js/appjs/fanfan/order/order.js"></script>
 </body>
 </html>

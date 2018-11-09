@@ -140,7 +140,7 @@ public class OrderServiceImpl implements OrderService {
 		if(StringUtils.isEmpty(orderDO.getOrderNum()))
 		{
 			//生成订单号
-			orderDO.setOrderNum(this.getOrderNum());
+			orderDO.setOrderNum(StringUtils.createOrderNum());
 			//获取实体
 			orderDO.setOrderState(OrderStateEnum.userRequestPay.getVal());
 			orderDO.setCreateTime(Calendar.getInstance().getTime());
@@ -348,7 +348,7 @@ public class OrderServiceImpl implements OrderService {
 	 * @param orderDO
 	 */
 	@Override
-	@Transactional(rollbackFor = {Exception.class})
+	@Transactional(rollbackFor = {Exception.class,BDException.class})
 	public void updateOrderState(OrderDO orderDO){
 		//保存订单状态
 		if(orderStateService.save(new OrderStateDO(orderDO.getId(),orderDO.getOrderState(),orderDO.getCustomerId()),orderDO.getOrderNum())>0) {
@@ -597,15 +597,6 @@ public class OrderServiceImpl implements OrderService {
         return orderAlipayService.save(alipayDO)>0;
     }
 
-    /**
-     * 获取订单号
-     * @param
-     * @return
-     */
-	private String getOrderNum(){
-		Long time = System.currentTimeMillis();
-		return time+""+ (int)Math.random()*1000;
-	}
 
 
 	/**

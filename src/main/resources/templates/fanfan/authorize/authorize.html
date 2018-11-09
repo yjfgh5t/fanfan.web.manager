@@ -21,8 +21,14 @@
 							<button class="btn btn-success" onclick="reLoad()">查询</button>
 						</div>
 						<div class="columns pull-right col-md-2 nopadding">
-							<input id="searchName" type="text" class="form-control"
-								placeholder="">
+							<select class="form-control" id="identificationState">
+								<option value="">所有</option>
+								<option value="0">未认证</option>
+								<option value="1">认证中</option>
+								<option value="2">认证失败</option>
+								<option value="3">认证成功待确认</option>
+								<option value="4">已认证</option>
+							</select>
 						</div>
 					</div>
 					<table id="exampleTable" data-mobile-responsive="true">
@@ -55,6 +61,8 @@
 			</script>
 		</div>
 	</div>
+	<!--下载图片 -->
+	<a href="" target="_blank"  download="canvas_love.png" id="a-save-img" style="display: none;" ></a>
 	<div th:include="include :: footer"></div>
 	<script type="text/javascript" src="/js/appjs/fanfan/authorize/authorize.js"></script>
 </body>
