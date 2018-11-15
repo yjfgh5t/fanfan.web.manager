@@ -32,6 +32,10 @@ public class AuthorizeServiceImpl implements AuthorizeService {
 	public	AuthorizeDO getState(Integer id){
 		return authorizeDao.getState(id);
 	}
+	@Override
+	public AuthorizeDO getStateByCustomerId(Integer customerId){
+		return authorizeDao.getStateByCustomerId(customerId);
+	}
 
 	@Override
 	public List<AuthorizeDO> list(Map<String, Object> map){

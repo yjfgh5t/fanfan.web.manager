@@ -25,4 +25,9 @@ public class RedisConstant {
      * 商户Token
      */
     public static final String CUSTOMER_TOKEN_KEY="CUSTOMER_TOKEN_KEY";
+
+    /**
+     * 商户店铺状态
+     */
+    public static final String CUSTOMER_SHOP_STATE_KEY="CUSTOMER_SHOP_STATE_KEY";
 }

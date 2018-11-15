@@ -25,6 +25,13 @@ public interface AuthorizeService {
 	 */
 	AuthorizeDO getState(Integer id);
 
+	/**
+	 * 查询审核状态
+	 * @param customerId
+	 * @return
+	 */
+	AuthorizeDO getStateByCustomerId(Integer customerId);
+
 	List<AuthorizeDO> list(Map<String, Object> map);
 	
 	int count(Map<String, Object> map);

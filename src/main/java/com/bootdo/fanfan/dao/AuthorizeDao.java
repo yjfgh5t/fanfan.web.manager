@@ -35,6 +35,9 @@ public interface AuthorizeDao {
 	@Select("select authorize_state,identification_state from ff_authorize where id =#{id}")
 	AuthorizeDO getState(@Param("id") Integer id);
 
+	@Select("select authorize_state,identification_state from ff_authorize where customer_id =#{customerId}")
+	AuthorizeDO getStateByCustomerId(@Param("customerId") Integer customerId);
+
 	@Select("select id from ff_authorize where customer_id = #{customerId}")
 	Integer getId(@Param("customerId") Integer customerId);
 
