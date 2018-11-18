@@ -60,7 +60,7 @@ public class CommodityCategoryRestController extends ApiBaseRestController  {
         }else {
             commodityCategoryService.update(commoditCategory);
         }
-        return R.ok();
+        return R.ok().put("data",commoditCategory.getId());
     }
 
     @PostMapping("/delete/{id}")

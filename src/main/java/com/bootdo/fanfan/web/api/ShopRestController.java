@@ -95,9 +95,9 @@ public class ShopRestController extends ApiBaseRestController{
         if (state <= 2) {
             //商品设置状态
             Map<String, Object> params = new HashMap<>();
-            params.put("CustomerId", getBaseModel().getCustomerId());
+            params.put("customerId", getBaseModel().getCustomerId());
             params.put("delete", 0);
-            int count = shopService.count(params);
+            int count = commodityService.count(params);
             if (count == 0) {
                 return R.ok().put("data", 2);
             }
