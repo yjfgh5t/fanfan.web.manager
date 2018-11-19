@@ -105,7 +105,11 @@ public class HttpClientUtils {
         return doPost(url, null);
     }
 
-    public static String doPostJson(String url, String json) {
+    public static String doPostJson(String url, String json){
+        return doPostJson(url,json,null);
+    }
+
+    public static String doPostJson(String url, String json,Map<String,String> headers) {
         // 创建Httpclient对象
         CloseableHttpClient httpClient = HttpClients.createDefault();
         CloseableHttpResponse response = null;
@@ -116,6 +120,13 @@ public class HttpClientUtils {
             // 创建请求内容
             StringEntity entity = new StringEntity(json, ContentType.APPLICATION_JSON);
             httpPost.setEntity(entity);
+
+            if(headers!=null){
+                headers.forEach((key,val)->{
+                    httpPost.setHeader(key,val);
+                });
+            }
+
             // 执行http请求
             response = httpClient.execute(httpPost);
             resultString = EntityUtils.toString(response.getEntity(), "utf-8");

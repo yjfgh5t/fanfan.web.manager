@@ -17,6 +17,11 @@ public class BootdoConfig {
 	private String staticUrl;
 
 	/**
+	 * 信鸽应用Id
+	 */
+	private String xgAppId;
+
+	/**
 	 * 信鸽账号
 	 */
 	private Integer xgAccessId;

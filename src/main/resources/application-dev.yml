@@ -1,7 +1,8 @@
 bootdo:
   uploadPath: D:/var/uploaded_files/
-  staticUrl: http://192.168.1.10:8081/files/ # http://192.168.2.68:8081
+  staticUrl: http://192.168.4.47:8081/files/ # http://192.168.2.68:8081
   xgAccessId: 2100311367
+  xgAppId: 3865f5faddbc5
   xgSecretKey: 03bc79adf9ad6abcb1ef0c5c4407bf2b
   aliPayAppId: 2018033102482725
   aliPayPlatformAppId: 2018072060650548

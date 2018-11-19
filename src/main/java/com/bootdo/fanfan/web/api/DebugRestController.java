@@ -2,6 +2,7 @@ package com.bootdo.fanfan.web.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.response.AlipayTradeQueryResponse;
+import com.bootdo.common.config.BootdoConfig;
 import com.bootdo.common.extend.EMapper;
 import com.bootdo.common.utils.R;
 import com.bootdo.fanfan.domain.AlipayRecordDO;
@@ -14,6 +15,7 @@ import com.bootdo.fanfan.vo.APIOrderRequVO;
 import com.bootdo.fanfan.vo.APIPrintOrderDetailVO;
 import com.bootdo.fanfan.vo.APIPrintOrderVO;
 import com.bootdo.fanfan.vo.model.XGPushModel;
+import com.tencent.xinge.XingeApp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,7 +51,6 @@ public class DebugRestController {
 
     @GetMapping("pushNotify")
     public R pushNotify(Integer customerId,String message){
-
         XGPushModel pushModel = new XGPushModel(XGPushModel.MsgType.authorizeNotify,customerId.longValue());
         pushModel.setMsgTitle(message);
         pushModel.setMsgContent("支付宝授权成功");
