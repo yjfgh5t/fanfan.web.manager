@@ -50,7 +50,6 @@ public class TestXGPush {
         //设置消息
         xgPushModel.setMessage(messageModel);
 
-
         XGResultModel result = xgApp.push(bootdoConfig.getXgAppId(),bootdoConfig.getXgSecretKey(), xgPushModel);
 
         System.out.println("推送返回"+ result.toString());

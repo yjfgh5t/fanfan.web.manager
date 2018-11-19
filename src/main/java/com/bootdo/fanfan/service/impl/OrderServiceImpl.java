@@ -9,10 +9,7 @@ import com.bootdo.common.utils.StringUtils;
 import com.bootdo.fanfan.domain.*;
 import com.bootdo.fanfan.domain.DTO.OrderStatisticsDTO;
 import com.bootdo.fanfan.domain.DTO.TemplateMsgMQDTO;
-import com.bootdo.fanfan.domain.enumDO.OrderDetailEnum;
-import com.bootdo.fanfan.domain.enumDO.OrderDetailType;
-import com.bootdo.fanfan.domain.enumDO.OrderStateEnum;
-import com.bootdo.fanfan.domain.enumDO.OrderTypeEnum;
+import com.bootdo.fanfan.domain.enumDO.*;
 import com.bootdo.fanfan.manager.AlipayManager;
 import com.bootdo.fanfan.manager.TemplateMsgManager;
 import com.bootdo.fanfan.manager.XGPushManager;
@@ -415,17 +412,19 @@ public class OrderServiceImpl implements OrderService {
 			return;
 		}
 		XGPushModel pushModel = new XGPushModel(XGPushModel.MsgType.payOrder,orderRequVO.getCustomerId().longValue());
-		pushModel.setMsgTitle("您有新的订单");
-		pushModel.setMsgContent("订单总额："+orderRequVO.getOrderTotal().doubleValue());
+		pushModel.setMsgTitle(OrderPayType.get(orderRequVO.getOrderPayType()).getText()+"支付订单"+orderRequVO.getOrderPay().doubleValue()+"元");
+		pushModel.setMsgContent("请及时处理");
 
 		//数据转换
 		APIPrintOrderVO data = eMapper.map(orderRequVO, APIPrintOrderVO.class);
 		if(orderRequVO.getDetailList()!=null){
 			List<APIPrintOrderDetailVO> detailVOS = eMapper.mapArray(orderRequVO.getDetailList(), APIPrintOrderDetailVO.class);
 			data.setDetails(detailVOS);
+			//设置详情
+			pushModel.setMsgContent("【"+orderRequVO.getDetailList().get(0).getOutTitle()+"】等共"+orderRequVO.getDetailList().stream().filter((f)->{ return OrderDetailEnum.Commodity.getVal().equals(f.getOutType());}).count()+"个商品");
 		}
 		pushModel.addParams("data", JSONObject.toJSONString(data));
-		pushModel.setNotification(false);
+		pushModel.setNotification(true);
 		//推送消息
 		xgPushManager.put(pushModel);
 	}

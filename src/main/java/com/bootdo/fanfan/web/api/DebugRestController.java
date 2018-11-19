@@ -72,22 +72,8 @@ public class DebugRestController {
      */
     @GetMapping("/pushOrder/{id}")
     public R debugPush(@PathVariable("id") Integer id) {
-        APIOrderRequVO apiOrderRequVO = orderService.queryOrder(id);
-        XGPushModel pushModel = new XGPushModel(XGPushModel.MsgType.payOrder, apiOrderRequVO.getCustomerId().longValue());
-        pushModel.setMsgTitle("您有新的订单");
-        pushModel.setMsgContent("订单总额："+new Random().nextInt());
-        pushModel.setNotification(false);
-        //数据转换
-        APIPrintOrderVO data = mapper.map(apiOrderRequVO, APIPrintOrderVO.class);
-        if(apiOrderRequVO.getDetailList()!=null){
-            List<APIPrintOrderDetailVO> detailVOS = mapper.mapArray(apiOrderRequVO.getDetailList(), APIPrintOrderDetailVO.class);
-            data.setDetails(detailVOS);
-        }
-        pushModel.addParams("data", JSONObject.toJSONString(data));
-        pushModel.addParams("time",Calendar.getInstance().getTime());
-
-        //推送消息
-        xgPushManager.put(pushModel);
+        //推送通知订单
+        orderService.sendOrderNotification(id);
         return R.ok();
     }
 

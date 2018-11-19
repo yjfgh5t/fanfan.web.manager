@@ -23,4 +23,13 @@ public enum OrderPayType {
         this.id=val;
     }
 
+    public static OrderPayType get(Integer id){
+        for (OrderPayType orderPayType : OrderPayType.values()){
+            if(orderPayType.id.equals(id)){
+                return orderPayType;
+            }
+        }
+        return Alipay;
+    }
+
 }
