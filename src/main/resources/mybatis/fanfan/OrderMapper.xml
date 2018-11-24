@@ -152,8 +152,8 @@
 	</delete>
 
 	<select id="queryOrderByUser" resultType="com.bootdo.fanfan.vo.APIOrderListVO">
-		select A.id, A.`order_num`,A.`order_state`,A.`order_type`,A.`order_pay`,A.`order_commodity_total` as `commodity_total`,B.`out_title` as `title`,A.`create_time`,C.commodity_img,A.`order_date_num`    from
-		(select `id`,`order_num`,`order_state`,`order_type`,`order_pay`,`order_commodity_total`,`create_time`,`order_date_num` from ff_order
+		select A.id, A.`order_num`,A.`order_state`,A.`order_type`,A.`order_pay`,A.`order_pay_type`,A.`order_commodity_total` as `commodity_total`,B.`out_title` as `title`,A.`create_time`,C.commodity_img,A.`order_date_num`    from
+		(select `id`,`order_num`,`order_state`,`order_type`,`order_pay`,`order_pay_type`,`order_commodity_total`,`create_time`,`order_date_num` from ff_order
 		<where>
 			order_state!=101
 			<if test="userId != null and userId != ''"> AND user_id = #{userId} </if>
@@ -184,7 +184,7 @@
 
 	<!-- 未支付的订单不会查出来 只有已支付的订单才会有order_time值-->
 	<select id="queryOrderByCustomer" resultType="com.bootdo.fanfan.vo.APIOrderListCustomerVO">
-		SELECT a.id,a.order_num,a.order_state,a.order_type,a.order_total,a.order_total,a.order_pay,a.order_date_num,a.order_desk_num,a.order_time,a.order_remark,b.user_nick,b.user_icon from ff_order  as a
+		SELECT a.id,a.order_num,a.order_state,a.order_type,a.order_pay_type,a.order_total,a.order_total,a.order_pay,a.order_date_num,a.order_desk_num,a.order_time,a.order_remark,b.user_nick,b.user_icon from ff_order  as a
 		left JOIN ff_user as b
 		on a.user_id = b.id
 		where  a.customer_id=#{customerId}

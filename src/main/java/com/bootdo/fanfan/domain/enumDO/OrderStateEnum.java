@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum  OrderStateEnum {
-
+    @Deprecated
     userCreate(101,"临时订单"),
-    userRequestPay(102,"提交订单"),
+    userPostOrder(102,"提交订单"),
     userWaitPay(103,"待支付"),
     userPaid(104,"已支付"),
     userPayOvertime(105,"超时未支付"),
@@ -15,12 +15,12 @@ public enum  OrderStateEnum {
     userException(108,"订单异常反馈"),
 
     //商家确认收单
-    businessConfirm(201,"商家正在备货"),
-    businessCancel(202,"商家取消订单"),
+    businessPending(200,"商家订单确认中"),
+    businessConfirm(201,"商家已确认订单"),
+    businessCancel(202,"商家已取消订单"),
     businessDelivery(203,"正在派单"),
 
     orderSuccess(999,"订单完成");
-
     private Integer val;
 
     private String  text;

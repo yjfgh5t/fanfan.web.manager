@@ -17,6 +17,13 @@ public interface ShopService {
 	ShopDO get(Integer id);
 
 	ShopDO getByCustomerId(Integer customerId);
+
+	/**
+	 * 获取店铺名称
+	 * @param customerId
+	 * @return
+	 */
+	String getNameByCustomerId(Integer customerId);
 	
 	List<ShopDO> list(Map<String, Object> map);
 	

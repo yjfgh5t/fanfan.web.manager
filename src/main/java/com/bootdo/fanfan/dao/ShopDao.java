@@ -34,4 +34,7 @@ public interface ShopDao {
 
 	@Select("select * from ff_shop where customer_id =#{customerId}")
 	ShopDO getByCustomerId(@PathVariable("customerId") Integer customerId);
+
+	@Select("select name from ff_shop where customer_id =#{customerId}")
+	String getNameByCustomerId(@PathVariable("customerId") Integer customerId);
 }

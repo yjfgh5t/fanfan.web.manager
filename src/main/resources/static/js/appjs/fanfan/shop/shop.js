@@ -69,7 +69,7 @@ function load() {
 								},
 																{
 									field : 'state', 
-									title : '店铺状态 1：正常营业  2：停止营业' 
+									title : '店铺状态 '
 								},
 																{
 									field : 'minOrderPrice', 
@@ -80,12 +80,20 @@ function load() {
 									title : '店铺地址' 
 								},
 																{
-									field : 'createTime', 
-									title : '创建时间' 
+									field : 'alipay', 
+									title : '是否开启支付宝' 
 								},
 																{
-									field : 'modifyTime', 
-									title : '结束时间' 
+									field : 'wechate', 
+									title : '是否开启微信' 
+								},
+																{
+									field : 'offline', 
+									title : '是否线下支付' 
+								},
+																{
+									field : 'createTime', 
+									title : '创建时间' 
 								},
 																{
 									field : 'customerId', 

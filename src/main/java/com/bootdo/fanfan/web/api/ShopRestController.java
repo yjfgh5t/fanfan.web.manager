@@ -46,38 +46,56 @@ public class ShopRestController extends ApiBaseRestController{
         }else {
             shopDO = shopService.getByCustomerId(getBaseModel().getCustomerId());
         }
-
         APIShopVO shopVO=null;
-
         if(shopDO!=null){
             shopVO = eMapper.map(shopDO, APIShopVO.class);
         }
-
         return R.ok().put("data",shopVO);
     }
 
     @PostMapping("/")
     public R save(@RequestBody APIShopVO shopVO){
-
-        shopVO.setCustomerId(getBaseModel().getCustomerId());
-
         ShopDO shopDO = eMapper.map(shopVO,ShopDO.class);
-
         int success=0;
-
         if(shopVO.getId()==-1){
+            shopVO.setCustomerId(getBaseModel().getCustomerId());
             success = shopService.save(shopDO);
         } else {
             success = shopService.update(shopDO);
         }
-
         if(success>0) {
             return R.ok().put("data",shopDO.getId());
         }else {
-            return R.error(1,"保存失败");
+            return R.error("保存失败");
         }
     }
 
+    /**
+     * 店铺收款设置
+     * @param shopVO
+     * @return
+     */
+    @PostMapping("/shopPaySetting")
+    public R shopPaySetting(@RequestBody APIShopVO shopVO){
+
+        //都设置为否
+        if(!shopVO.getAlipay() && !shopVO.getOffline() &&  !shopVO.getWechate()){
+            return R.error("至少开通一个收款方式");
+        }
+        //设置支付宝收款
+        if(shopVO.getAlipay()){
+            //查询是否已经签约
+            AuthorizeDO authorizeDO = authorizeService.getByCustomerId(getBaseModel().getCustomerId());
+            if(authorizeDO==null || BooleanEnum.False.getVal().equals(authorizeDO.getAuthorizeState())){
+                return R.ok("店铺还未授权").put("data",-1);
+            }
+            //未认证
+            if(!IdentificationEnum.SuccessIdentification.getVal().equals(authorizeDO.getIdentificationState())){
+                return R.ok("店铺还未认证").put("data",-1);
+            }
+        }
+        return save(shopVO);
+    }
     /**
      * 店铺状态  1：店铺未设置，2：商品未设置 3：支付宝未授权 4：支付宝未认证 5:支付宝认证失败 6:支付宝认证待确认 9:信息已完善
      * @return

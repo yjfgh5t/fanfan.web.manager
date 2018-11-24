@@ -38,6 +38,16 @@ public class APIOrderListCustomerVO {
      */
     private String orderTypeText;
 
+    /**
+     * 付款类型
+     */
+    private Integer orderPayType;
+
+    /**
+     * 支付类型文本
+     */
+    private String orderPayTypeText;
+
     private Integer orderType;
 
     /**

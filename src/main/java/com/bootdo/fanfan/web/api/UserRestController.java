@@ -10,6 +10,7 @@ import com.bootdo.fanfan.domain.TpUserDO;
 import com.bootdo.fanfan.domain.UserDO;
 import com.bootdo.fanfan.domain.enumDO.PlatformEnum;
 import com.bootdo.fanfan.manager.AlismsManager;
+import com.bootdo.fanfan.service.ShopService;
 import com.bootdo.fanfan.service.TpUserService;
 import com.bootdo.fanfan.vo.APICustomerVO;
 import com.bootdo.fanfan.vo.APICustomerRegisterVO;
@@ -41,6 +42,9 @@ public class UserRestController extends ApiBaseRestController {
 
     @Autowired
     AlismsManager alismsManager;
+
+    @Autowired
+    ShopService shopService;
 
     @Autowired
     RedisUtils redisUtils;
@@ -78,8 +82,9 @@ public class UserRestController extends ApiBaseRestController {
             userPwd = MD5Utils.encrypt(userVO.getUsername(), userPwd);
             //判断密码输入是否正确
             if (userPwd.equals(userDOS.get(0).getPassword())) {
-                //查詢店鋪Id
-
+                //查询店铺Id
+                String shopName = shopService.getNameByCustomerId(userVO.getUserId().intValue());
+                userVO.setShopName(shopName);
                 return R.ok().put("data", userVO);
             }
         }

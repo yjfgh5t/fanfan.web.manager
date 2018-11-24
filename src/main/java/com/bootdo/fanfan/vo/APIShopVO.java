@@ -34,5 +34,11 @@ public class APIShopVO {
     private Date modifyTime;
     //商户Id
     private Integer customerId;
+    //是否开启支付宝
+    private Boolean alipay;
+    //是否开启微信
+    private Boolean wechate;
+    //是否线下支付
+    private Boolean offline;
 
 }

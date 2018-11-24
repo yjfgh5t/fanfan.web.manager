@@ -37,7 +37,10 @@ public class APIPrintOrderVO {
      * 打包、堂吃、外卖
      */
     private String orderTypeText;
-
+    /**
+     * 支付类型文本
+     */
+    private String orderPayTypeText;
     /**
      * 备注
      */

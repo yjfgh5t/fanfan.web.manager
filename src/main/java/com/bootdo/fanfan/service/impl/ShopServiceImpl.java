@@ -28,6 +28,11 @@ public class ShopServiceImpl implements ShopService {
 	public ShopDO getByCustomerId(Integer customerId){
 		return shopDao.getByCustomerId(customerId);
 	}
+
+	@Override
+	public String getNameByCustomerId(Integer customerId){
+		return shopDao.getNameByCustomerId(customerId);
+	}
 	
 	@Override
 	public List<ShopDO> list(Map<String, Object> map){
@@ -44,7 +49,6 @@ public class ShopServiceImpl implements ShopService {
 		shop.setModifyTime(new Date());
 		shop.setCreateTime(new Date());
 		int count = shopDao.save(shop);
-
 		//保存成功 返回Id
 		return count;
 	}

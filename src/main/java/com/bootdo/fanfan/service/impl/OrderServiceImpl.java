@@ -139,7 +139,7 @@ public class OrderServiceImpl implements OrderService {
 			//生成订单号
 			orderDO.setOrderNum(StringUtils.createOrderNum());
 			//获取实体
-			orderDO.setOrderState(OrderStateEnum.userRequestPay.getVal());
+			orderDO.setOrderState(OrderStateEnum.userPostOrder.getVal());
 			orderDO.setCreateTime(Calendar.getInstance().getTime());
 			//保存订单
 			save(orderDO);
@@ -149,7 +149,7 @@ public class OrderServiceImpl implements OrderService {
 		}
 
 		//设置订单号
-		orderDetailDOList.forEach(f->{ f.setOrderId(orderDO.getId()); });
+		orderDetailDOList.forEach(f-> f.setOrderId(orderDO.getId()));
 
 		//保存订单详情
 		orderDetialService.batchSave(orderDetailDOList);
@@ -164,17 +164,28 @@ public class OrderServiceImpl implements OrderService {
 		}
 
 		//创建支付宝预付单
-        if(orderDO.getOrderState().equals(OrderStateEnum.userRequestPay.getVal())) {
-        	//创建预付单成功
-            if(createAlipayOrder(orderDetailDOList, orderDO)){
-            	//订单状态
-            	orderDO.setOrderState(OrderStateEnum.userWaitPay.getVal());
-				orderDO.setCustomerId(orderDO.getCustomerId());
-            	//更新订单状态
-				updateOrderState(orderDO);
-			}
+        if(orderDO.getOrderState().equals(OrderStateEnum.userPostOrder.getVal())) {
+			OrderPayType payType = OrderPayType.get(orderDO.getOrderPayType());
+			switch (payType){
+                case Alipay:
+                    //创建预付单成功
+                    if(createAlipayOrder(orderDetailDOList, orderDO)){
+                        //订单状态
+                        orderDO.setOrderState(OrderStateEnum.userWaitPay.getVal());
+                        orderDO.setCustomerId(orderDO.getCustomerId());
+                        //更新订单状态
+                        updateOrderState(orderDO);
+                    }
+                    break;
+                case Cash:
+                        //订单状态
+                        orderDO.setOrderState(OrderStateEnum.businessPending.getVal());
+                        orderDO.setCustomerId(orderDO.getCustomerId());
+                        //更新订单状态
+                        updateOrderState(orderDO);
+                    break;
+            }
         }
-
 		return orderDO.getId();
 	}
 
@@ -316,11 +327,14 @@ public class OrderServiceImpl implements OrderService {
 
 		//订单详情转换
 		apiOrderRequVO.setDetailList(eMapper.mapArray(orderDetailDOList,APIOrderDetailVO.class));
-
+        //订单类型
 		if(orderDO.getOrderType()!=null){
 			apiOrderRequVO.setOrderTypeText(OrderTypeEnum.get(orderDO.getOrderType()).getText());
 		}
-
+		//付款类型
+        if(orderDO.getOrderPayType()!=null){
+		    apiOrderRequVO.setOrderPayTypeText(OrderPayType.get(orderDO.getOrderPayType()).getText());
+        }
 		//订单收货人信息
 		OrderReceiverDO receiverDO = orderReceiverService.queryById(orderDO.getId());
 		if(receiverDO!=null){
@@ -455,6 +469,8 @@ public class OrderServiceImpl implements OrderService {
 					item.setLastPayTime(getLastPaySecond(item.getId()));
 					//支付宝支付字符串
 					item.setAlipayOrderStr(orderAlipayService.getOrderStrById(item.getId()));
+                    //付款类型文本
+                    item.setOrderPayTypeText(OrderPayType.get(item.getOrderPayType()).getText());
 				}
 			});
 		}
@@ -491,6 +507,8 @@ public class OrderServiceImpl implements OrderService {
 					item.setOrderStateText(OrderStateEnum.get(item.getOrderState()).getText());
 					//堂吃类型文本
 					item.setOrderTypeText(OrderTypeEnum.get(item.getOrderType()).getText());
+					//付款类型文本
+                    item.setOrderPayTypeText(OrderPayType.get(item.getOrderPayType()).getText());
 				});
 			}
 		}
@@ -604,7 +622,7 @@ public class OrderServiceImpl implements OrderService {
 	 */
 	private Long getLastPaySecond(Integer orderId) {
 		//提交预付单时间
-		Date submitOrderTime = orderStateService.queryStateDate(orderId, OrderStateEnum.userRequestPay.getVal());
+		Date submitOrderTime = orderStateService.queryStateDate(orderId, OrderStateEnum.userPostOrder.getVal());
 		//加15分钟
 		submitOrderTime.setMinutes(submitOrderTime.getMinutes()+15);
 		//最后付款剩余秒数

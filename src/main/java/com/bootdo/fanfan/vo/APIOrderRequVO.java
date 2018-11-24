@@ -29,6 +29,8 @@ public class APIOrderRequVO {
     private BigDecimal orderDiscountTotal;
     //订单支付类型  1:支付宝  2：微信 3：现金
     private Integer orderPayType;
+    //订单支付类型文本
+    private String orderPayTypeText;
     //用餐人数
     private String orderMealsNum;
     //商户描述（退款描述）

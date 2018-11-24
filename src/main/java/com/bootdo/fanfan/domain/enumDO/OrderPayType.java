@@ -10,7 +10,7 @@ public enum OrderPayType {
 
     Alipay(1,"支付宝"),
     Wechat(2,"微信"),
-    Cash(3,"现金");
+    Cash(3,"线下付款");
 
     @Getter
     private Integer id;

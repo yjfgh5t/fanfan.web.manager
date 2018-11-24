@@ -42,9 +42,9 @@ public class APICustomerVO {
     private String picPath;
 
     /**
-     * 店鋪Id
+     * 店铺名称
      */
-    private Integer shopId;
+    private String shopName;
 
     /**
      * 密码
