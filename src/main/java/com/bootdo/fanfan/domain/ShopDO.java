@@ -10,7 +10,7 @@ import java.util.Date;
  * 
  * @author jy
  * @email 1992lcg@163.com
- * @date 2018-11-24 20:41:08
+ * @date 2018-11-25 21:10:26
  */
 public class ShopDO implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -32,11 +32,11 @@ public class ShopDO implements Serializable {
 	//店铺地址
 	private String address;
 	//是否开启支付宝
-	private Boolean alipay;
+	private Integer alipay;
 	//是否开启微信
-	private Boolean wechate;
+	private Integer wechat;
 	//是否线下支付
-	private Boolean offline;
+	private Integer offline;
 	//创建时间
 	private Date createTime;
 	//结束时间
@@ -143,37 +143,37 @@ public class ShopDO implements Serializable {
 	/**
 	 * 设置：是否开启支付宝
 	 */
-	public void setAlipay(Boolean alipay) {
+	public void setAlipay(Integer alipay) {
 		this.alipay = alipay;
 	}
 	/**
 	 * 获取：是否开启支付宝
 	 */
-	public Boolean getAlipay() {
+	public Integer getAlipay() {
 		return alipay;
 	}
 	/**
 	 * 设置：是否开启微信
 	 */
-	public void setWechate(Boolean wechate) {
-		this.wechate = wechate;
+	public void setWechat(Integer wechat) {
+		this.wechat = wechat;
 	}
 	/**
 	 * 获取：是否开启微信
 	 */
-	public Boolean getWechate() {
-		return wechate;
+	public Integer getWechat() {
+		return wechat;
 	}
 	/**
 	 * 设置：是否线下支付
 	 */
-	public void setOffline(Boolean offline) {
+	public void setOffline(Integer offline) {
 		this.offline = offline;
 	}
 	/**
 	 * 获取：是否线下支付
 	 */
-	public Boolean getOffline() {
+	public Integer getOffline() {
 		return offline;
 	}
 	/**

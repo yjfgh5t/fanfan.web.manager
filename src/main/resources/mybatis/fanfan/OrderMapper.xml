@@ -170,7 +170,7 @@
 			limit #{offset}, #{limit}
 		</if>
 		) as A
-		LEFT JOIN ff_order_detail B on A.id  =  B.order_id and B.id=(select min(id) from ff_order_detail where order_id=A.id and out_type=1)
+		LEFT JOIN ff_order_detail B on A.id  =  B.order_id and B.id=(select min(id) from ff_order_detail where order_id=A.id and (out_type=1 or out_type=5))
         LEFT JOIN ff_commodity C
         on C.id  = B.out_id
 	</select>
@@ -197,10 +197,16 @@
 				AND a.id &lt; #{lastId}
 			</if>
 		</if>
-		<if test="orderState != null">
-			AND a.order_state = #{orderState}
+		<if test="orderStates != null">
+			AND a.order_state in
+			<foreach collection="orderStates" open="(" close=")" separator="," item="item">
+				${item}
+			</foreach>
 		</if>
 		ORDER BY a.id DESC
+		<if test="limit != null">
+			limit #{limit}
+		</if>
 	</select>
 
 	<select id="queryOrderStatistics" resultType="com.bootdo.fanfan.domain.DTO.OrderStatisticsDTO">

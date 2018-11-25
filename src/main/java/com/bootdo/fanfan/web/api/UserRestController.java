@@ -88,7 +88,6 @@ public class UserRestController extends ApiBaseRestController {
                 return R.ok().put("data", userVO);
             }
         }
-
         return R.ok().put("data","");
     }
 

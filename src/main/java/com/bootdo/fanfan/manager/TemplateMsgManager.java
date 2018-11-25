@@ -1,7 +1,6 @@
 package com.bootdo.fanfan.manager;
 
 import com.bootdo.common.msgQueue.AbstractMsgQueue;
-import com.bootdo.common.task.RefshOrderJob;
 import com.bootdo.common.utils.DateUtils;
 import com.bootdo.common.utils.StringUtils;
 import com.bootdo.fanfan.domain.AlipayRecordDO;
@@ -45,19 +44,25 @@ public class TemplateMsgManager extends AbstractMsgQueue<TemplateMsgMQDTO> {
 
         switch (item.getTemplateType()) {
             case 1:
+                //付款消息
                 sendPayTempMsg(item);
                 break;
             case 2:
-                sendCancleTempMsg(item);
+                //退款消息
+                sendRefundTempMsg(item);
+                break;
+            case 3:
+                //取消订单消息
+                sendCancelTempMsg(item);
                 break;
             default:
         }
     }
 
     /**
-     * 推送退单模板消息
+     * 推送退款模板消息
      */
-    private void sendCancleTempMsg(TemplateMsgMQDTO item) {
+    private void sendRefundTempMsg(TemplateMsgMQDTO item) {
 
         StringBuilder builder = new StringBuilder("开始推送取消订单模板---->\t");
 
@@ -86,7 +91,7 @@ public class TemplateMsgManager extends AbstractMsgQueue<TemplateMsgMQDTO> {
                 templateMsgDTO.setKeyword3(remark);
 
                 //发送模板消息
-               boolean send = alipayManager.sendTemplateMsg(templateMsgDTO.buildCancelPayOrder(item.getOrderId()),null);
+               boolean send = alipayManager.sendTemplateMsg(templateMsgDTO.buildRefundOrder(item.getOrderId()),null);
                 builder.append("2.执行发送结果:"+send);
             }
         }
@@ -120,6 +125,34 @@ public class TemplateMsgManager extends AbstractMsgQueue<TemplateMsgMQDTO> {
                 boolean send = alipayManager.sendTemplateMsg(templateMsgDTO.buildPaySuccess(item.getOrderId()),null);
                 builder.append("2.执行发送结果:"+send);
             }
+        }
+        logger.info(builder.toString());
+    }
+
+    /**
+     * 推送取消订单模板消息
+     * @param item
+     */
+    private void sendCancelTempMsg(TemplateMsgMQDTO item) {
+        StringBuilder builder = new StringBuilder("开始推送下订单模板---->\t");
+
+        OrderDO orderDO = orderService.get(item.getOrderId());
+        //获取FormId
+        FormUserDTO recordDO = formIdService.getCanUseFormId(PlatformEnum.AlipayMiniprogram,orderDO.getUserId());
+        builder.append("1.推送支付宝模板消息 userId:" + orderDO.getUserId());
+        if (recordDO != null) {
+            TemplateMsgDTO templateMsgDTO = new TemplateMsgDTO();
+            templateMsgDTO.setFormId(recordDO.getFormId());
+            templateMsgDTO.setToUserId(recordDO.getTpId());
+            //订单号码
+            templateMsgDTO.setKeyword1(orderDO.getOrderDateNum());
+            //订单金额、
+            templateMsgDTO.setKeyword2(orderDO.getOrderPay().toString());
+            //下单时间
+            templateMsgDTO.setKeyword3(DateUtils.format(orderDO.getOrderTime()));
+            //发送模板消息
+            boolean send = alipayManager.sendTemplateMsg(templateMsgDTO.buildCancelOrder(item.getOrderId()), null);
+            builder.append("2.执行发送结果:" + send);
         }
         logger.info(builder.toString());
     }

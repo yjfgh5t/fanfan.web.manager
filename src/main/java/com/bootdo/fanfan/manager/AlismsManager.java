@@ -112,7 +112,7 @@ public class AlismsManager {
             //组装请求对象
             SendSmsRequest request = getSendSmsRequest(mobile,params);
             //必填:短信模板-可在短信控制台中找到，发送国际/港澳台消息时，请使用国际/港澳台短信模版
-            request.setTemplateCode("SMS_150740039");
+            request.setTemplateCode("SMS_150170604");
             //执行发送
             SendSmsResponse sendSmsResponse =null;
             if(1==2){

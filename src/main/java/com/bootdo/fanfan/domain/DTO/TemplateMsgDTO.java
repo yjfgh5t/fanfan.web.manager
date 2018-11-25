@@ -54,10 +54,21 @@ public class TemplateMsgDTO {
     }
 
     /**
-     * 取消订单通知
+     * 退款通知
      * @return
      */
-    public TemplateMsgDTO buildCancelPayOrder(Integer orderId){
+    public TemplateMsgDTO buildRefundOrder(Integer orderId){
+        this.templateId ="NDQxMGRmMTYyMjIzYTY5YTYwYzU0MmRjOTk2N2Q0MzM=";
+        this.page="pages/order/order-detail/order-detail?orderId="+orderId;
+        return this;
+    }
+
+    /**
+     * 取消订单通知
+     * @param orderId
+     * @return
+     */
+    public TemplateMsgDTO buildCancelOrder(Integer orderId){
         this.templateId ="NDQxMGRmMTYyMjIzYTY5YTYwYzU0MmRjOTk2N2Q0MzM=";
         this.page="pages/order/order-detail/order-detail?orderId="+orderId;
         return this;

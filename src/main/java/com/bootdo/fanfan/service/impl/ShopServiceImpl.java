@@ -30,6 +30,11 @@ public class ShopServiceImpl implements ShopService {
 	}
 
 	@Override
+	public ShopDO getPayType(Integer id){
+		return shopDao.getPayType(id);
+	}
+
+	@Override
 	public String getNameByCustomerId(Integer customerId){
 		return shopDao.getNameByCustomerId(customerId);
 	}

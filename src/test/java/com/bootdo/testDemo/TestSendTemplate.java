@@ -1,14 +1,6 @@
 package com.bootdo.testDemo;
 
-import com.alibaba.fastjson.JSON;
-import com.alipay.api.AlipayApiException;
-import com.alipay.api.AlipayClient;
-import com.alipay.api.request.AlipayOpenAppMiniTemplatemessageSendRequest;
-import com.alipay.api.request.AlipayTradeQueryRequest;
-import com.alipay.api.response.AlipayOpenAppMiniTemplatemessageSendResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
-import com.bootdo.common.config.AlipayConfig;
-import com.bootdo.fanfan.domain.AlipayKeyDO;
 import com.bootdo.fanfan.domain.DTO.TemplateMsgDTO;
 import com.bootdo.fanfan.manager.AlipayManager;
 import com.bootdo.fanfan.service.AlipayKeyService;
@@ -48,7 +40,7 @@ public class TestSendTemplate {
         templateMsgDTO.setKeyword3("商家退款");
 
         //发送模板消息
-        boolean send = alipayManager.sendTemplateMsg(templateMsgDTO.buildCancelPayOrder(77),null);
+        boolean send = alipayManager.sendTemplateMsg(templateMsgDTO.buildRefundOrder(77),null);
 
         System.out.println("发送："+send);
     }

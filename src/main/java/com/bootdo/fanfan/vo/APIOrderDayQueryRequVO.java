@@ -34,6 +34,11 @@ public class APIOrderDayQueryRequVO {
     private Boolean newOrder;
 
     /**
+     * 分页数
+     */
+    private Integer pageSize;
+
+    /**
      * 订单状态
      */
     private Integer orderState;

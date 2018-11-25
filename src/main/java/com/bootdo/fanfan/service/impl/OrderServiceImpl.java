@@ -362,9 +362,10 @@ public class OrderServiceImpl implements OrderService {
 	@Transactional(rollbackFor = {Exception.class,BDException.class})
 	public void updateOrderState(OrderDO orderDO){
 		//保存订单状态
-		if(orderStateService.save(new OrderStateDO(orderDO.getId(),orderDO.getOrderState(),orderDO.getCustomerId()),orderDO.getOrderNum())>0) {
-			//顾客支付
-			if (orderDO.getOrderState().equals(OrderStateEnum.userPaid.getVal())) {
+		int save = orderStateService.save(new OrderStateDO(orderDO.getId(), orderDO.getOrderState(), orderDO.getCustomerId()), orderDO.getOrderNum());
+		if(save >0) {
+			//顾客支付 线下支付(商家确认中)
+			if (orderDO.getOrderState().equals(OrderStateEnum.userPaid.getVal()) || orderDO.getOrderState().equals(OrderStateEnum.businessPending.getVal())) {
 				//查询customerId
 				Integer customerId =orderDO.getCustomerId();
 				if(customerId==null) {
@@ -374,7 +375,9 @@ public class OrderServiceImpl implements OrderService {
 				//更新订单信息
 				orderDao.updateOrderStatePay(orderDO.getOrderState(), orderDO.getId(), dateNum);
 				//推送消息队列-下单通知-给顾客
-				templateMsgManager.put(new TemplateMsgMQDTO().buildOrderPayMQ(orderDO.getId()));
+				if(orderDO.getOrderState().equals(OrderStateEnum.userPaid.getVal())) {
+					templateMsgManager.put(new TemplateMsgMQDTO().buildOrderPayMQ(orderDO.getId()));
+				}
 				//推送下单通知-给商户
 				sendOrderNotification(orderDO.getId());
 				//商户取消订单
@@ -383,11 +386,16 @@ public class OrderServiceImpl implements OrderService {
 				if (orderDao.updateOrderStateCancel(orderDO.getOrderState(), orderDO.getId(), orderDO.getOrderCustomerRemark()) > 0) {
 					OrderDO temModel = orderDao.getOrderTrande(orderDO.getId());
 					//支付宝退款
-					if (!alipayManager.tradeRefund(temModel.getOrderNum(), temModel.getOrderPay().doubleValue(), temModel.getCustomerId())) {
-						throw new BDException("支付宝退款失败",BDException.BUSINESS_ERROR_CODE);
+					if(temModel.getOrderPayType().equals(OrderPayType.Alipay.getId())) {
+						if (!alipayManager.tradeRefund(temModel.getOrderNum(), temModel.getOrderPay().doubleValue(), temModel.getCustomerId())) {
+							throw new BDException("支付宝退款失败", BDException.BUSINESS_ERROR_CODE);
+						}
+						//推送消息队列-取消订单通知
+						templateMsgManager.put(new TemplateMsgMQDTO().buildOrderRefundMQ(orderDO.getId()));
+					}else if (temModel.getOrderPayType().equals(OrderPayType.Cash.getId())){
+						//推送取消订单模板消息
+						templateMsgManager.put(new TemplateMsgMQDTO().buildOrderCancelMQ(orderDO.getId()));
 					}
-					//推送消息队列-取消订单通知
-					templateMsgManager.put(new TemplateMsgMQDTO().buildOrderCancleMQ(orderDO.getId()));
 				} else {
 					//支付宝退款成功 订单修改失败
 					throw new BDException("退款失败，请稍后重试",BDException.BUSINESS_ERROR_CODE);
@@ -449,7 +457,7 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	/**
-	 * 查询用户订单
+	 * 用户查询订单
 	 * @param map
 	 * @return
 	 */
@@ -462,7 +470,6 @@ public class OrderServiceImpl implements OrderService {
 			list.forEach((item)->{
 				//设置文本
 				item.setOrderStateText(OrderStateEnum.get(item.getOrderState()).getText());
-				item.setCommoditImg(item.getCommoditImg());
 				//待支付状态
 				if(item.getOrderState().equals(OrderStateEnum.userWaitPay.getVal())){
 					//剩余支付秒数
@@ -478,6 +485,11 @@ public class OrderServiceImpl implements OrderService {
 		return list;
 	}
 
+	/**
+	 * 商户查询订单
+	 * @param map
+	 * @return
+	 */
 	@Override
 	public List<APIOrderListCustomerVO> queryOrderByCustomer(Map<String, Object> map) {
 
@@ -613,8 +625,6 @@ public class OrderServiceImpl implements OrderService {
         //保存
         return orderAlipayService.save(alipayDO)>0;
     }
-
-
 
 	/**
 	 * 获取剩余支付秒数

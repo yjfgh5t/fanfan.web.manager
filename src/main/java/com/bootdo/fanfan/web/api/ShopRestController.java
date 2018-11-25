@@ -70,6 +70,17 @@ public class ShopRestController extends ApiBaseRestController{
         }
     }
 
+    @PostMapping("/payType")
+    public R payType(Integer shopId){
+        APIShopVO shopVO =null;
+
+        if(shopId!=null){
+            ShopDO shopDO = shopService.getPayType(shopId);
+            shopVO = eMapper.map(shopDO,APIShopVO.class);
+        }
+        return R.ok().put("data",shopVO);
+    }
+
     /**
      * 店铺收款设置
      * @param shopVO
@@ -79,7 +90,7 @@ public class ShopRestController extends ApiBaseRestController{
     public R shopPaySetting(@RequestBody APIShopVO shopVO){
 
         //都设置为否
-        if(!shopVO.getAlipay() && !shopVO.getOffline() &&  !shopVO.getWechate()){
+        if(!shopVO.getAlipay() && !shopVO.getOffline() &&  !shopVO.getWechat()){
             return R.error("至少开通一个收款方式");
         }
         //设置支付宝收款

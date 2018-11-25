@@ -55,7 +55,7 @@ public interface OrderDao {
 	 * @param id
 	 * @return
 	 */
-	@Select("select order_num,customer_id,order_pay from  ff_order  where id=#{id}")
+	@Select("select order_num,customer_id,order_pay,order_pay_type from  ff_order  where id=#{id}")
 	OrderDO getOrderTrande(@Param("id") Integer id);
 
 	/**

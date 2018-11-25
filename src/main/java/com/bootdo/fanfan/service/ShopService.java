@@ -19,6 +19,13 @@ public interface ShopService {
 	ShopDO getByCustomerId(Integer customerId);
 
 	/**
+	 * 付款类型
+	 * @param id
+	 * @return
+	 */
+	ShopDO getPayType(Integer id);
+
+	/**
 	 * 获取店铺名称
 	 * @param customerId
 	 * @return

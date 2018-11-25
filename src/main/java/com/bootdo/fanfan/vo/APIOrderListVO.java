@@ -30,7 +30,7 @@ public class APIOrderListVO {
 
     private Integer commodityTotal;
 
-    private String commoditImg;
+    private String commodityImg;
 
     private String title;
 

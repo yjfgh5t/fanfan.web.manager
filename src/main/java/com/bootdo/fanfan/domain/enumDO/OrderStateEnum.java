@@ -7,17 +7,17 @@ public enum  OrderStateEnum {
     @Deprecated
     userCreate(101,"临时订单"),
     userPostOrder(102,"提交订单"),
-    userWaitPay(103,"待支付"),
-    userPaid(104,"已支付"),
-    userPayOvertime(105,"超时未支付"),
-    userCancel(106,"订单已取消"),
-    userConfirm(107,"已确认收单"),
-    userException(108,"订单异常反馈"),
+    userWaitPay(103,"待付款"),
+    userPaid(104,"已付款"),
+    userPayOvertime(105,"超时未付款"),
+    userCancel(106,"用户已取消"),
+    userConfirm(107,"确认收单"),
+    userException(108,"订单异常"),
 
     //商家确认收单
-    businessPending(200,"商家订单确认中"),
-    businessConfirm(201,"商家已确认订单"),
-    businessCancel(202,"商家已取消订单"),
+    businessPending(200,"商家确认中"),
+    businessConfirm(201,"商家已确认"),
+    businessCancel(202,"商家已取消"),
     businessDelivery(203,"正在派单"),
 
     orderSuccess(999,"订单完成");

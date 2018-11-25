@@ -26,9 +26,16 @@ public class TemplateMsgMQDTO {
         return this;
     }
 
-    public TemplateMsgMQDTO buildOrderCancleMQ(Integer orderId){
+    public TemplateMsgMQDTO buildOrderRefundMQ(Integer orderId){
         this.templateType=2;
         this.orderId=orderId;
         return this;
     }
+
+    public TemplateMsgMQDTO buildOrderCancelMQ(Integer orderId){
+        this.templateType=3;
+        this.orderId=orderId;
+        return this;
+    }
+
 }

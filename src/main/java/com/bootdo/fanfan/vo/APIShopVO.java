@@ -37,7 +37,7 @@ public class APIShopVO {
     //是否开启支付宝
     private Boolean alipay;
     //是否开启微信
-    private Boolean wechate;
+    private Boolean wechat;
     //是否线下支付
     private Boolean offline;
 

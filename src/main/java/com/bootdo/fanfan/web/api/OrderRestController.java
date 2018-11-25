@@ -152,20 +152,27 @@ public class OrderRestController extends ApiBaseRestController {
         params.put("endTime", endDate);
         params.put("lastId", dayQueryRequVO.getLastId());
         params.put("isMax", dayQueryRequVO.getIsMax());
+        params.put("limit", dayQueryRequVO.getPageSize());
         //订单状态不为空
         if (dayQueryRequVO.getOrderState() != null && dayQueryRequVO.getOrderState() > 0) {
+            List<Integer> orderStates = new ArrayList<>();
             switch (dayQueryRequVO.getOrderState()) {
+                //进行中
                 case 1:
-                    params.put("orderState", OrderStateEnum.userPaid.getVal());
+                    orderStates.add(OrderStateEnum.userPaid.getVal());
+                    orderStates.add(OrderStateEnum.businessPending.getVal());
                     break;
+                //已完成
                 case 2:
-                    params.put("orderState", OrderStateEnum.orderSuccess.getVal());
+                    orderStates.add(OrderStateEnum.orderSuccess.getVal());
                     break;
+                //已取消
                 case 3:
-                    params.put("orderState", OrderStateEnum.businessCancel.getVal());
+                    orderStates.add(OrderStateEnum.businessCancel.getVal());
                     break;
                 default:
             }
+            params.put("orderStates",orderStates);
         }
 
         List<APIOrderListCustomerVO> listCustomerVOS = orderService.queryOrderByCustomer(params);
@@ -191,7 +198,7 @@ public class OrderRestController extends ApiBaseRestController {
         Date endDate = DateUtils.addDays(date, 1);
         params.put("endTime",endDate);
         //查询状态
-        Integer[] states = new Integer[]{OrderStateEnum.userPaid.getVal(),OrderStateEnum.orderSuccess.getVal()};
+        Integer[] states = new Integer[]{OrderStateEnum.userPaid.getVal(),OrderStateEnum.orderSuccess.getVal(),OrderStateEnum.businessPending.getVal()};
         params.put("stateArray",states);
 
         //查询成功的订单数

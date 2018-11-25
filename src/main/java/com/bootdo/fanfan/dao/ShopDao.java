@@ -37,4 +37,7 @@ public interface ShopDao {
 
 	@Select("select name from ff_shop where customer_id =#{customerId}")
 	String getNameByCustomerId(@PathVariable("customerId") Integer customerId);
+
+	@Select("select alipay,wechat,offline from ff_shop where id=#{id}")
+	ShopDO getPayType(@PathVariable("id") Integer id);
 }

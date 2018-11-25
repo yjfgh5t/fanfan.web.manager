@@ -4,11 +4,11 @@
 <mapper namespace="com.bootdo.fanfan.dao.ShopDao">
 
 	<select id="get" resultType="com.bootdo.fanfan.domain.ShopDO">
-		select `id`,`name`,`business_start`,`business_end`,`logo`,`state`,`min_order_price`,`address`,`alipay`,`wechate`,`offline`,`create_time`,`modify_time`,`customer_id` from ff_shop where id = #{value}
+		select `id`,`name`,`business_start`,`business_end`,`logo`,`state`,`min_order_price`,`address`,`alipay`,`wechat`,`offline`,`create_time`,`modify_time`,`customer_id` from ff_shop where id = #{value}
 	</select>
 
 	<select id="list" resultType="com.bootdo.fanfan.domain.ShopDO">
-		select `id`,`name`,`business_start`,`business_end`,`logo`,`state`,`min_order_price`,`address`,`alipay`,`wechate`,`offline`,`create_time`,`modify_time`,`customer_id` from ff_shop
+		select `id`,`name`,`business_start`,`business_end`,`logo`,`state`,`min_order_price`,`address`,`alipay`,`wechat`,`offline`,`create_time`,`modify_time`,`customer_id` from ff_shop
         <where>  
 		  		  <if test="id != null and id != ''"> and id = #{id} </if>
 		  		  <if test="name != null and name != ''"> and name = #{name} </if>
@@ -19,7 +19,7 @@
 		  		  <if test="minOrderPrice != null and minOrderPrice != ''"> and min_order_price = #{minOrderPrice} </if>
 		  		  <if test="address != null and address != ''"> and address = #{address} </if>
 		  		  <if test="alipay != null and alipay != ''"> and alipay = #{alipay} </if>
-		  		  <if test="wechate != null and wechate != ''"> and wechate = #{wechate} </if>
+		  		  <if test="wechat != null and wechat != ''"> and wechat = #{wechat} </if>
 		  		  <if test="offline != null and offline != ''"> and offline = #{offline} </if>
 		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
 		  		  <if test="modifyTime != null and modifyTime != ''"> and modify_time = #{modifyTime} </if>
@@ -50,7 +50,7 @@
 		  		  <if test="minOrderPrice != null and minOrderPrice != ''"> and min_order_price = #{minOrderPrice} </if>
 		  		  <if test="address != null and address != ''"> and address = #{address} </if>
 		  		  <if test="alipay != null and alipay != ''"> and alipay = #{alipay} </if>
-		  		  <if test="wechate != null and wechate != ''"> and wechate = #{wechate} </if>
+		  		  <if test="wechat != null and wechat != ''"> and wechat = #{wechat} </if>
 		  		  <if test="offline != null and offline != ''"> and offline = #{offline} </if>
 		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
 		  		  <if test="modifyTime != null and modifyTime != ''"> and modify_time = #{modifyTime} </if>
@@ -69,7 +69,7 @@
 			`min_order_price`, 
 			`address`, 
 			`alipay`, 
-			`wechate`, 
+			`wechat`, 
 			`offline`, 
 			`create_time`, 
 			`modify_time`, 
@@ -85,7 +85,7 @@
 			#{minOrderPrice}, 
 			#{address}, 
 			#{alipay}, 
-			#{wechate}, 
+			#{wechat}, 
 			#{offline}, 
 			#{createTime}, 
 			#{modifyTime}, 
@@ -104,7 +104,7 @@
 			<if test="minOrderPrice != null">`min_order_price` = #{minOrderPrice}, </if>
 			<if test="address != null">`address` = #{address}, </if>
 			<if test="alipay != null">`alipay` = #{alipay}, </if>
-			<if test="wechate != null">`wechate` = #{wechate}, </if>
+			<if test="wechat != null">`wechat` = #{wechat}, </if>
 			<if test="offline != null">`offline` = #{offline}, </if>
 			<if test="createTime != null">`create_time` = #{createTime}, </if>
 			<if test="modifyTime != null">`modify_time` = #{modifyTime}, </if>

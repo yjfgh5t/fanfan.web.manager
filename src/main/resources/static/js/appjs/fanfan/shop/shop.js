@@ -84,7 +84,7 @@ function load() {
 									title : '是否开启支付宝' 
 								},
 																{
-									field : 'wechate', 
+									field : 'wechat',
 									title : '是否开启微信' 
 								},
 																{
