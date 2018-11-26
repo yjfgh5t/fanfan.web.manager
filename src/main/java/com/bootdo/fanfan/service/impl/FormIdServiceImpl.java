@@ -33,10 +33,12 @@ public class FormIdServiceImpl implements FormIdService {
 	 */
 	@Override
 	public FormUserDTO getCanUseFormId(PlatformEnum platformEnum, Integer userId) {
-
 		int count = platformEnum == PlatformEnum.AlipayMiniprogram ? 3 : 1;
-
-		return formIdDao.getCanUseFormId(platformEnum.getVal(), count, userId);
+		FormUserDTO userDTO = formIdDao.getCanUseFormId(platformEnum.getVal(), count, userId);
+		if(userDTO!=null){
+			formIdDao.addFormIdUseOnce(userDTO.getId());
+		}
+		return userDTO;
 	}
 
 	

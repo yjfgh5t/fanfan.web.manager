@@ -58,7 +58,7 @@ public class ShopRestController extends ApiBaseRestController{
         ShopDO shopDO = eMapper.map(shopVO,ShopDO.class);
         int success=0;
         if(shopVO.getId()==-1){
-            shopVO.setCustomerId(getBaseModel().getCustomerId());
+            shopDO.setCustomerId(getBaseModel().getCustomerId());
             success = shopService.save(shopDO);
         } else {
             success = shopService.update(shopDO);

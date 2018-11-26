@@ -30,17 +30,17 @@ public class TestSendTemplate {
     public void SendMessage(){
 
         TemplateMsgDTO templateMsgDTO = new TemplateMsgDTO();
-        templateMsgDTO.setFormId("2018103022001474791006993587");
+        templateMsgDTO.setFormId("MjA4ODgwMjYzNzM3NDc5NF8xNTQzMjM0Nzc3NDIxXzk5MQ==");
         templateMsgDTO.setToUserId("2088802637374794");
         //订单号、
-        templateMsgDTO.setKeyword1("222002220022");
+        templateMsgDTO.setKeyword1("1");
         //退款金额、
-        templateMsgDTO.setKeyword2("1.0");
+        templateMsgDTO.setKeyword2("商户取消订单");
         //退款原因
-        templateMsgDTO.setKeyword3("商家退款");
+        templateMsgDTO.setKeyword3("饭饭点餐");
 
         //发送模板消息
-        boolean send = alipayManager.sendTemplateMsg(templateMsgDTO.buildRefundOrder(77),null);
+        boolean send = alipayManager.sendTemplateMsg(templateMsgDTO.buildCancelOrder(77),null);
 
         System.out.println("发送："+send);
     }

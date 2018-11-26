@@ -9,10 +9,13 @@ import com.bootdo.fanfan.domain.DTO.TemplateMsgDTO;
 import com.bootdo.fanfan.domain.DTO.TemplateMsgMQDTO;
 import com.bootdo.fanfan.domain.OrderDO;
 import com.bootdo.fanfan.domain.enumDO.OrderPayType;
+import com.bootdo.fanfan.domain.enumDO.OrderStateEnum;
+import com.bootdo.fanfan.domain.enumDO.OrderTypeEnum;
 import com.bootdo.fanfan.domain.enumDO.PlatformEnum;
 import com.bootdo.fanfan.service.AlipayRecordService;
 import com.bootdo.fanfan.service.FormIdService;
 import com.bootdo.fanfan.service.OrderService;
+import com.bootdo.fanfan.service.ShopService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +41,9 @@ public class TemplateMsgManager extends AbstractMsgQueue<TemplateMsgMQDTO> {
 
     @Autowired
     AlipayRecordService alipayRecordService;
+
+    @Autowired
+    ShopService shopService;
 
     @Override
     protected void runCallback(TemplateMsgMQDTO item) {
@@ -80,7 +86,7 @@ public class TemplateMsgManager extends AbstractMsgQueue<TemplateMsgMQDTO> {
                 templateMsgDTO.setFormId(recordDO.getTradeNo());
                 templateMsgDTO.setToUserId(recordDO.getBuyerId());
                 //订单号、
-                templateMsgDTO.setKeyword1(orderDO.getOrderDateNum());
+                templateMsgDTO.setKeyword1("#"+orderDO.getOrderDateNum());
                 //退款金额、
                 templateMsgDTO.setKeyword2(orderDO.getOrderPay().toString());
                 //退款原因
@@ -103,7 +109,6 @@ public class TemplateMsgManager extends AbstractMsgQueue<TemplateMsgMQDTO> {
      * 推送支付订单模板消息
      */
     private void sendPayTempMsg(TemplateMsgMQDTO item) {
-
         StringBuilder builder = new StringBuilder("开始推送下订单模板---->\t");
 
         OrderDO orderDO = orderService.get(item.getOrderId());
@@ -116,7 +121,7 @@ public class TemplateMsgManager extends AbstractMsgQueue<TemplateMsgMQDTO> {
                 templateMsgDTO.setFormId(recordDO.getTradeNo());
                 templateMsgDTO.setToUserId(recordDO.getBuyerId());
                 //订单号码
-                templateMsgDTO.setKeyword1(orderDO.getOrderDateNum());
+                templateMsgDTO.setKeyword1("#"+orderDO.getOrderDateNum());
                 //订单金额、
                 templateMsgDTO.setKeyword2(orderDO.getOrderPay().toString());
                 //下单时间
@@ -145,11 +150,12 @@ public class TemplateMsgManager extends AbstractMsgQueue<TemplateMsgMQDTO> {
             templateMsgDTO.setFormId(recordDO.getFormId());
             templateMsgDTO.setToUserId(recordDO.getTpId());
             //订单号码
-            templateMsgDTO.setKeyword1(orderDO.getOrderDateNum());
-            //订单金额、
-            templateMsgDTO.setKeyword2(orderDO.getOrderPay().toString());
-            //下单时间
-            templateMsgDTO.setKeyword3(DateUtils.format(orderDO.getOrderTime()));
+            templateMsgDTO.setKeyword1("#"+orderDO.getOrderDateNum());
+            //订单状态、
+            templateMsgDTO.setKeyword2(OrderStateEnum.get(orderDO.getOrderState()).getText());
+            //商户名称
+            String shopName = shopService.getNameByCustomerId(orderDO.getCustomerId());
+            templateMsgDTO.setKeyword3(shopName);
             //发送模板消息
             boolean send = alipayManager.sendTemplateMsg(templateMsgDTO.buildCancelOrder(item.getOrderId()), null);
             builder.append("2.执行发送结果:" + send);

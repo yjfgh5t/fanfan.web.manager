@@ -69,7 +69,7 @@ public class TemplateMsgDTO {
      * @return
      */
     public TemplateMsgDTO buildCancelOrder(Integer orderId){
-        this.templateId ="NDQxMGRmMTYyMjIzYTY5YTYwYzU0MmRjOTk2N2Q0MzM=";
+        this.templateId ="OWI4YjZjY2Q0Njk4Mjc2Zjc0NmY4NjQ5NDJjMDA4MWY=";
         this.page="pages/order/order-detail/order-detail?orderId="+orderId;
         return this;
     }

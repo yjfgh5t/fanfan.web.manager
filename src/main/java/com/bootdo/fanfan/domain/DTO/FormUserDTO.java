@@ -13,4 +13,6 @@ public class FormUserDTO {
 
     private String tpId;
 
+    private Integer id;
+
 }

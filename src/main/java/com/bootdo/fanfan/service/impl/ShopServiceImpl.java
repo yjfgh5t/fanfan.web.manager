@@ -53,6 +53,10 @@ public class ShopServiceImpl implements ShopService {
 	public int save(ShopDO shop){
 		shop.setModifyTime(new Date());
 		shop.setCreateTime(new Date());
+		//默认开启线下支付
+		shop.setAlipay(0);
+		shop.setWechat(0);
+		shop.setOffline(1);
 		int count = shopDao.save(shop);
 		//保存成功 返回Id
 		return count;
