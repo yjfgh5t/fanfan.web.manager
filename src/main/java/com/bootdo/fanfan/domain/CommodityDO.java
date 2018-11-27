@@ -51,4 +51,6 @@ public class CommodityDO{
 	private Integer delete;
 	//是否必点
 	private Integer mustOrder;
+	//是否为推荐商品
+	private Integer recommend;
 }

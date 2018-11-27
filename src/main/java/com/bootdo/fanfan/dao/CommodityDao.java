@@ -52,4 +52,20 @@ public interface CommodityDao {
 	 */
 	List<CommodityWidthExtendDO> queryExtends(Map<String,Object> map);
 
+	/**
+	 * 修改是否为推荐商品
+	 * @param id
+	 * @param recommend
+	 * @return
+	 */
+	@Update("update ff_commodity set recommend=${recommend} where id=${id}")
+	int updateRecommend(@Param("id") Integer id, @Param("recommend") Integer recommend);
+
+	/**
+	 * 查询推荐商品
+	 * @param customerId
+	 * @return
+	 */
+	@Select("select id,commodity_title,commodity_sale_price,commodity_img,recommend from ff_commodity where customer_id =#{customerId} and recommend>0")
+	List<CommodityDO> queryRecommend(@Param("customerId") Integer customerId);
 }

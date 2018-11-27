@@ -56,6 +56,7 @@
 		  		  <if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
 		  		  <if test="commodityType != null and commodityType != ''"> and commodity_type = #{commodityType} </if>
 		  		  <if test="delete != null"> and `delete` = #{delete} </if>
+			      <if test="recommend !=null"> and recommend &gt; 0 </if>
 			  	  <if test="categoryId != null and categoryId != ''"> and category_id = #{categoryId} </if>
 		  		</where>
 	</select>
@@ -72,6 +73,7 @@
 			`commodity_fiex_num`,
 			`commodity_package_price`,
 			`commodity_unit`,
+			`is_recommend`,
 			`status`, 
 			`create_time`, 
 			`customer_id`,
@@ -91,7 +93,8 @@
 			#{commodityFiexNum},
 			#{commodityPackagePrice},
 			#{commodityUnit},
-			#{status}, 
+			#{isRecommend},
+			#{status},
 			#{createTime}, 
 			#{customerId},
 			#{order}, 
@@ -113,6 +116,7 @@
 			<if test="commodityFiexNum != null">`commodity_fiex_num` = #{commodityFiexNum}, </if>
 			<if test="commodityPackagePrice != null">`commodity_package_price` = #{commodityPackagePrice}, </if>
 			<if test="commodityUnit != null">`commodity_unit` = #{commodityUnit}, </if>
+			<if test="isRecommend != null">`is_recommend` = #{isRecommend}, </if>
 			<if test="status != null">`status` = #{status}, </if>
 			<if test="createTime != null">`create_time` = #{createTime}, </if>
 			<if test="customerId != null">`customer_id` = #{customerId}, </if>

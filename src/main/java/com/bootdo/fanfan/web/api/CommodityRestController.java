@@ -6,11 +6,13 @@ import com.bootdo.fanfan.domain.CommodityCategoryDO;
 import com.bootdo.fanfan.domain.CommodityDO;
 import com.bootdo.fanfan.domain.CommodityExtendDO;
 import com.bootdo.fanfan.domain.CommodityWidthExtendDO;
+import com.bootdo.fanfan.domain.enumDO.BooleanEnum;
 import com.bootdo.fanfan.domain.enumDO.PlatformEnum;
 import com.bootdo.fanfan.service.CommodityCategoryService;
 import com.bootdo.fanfan.service.CommodityService;
 import com.bootdo.fanfan.service.CommodityExtendService;
 import com.bootdo.fanfan.vo.APICommodityCategoryRequVO;
+import com.bootdo.fanfan.vo.APICommodityRecommendVO;
 import com.bootdo.fanfan.vo.APICommoditySimpleVO;
 import com.bootdo.fanfan.vo.APICommodityVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -158,6 +160,37 @@ public class CommodityRestController extends ApiBaseRestController {
         commodityService.updateStatus(id,pullOffShelves);
 
         return R.ok().put("data",true);
+    }
+
+    /**
+     * 推荐商品
+     * @param commodityId
+     * @param recommend
+     * @return
+     */
+    @PostMapping("/recommend/{id}")
+    public R recommend(@PathVariable("id") Integer commodityId,Integer recommend){
+        //修改商品状态
+       int result = commodityService.setRecommend(commodityId, recommend,getBaseModel().getCustomerId());
+       switch (result){
+           case -1: return R.error("推荐商品不能超过4个哦");
+           case 0: return R.error("设置失败，请重试");
+           default: return R.ok().put("data",true);
+       }
+    }
+
+    /**
+     * 获取推荐商品
+     * @return
+     */
+    @GetMapping("/getRecommend")
+    public R getRecommend(){
+        //查询列表
+        List<CommodityDO> recommendList = commodityService.getRecommend(getBaseModel().getCustomerId());
+        //数据转换
+        List<APICommodityRecommendVO> result = mapper.mapArray(recommendList, APICommodityRecommendVO.class);
+
+        return R.ok().put("data",result);
     }
 
 }

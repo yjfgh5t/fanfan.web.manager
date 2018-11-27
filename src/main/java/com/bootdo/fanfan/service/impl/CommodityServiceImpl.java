@@ -69,15 +69,50 @@ public class CommodityServiceImpl implements CommodityService {
 	}
 	
 	@Override
-	public int save(CommodityDO commodit){
+	public int save(CommodityDO commodityDO){
 		//设置当前时间
-		commodit.setCreateTime(Calendar.getInstance().getTime());
-		commodit.setStatus(CommoditStateEnum.useful.getVal());
-		commodit.setDelete(BooleanEnum.False.getVal());
-		if(commodit.getMustOrder()==null){
-			commodit.setMustOrder(BooleanEnum.False.getVal());
+		commodityDO.setCreateTime(Calendar.getInstance().getTime());
+		commodityDO.setStatus(CommoditStateEnum.useful.getVal());
+		commodityDO.setDelete(BooleanEnum.False.getVal());
+		if(commodityDO.getMustOrder()==null){
+			commodityDO.setMustOrder(BooleanEnum.False.getVal());
 		}
-		return commodityDao.save(commodit);
+		if(commodityDO.getRecommend()==null){
+			commodityDO.setRecommend(0);
+		}
+		return commodityDao.save(commodityDO);
+	}
+
+	/**
+	 * 修改为是否推荐商品
+	 * @param recommend
+	 * @param commodityId
+	 * @return
+	 */
+	@Override
+	public int setRecommend(Integer commodityId,Integer recommend,Integer customerId){
+
+		//查询推荐商品数量
+		Map<String, Object> map = new HashMap<>();
+		map.put("customerId",customerId);
+		map.put("delete","0");
+		map.put("recommend","1");
+
+		int count = commodityDao.count(map);
+		if(count>4){
+			return -1;
+		}
+		return commodityDao.updateRecommend(commodityId,recommend);
+	}
+
+	/**
+	 * 查询推荐商品
+	 * @param customerId
+	 * @return
+	 */
+	@Override
+	public List<CommodityDO> getRecommend(Integer customerId){
+		return commodityDao.queryRecommend(customerId);
 	}
 
 	/**

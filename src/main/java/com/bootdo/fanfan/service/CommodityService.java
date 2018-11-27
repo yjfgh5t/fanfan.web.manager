@@ -2,6 +2,7 @@ package com.bootdo.fanfan.service;
 
 import com.bootdo.fanfan.domain.CommodityDO;
 import com.bootdo.fanfan.domain.CommodityWidthExtendDO;
+import com.bootdo.fanfan.domain.enumDO.BooleanEnum;
 
 import java.util.List;
 import java.util.Map;
@@ -47,4 +48,19 @@ public interface CommodityService {
 	 * @return
 	 */
 	List<CommodityWidthExtendDO> queryByIdArray(List<Integer> idArray);
+
+	/**
+	 * 设置推荐商品
+	 * @param recommend
+	 * @param commodityId
+	 * @return
+	 */
+	int setRecommend(Integer commodityId,Integer recommend,Integer customerId);
+
+	/**
+	 * 查询推荐商品
+	 * @param customerId
+	 * @return
+	 */
+	List<CommodityDO> getRecommend(Integer customerId);
 }
