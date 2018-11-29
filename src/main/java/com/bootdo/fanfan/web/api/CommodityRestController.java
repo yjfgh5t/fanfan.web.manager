@@ -164,14 +164,13 @@ public class CommodityRestController extends ApiBaseRestController {
 
     /**
      * 推荐商品
-     * @param commodityId
-     * @param recommend
+     * @param commodityIds
      * @return
      */
-    @PostMapping("/recommend/{id}")
-    public R recommend(@PathVariable("id") Integer commodityId,Integer recommend){
+    @PostMapping("/setRecommend")
+    public R recommend(@RequestParam(value = "commodityIds[]") Integer[] commodityIds){
         //修改商品状态
-       int result = commodityService.setRecommend(commodityId, recommend,getBaseModel().getCustomerId());
+       int result = commodityService.setRecommend(commodityIds,getBaseModel().getCustomerId());
        switch (result){
            case -1: return R.error("推荐商品不能超过4个哦");
            case 0: return R.error("设置失败，请重试");

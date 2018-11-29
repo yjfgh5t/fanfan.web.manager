@@ -51,11 +51,11 @@ public interface CommodityService {
 
 	/**
 	 * 设置推荐商品
-	 * @param recommend
-	 * @param commodityId
+	 * @param commodityIds
+	 * @param customerId
 	 * @return
 	 */
-	int setRecommend(Integer commodityId,Integer recommend,Integer customerId);
+	int setRecommend(Integer [] commodityIds,Integer customerId);
 
 	/**
 	 * 查询推荐商品

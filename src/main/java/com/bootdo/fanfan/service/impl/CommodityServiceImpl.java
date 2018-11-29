@@ -85,12 +85,12 @@ public class CommodityServiceImpl implements CommodityService {
 
 	/**
 	 * 修改为是否推荐商品
-	 * @param recommend
-	 * @param commodityId
+	 * @param commodityIds
+	 * @param customerId
 	 * @return
 	 */
 	@Override
-	public int setRecommend(Integer commodityId,Integer recommend,Integer customerId){
+	public int setRecommend(Integer [] commodityIds,Integer customerId){
 
 		//查询推荐商品数量
 		Map<String, Object> map = new HashMap<>();
@@ -102,7 +102,7 @@ public class CommodityServiceImpl implements CommodityService {
 		if(count>4){
 			return -1;
 		}
-		return commodityDao.updateRecommend(commodityId,recommend);
+		return 0;
 	}
 
 	/**
