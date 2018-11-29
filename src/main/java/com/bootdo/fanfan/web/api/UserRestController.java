@@ -198,15 +198,13 @@ public class UserRestController extends ApiBaseRestController {
 
         //如果发送一次 则验证imgCode
         if(hasSend!=null){
-
             if(StringUtils.isEmpty(imgCode)){
-                return R.error("图片验证码输入不正确");
+                return R.error(1,"图形验证码输入不正确");
             }
-
             String cacheImgCode = (String) redisUtils.hget(RedisConstant.IMG_CODE_KEY,mobile);
 
             if(StringUtils.isEmpty(cacheImgCode) || !imgCode.toLowerCase().equals(cacheImgCode.toLowerCase())){
-                return R.error("图片验证码输入不正确");
+                return R.error(2,"图形验证码输入不正确");
             }
         }
 
@@ -216,7 +214,7 @@ public class UserRestController extends ApiBaseRestController {
             return R.ok();
         }
 
-        return R.error("验证码发送失败");
+        return R.error(3,"验证码发送失败");
     }
 
     /**
