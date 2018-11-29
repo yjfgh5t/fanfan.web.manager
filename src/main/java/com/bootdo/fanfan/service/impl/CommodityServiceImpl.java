@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.bootdo.fanfan.dao.CommodityDao;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 
@@ -90,19 +91,24 @@ public class CommodityServiceImpl implements CommodityService {
 	 * @return
 	 */
 	@Override
+	@Transactional
 	public int setRecommend(Integer [] commodityIds,Integer customerId){
 
-		//查询推荐商品数量
-		Map<String, Object> map = new HashMap<>();
-		map.put("customerId",customerId);
-		map.put("delete","0");
-		map.put("recommend","1");
+		//重置之前的推荐商品
+		commodityDao.updateOldRecommend(customerId);
+		//设置当前的推荐商品
+		String strIdArray= StringUtils.join(commodityIds,",");
+		return commodityDao.updateRecommend(strIdArray);
+	}
 
-		int count = commodityDao.count(map);
-		if(count>4){
-			return -1;
-		}
-		return 0;
+	/**
+	 * 去除推荐
+	 * @param commodityId
+	 * @return
+	 */
+	@Override
+	public int removeRecommend(Integer commodityId) {
+		return commodityDao.removeRecommend(commodityId);
 	}
 
 	/**

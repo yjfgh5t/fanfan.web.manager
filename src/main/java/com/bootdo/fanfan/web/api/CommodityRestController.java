@@ -15,9 +15,11 @@ import com.bootdo.fanfan.vo.APICommodityCategoryRequVO;
 import com.bootdo.fanfan.vo.APICommodityRecommendVO;
 import com.bootdo.fanfan.vo.APICommoditySimpleVO;
 import com.bootdo.fanfan.vo.APICommodityVO;
+import com.bootdo.fanfan.vo.request.APICommodityRecommendReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -164,18 +166,27 @@ public class CommodityRestController extends ApiBaseRestController {
 
     /**
      * 推荐商品
-     * @param commodityIds
+     * @param request
      * @return
      */
     @PostMapping("/setRecommend")
-    public R recommend(@RequestParam(value = "commodityIds[]") Integer[] commodityIds){
+    public R recommend(@RequestBody APICommodityRecommendReq request){
+        if(request.getCommodityIds()!=null && request.getCommodityIds().length>6){
+            return  R.error("推荐商品不能超过6个哦");
+        }
+        int result = -1;
         //修改商品状态
-       int result = commodityService.setRecommend(commodityIds,getBaseModel().getCustomerId());
-       switch (result){
-           case -1: return R.error("推荐商品不能超过4个哦");
-           case 0: return R.error("设置失败，请重试");
-           default: return R.ok().put("data",true);
-       }
+        if(request.getCommodityIds()!=null && request.getCommodityIds().length>0) {
+             result = commodityService.setRecommend(request.getCommodityIds(), getBaseModel().getCustomerId());
+        }else{
+            result = commodityService.removeRecommend(request.getDeleteId());
+        }
+
+      if(result==0) {
+          return R.error("设置失败，请重试");
+      }else{
+          return R.ok().put("data", true);
+      }
     }
 
     /**
@@ -188,7 +199,9 @@ public class CommodityRestController extends ApiBaseRestController {
         List<CommodityDO> recommendList = commodityService.getRecommend(getBaseModel().getCustomerId());
         //数据转换
         List<APICommodityRecommendVO> result = mapper.mapArray(recommendList, APICommodityRecommendVO.class);
-
+        if(result==null){
+            result = new ArrayList<>();
+        }
         return R.ok().put("data",result);
     }
 

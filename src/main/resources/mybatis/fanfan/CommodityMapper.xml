@@ -129,7 +129,7 @@
 	</update>
 	
 	<delete id="remove">
-		update ff_commodity set delete=1 where id = #{value}
+		update ff_commodity set `delete`=1 where id = #{id}
 	</delete>
 	
 	<delete id="batchRemove">

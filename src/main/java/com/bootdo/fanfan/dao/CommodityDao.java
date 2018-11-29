@@ -30,7 +30,7 @@ public interface CommodityDao {
 	
 	int update(CommodityDO commodit);
 	
-	int remove(Integer id);
+	int remove(@Param("id") Integer id);
 	
 	int batchRemove(Integer[] ids);
 
@@ -53,13 +53,28 @@ public interface CommodityDao {
 	List<CommodityWidthExtendDO> queryExtends(Map<String,Object> map);
 
 	/**
-	 * 修改是否为推荐商品
-	 * @param id
-	 * @param recommend
+	 * 修改为推荐商品
+	 * @param idArray
 	 * @return
 	 */
-	@Update("update ff_commodity set recommend=${recommend} where id=${id}")
-	int updateRecommend(@Param("id") Integer id, @Param("recommend") Integer recommend);
+	@Update("update ff_commodity set recommend=1 where id in (${idArray})")
+	int updateRecommend(@Param("idArray") String idArray);
+
+	/**
+	 * 去除老的推荐商品
+	 * @param customerId
+	 * @return
+	 */
+	@Update("update ff_commodity set recommend=0 where customer_id =#{customerId}")
+	int updateOldRecommend(@Param("customerId") Integer customerId);
+
+	/**
+	 * 去除推荐
+	 * @param id
+	 * @return
+	 */
+	@Update("update ff_commodity set recommend=0 where id =#{id}")
+	int removeRecommend(@Param("id") Integer id);
 
 	/**
 	 * 查询推荐商品

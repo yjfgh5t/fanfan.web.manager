@@ -57,6 +57,8 @@ public interface CommodityService {
 	 */
 	int setRecommend(Integer [] commodityIds,Integer customerId);
 
+	int removeRecommend(Integer commodityId);
+
 	/**
 	 * 查询推荐商品
 	 * @param customerId
