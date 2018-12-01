@@ -188,13 +188,15 @@
 		left JOIN ff_user as b
 		on a.user_id = b.id
 		where  a.customer_id=#{customerId}
-		AND a.order_time BETWEEN #{startTime} and #{endTime}
-		<if test="lastId>=0">
+		<if test="lastOrderTime == null">
+			AND a.order_time BETWEEN #{startTime} and #{endTime}
+		</if>
+		<if test="lastOrderTime != null">
 			<if test="isMax==true">
-				AND a.id &gt; #{lastId}
+				AND a.order_time BETWEEN #{lastOrderTime} and #{endTime}
 			</if>
 			<if test="isMax==false">
-				AND a.id &lt; #{lastId}
+				AND a.order_time BETWEEN  #{startTime} and #{lastOrderTime}
 			</if>
 		</if>
 		<if test="orderStates != null">
@@ -203,7 +205,7 @@
 				${item}
 			</foreach>
 		</if>
-		ORDER BY a.id DESC
+		ORDER BY a.order_time DESC
 		<if test="limit != null">
 			limit #{limit}
 		</if>

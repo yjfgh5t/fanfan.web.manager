@@ -50,7 +50,12 @@ public class CommodityRestController extends ApiBaseRestController {
 
         Map<String, Object> _map = new HashMap<>();
         _map.put("sort","`order`");
+        _map.put("order","DESC");
         _map.put("customerId",getBaseModel().getCustomerId());
+        //小程序 排除下架商品
+        if(getBaseModel().getClientEnumType() == PlatformEnum.AlipayMiniprogram){
+            _map.put("status","1");
+        }
 
         List<CommodityWidthExtendDO> list = commodityService.listExtend(_map);
         if(getBaseModel().getClientEnumType() == PlatformEnum.CustomerAndroid){
@@ -72,6 +77,10 @@ public class CommodityRestController extends ApiBaseRestController {
         Map<String, Object> _map = new HashMap<>();
         _map.put("sort","`order`");
         _map.put("customerId",getBaseModel().getCustomerId());
+        //小程序 排除下架商品
+        if(getBaseModel().getClientEnumType() == PlatformEnum.AlipayMiniprogram){
+            _map.put("status","1");
+        }
         //查询商品数据
         List<CommodityWidthExtendDO> list = commodityService.listExtend(_map);
         //返回类型
@@ -116,15 +125,13 @@ public class CommodityRestController extends ApiBaseRestController {
         CommodityDO commodit = mapper.map(commodityVO,CommodityDO.class);
         if(commodit.getId()==0) {
             commodit.setCustomerId(getBaseModel().getCustomerId());
-            commodit.setId(commodityService.save(commodit));
+            commodityService.save(commodit);
         }else {
             commodityService.update(commodit);
         }
 
         if(commodityVO.getExtendList()!=null && commodityVO.getExtendList().size()>0){
             List<CommodityExtendDO> list = mapper.mapArray(commodityVO.getExtendList(),CommodityExtendDO.class);
-            //获取老的id
-            List<Integer> oldIds =  list.stream().filter((item)->item.getId()>0).map(CommodityExtendDO::getId).collect(Collectors.toList());
             //获取添加的
             List<CommodityExtendDO> newDatas = list.stream()
                     .filter((item)->{
@@ -134,10 +141,6 @@ public class CommodityRestController extends ApiBaseRestController {
                         return item.getId()==0;
                     })
                     .collect(Collectors.toList());
-            //清除客户端移除的规格
-            if(oldIds!=null && oldIds.size()>0){
-                commodityExtendService.updateDeletes(oldIds,commodit.getId());
-            }
             //保存数据
             if(newDatas!=null && newDatas.size()>0){
                 newDatas.forEach((item)->{
@@ -145,8 +148,14 @@ public class CommodityRestController extends ApiBaseRestController {
                 });
             }
         }
-
         return R.ok().put("data",commodit.getId());
+    }
+
+    @PostMapping("/removeNorms")
+    public R removeNorms(Integer normId,Integer commodityId){
+       boolean success = commodityExtendService.updateDeletes(normId,commodityId);
+
+        return R.ok().put("data",success);
     }
 
     /**

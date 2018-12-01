@@ -83,6 +83,8 @@ public class AuthorizeRestController extends ApiBaseRestController{
             alipayDO.setSubject("验证是否签约");
             alipayDO.setTradeNo(System.currentTimeMillis() + "");
             alipayDO.setTotalAmount("0.01");
+            //何总的tpId
+            alipayDO.setBuyerId("2088602121036890");
             String tradeNo = alipayManager.createTradePayPlatform(alipayDO, getBaseModel().getCustomerId());
             //创建预付单成功 表示商户已经签约
             if (tradeNo != null) {

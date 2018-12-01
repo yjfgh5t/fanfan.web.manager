@@ -4,6 +4,7 @@ import com.alipay.api.response.AlipayUserInfoShareResponse;
 import com.bootdo.common.config.AlipayConfig;
 import com.bootdo.common.exception.BDException;
 import com.bootdo.common.extend.EMapper;
+import com.bootdo.common.utils.StringUtils;
 import com.bootdo.fanfan.domain.UserDO;
 import com.bootdo.fanfan.domain.enumDO.PlatformEnum;
 import com.bootdo.fanfan.manager.AlipayManager;
@@ -139,7 +140,11 @@ public class TpUserServiceImpl implements TpUserService {
 				tpUserDO.setTpType(platformEnum.getVal());
 				tpUserDO.setTpAppId(alipayConfig.getAppId());
 				//设置性别
-				tpUserDO.setTpSex(alipayUserInfoShareResponse.getGender().toLowerCase().equals("M")?2:3);
+				if(StringUtils.isNotEmpty(alipayUserInfoShareResponse.getGender())) {
+					tpUserDO.setTpSex(alipayUserInfoShareResponse.getGender().toLowerCase().equals("m") ? 2 : 3);
+				}else{
+					tpUserDO.setTpSex(1);
+				}
 			}
 		}
 

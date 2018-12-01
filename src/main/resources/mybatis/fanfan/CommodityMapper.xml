@@ -73,7 +73,7 @@
 			`commodity_fiex_num`,
 			`commodity_package_price`,
 			`commodity_unit`,
-			`is_recommend`,
+			`recommend`,
 			`status`, 
 			`create_time`, 
 			`customer_id`,
@@ -93,7 +93,7 @@
 			#{commodityFiexNum},
 			#{commodityPackagePrice},
 			#{commodityUnit},
-			#{isRecommend},
+			#{recommend},
 			#{status},
 			#{createTime}, 
 			#{customerId},
@@ -116,7 +116,7 @@
 			<if test="commodityFiexNum != null">`commodity_fiex_num` = #{commodityFiexNum}, </if>
 			<if test="commodityPackagePrice != null">`commodity_package_price` = #{commodityPackagePrice}, </if>
 			<if test="commodityUnit != null">`commodity_unit` = #{commodityUnit}, </if>
-			<if test="isRecommend != null">`is_recommend` = #{isRecommend}, </if>
+			<if test="recommend != null">`recommend` = #{recommend}, </if>
 			<if test="status != null">`status` = #{status}, </if>
 			<if test="createTime != null">`create_time` = #{createTime}, </if>
 			<if test="customerId != null">`customer_id` = #{customerId}, </if>
@@ -144,6 +144,7 @@
 		WHERE  `delete` = 0
 		<if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
 		<if test="idArray !=null and idArray !=''"> and `id` in(${idArray})</if>
+		<if test="status !=null"> and `status` = #{status}</if>
 		<choose>
 			<when test="sort != null and sort.trim() != ''">
 				order by ${sort} ${order}

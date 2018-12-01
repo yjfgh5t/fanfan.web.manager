@@ -31,7 +31,7 @@ public class CommodityCategoryServiceImpl implements CommodityCategoryService {
 	public List<CommodityCategoryDO> getByCustomerId(Integer customerId){
 		Map<String,Object> parmas = new HashMap<>();
 		parmas.put("sort","`order`");
-		parmas.put("order","asc");
+		parmas.put("order","desc");
 		parmas.put("delete","0");
 		parmas.put("customerId",customerId);
 

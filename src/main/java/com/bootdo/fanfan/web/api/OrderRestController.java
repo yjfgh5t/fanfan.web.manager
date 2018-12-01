@@ -150,7 +150,18 @@ public class OrderRestController extends ApiBaseRestController {
         //结束日期
         Date endDate = DateUtils.addDays(date, 1);
         params.put("endTime", endDate);
-        params.put("lastId", dayQueryRequVO.getLastId());
+        //操作时间加1s 防止读取重复的数据
+        if(dayQueryRequVO.getLastOrderTime()!=null){
+            Calendar lastOrderTime = Calendar.getInstance();
+            lastOrderTime.setTime(dayQueryRequVO.getLastOrderTime());
+            if(dayQueryRequVO.getIsMax()) {
+                lastOrderTime.add(Calendar.SECOND, 1);
+            }else{
+                lastOrderTime.add(Calendar.SECOND, -1);
+            }
+            dayQueryRequVO.setLastOrderTime(lastOrderTime.getTime());
+        }
+        params.put("lastOrderTime", dayQueryRequVO.getLastOrderTime());
         params.put("isMax", dayQueryRequVO.getIsMax());
         params.put("limit", dayQueryRequVO.getPageSize());
         //订单状态不为空

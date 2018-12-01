@@ -49,16 +49,15 @@ public class CommodityExtendServiceImpl implements CommodityExtendService {
 
 	/**
 	 * 修改客户端删除的规格
-	 * @param idArrays
+	 * @param normId
 	 * @param commodityId
 	 * @return
 	 */
-	public boolean updateDeletes(List<Integer> idArrays,Integer commodityId){
-		if(CollectionUtils.isEmpty(idArrays)) {
+	public boolean updateDeletes(Integer normId,Integer commodityId){
+		if(normId==null) {
 			return false;
 		}
-		String strIdarry= StringUtils.join(idArrays,",");
-		return commodityExtendDao.updateDeletes(strIdarry,commodityId)>0;
+		return commodityExtendDao.updateDeletes(normId,commodityId)>0;
 	}
 
 	@Override

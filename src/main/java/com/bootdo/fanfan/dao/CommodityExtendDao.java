@@ -34,10 +34,10 @@ public interface CommodityExtendDao {
 
 	/**
 	 * 修改客户端删除的规格
-	 * @param idArray
+	 * @param id
 	 * @param commodityId
 	 * @return
 	 */
-	@Update("update ff_commodity_extend set `delete`=1 where commodity_id=#{commodityId} and `id` not in(${idArray})")
-	int updateDeletes(@Param("idArray") String idArray, @Param("commodityId") Integer commodityId);
+	@Update("update ff_commodity_extend set `delete`=1 where commodity_id=#{commodityId} and `id`=#{id}")
+	int updateDeletes(@Param("id") Integer id, @Param("commodityId") Integer commodityId);
 }

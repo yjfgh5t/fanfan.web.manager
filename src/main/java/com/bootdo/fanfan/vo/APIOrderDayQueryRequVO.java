@@ -42,4 +42,10 @@ public class APIOrderDayQueryRequVO {
      * 订单状态
      */
     private Integer orderState;
+
+    /**
+     * 下单时间
+     */
+    @DateTimeFormat(pattern = "YYYY-MM-dd HH:mm:ss")
+    private Date lastOrderTime;
 }

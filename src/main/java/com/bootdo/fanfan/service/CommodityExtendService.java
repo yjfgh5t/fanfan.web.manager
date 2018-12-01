@@ -24,7 +24,7 @@ public interface CommodityExtendService {
 	
 	int update(CommodityExtendDO commodityExtend);
 
-	boolean updateDeletes(List<Integer> idArrays,Integer commodityId);
+	boolean updateDeletes(Integer normId,Integer commodityId);
 
 	List<CommodityExtendDO> listByCommodityId(Integer commodityId);
 
