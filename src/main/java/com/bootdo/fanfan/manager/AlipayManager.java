@@ -237,7 +237,7 @@ public class AlipayManager {
      * 退款
      */
     public boolean tradeRefund(String orderNum, double refundAmount, Integer customerId) {
-        AlipayClient alipayClient = alipayConfig.getDefaultClient();
+        AlipayClient alipayClient = alipayConfig.getDefaultPlatformClient();
         AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
         request.setBizContent("{" +
                 "\"out_trade_no\":\"" + orderNum + "\"," +
@@ -246,7 +246,7 @@ public class AlipayManager {
         AlipayTradeRefundResponse response = null;
         try {
             //执行退款
-            response = alipayClient.execute(request);
+            response = alipayClient.execute(request,null,getAuthToken(customerId));
             logger.info("退款-返回：{}", response.getBody());
             if (response.isSuccess()) {
                 return response.getCode().equals("10000");

@@ -31,4 +31,12 @@ public class HomeController {
         return "h5/authorize";
     }
 
+    /**
+     * 扫码页面
+     * @return
+     */
+    @GetMapping("qrcode")
+    public String qrcode(){
+            return "h5/qrcode";
+    }
 }

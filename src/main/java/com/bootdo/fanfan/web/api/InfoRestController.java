@@ -24,6 +24,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -163,14 +164,13 @@ public class InfoRestController extends ApiBaseRestController {
 
     /**
      * 扫码入口
-     * @param qrCodeId
+     * @param qrcode
      * @return
      */
-    @GetMapping("/qrcode/{qrcode}")
-    @Cacheable(value = "qrcode",keyGenerator = "keyGenerator")
-    public R qrcode(@PathVariable("qrcode") String qrCodeId){
-        System.out.println("访问"+qrCodeId);
-        return R.ok();
+    @GetMapping("/qrcode")
+    //@Cacheable(value = "qrcode",keyGenerator = "keyGenerator")
+    public void qrcode(String qrcode,HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        request.getRequestDispatcher("/h5/qrcode").forward(request,response);
     }
 
     @RequestMapping("/qrCodeImg")
