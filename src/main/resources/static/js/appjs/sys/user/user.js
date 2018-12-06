@@ -65,6 +65,10 @@ function load(deptId) {
 						field : 'mobile',
 						title : '手机号'
 					},
+                    {
+                        field : 'gmtCreate',
+                        title : '注册时间'
+                    },
 					{
 						field : 'status',
 						title : '状态',

@@ -32,7 +32,7 @@ public interface TpUserDao {
 	
 	int batchRemove(Integer[] ids);
 
-	@Select("select * from ff_tp_user where tp_id=${tpId}")
+	@Select("select * from ff_tp_user where tp_id=#{tpId}")
 	TpUserDO getByTpId(@Param("tpId") String tpId);
 
 	/**

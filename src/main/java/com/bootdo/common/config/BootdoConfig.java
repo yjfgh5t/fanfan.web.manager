@@ -61,6 +61,16 @@ public class BootdoConfig {
 	 */
 	private String payNotifyUrl;
 
+	/**
+	 * 微信应用Id
+	 */
+	private String wxAppId;
+
+	/**
+	 * 微信接口地址
+	 */
+	private String wxUrlPath;
+
 	public String getUploadImgPath(){
 		return  uploadPath+"img/";
 	}

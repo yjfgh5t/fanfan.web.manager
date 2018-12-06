@@ -50,7 +50,6 @@ public class CommodityCategoryController extends BaseController {
 		query.put("sort","`order`");
 		query.put("order","asc");
 		query.put("delete","0");
-		query.put("customerId",getUserId());
 		List<CommodityCategoryDO> commoditCategoryList = commodityCategoryService.list(query);
 		int total = commodityCategoryService.count(query);
 		PageUtils pageUtils = new PageUtils(commoditCategoryList, total);

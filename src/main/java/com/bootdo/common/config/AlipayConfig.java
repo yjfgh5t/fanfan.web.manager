@@ -3,6 +3,7 @@ package com.bootdo.common.config;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.bootdo.fanfan.domain.AlipayKeyDO;
+import com.bootdo.fanfan.manager.model.wechat.WXClient;
 import com.bootdo.fanfan.service.AlipayKeyService;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,12 @@ public class AlipayConfig {
     @Getter
     private AlipayClient defaultPlatformClient;
 
+    /**
+     * 获取微信客户端
+     */
+    @Getter
+    private WXClient defaultWXClient;
+
 
     @Autowired
     AlipayKeyService alipayKeyService;
@@ -57,6 +64,10 @@ public class AlipayConfig {
         alipayKeyDO = alipayKeyService.getByAppId(bootdoConfig.getAliPayPlatformAppId());
         defaultPlatformClient = getAppClient(alipayKeyDO);
         publicPlatformTBKey = alipayKeyDO.getPublicTbKey();
+
+        //初始化微信小程序Client
+        alipayKeyDO = alipayKeyService.getByAppId(bootdoConfig.getWxAppId());
+        defaultWXClient = getWXAppClient(alipayKeyDO);
     }
 
 
@@ -74,6 +85,14 @@ public class AlipayConfig {
         } else {
             throw new SecurityException("商户未配置支付宝密钥");
         }
+    }
+
+    private WXClient getWXAppClient(AlipayKeyDO alipayKeyDO){
+        WXClient wxClient = new WXClient();
+        wxClient.setAppId(alipayKeyDO.getAppId());
+        wxClient.setAppSecret(alipayKeyDO.getPrivateKey());
+        wxClient.setUrlPath(bootdoConfig.getWxUrlPath());
+        return wxClient;
     }
 
 }

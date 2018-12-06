@@ -44,35 +44,47 @@ public class TpUserServiceImpl implements TpUserService {
 		return tpUserDao.get(id);
 	}
 
+	/**
+	 * 设置支付宝用户信息
+	 * @param code
+	 * @param platformEnum
+	 * @param customerId
+	 * @return
+	 */
+	@Override
+	public TpUserDO setAlipayTPInfo(String code, PlatformEnum platformEnum,Integer customerId){
+		TpUserDO tpUserDO = getTpUserDO(code, platformEnum,customerId);
+		return getTPInfo(tpUserDO,platformEnum,customerId);
+	}
+
 	@Override
 	@Transactional(rollbackFor = {Exception.class,BDException.class})
-	public TpUserDO getTPInfo(String code, PlatformEnum platformEnum,Integer customerId) {
+	public TpUserDO getTPInfo(TpUserDO tpUserDO, PlatformEnum platformEnum,Integer customerId) {
 
-		TpUserDO tpUserDO = getTpUserDO(code, platformEnum,customerId);
+		if(tpUserDO!=null) {
 
-		if(tpUserDO==null)
-			return null;
+			//查询数据中是否存在
+			TpUserDO dbTpUserDO = tpUserDao.getByTpId(tpUserDO.getTpId());
 
-		//查询数据中是否存在
-		TpUserDO  dbTpUserDO  = tpUserDao.getByTpId(tpUserDO.getTpId());
+			if (dbTpUserDO != null) {
+				return dbTpUserDO;
+			}
 
-		if(dbTpUserDO!=null)
-			return dbTpUserDO;
+			//转化未 用户信息
+			UserDO userDO = eMapper.map(tpUserDO, UserDO.class);
 
-		//转化未 用户信息
-		UserDO userDO = eMapper.map(tpUserDO,UserDO.class);
+			//添加用户至信息表
+			if (userService.save(userDO) < 0) {
+				//抛出异常
+				throw new BDException("保存用户失败", BDException.BUSINESS_ERROR_CODE);
+			}
 
-		//添加用户至信息表
-		if(userService.save(userDO)<0){
-			//抛出异常
-			throw new BDException("保存用户失败",BDException.BUSINESS_ERROR_CODE);
+			//添加至TpUser表
+			tpUserDO.setUserId(userDO.getId());
+
+			//保存
+			this.save(tpUserDO);
 		}
-
-		//添加至TpUser表
-		tpUserDO.setUserId(userDO.getId());
-
-		//保存 并设置 Id
-		tpUserDO.setId(this.save(tpUserDO));
 
 		return tpUserDO;
 	}
@@ -88,7 +100,7 @@ public class TpUserServiceImpl implements TpUserService {
 	}
 	
 	@Override
-	public int save(TpUserDO tpUser){
+	public int save(TpUserDO tpUser) {
 		tpUser.setCreateTime(Calendar.getInstance().getTime());
 		return tpUserDao.save(tpUser);
 	}

@@ -57,7 +57,6 @@ public class CommodityController extends BaseController {
         Query query = new Query(params);
 		query.put("sort","`order`");
 		query.put("order","asc");
-		query.put("customerId",getUserId());
 		List<CommodityDO> commoditList = commodityService.list(query);
 		int total = commodityService.count(query);
 		PageUtils pageUtils = new PageUtils(commoditList, total);

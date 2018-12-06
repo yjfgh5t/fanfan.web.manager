@@ -10,10 +10,13 @@ import com.bootdo.fanfan.domain.TpUserDO;
 import com.bootdo.fanfan.domain.UserDO;
 import com.bootdo.fanfan.domain.enumDO.PlatformEnum;
 import com.bootdo.fanfan.manager.AlismsManager;
+import com.bootdo.fanfan.manager.WechatManager;
+import com.bootdo.fanfan.manager.model.wechat.WXJSCodeModel;
 import com.bootdo.fanfan.service.ShopService;
 import com.bootdo.fanfan.service.TpUserService;
 import com.bootdo.fanfan.vo.APICustomerVO;
 import com.bootdo.fanfan.vo.APICustomerRegisterVO;
+import com.bootdo.fanfan.vo.request.APIUserReq;
 import com.bootdo.system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -44,6 +47,9 @@ public class UserRestController extends ApiBaseRestController {
     AlismsManager alismsManager;
 
     @Autowired
+    WechatManager wechatManager;
+
+    @Autowired
     ShopService shopService;
 
     @Autowired
@@ -52,15 +58,44 @@ public class UserRestController extends ApiBaseRestController {
     @Autowired
     EMapper eMapper;
 
+    /**
+     * 支付宝设置用信息
+     * @param code
+     * @param type
+     * @return
+     */
     @PostMapping("/")
     public R getUser(@Param("code") String code,@Param("type") Integer type){
 
-        TpUserDO tpUserDO = tpUserService.getTPInfo(code,PlatformEnum.get(type),getBaseModel().getCustomerId());
+        TpUserDO tpUserDO = tpUserService.setAlipayTPInfo(code,PlatformEnum.get(type),getBaseModel().getCustomerId());
 
         if(tpUserDO!=null) {
            return R.ok().put("data", eMapper.map(tpUserDO, UserDO.class));
         }
-        return  R.error(1,"获取用户新失败");
+        return  R.error(1,"获取用户信息失败");
+    }
+
+    /**
+     * 微信设置用户信息
+     * @param userReq
+     * @return
+     */
+    @PostMapping("/wxUser")
+    public R getWXUser(@RequestBody APIUserReq userReq){
+        WXJSCodeModel codeModel = wechatManager.getJsCodeModel(userReq.getCode());
+
+        if(codeModel!=null){
+            userReq.setTpAppId(codeModel.getAppId());
+            userReq.setTpId(codeModel.getOpenid());
+            userReq.setTpType(PlatformEnum.WechatMiniprogram.getVal());
+            TpUserDO tpUserDO = eMapper.map(userReq,TpUserDO.class);
+            tpUserDO = tpUserService.getTPInfo(tpUserDO,PlatformEnum.WechatMiniprogram,getBaseModel().getCustomerId());
+            if(tpUserDO!=null) {
+                return R.ok().put("data", eMapper.map(tpUserDO, UserDO.class));
+            }
+        }
+
+        return R.error(1,"获取用户信息失败");
     }
 
 

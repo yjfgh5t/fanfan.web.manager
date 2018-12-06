@@ -30,4 +30,9 @@ public class RedisConstant {
      * 商户店铺状态
      */
     public static final String CUSTOMER_SHOP_STATE_KEY="CUSTOMER_SHOP_STATE_KEY";
+
+    /**
+     * 微信Token
+     */
+    public static final String WX_MINI_PROGRAM_TOKEN_KEY="WX_MINI_PROGRAM_TOKEN_KEY";
 }

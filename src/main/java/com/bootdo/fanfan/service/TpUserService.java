@@ -18,13 +18,15 @@ public interface TpUserService {
 	
 	TpUserDO get(Integer id);
 
+	TpUserDO setAlipayTPInfo(String code, PlatformEnum platformEnum, Integer customerId);
+
 	/**
 	 * 获取第三方用户信息
-	 * @param code 令牌
+	 * @param tpUserDO 第三方用户信息
 	 * @param platformEnum  类型 支付宝、微信
 	 * @return
 	 */
-	TpUserDO getTPInfo(String code, PlatformEnum platformEnum, Integer customerId);
+	TpUserDO getTPInfo(TpUserDO tpUserDO, PlatformEnum platformEnum, Integer customerId);
 	
 	List<TpUserDO> list(Map<String, Object> map);
 	
