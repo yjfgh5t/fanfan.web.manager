@@ -134,6 +134,16 @@ public class InfoRestController extends ApiBaseRestController {
     }
 
     /**
+     * 下载新版本
+     * @return
+     */
+    @GetMapping("/fanfan.apk")
+    public ResponseEntity<byte[]> downLoadApk(){
+        byte[] fileBytes = FileUtil.readByBytes(bootdoConfig.getUploadPath()+"fanfan.apk");
+        return  new ResponseEntity<byte[]>(fileBytes, HttpStatus.OK);
+    }
+
+    /**
      * 上传文件
      * @param file
      * @param request
