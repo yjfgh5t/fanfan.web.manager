@@ -7,6 +7,7 @@ import com.bootdo.fanfan.manager.model.wechat.WXClient;
 import com.bootdo.fanfan.service.AlipayKeyService;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
+@Order(1)
 public class AlipayConfig {
 
     @Autowired

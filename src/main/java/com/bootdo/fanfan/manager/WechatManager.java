@@ -22,6 +22,7 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -34,6 +35,7 @@ import java.util.Map;
  * @date: 2018/12/5 9:53
  */
 @Component
+@Order(2)
 public class WechatManager {
 
     Logger logger = LoggerFactory.getLogger(WechatManager.class);
