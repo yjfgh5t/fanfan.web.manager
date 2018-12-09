@@ -18,7 +18,9 @@ import com.bootdo.fanfan.service.AlipayRecordService;
 import com.bootdo.fanfan.service.OrderService;
 import com.bootdo.fanfan.service.OrderStateService;
 import com.bootdo.fanfan.vo.*;
+import com.bootdo.fanfan.vo.enums.APIAuthorityEnum;
 import com.bootdo.fanfan.vo.model.XGPushModel;
+import com.bootdo.fanfan.web.interceptor.Login;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -28,6 +30,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping(value = "/api/order")
+@Login
 public class OrderRestController extends ApiBaseRestController {
 
     @Autowired
@@ -197,6 +200,7 @@ public class OrderRestController extends ApiBaseRestController {
      * @return
      */
     @GetMapping("/statistics/{date}")
+    @Login(authority = APIAuthorityEnum.OnlyCustomer)
     public R queryStatistics(@PathVariable("date") @DateTimeFormat(pattern = "YYYY-MM-dd") Date date){
 
         APIOrderStatisticsVO result = new APIOrderStatisticsVO();
@@ -340,7 +344,6 @@ public class OrderRestController extends ApiBaseRestController {
 
     /**
      * 获取订单状态
-     *
      * @param idArry
      * @return
      */
@@ -362,6 +365,5 @@ public class OrderRestController extends ApiBaseRestController {
         }
         return R.ok().put("data", "");
     }
-
 
 }

@@ -11,6 +11,8 @@ import com.bootdo.fanfan.service.AuthorizeService;
 import com.bootdo.fanfan.service.CommodityService;
 import com.bootdo.fanfan.service.ShopService;
 import com.bootdo.fanfan.vo.APIShopVO;
+import com.bootdo.fanfan.vo.enums.APIAuthorityEnum;
+import com.bootdo.fanfan.web.interceptor.Login;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +25,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/shop")
+@Login(authority = APIAuthorityEnum.OnlyCustomer)
 public class ShopRestController extends ApiBaseRestController{
 
     @Autowired
@@ -38,6 +41,7 @@ public class ShopRestController extends ApiBaseRestController{
     EMapper eMapper;
 
     @GetMapping("/{id}")
+    @Login(authority = APIAuthorityEnum.All)
     public R get(@PathVariable("id") Integer id){
 
         ShopDO shopDO =null;

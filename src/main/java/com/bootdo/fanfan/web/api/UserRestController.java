@@ -6,6 +6,7 @@ import com.bootdo.common.utils.R;
 import com.bootdo.common.utils.RedisUtils;
 import com.bootdo.common.utils.StringUtils;
 import com.bootdo.fanfan.constant.RedisConstant;
+import com.bootdo.fanfan.constant.SessionConstant;
 import com.bootdo.fanfan.domain.TpUserDO;
 import com.bootdo.fanfan.domain.UserDO;
 import com.bootdo.fanfan.domain.enumDO.PlatformEnum;
@@ -16,8 +17,13 @@ import com.bootdo.fanfan.service.ShopService;
 import com.bootdo.fanfan.service.TpUserService;
 import com.bootdo.fanfan.vo.APICustomerVO;
 import com.bootdo.fanfan.vo.APICustomerRegisterVO;
+import com.bootdo.fanfan.vo.APIUserVO;
+import com.bootdo.fanfan.vo.enums.APIAuthorityEnum;
 import com.bootdo.fanfan.vo.request.APIUserReq;
+import com.bootdo.fanfan.web.interceptor.Login;
 import com.bootdo.system.service.UserService;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.web.session.HttpServletSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.validation.BindingResult;
@@ -28,9 +34,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 
 @RestController
@@ -70,7 +78,10 @@ public class UserRestController extends ApiBaseRestController {
         TpUserDO tpUserDO = tpUserService.setAlipayTPInfo(code,PlatformEnum.get(type),getBaseModel().getCustomerId());
 
         if(tpUserDO!=null) {
-           return R.ok().put("data", eMapper.map(tpUserDO, UserDO.class));
+            APIUserVO userModel = eMapper.map(tpUserDO, APIUserVO.class);
+            //保存登录信息
+            saveLogin(userModel);
+           return R.ok().put("data", userModel);
         }
         return  R.error(1,"获取用户信息失败");
     }
@@ -83,7 +94,6 @@ public class UserRestController extends ApiBaseRestController {
     @PostMapping("/wxUser")
     public R getWXUser(@RequestBody APIUserReq userReq){
         WXJSCodeModel codeModel = wechatManager.getJsCodeModel(userReq.getCode());
-
         if(codeModel!=null){
             userReq.setTpAppId(codeModel.getAppId());
             userReq.setTpId(codeModel.getOpenid());
@@ -91,7 +101,10 @@ public class UserRestController extends ApiBaseRestController {
             TpUserDO tpUserDO = eMapper.map(userReq,TpUserDO.class);
             tpUserDO = tpUserService.getTPInfo(tpUserDO,PlatformEnum.WechatMiniprogram,getBaseModel().getCustomerId());
             if(tpUserDO!=null) {
-                return R.ok().put("data", eMapper.map(tpUserDO, UserDO.class));
+                APIUserVO userModel = eMapper.map(tpUserDO, APIUserVO.class);
+                //保存登录信息
+                saveLogin(userModel);
+                return R.ok().put("data", userModel);
             }
         }
 
@@ -105,22 +118,18 @@ public class UserRestController extends ApiBaseRestController {
      * @return
      */
     @PostMapping("customer/login")
-    public R customerLogin(@Param("mobile") String mobile,@Param("userPwd") String userPwd){
-
+    @Login(require = false,authority = APIAuthorityEnum.OnlyCustomer)
+    public R customerLogin(@Param("mobile") String mobile, @Param("userPwd") String userPwd){
         Map<String,Object> params = new HashMap<>();
         params.put("mobile",mobile);
-
         List<com.bootdo.system.domain.UserDO> userDOS =userService.list(params);
-
         if(userDOS!=null && userDOS.size()>0) {
             APICustomerVO userVO = eMapper.map(userDOS.get(0), APICustomerVO.class);
             userPwd = MD5Utils.encrypt(userVO.getUsername(), userPwd);
             //判断密码输入是否正确
             if (userPwd.equals(userDOS.get(0).getPassword())) {
-                //查询店铺Id
-                String shopName = shopService.getNameByCustomerId(userVO.getUserId().intValue());
-                userVO.setShopName(shopName);
-                return R.ok().put("data", userVO);
+                Map<String, Object> result = customerLogin(userVO);
+                return R.ok().put("data", result);
             }
         }
         return R.ok().put("data","");
@@ -132,8 +141,8 @@ public class UserRestController extends ApiBaseRestController {
      * @return
      */
     @PostMapping("customer/codeLogin")
+    @Login(require = false,authority = APIAuthorityEnum.OnlyCustomer)
     public R customerCodeLogin(@Param("mobile") String mobile,@Param("code") String code){
-
         //手机验证码
         if(StringUtils.isEmpty(mobile+code) || !alismsManager.checkCode(mobile,code)){
             return R.error("验证码输入不正确");
@@ -143,13 +152,48 @@ public class UserRestController extends ApiBaseRestController {
         params.put("mobile",mobile);
 
         List<com.bootdo.system.domain.UserDO> userDOS =userService.list(params);
-
         if(userDOS!=null && userDOS.size()>0) {
             APICustomerVO userVO = eMapper.map(userDOS.get(0), APICustomerVO.class);
-            return R.ok().put("data", userVO);
+            Map<String, Object> result = customerLogin(userVO);
+            return R.ok().put("data", result);
         }else{
             return R.error("手机号还未注册");
         }
+    }
+
+    @PostMapping("customer/autoLogin")
+    @Login(require = false,authority = APIAuthorityEnum.OnlyCustomer)
+    public R customerAutoLogin(@Param("userId") Long userId,@Param("pwd") String pwd){
+
+        if(userId==null || !StringUtils.isNotEmpty(pwd)){
+            return R.error("自动登录失败");
+        }
+
+        Map<String,Object> params = new HashMap<>();
+        params.put("userId",userId);
+        params.put("password",pwd);
+
+        List<com.bootdo.system.domain.UserDO> userDOS =userService.list(params);
+        if(userDOS!=null && userDOS.size()>0) {
+            APICustomerVO userVO = eMapper.map(userDOS.get(0), APICustomerVO.class);
+            Map<String, Object> result = customerLogin(userVO);
+            return R.ok().put("data", result);
+        }else{
+            return R.error("自动登录失败");
+        }
+    }
+
+    private Map<String,Object> customerLogin( APICustomerVO userVO) {
+        //查询店铺Id
+        String shopName = shopService.getNameByCustomerId(userVO.getUserId().intValue());
+        userVO.setShopName(shopName);
+        //将用户信息存入Redis
+        String tokenKey = saveLogin(userVO);
+
+        Map<String, Object> resultParams = new HashMap<>();
+        resultParams.put("userInfo", userVO);
+        resultParams.put("token", tokenKey);
+        return resultParams;
     }
 
     /**
@@ -159,6 +203,7 @@ public class UserRestController extends ApiBaseRestController {
      * @return
      */
     @PostMapping("customer/save")
+    @Login(authority = APIAuthorityEnum.OnlyCustomer)
     public R customerSave(@Validated @RequestBody APICustomerVO model, BindingResult result){
 
         //验证Model
@@ -168,7 +213,7 @@ public class UserRestController extends ApiBaseRestController {
         int success=0;
         if(model.getUserId()!=0){
 
-            com.bootdo.system.domain.UserDO oldModel = userService.get(model.getUserId());
+            com.bootdo.system.domain.UserDO oldModel = userService.get(model.getUserId().longValue());
 
             if(StringUtils.isNotEmpty(userDO.getPassword())){
                 userDO.setPassword(MD5Utils.encrypt(oldModel.getUsername(),userDO.getPassword()));

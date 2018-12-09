@@ -12,11 +12,14 @@ import com.bootdo.fanfan.domain.enumDO.IdentificationEnum;
 import com.bootdo.fanfan.manager.AlipayManager;
 import com.bootdo.fanfan.service.AuthorizeService;
 import com.bootdo.fanfan.vo.APIAuthorizeVO;
+import com.bootdo.fanfan.vo.enums.APIAuthorityEnum;
+import com.bootdo.fanfan.web.interceptor.Login;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/api/authorize")
+@Login(authority = APIAuthorityEnum.OnlyCustomer)
 public class AuthorizeRestController extends ApiBaseRestController{
 
     @Autowired

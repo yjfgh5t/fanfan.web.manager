@@ -8,6 +8,8 @@ import com.bootdo.fanfan.service.ReceiverService;
 import com.bootdo.fanfan.vo.APIAddressVO;
 import com.bootdo.fanfan.vo.APIGDMapTipVO;
 import com.bootdo.fanfan.vo.APIReceiverVO;
+import com.bootdo.fanfan.vo.enums.APIAuthorityEnum;
+import com.bootdo.fanfan.web.interceptor.Login;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +20,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api/address")
+@Login(authority = APIAuthorityEnum.OnlyUser)
 public class AddressRestController extends ApiBaseRestController {
 
     @Autowired

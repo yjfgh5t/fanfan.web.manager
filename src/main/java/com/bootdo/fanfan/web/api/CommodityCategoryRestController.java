@@ -10,6 +10,8 @@ import com.bootdo.fanfan.service.CommodityService;
 import com.bootdo.fanfan.vo.APICommodityCategoryRequVO;
 import com.bootdo.fanfan.vo.APICommoditySimpleVO;
 import com.bootdo.fanfan.vo.APICommodityVO;
+import com.bootdo.fanfan.vo.enums.APIAuthorityEnum;
+import com.bootdo.fanfan.web.interceptor.Login;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/commodityCategory")
+@Login(authority = APIAuthorityEnum.OnlyCustomer)
 public class CommodityCategoryRestController extends ApiBaseRestController  {
 
     @Autowired

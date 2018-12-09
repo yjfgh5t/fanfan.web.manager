@@ -16,7 +16,7 @@ public class APICustomerVO {
      * id
      */
     @NotNull(message = "Id不能为空")
-    private Long userId;
+    private Integer userId;
     /**
      * 用户昵称
      */

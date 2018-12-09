@@ -9,6 +9,8 @@ import com.bootdo.fanfan.manager.AlipayManager;
 import com.bootdo.fanfan.service.DeskService;
 import com.bootdo.fanfan.service.QrcodeService;
 import com.bootdo.fanfan.vo.APIDeskVO;
+import com.bootdo.fanfan.vo.enums.APIAuthorityEnum;
+import com.bootdo.fanfan.web.interceptor.Login;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +24,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping(value = "/api/desk")
+@Login(authority = APIAuthorityEnum.OnlyCustomer)
 public class DeskRestController extends ApiBaseRestController {
 
     @Autowired

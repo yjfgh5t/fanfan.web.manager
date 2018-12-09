@@ -6,6 +6,8 @@ import com.bootdo.fanfan.domain.ContactDO;
 import com.bootdo.fanfan.manager.AlismsManager;
 import com.bootdo.fanfan.service.ContactService;
 import com.bootdo.fanfan.vo.APIConcatVO;
+import com.bootdo.fanfan.vo.enums.APIAuthorityEnum;
+import com.bootdo.fanfan.web.interceptor.Login;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping(value = "/api/concat")
+@Login(authority = APIAuthorityEnum.OnlyCustomer)
 public class ConcatRestController extends ApiBaseRestController {
 
     @Autowired

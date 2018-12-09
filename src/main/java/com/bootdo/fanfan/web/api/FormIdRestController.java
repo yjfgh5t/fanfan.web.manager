@@ -4,6 +4,8 @@ import com.bootdo.common.utils.R;
 import com.bootdo.fanfan.domain.FormIdDO;
 import com.bootdo.fanfan.domain.enumDO.PlatformEnum;
 import com.bootdo.fanfan.service.FormIdService;
+import com.bootdo.fanfan.vo.enums.APIAuthorityEnum;
+import com.bootdo.fanfan.web.interceptor.Login;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/formId")
+@Login(authority = APIAuthorityEnum.OnlyUser)
 public class FormIdRestController extends ApiBaseRestController {
 
     @Autowired

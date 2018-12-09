@@ -290,6 +290,13 @@
             <version>1.1.0</version>
         </dependency>
 
+        <!-- SpringSession -->
+        <!--<dependency>-->
+        <!--<groupId>org.springframework.session</groupId>-->
+        <!--<artifactId>spring-session-data-redis</artifactId>-->
+        <!--<version>1.3.1.RELEASE</version>-->
+        <!--</dependency>-->
+
         <!--war包部署需要-->
         <!--<dependency>-->
             <!--<groupId>org.springframework.boot</groupId>-->

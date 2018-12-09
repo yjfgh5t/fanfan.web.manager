@@ -1,10 +1,12 @@
 package com.bootdo.system.config;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -24,7 +26,7 @@ import java.util.Map;
 public class RedisCacheConfig {
 
     @Bean
-    public RedisTemplate redisTemplate(RedisTemplate redisTemplate){
+    public RedisTemplate redisTemplate(@Qualifier(value = "stringRedisTemplate") RedisTemplate redisTemplate){
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());

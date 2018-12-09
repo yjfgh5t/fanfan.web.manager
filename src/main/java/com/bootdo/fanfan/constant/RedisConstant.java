@@ -35,4 +35,9 @@ public class RedisConstant {
      * 微信Token
      */
     public static final String WX_MINI_PROGRAM_TOKEN_KEY="WX_MINI_PROGRAM_TOKEN_KEY";
+
+    /**
+     * 用户登录Key
+     */
+    public static final String FANFAN_USER_LOGIN="FANFAN:USER_LOGIN_KEY:";
 }

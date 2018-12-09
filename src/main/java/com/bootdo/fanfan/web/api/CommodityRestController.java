@@ -15,7 +15,9 @@ import com.bootdo.fanfan.vo.APICommodityCategoryRequVO;
 import com.bootdo.fanfan.vo.APICommodityRecommendVO;
 import com.bootdo.fanfan.vo.APICommoditySimpleVO;
 import com.bootdo.fanfan.vo.APICommodityVO;
+import com.bootdo.fanfan.vo.enums.APIAuthorityEnum;
 import com.bootdo.fanfan.vo.request.APICommodityRecommendReq;
+import com.bootdo.fanfan.web.interceptor.Login;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +29,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/commodity")
+@Login(authority = APIAuthorityEnum.OnlyCustomer)
 public class CommodityRestController extends ApiBaseRestController {
 
     @Autowired
@@ -70,6 +73,7 @@ public class CommodityRestController extends ApiBaseRestController {
      * @return
      */
     @GetMapping("/commodityWithCategory")
+    @Login(require = false, authority = APIAuthorityEnum.OnlyUser)
     public R commodityWithCategory(){
 
         Map<String, Object> results = new HashMap<>();
@@ -203,6 +207,7 @@ public class CommodityRestController extends ApiBaseRestController {
      * @return
      */
     @GetMapping("/getRecommend")
+    @Login(require = false, authority = APIAuthorityEnum.All)
     public R getRecommend(){
         //查询列表
         List<CommodityDO> recommendList = commodityService.getRecommend(getBaseModel().getCustomerId());
