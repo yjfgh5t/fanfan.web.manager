@@ -172,6 +172,11 @@ public class InfoRestController extends ApiBaseRestController {
         return R.error();
     }
 
+    @GetMapping("/time")
+    public R getTime(){
+        return R.ok().put("data",""+System.currentTimeMillis());
+    }
+
     /**
      * 扫码入口
      * @param qrcode

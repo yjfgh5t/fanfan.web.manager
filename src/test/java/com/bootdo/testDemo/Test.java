@@ -1,6 +1,7 @@
 package com.bootdo.testDemo;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.bootdo.common.utils.MD5Utils;
 import com.bootdo.fanfan.domain.OrderDO;
 import com.bootdo.fanfan.vo.APIOrderRequVO;
@@ -26,12 +27,8 @@ public class Test {
 
         System.out.println(1000+new Random().nextInt(999)+"");
 
-        MethodHandle methodHandle = MethodHandles.lookup().findVirtual(parent.class,"setName", MethodType.methodType(void.class,String.class));
+        System.out.println(MD5Utils.simpleEncrypt("123"));
 
-        parent p = new parent();
-        methodHandle.invoke(p,"名");
-
-        System.out.println(p.getName());
 
     }
 

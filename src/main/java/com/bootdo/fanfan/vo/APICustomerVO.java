@@ -49,5 +49,5 @@ public class APICustomerVO {
     /**
      * 密码
      */
-    private String password;
+    private String code;
 }

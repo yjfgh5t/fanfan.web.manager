@@ -1,5 +1,6 @@
 package com.bootdo.fanfan.service.impl;
 
+import com.alipay.api.response.AlipaySystemOauthTokenResponse;
 import com.alipay.api.response.AlipayUserInfoShareResponse;
 import com.bootdo.common.config.AlipayConfig;
 import com.bootdo.common.exception.BDException;
@@ -8,6 +9,8 @@ import com.bootdo.common.utils.StringUtils;
 import com.bootdo.fanfan.domain.UserDO;
 import com.bootdo.fanfan.domain.enumDO.PlatformEnum;
 import com.bootdo.fanfan.manager.AlipayManager;
+import com.bootdo.fanfan.manager.WechatManager;
+import com.bootdo.fanfan.manager.model.wechat.WXJSCodeModel;
 import com.bootdo.fanfan.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,6 +42,9 @@ public class TpUserServiceImpl implements TpUserService {
 	@Autowired
 	private AlipayConfig alipayConfig;
 
+	@Autowired
+	private WechatManager wechatManager;
+
 	@Override
 	public TpUserDO get(Integer id){
 		return tpUserDao.get(id);
@@ -60,6 +66,32 @@ public class TpUserServiceImpl implements TpUserService {
 	public TpUserDO setAlipayTPInfo(String code, PlatformEnum platformEnum,Integer customerId){
 		TpUserDO tpUserDO = getTpUserDO(code, platformEnum,customerId);
 		return getTPInfo(tpUserDO,platformEnum,customerId);
+	}
+
+	@Override
+	public TpUserDO checkTPCode(String code, PlatformEnum platformEnum) {
+
+		String tpId=null;
+
+		//查询支付宝Code
+		if(platformEnum==PlatformEnum.AlipayMiniprogram){
+			AlipaySystemOauthTokenResponse token = alipayManager.getToken(code);
+			if(token!=null){
+				tpId = token.getUserId();
+			}
+		}else if(platformEnum ==PlatformEnum.WechatMiniprogram){
+			//查询微信Code
+			WXJSCodeModel codeModel = wechatManager.getJsCodeModel(code);
+			if(codeModel!=null){
+				tpId = codeModel.getOpenid();
+			}
+		}
+
+		//查询用户信息
+		if(StringUtils.isNotEmpty(tpId)){
+			return tpUserDao.getByTpId(tpId);
+		}
+		return null;
 	}
 
 	@Override

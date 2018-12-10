@@ -23,6 +23,14 @@ public interface TpUserService {
 	TpUserDO setAlipayTPInfo(String code, PlatformEnum platformEnum, Integer customerId);
 
 	/**
+	 * 验证code
+	 * @param code
+	 * @param platformEnum
+	 * @return
+	 */
+	TpUserDO checkTPCode(String code,PlatformEnum platformEnum);
+
+	/**
 	 * 获取第三方用户信息
 	 * @param tpUserDO 第三方用户信息
 	 * @param platformEnum  类型 支付宝、微信

@@ -213,6 +213,15 @@
         </field>
     </mapping>
 
+    <mapping>
+        <class-a>com.bootdo.fanfan.vo.APICustomerVO</class-a>
+        <class-b>com.bootdo.system.domain.UserDO</class-b>
+        <field>
+            <a>code</a>
+            <b>password</b>
+        </field>
+    </mapping>
+
     <!--订单数据转换 -->
     <mapping>
         <class-a>com.alipay.api.response.AlipayTradeQueryResponse</class-a>
