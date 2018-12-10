@@ -38,8 +38,12 @@ public class FormIdRestController extends ApiBaseRestController {
         //判断客户端类型
         if(PlatformEnum.AlipayMiniprogram==getBaseModel().getClientEnumType()){
             formIdDO.setFormType(PlatformEnum.AlipayMiniprogram.getVal());
+            //支付宝每个formid可以使用3次
+            formIdDO.setUseCount(3);
         }else if(PlatformEnum.WechatMiniprogram == getBaseModel().getClientEnumType()){
             formIdDO.setFormType(PlatformEnum.WechatMiniprogram.getVal());
+            //支付宝每个formid可以使用1次
+            formIdDO.setUseCount(1);
         }
 
         //执行保存
@@ -47,5 +51,4 @@ public class FormIdRestController extends ApiBaseRestController {
 
         return R.ok().put("data",true);
     }
-
 }

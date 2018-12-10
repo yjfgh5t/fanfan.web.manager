@@ -7,6 +7,9 @@ import com.bootdo.fanfan.vo.APIOrderRequVO;
 import lombok.Data;
 import lombok.Getter;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,17 +22,17 @@ import java.util.Random;
  */
 public class Test {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Throwable {
 
         System.out.println(1000+new Random().nextInt(999)+"");
 
-//        BigDecimal zero = new BigDecimal(0),two = new BigDecimal(2.03);
-//
-//        System.out.println(two.doubleValue());
-//
-//        zero.add(two);
-//
-//        System.out.println(zero.toBigInteger().intValue());
+        MethodHandle methodHandle = MethodHandles.lookup().findVirtual(parent.class,"setName", MethodType.methodType(void.class,String.class));
+
+        parent p = new parent();
+        methodHandle.invoke(p,"名");
+
+        System.out.println(p.getName());
+
     }
 
 

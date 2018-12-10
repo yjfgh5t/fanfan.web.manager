@@ -10,8 +10,11 @@ bootdo:
   defaultCustomerId: 132
   authorizeUrl: "https://openauth.alipay.com/oauth2/appToAppAuth.htm?app_id=2018072060650548&redirect_uri=http%3A%2F%2Fwxcard.com.cn%2Fapi%2Falipay%2FauthRedirect%3Fcustomer_id%3D"
   payNotifyUrl: http://wxcard.com.cn/api/alipay/alipayReceiver
-  wxAppId: wx68302348e3b462b9
+  wxAppId: wx6c42f08ee63e53c5
   wxUrlPath: https://api.weixin.qq.com/cgi-bin/
+  wxRefundTempId: tmLNvtbEQK1yibKFWrRDXsZPovg1AkS3HhAc-vDGSG0
+  wxCancelTempId: Fim754TeKWowfEv8wllKaXhpUG8g9VSiHgM1Lq0Fcro
+  wxPaySuccessTempId: TJTmvJPHVzuY-LhRVnw5m5J_0VR1JMt_JdnFfAxKfLw
 logging:
   level:
     root: error

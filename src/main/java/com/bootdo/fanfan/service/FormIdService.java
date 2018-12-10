@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public interface FormIdService {
 
-	FormUserDTO getCanUseFormId(PlatformEnum platformEnum, Integer userId);
+	FormUserDTO getCanUseFormId(Integer userId);
 
 	FormIdDO get(Integer id);
 	

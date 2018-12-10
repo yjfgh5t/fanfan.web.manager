@@ -34,9 +34,9 @@ public interface FormIdDao {
 	
 	int batchRemove(Integer[] ids);
 
-	@Select("SELECT fi.id,fi.form_id as formId,tp.tp_id as tpId from ff_form_id as fi join ff_tp_user as tp on tp.user_id = fi.user_id  where fi.expired_time>NOW() and fi.use_count<=#{count} and fi.user_id=#{userId} and fi.form_type=#{type} and tp.tp_type=#{type} limit 0,1")
-	FormUserDTO getCanUseFormId(@Param("type") Integer type, @Param("count") Integer count, @Param("userId") Integer userId);
+	@Select("SELECT id,form_id ,tp_id,form_type from ff_form_id  where expired_time>NOW() and use_count>0 and user_id=#{userId} limit 0,1")
+	FormUserDTO getCanUseFormId(@Param("userId") Integer userId);
 
-	@Update("UPDATE ff_form_id set use_count = user_count+1 where id=#{id}")
+	@Update("UPDATE ff_form_id set use_count = user_count-1 where id=#{id}")
 	int addFormIdUseOnce(@Param("id") Integer id);
 }

@@ -18,6 +18,8 @@ public interface TpUserService {
 	
 	TpUserDO get(Integer id);
 
+	TpUserDO getByUserId(Integer userId);
+
 	TpUserDO setAlipayTPInfo(String code, PlatformEnum platformEnum, Integer customerId);
 
 	/**

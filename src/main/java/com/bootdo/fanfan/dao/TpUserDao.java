@@ -43,4 +43,7 @@ public interface TpUserDao {
 	 */
 	@Select("select tp_id from ff_tp_user where user_id=#{userId} and tp_app_id=${appId}")
 	String getTpId(@Param("userId") Integer userId,@Param("appId") String appId);
+
+	@Select("select tp_nick,user_id,tp_icon,tp_sex,tp_type from ff_tp_user where user_id=#{userId}")
+	TpUserDO getByUserId(@Param("userId") Integer userId);
 }

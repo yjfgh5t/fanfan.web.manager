@@ -4,8 +4,6 @@ import lombok.Data;
 
 @Data
 public class APIUserVO {
-    //主键
-    private Integer id;
     //用户id主键
     private Integer userId;
     //1:支付宝 2:微信

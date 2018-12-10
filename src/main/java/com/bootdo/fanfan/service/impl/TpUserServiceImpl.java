@@ -44,6 +44,11 @@ public class TpUserServiceImpl implements TpUserService {
 		return tpUserDao.get(id);
 	}
 
+	@Override
+	public TpUserDO getByUserId(Integer userId) {
+		return tpUserDao.getByUserId(userId);
+	}
+
 	/**
 	 * 设置支付宝用户信息
 	 * @param code

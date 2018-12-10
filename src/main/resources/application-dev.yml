@@ -12,6 +12,9 @@ bootdo:
   payNotifyUrl: http://wxcard.com.cn/api/alipay/alipayReceiver
   wxAppId: wx68302348e3b462b9
   wxUrlPath: https://api.weixin.qq.com/cgi-bin/
+  wxRefundTempId: yRbDZ0riGMa0O-CyE5xnXYuc-Z3qVUy5lWMnI8gOJLk
+  wxCancelTempId: BgA1RuHPJSAb2bw5IZQow48M7a-b7xmtqZF8NrntnyY
+  wxPaySuccessTempId: ToMXyZQUhMpayucfl7cAw0BIIkPZMPRQRgolhU5YvhY
 logging:
   level:
     root: error
@@ -48,7 +51,7 @@ spring:
   redis:
       host: 127.0.0.1
       port: 6379
-      password:
+      password: 123456
       # 连接超时时间（毫秒）123456
       timeout: 10000
       pool:

@@ -34,16 +34,12 @@ public class APIBaseVO {
      */
     private Long time;
 
-    /**
-     * 签名
-     */
-    private String sign;
-
     public PlatformEnum getClientEnumType(){
         switch (this.clientType){
             case "AlipayMiniprogram": return PlatformEnum.AlipayMiniprogram;
+            case "WechatMiniprogram": return PlatformEnum.WechatMiniprogram;
             case "Android":return PlatformEnum.CustomerAndroid;
+            default: return null;
         }
-        return null;
     }
 }

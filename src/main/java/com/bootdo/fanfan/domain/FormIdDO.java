@@ -21,6 +21,8 @@ public class FormIdDO implements Serializable {
 	private Integer userId;
 	//表单id
 	private String formId;
+	//第三方Id
+	private String tpId;
 	//过期时间
 	private Date expiredTime;
 	//使用次数 支付包可使用3次 微信1次

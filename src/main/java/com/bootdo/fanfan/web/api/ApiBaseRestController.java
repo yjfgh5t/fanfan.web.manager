@@ -30,21 +30,23 @@ import java.util.UUID;
 @Controller
 public class ApiBaseRestController {
 
-    private static ThreadLocal<APIBaseVO> local = new ThreadLocal<>();
+    private static ThreadLocal<ThreadLocalModel> local = new ThreadLocal<>();
 
     @Autowired
     RedisUtils redisUtils;
 
     @ModelAttribute
-    private void headerAttribute(@RequestHeader(name = "base",required = false) String base, HttpServletResponse response) throws IOException {
-        if(!StringUtils.isEmpty(base)) {
-            APIBaseVO baseModel = JSONObject.parseObject(base, APIBaseVO.class);
-            local.set(baseModel);
-        }
+    private void headerAttribute(@RequestHeader(name = "base",required = false) String base,
+                                 @RequestHeader(name = "x-auth-token",required = false) String authToken) throws IOException {
+        local.set(new ThreadLocalModel(base,authToken));
     }
 
+    /**
+     * 获取基础信息
+     * @return
+     */
     protected APIBaseVO getBaseModel(){
-        return local.get();
+        return local.get().getBaseModel();
     }
 
     /**
@@ -58,34 +60,6 @@ public class ApiBaseRestController {
     }
 
     /**
-     * 验证签名
-     * @return
-     */
-    private boolean checkSign(APIBaseVO baseVO){
-
-
-
-        if(StringUtils.isEmpty(baseVO.getVersion())){
-            return true;
-        }
-
-        StringBuilder stringBuilder = new StringBuilder();
-        //支付宝小程序
-        if(baseVO.getClientEnumType()== PlatformEnum.AlipayMiniprogram) {
-            stringBuilder.append(baseVO.getClientType());
-            stringBuilder.append(baseVO.getUserId());
-            stringBuilder.append(baseVO.getCustomerId());
-            stringBuilder.append(baseVO.getVersion());
-            stringBuilder.append(baseVO.getTime());
-            stringBuilder.append("miniprogram");
-        }
-
-        String strSign = MD5Utils.simpleEncrypt(stringBuilder.toString());
-
-        return strSign.equals(baseVO.getSign());
-    }
-
-    /**
      * 验证
      * @param result
      * @return
@@ -96,6 +70,27 @@ public class ApiBaseRestController {
             if(allErrors!=null && allErrors.size()>0){
                 throw new BDException(allErrors.get(0).getDefaultMessage(),BDException.VERIFY_ERROR_CODE);
             }
+        }
+    }
+
+    private class ThreadLocalModel{
+
+        private String paramBase;
+
+        private String paramAuthKey;
+
+        private APIBaseVO baseVO;
+
+        public ThreadLocalModel(String paramBase,String paramAuthKey){
+            this.paramBase = paramBase;
+            this.paramAuthKey = paramAuthKey;
+        }
+
+        public APIBaseVO getBaseModel(){
+            if(baseVO==null && StringUtils.isNotEmpty(paramBase)){
+                baseVO = JSONObject.parseObject(paramBase, APIBaseVO.class);
+            }
+            return baseVO;
         }
     }
 }

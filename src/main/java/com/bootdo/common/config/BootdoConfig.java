@@ -71,6 +71,21 @@ public class BootdoConfig {
 	 */
 	private String wxUrlPath;
 
+	/**
+	 * 退款模板Id
+	 */
+	private String wxRefundTempId;
+
+	/**
+	 * 取消订单模板Id
+	 */
+	private String wxCancelTempId;
+
+	/**
+	 * 付款成功模板Id
+	 */
+	private String wxPaySuccessTempId;
+
 	public String getUploadImgPath(){
 		return  uploadPath+"img/";
 	}

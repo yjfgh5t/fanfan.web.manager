@@ -1,5 +1,6 @@
 package com.bootdo.fanfan.manager;
 
+import com.bootdo.common.config.BootdoConfig;
 import com.bootdo.common.msgQueue.AbstractMsgQueue;
 import com.bootdo.common.utils.DateUtils;
 import com.bootdo.common.utils.StringUtils;
@@ -49,6 +50,9 @@ public class TemplateMsgManager extends AbstractMsgQueue<TemplateMsgMQDTO> {
     @Autowired
     WechatManager wechatManager;
 
+    @Autowired
+    BootdoConfig bootdoConfig;
+
     @Override
     protected void runCallback(TemplateMsgMQDTO item) {
 
@@ -74,7 +78,7 @@ public class TemplateMsgManager extends AbstractMsgQueue<TemplateMsgMQDTO> {
      */
     private void sendRefundTempMsg(TemplateMsgMQDTO item) {
 
-        StringBuilder builder = new StringBuilder("开始推送取消订单模板---->\t");
+        StringBuilder builder = new StringBuilder("开始推送退款订单模板---->\t");
 
         OrderDO orderDO = orderService.get(item.getOrderId());
 
@@ -82,7 +86,7 @@ public class TemplateMsgManager extends AbstractMsgQueue<TemplateMsgMQDTO> {
         if (orderDO != null) {
 
             //发送支付宝模板消息
-            if(PlatformEnum.AlipayMiniprogram.getVal().equals(orderDO.getOrderPayType())) {
+            if (PlatformEnum.AlipayMiniprogram.getVal().equals(orderDO.getOrderPayType())) {
                 //获取FormId
                 AlipayRecordDO recordDO = alipayRecordService.getByOutTradeNo(orderDO.getOrderNum());
 
@@ -109,29 +113,29 @@ public class TemplateMsgManager extends AbstractMsgQueue<TemplateMsgMQDTO> {
             }
 
             //发送微信模板消息
-            if(PlatformEnum.WechatMiniprogram.getVal().equals(orderDO.getOrderPayType())){
+            if (PlatformEnum.WechatMiniprogram.getVal().equals(orderDO.getOrderPayType())) {
                 //获取FormId
-                FormUserDTO recordDO = formIdService.getCanUseFormId(PlatformEnum.AlipayMiniprogram, orderDO.getUserId());
+                FormUserDTO recordDO = formIdService.getCanUseFormId(orderDO.getUserId());
                 builder.append("1.推送微信模板消息 userId:" + orderDO.getUserId());
 
                 WXTemplateModel wxTemplateModel = new WXTemplateModel();
                 wxTemplateModel.setTouser(recordDO.getTpId());
-                wxTemplateModel.setPage("pages/order/order-detail/order-detail?orderId="+orderDO.getId());
+                wxTemplateModel.setPage("pages/order/order-detail/order-detail?orderId=" + orderDO.getId());
                 wxTemplateModel.setFormId(recordDO.getFormId());
-                wxTemplateModel.setTemplateId("yRbDZ0riGMa0O-CyE5xnXYuc-Z3qVUy5lWMnI8gOJLk");
+                wxTemplateModel.setTemplateId(bootdoConfig.getWxRefundTempId());
                 //退款单号
-                wxTemplateModel.addDataItem("keyword1","#"+orderDO.getOrderDateNum());
+                wxTemplateModel.addDataItem("keyword1", "#" + orderDO.getOrderDateNum());
                 //退款金额
-                wxTemplateModel.addDataItem("keyword2",orderDO.getOrderPay().toString());
+                wxTemplateModel.addDataItem("keyword2", orderDO.getOrderPay().toString());
                 //退款原因
                 String remark = orderDO.getOrderCustomerRemark();
                 if (StringUtils.isEmpty(remark)) {
                     remark = "商家取消订单";
                 }
-                wxTemplateModel.addDataItem("keyword3",remark);
+                wxTemplateModel.addDataItem("keyword3", remark);
                 //商户名称
                 String shopName = shopService.getNameByCustomerId(orderDO.getCustomerId());
-                wxTemplateModel.addDataItem("keyword4",shopName);
+                wxTemplateModel.addDataItem("keyword4", shopName);
                 boolean send = wechatManager.sendTemplate(wxTemplateModel);
                 builder.append("2.执行发送结果:" + send);
             }
@@ -144,12 +148,12 @@ public class TemplateMsgManager extends AbstractMsgQueue<TemplateMsgMQDTO> {
      * 推送支付订单模板消息
      */
     private void sendPayTempMsg(TemplateMsgMQDTO item) {
-        StringBuilder builder = new StringBuilder("开始推送下订单模板---->\t");
+        StringBuilder builder = new StringBuilder("开始推送支付下单模板---->\t");
 
         OrderDO orderDO = orderService.get(item.getOrderId());
         if (orderDO != null) {
             //发送支付宝模板消息
-            if(OrderPayType.Alipay.getId().equals(orderDO.getOrderPayType())) {
+            if (OrderPayType.Alipay.getId().equals(orderDO.getOrderPayType())) {
                 //获取FormId
                 AlipayRecordDO recordDO = alipayRecordService.getByOutTradeNo(orderDO.getOrderNum());
                 builder.append("1.推送支付宝模板消息 userId:" + recordDO.getBuyerId());
@@ -170,24 +174,24 @@ public class TemplateMsgManager extends AbstractMsgQueue<TemplateMsgMQDTO> {
             }
 
             //发送微信模板消息
-            if(PlatformEnum.WechatMiniprogram.getVal().equals(orderDO.getOrderPayType())){
+            if (PlatformEnum.WechatMiniprogram.getVal().equals(orderDO.getOrderPayType())) {
                 //获取FormId
-                FormUserDTO recordDO = formIdService.getCanUseFormId(PlatformEnum.AlipayMiniprogram, orderDO.getUserId());
+                FormUserDTO recordDO = formIdService.getCanUseFormId(orderDO.getUserId());
                 builder.append("1.推送微信模板消息 userId:" + orderDO.getUserId());
 
                 WXTemplateModel wxTemplateModel = new WXTemplateModel();
                 wxTemplateModel.setTouser(recordDO.getTpId());
-                wxTemplateModel.setPage("pages/order/order-detail/order-detail?orderId="+orderDO.getId());
+                wxTemplateModel.setPage("pages/order/order-detail/order-detail?orderId=" + orderDO.getId());
                 wxTemplateModel.setFormId(recordDO.getFormId());
-                wxTemplateModel.setTemplateId("ToMXyZQUhMpayucfl7cAw0BIIkPZMPRQRgolhU5YvhY");
+                wxTemplateModel.setTemplateId(bootdoConfig.getWxPaySuccessTempId());
                 //订单号
-                wxTemplateModel.addDataItem("keyword1",orderDO.getOrderDateNum());
+                wxTemplateModel.addDataItem("keyword1", orderDO.getOrderDateNum());
                 //订单金额
-                wxTemplateModel.addDataItem("keyword2",orderDO.getOrderPay().toString());
+                wxTemplateModel.addDataItem("keyword2", orderDO.getOrderPay().toString());
                 //付款方式
-                wxTemplateModel.addDataItem("keyword3",OrderPayType.get(orderDO.getOrderPayType()).getText());
+                wxTemplateModel.addDataItem("keyword3", OrderPayType.get(orderDO.getOrderPayType()).getText());
                 //下单时间
-                wxTemplateModel.addDataItem("keyword4",DateUtils.format(orderDO.getOrderTime()));
+                wxTemplateModel.addDataItem("keyword4", DateUtils.format(orderDO.getOrderTime()));
                 boolean send = wechatManager.sendTemplate(wxTemplateModel);
                 builder.append("2.执行发送结果:" + send);
             }
@@ -197,52 +201,51 @@ public class TemplateMsgManager extends AbstractMsgQueue<TemplateMsgMQDTO> {
 
     /**
      * 推送取消订单模板消息
+     *
      * @param item
      */
     private void sendCancelTempMsg(TemplateMsgMQDTO item) {
-        StringBuilder builder = new StringBuilder("开始推送下订单模板---->\t");
+        StringBuilder builder = new StringBuilder("开始推送取消订单模板---->\t");
 
         OrderDO orderDO = orderService.get(item.getOrderId());
         if (orderDO != null) {
-            //发送支付宝模板消息
-            if (OrderPayType.Alipay.getId().equals(orderDO.getOrderPayType())) {
-                //获取FormId
-                FormUserDTO recordDO = formIdService.getCanUseFormId(PlatformEnum.AlipayMiniprogram, orderDO.getUserId());
-                builder.append("1.推送支付宝模板消息 userId:" + orderDO.getUserId());
-                if (recordDO != null) {
-                    TemplateMsgDTO templateMsgDTO = new TemplateMsgDTO();
-                    templateMsgDTO.setFormId(recordDO.getFormId());
-                    templateMsgDTO.setToUserId(recordDO.getTpId());
-                    //订单号码
-                    templateMsgDTO.setKeyword1("#" + orderDO.getOrderDateNum());
-                    //订单状态、
-                    templateMsgDTO.setKeyword2(OrderStateEnum.get(orderDO.getOrderState()).getText());
+            //获取FormId
+            FormUserDTO recordDO = formIdService.getCanUseFormId(orderDO.getUserId());
+            boolean send = false;
+            if (recordDO != null) {
+                //发送模板消息
+                if (recordDO.getFormType().equals(PlatformEnum.AlipayMiniprogram.getVal())) {
+                    builder.append("1.推送支付宝模板消息 userId:" + orderDO.getUserId());
+                    if (recordDO != null) {
+                        TemplateMsgDTO templateMsgDTO = new TemplateMsgDTO();
+                        templateMsgDTO.setFormId(recordDO.getFormId());
+                        templateMsgDTO.setToUserId(recordDO.getTpId());
+                        //订单号码
+                        templateMsgDTO.setKeyword1("#" + orderDO.getOrderDateNum());
+                        //订单状态、
+                        templateMsgDTO.setKeyword2(OrderStateEnum.get(orderDO.getOrderState()).getText());
+                        //商户名称
+                        String shopName = shopService.getNameByCustomerId(orderDO.getCustomerId());
+                        templateMsgDTO.setKeyword3(shopName);
+                        //发送模板消息
+                        send = alipayManager.sendTemplateMsg(templateMsgDTO.buildCancelOrder(item.getOrderId()), null);
+                    }
+                } else if (recordDO.getFormType().equals(PlatformEnum.WechatMiniprogram.getVal())) {
+                    //发送微信模板消息
+                    builder.append("1.推送微信模板消息 userId:" + orderDO.getUserId());
+
+                    WXTemplateModel wxTemplateModel = new WXTemplateModel();
+                    wxTemplateModel.setTouser(recordDO.getTpId());
+                    wxTemplateModel.setPage("pages/order/order-detail/order-detail?orderId=" + orderDO.getId());
+                    wxTemplateModel.setFormId(recordDO.getFormId());
+                    wxTemplateModel.setTemplateId(bootdoConfig.getWxCancelTempId());
+                    wxTemplateModel.addDataItem("keyword1", "#" + orderDO.getOrderDateNum());
+                    wxTemplateModel.addDataItem("keyword2", OrderStateEnum.get(orderDO.getOrderState()).getText());
                     //商户名称
                     String shopName = shopService.getNameByCustomerId(orderDO.getCustomerId());
-                    templateMsgDTO.setKeyword3(shopName);
-                    //发送模板消息
-                    boolean send = alipayManager.sendTemplateMsg(templateMsgDTO.buildCancelOrder(item.getOrderId()), null);
-                    builder.append("2.执行发送结果:" + send);
+                    wxTemplateModel.addDataItem("keyword3", shopName);
+                    send = wechatManager.sendTemplate(wxTemplateModel);
                 }
-            }
-
-            //发送微信模板消息
-            if (PlatformEnum.WechatMiniprogram.getVal().equals(orderDO.getOrderPayType())) {
-                //获取FormId
-                FormUserDTO recordDO = formIdService.getCanUseFormId(PlatformEnum.AlipayMiniprogram, orderDO.getUserId());
-                builder.append("1.推送微信模板消息 userId:" + orderDO.getUserId());
-
-                WXTemplateModel wxTemplateModel = new WXTemplateModel();
-                wxTemplateModel.setTouser(recordDO.getTpId());
-                wxTemplateModel.setPage("pages/order/order-detail/order-detail?orderId="+orderDO.getId());
-                wxTemplateModel.setFormId(recordDO.getFormId());
-                wxTemplateModel.setTemplateId("BgA1RuHPJSAb2bw5IZQow48M7a-b7xmtqZF8NrntnyY");
-                wxTemplateModel.addDataItem("keyword1","#" + orderDO.getOrderDateNum());
-                wxTemplateModel.addDataItem("keyword2",OrderStateEnum.get(orderDO.getOrderState()).getText());
-                //商户名称
-                String shopName = shopService.getNameByCustomerId(orderDO.getCustomerId());
-                wxTemplateModel.addDataItem("keyword3",shopName);
-                boolean send = wechatManager.sendTemplate(wxTemplateModel);
                 builder.append("2.执行发送结果:" + send);
             }
         }

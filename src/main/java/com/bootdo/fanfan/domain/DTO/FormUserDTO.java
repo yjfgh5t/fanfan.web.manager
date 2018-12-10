@@ -15,4 +15,6 @@ public class FormUserDTO {
 
     private Integer id;
 
+    private Integer formType;
+
 }

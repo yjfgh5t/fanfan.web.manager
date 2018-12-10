@@ -66,6 +66,8 @@ public class UserRestController extends ApiBaseRestController {
     @Autowired
     EMapper eMapper;
 
+    //region 小程序登录
+
     /**
      * 支付宝设置用信息
      * @param code
@@ -76,12 +78,8 @@ public class UserRestController extends ApiBaseRestController {
     public R getUser(@Param("code") String code,@Param("type") Integer type){
 
         TpUserDO tpUserDO = tpUserService.setAlipayTPInfo(code,PlatformEnum.get(type),getBaseModel().getCustomerId());
-
         if(tpUserDO!=null) {
-            APIUserVO userModel = eMapper.map(tpUserDO, APIUserVO.class);
-            //保存登录信息
-            saveLogin(userModel);
-           return R.ok().put("data", userModel);
+            return R.ok().put("data", getLoginParam(tpUserDO));
         }
         return  R.error(1,"获取用户信息失败");
     }
@@ -91,7 +89,7 @@ public class UserRestController extends ApiBaseRestController {
      * @param userReq
      * @return
      */
-    @PostMapping("/wxUser")
+    @PostMapping("/appUser/wxUser")
     public R getWXUser(@RequestBody APIUserReq userReq){
         WXJSCodeModel codeModel = wechatManager.getJsCodeModel(userReq.getCode());
         if(codeModel!=null){
@@ -101,17 +99,43 @@ public class UserRestController extends ApiBaseRestController {
             TpUserDO tpUserDO = eMapper.map(userReq,TpUserDO.class);
             tpUserDO = tpUserService.getTPInfo(tpUserDO,PlatformEnum.WechatMiniprogram,getBaseModel().getCustomerId());
             if(tpUserDO!=null) {
-                APIUserVO userModel = eMapper.map(tpUserDO, APIUserVO.class);
-                //保存登录信息
-                saveLogin(userModel);
-                return R.ok().put("data", userModel);
+                return R.ok().put("data", getLoginParam(tpUserDO));
             }
         }
 
         return R.error(1,"获取用户信息失败");
     }
 
+    @PostMapping("/appUser/autoLogin")
+    public R userAutoLogin(){
+        Integer userId = getBaseModel().getUserId();
+        if(userId!=-1){
+            TpUserDO tpUserDO = tpUserService.getByUserId(userId);
+            if(tpUserDO!=null) {
+                return R.ok().put("data", getLoginParam(tpUserDO));
+            }
+        }
+        return R.error(1,"自动登录失败");
+    }
 
+    /**
+     * 包装参数
+     * @param tpUserDO
+     * @return
+     */
+    private Map<String, Object> getLoginParam(TpUserDO tpUserDO) {
+        Map<String, Object> resultParams = new HashMap<>();
+        APIUserVO userModel = eMapper.map(tpUserDO, APIUserVO.class);
+        //保存登录信息
+        String token = saveLogin(userModel);
+        resultParams.put("token", token);
+        resultParams.put("userInfo", userModel);
+        return resultParams;
+    }
+
+    //endregion
+
+    //region 商户登录
     /**
      * 商户登入
      * @param userPwd
@@ -161,6 +185,12 @@ public class UserRestController extends ApiBaseRestController {
         }
     }
 
+    /**
+     * 商户自动登录
+     * @param userId
+     * @param pwd
+     * @return
+     */
     @PostMapping("customer/autoLogin")
     @Login(require = false,authority = APIAuthorityEnum.OnlyCustomer)
     public R customerAutoLogin(@Param("userId") Long userId,@Param("pwd") String pwd){
@@ -183,6 +213,11 @@ public class UserRestController extends ApiBaseRestController {
         }
     }
 
+    /**
+     * 封装信息
+     * @param userVO
+     * @return
+     */
     private Map<String,Object> customerLogin( APICustomerVO userVO) {
         //查询店铺Id
         String shopName = shopService.getNameByCustomerId(userVO.getUserId().intValue());
@@ -195,6 +230,8 @@ public class UserRestController extends ApiBaseRestController {
         resultParams.put("token", tokenKey);
         return resultParams;
     }
+
+    //endregion
 
     /**
      * 保存商户信息
