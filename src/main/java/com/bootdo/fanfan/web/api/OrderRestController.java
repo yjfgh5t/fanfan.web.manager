@@ -90,8 +90,9 @@ public class OrderRestController extends ApiBaseRestController {
     @PostMapping("/query")
     public R queryOrder(@RequestBody APIOrderQueryRequVO orderQueryRequVO) {
 
-        if (orderQueryRequVO.getPageIndex() == null)
+        if (orderQueryRequVO.getPageIndex() == null) {
             return R.error("参数不能未空");
+        }
 
         int offSet = (orderQueryRequVO.getPageIndex() -1) * orderQueryRequVO.getPageSize();
 

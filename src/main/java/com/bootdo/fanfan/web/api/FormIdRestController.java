@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/formId")
-@Login(authority = APIAuthorityEnum.OnlyUser)
 public class FormIdRestController extends ApiBaseRestController {
 
     @Autowired
@@ -29,11 +28,16 @@ public class FormIdRestController extends ApiBaseRestController {
      * @return
      */
     @PostMapping("/")
-    public R add(String formId){
+    public R add(String formId,String tpId){
+
+        if(getBaseModel().getUserId()==null || getBaseModel().getUserId()<0){
+            return R.error("用户未登录");
+        }
 
         FormIdDO formIdDO = new FormIdDO();
         formIdDO.setFormId(formId);
         formIdDO.setUserId(getBaseModel().getUserId());
+        formIdDO.setTpId(tpId);
 
         //判断客户端类型
         if(PlatformEnum.AlipayMiniprogram==getBaseModel().getClientEnumType()){

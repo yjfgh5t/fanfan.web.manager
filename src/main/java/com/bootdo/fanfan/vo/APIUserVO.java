@@ -12,4 +12,6 @@ public class APIUserVO {
     private String tpIcon;
     //1:未知、2:男、3:女
     private Integer tpSex;
+    //第三方Id
+    private String tpId;
 }

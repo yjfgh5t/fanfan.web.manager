@@ -75,6 +75,7 @@ public class ShopRestController extends ApiBaseRestController{
     }
 
     @PostMapping("/payType")
+    @Login(authority = APIAuthorityEnum.All)
     public R payType(Integer shopId){
         APIShopVO shopVO =null;
 

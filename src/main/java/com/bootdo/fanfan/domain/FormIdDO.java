@@ -102,4 +102,12 @@ public class FormIdDO implements Serializable {
 	public Integer getFormType() {
 		return formType;
 	}
+
+	public String getTpId() {
+		return tpId;
+	}
+
+	public void setTpId(String tpId) {
+		this.tpId = tpId;
+	}
 }
