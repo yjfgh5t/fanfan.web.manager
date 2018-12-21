@@ -3,6 +3,7 @@ package com.bootdo.fanfan.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,7 +43,33 @@ public class DeliveryServiceImpl implements DeliveryService {
 	public int update(DeliveryDO delivery){
 		return deliveryDao.update(delivery);
 	}
-	
+
+	@Override
+	public List<DeliveryDO> getByCustomerId(Integer customerId){
+
+		Map<String,Object> params = new HashMap<>();
+		params.put("delete","0");
+		params.put("customerId",customerId);
+
+		return list(params);
+	}
+
+	/**
+	 * 默认
+	 * @param customerId
+	 * @return
+	 */
+	@Override
+	public DeliveryDO getDefaultByCustomerId(Integer customerId) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("delete", "0");
+		params.put("customerId", customerId);
+		params.put("is_default", 1);
+
+		List<DeliveryDO> list = list(params);
+		return list.size() > 0 ? list.get(0) : null;
+	}
+
 	@Override
 	public int remove(Integer id){
 		DeliveryDO delivery = new DeliveryDO();
@@ -50,7 +77,12 @@ public class DeliveryServiceImpl implements DeliveryService {
 		delivery.setDelete(1);
 		return deliveryDao.update(delivery);
 	}
-	
+
+	@Override
+	public int setDefault(Integer id) {
+		return deliveryDao.setDefault(id);
+	}
+
 	@Override
 	public int batchRemove(Integer[] ids){
 		return deliveryDao.batchRemove(ids);

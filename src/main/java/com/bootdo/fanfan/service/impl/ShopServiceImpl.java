@@ -38,7 +38,12 @@ public class ShopServiceImpl implements ShopService {
 	public String getNameByCustomerId(Integer customerId){
 		return shopDao.getNameByCustomerId(customerId);
 	}
-	
+
+	@Override
+	public String getTelephoneByCustomerId(Integer customerId) {
+		return shopDao.getTelByCustomerId(customerId);
+	}
+
 	@Override
 	public List<ShopDO> list(Map<String, Object> map){
 		return shopDao.list(map);

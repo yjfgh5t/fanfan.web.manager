@@ -24,4 +24,8 @@ public class APIReceiverVO {
     private String lat;
     //纬度
     private String lng;
+    //是否超出配送范围
+    private Boolean overRange;
+    //配送距离
+    private Integer deliveryRange;
 }

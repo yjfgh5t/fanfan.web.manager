@@ -64,7 +64,6 @@ public class DeskRestController extends ApiBaseRestController {
             QrcodeDO qrcode = new QrcodeDO();
             qrcode.setId(deskVO.getQrCodeId());
             qrcode.setCustomerId(getBaseModel().getCustomerId());
-            qrcode.setDeskId(deskDO.getId());
             //设置新的标记
             qrcodeService.update(qrcode);
         }

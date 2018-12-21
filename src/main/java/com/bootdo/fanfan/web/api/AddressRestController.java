@@ -1,10 +1,13 @@
 package com.bootdo.fanfan.web.api;
 
 import com.bootdo.common.extend.EMapper;
+import com.bootdo.common.utils.AMapUtils;
 import com.bootdo.common.utils.R;
 import com.bootdo.fanfan.domain.ReceiverDO;
+import com.bootdo.fanfan.domain.ShopDO;
 import com.bootdo.fanfan.manager.GDMapManager;
 import com.bootdo.fanfan.service.ReceiverService;
+import com.bootdo.fanfan.service.ShopService;
 import com.bootdo.fanfan.vo.APIAddressVO;
 import com.bootdo.fanfan.vo.APIGDMapTipVO;
 import com.bootdo.fanfan.vo.APIReceiverVO;
@@ -32,15 +35,18 @@ public class AddressRestController extends ApiBaseRestController {
     @Autowired
     ReceiverService  receiverService;
 
+    @Autowired
+    ShopService shopService;
+
     /**
      * 查询地理位置
      * @param keyWord
      * @return
      */
     @GetMapping("/search")
-    public R querAddress(String keyWord,String lat,String log){
+    public R querAddress(String keyWord,String lat,String log,String adcode){
         //地址列表
-        List<APIGDMapTipVO> list = gdMapManager.queryAddr(keyWord,lat,log);
+        List<APIGDMapTipVO> list = gdMapManager.queryAddr(keyWord,lat,log,adcode);
 
         return R.ok().put("data",eMapper.mapArray(list,APIAddressVO.class));
     }
@@ -61,7 +67,7 @@ public class AddressRestController extends ApiBaseRestController {
     }
 
     @GetMapping("/")
-    public R getList(){
+    public R getList(Boolean choise){
 
         Map<String,Object> params =  new HashMap<>();
 
@@ -71,9 +77,29 @@ public class AddressRestController extends ApiBaseRestController {
 
         List<APIReceiverVO> renList=new ArrayList<>();
 
-        if(list!=null &&  list.size()>0)
-            renList = eMapper.mapArray(list,APIReceiverVO.class);
-
+        if(list!=null &&  list.size()>0) {
+            renList = eMapper.mapArray(list, APIReceiverVO.class);
+            //设置是否大于配送范围
+            if(choise!=null && choise){
+                //查询店铺配送范围
+                ShopDO shopDO = shopService.getByCustomerId(getBaseModel().getCustomerId());
+                //配送范围
+                double range =  shopDO.getDeliveryRange()*1000;
+                if(shopDO!=null) {
+                    renList.forEach(item -> {
+                       double distance = AMapUtils.calculateLineDistance(
+                                Double.parseDouble(shopDO.getLng()),
+                                Double.parseDouble(shopDO.getLat()),
+                                Double.parseDouble(item.getLng()),
+                                Double.parseDouble(item.getLat()));
+                       //绝对值
+                        distance = Math.abs(distance);
+                        item.setDeliveryRange((int)distance);
+                        item.setOverRange(distance>range);
+                    });
+                }
+            }
+        }
         return R.ok().put("data",renList);
     }
 

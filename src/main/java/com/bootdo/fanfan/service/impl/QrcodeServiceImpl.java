@@ -58,19 +58,8 @@ public class QrcodeServiceImpl implements QrcodeService {
 	
 	@Override
 	public int update(QrcodeDO qrcode){
-		QrcodeDO model = get(qrcode.getId());
-
-		if(model!=null){
-			//只能修改本店的二维码 或者默认店铺的二维码
-			if(bootdoConfig.getDefaultCustomerId().equals(model.getCustomerId()) || model.getCustomerId().equals(qrcode.getCustomerId())) {
-				//去除之前设置的二维码
-				removeOldDesk(qrcode.getCustomerId(), qrcode.getDeskId());
-				model.setCustomerId(qrcode.getCustomerId());
-				model.setDeskId(qrcode.getDeskId());
-				return qrcodeDao.update(qrcode);
-			}
-		}
-		return -1;
+		qrcode.setModifyTime(new Date());
+		return qrcodeDao.update(qrcode);
 	}
 
 	/**

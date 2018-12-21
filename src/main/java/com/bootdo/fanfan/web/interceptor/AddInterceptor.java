@@ -16,7 +16,7 @@ public class AddInterceptor extends WebMvcConfigurerAdapter{
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new APILoginInterceptor(redisUtils))
                 .addPathPatterns("/api/**")
-                .excludePathPatterns("/api/alipay/**");
+                .excludePathPatterns("/api/alipay/**","/api/info/qrCodeImg");
     }
 
 }

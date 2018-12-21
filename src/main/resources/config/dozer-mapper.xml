@@ -228,4 +228,16 @@
         <class-b>com.bootdo.fanfan.domain.AlipayRecordDO</class-b>
     </mapping>
 
+    <!--配送员数据转换-->
+    <mapping>
+        <class-a>com.bootdo.fanfan.vo.APIDeliveryVO</class-a>
+        <class-b>com.bootdo.fanfan.domain.DeliveryDO</class-b>
+    </mapping>
+
+    <!--二维码数据转换-->
+    <mapping>
+        <class-a>com.bootdo.fanfan.vo.APIQRCodeVO</class-a>
+        <class-b>com.bootdo.fanfan.domain.QrcodeDO</class-b>
+    </mapping>
+
 </mappings>

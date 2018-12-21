@@ -2,6 +2,7 @@ package com.bootdo.fanfan.vo;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -28,10 +29,6 @@ public class APIShopVO {
     private Float minOrderPrice;
     //店铺地址
     private String address;
-    //创建时间
-    private Date createTime;
-    //结束时间
-    private Date modifyTime;
     //商户Id
     private Integer customerId;
     //是否开启支付宝
@@ -40,5 +37,16 @@ public class APIShopVO {
     private Boolean wechat;
     //是否线下支付
     private Boolean offline;
-
+    //精度
+    private String lat;
+    //维度
+    private String lng;
+    //商家联系电话
+    private String telephone;
+    //是否开启外卖
+    private Integer takeout;
+    //配送范围
+    private Double deliveryRange;
+    //配送费
+    private BigDecimal deliveryCost;
 }

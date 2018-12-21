@@ -1,6 +1,7 @@
 package com.bootdo.fanfan.domain;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 
@@ -10,7 +11,7 @@ import java.util.Date;
  * 
  * @author jy
  * @email 1992lcg@163.com
- * @date 2018-11-25 21:10:26
+ * @date 2018-12-13 09:26:51
  */
 public class ShopDO implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -31,12 +32,24 @@ public class ShopDO implements Serializable {
 	private Float minOrderPrice;
 	//店铺地址
 	private String address;
-	//是否开启支付宝
+	//开始支付宝收款
 	private Integer alipay;
-	//是否开启微信
+	//开启微信收款
 	private Integer wechat;
-	//是否线下支付
+	//开启线下收款
 	private Integer offline;
+	//精度
+	private String lat;
+	//维度
+	private String lng;
+	//商家联系电话
+	private String telephone;
+	//是否开启外卖
+	private Integer takeout;
+	//配送范围
+	private Double deliveryRange;
+	//配送费
+	private BigDecimal deliveryCost;
 	//创建时间
 	private Date createTime;
 	//结束时间
@@ -141,40 +154,112 @@ public class ShopDO implements Serializable {
 		return address;
 	}
 	/**
-	 * 设置：是否开启支付宝
+	 * 设置：开始支付宝收款
 	 */
 	public void setAlipay(Integer alipay) {
 		this.alipay = alipay;
 	}
 	/**
-	 * 获取：是否开启支付宝
+	 * 获取：开始支付宝收款
 	 */
 	public Integer getAlipay() {
 		return alipay;
 	}
 	/**
-	 * 设置：是否开启微信
+	 * 设置：开启微信收款
 	 */
 	public void setWechat(Integer wechat) {
 		this.wechat = wechat;
 	}
 	/**
-	 * 获取：是否开启微信
+	 * 获取：开启微信收款
 	 */
 	public Integer getWechat() {
 		return wechat;
 	}
 	/**
-	 * 设置：是否线下支付
+	 * 设置：开启线下收款
 	 */
 	public void setOffline(Integer offline) {
 		this.offline = offline;
 	}
 	/**
-	 * 获取：是否线下支付
+	 * 获取：开启线下收款
 	 */
 	public Integer getOffline() {
 		return offline;
+	}
+	/**
+	 * 设置：精度
+	 */
+	public void setLat(String lat) {
+		this.lat = lat;
+	}
+	/**
+	 * 获取：精度
+	 */
+	public String getLat() {
+		return lat;
+	}
+	/**
+	 * 设置：维度
+	 */
+	public void setLng(String lng) {
+		this.lng = lng;
+	}
+	/**
+	 * 获取：维度
+	 */
+	public String getLng() {
+		return lng;
+	}
+	/**
+	 * 设置：商家联系电话
+	 */
+	public void setTelephone(String telephone) {
+		this.telephone = telephone;
+	}
+	/**
+	 * 获取：商家联系电话
+	 */
+	public String getTelephone() {
+		return telephone;
+	}
+	/**
+	 * 设置：是否开启外卖
+	 */
+	public void setTakeout(Integer takeout) {
+		this.takeout = takeout;
+	}
+	/**
+	 * 获取：是否开启外卖
+	 */
+	public Integer getTakeout() {
+		return takeout;
+	}
+	/**
+	 * 设置：配送范围
+	 */
+	public void setDeliveryRange(Double deliveryRange) {
+		this.deliveryRange = deliveryRange;
+	}
+	/**
+	 * 获取：配送范围
+	 */
+	public Double getDeliveryRange() {
+		return deliveryRange;
+	}
+	/**
+	 * 设置：配送费
+	 */
+	public void setDeliveryCost(BigDecimal deliveryCost) {
+		this.deliveryCost = deliveryCost;
+	}
+	/**
+	 * 获取：配送费
+	 */
+	public BigDecimal getDeliveryCost() {
+		return deliveryCost;
 	}
 	/**
 	 * 设置：创建时间

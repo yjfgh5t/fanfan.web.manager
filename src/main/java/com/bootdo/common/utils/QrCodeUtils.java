@@ -61,10 +61,10 @@ public class QrCodeUtils {
         map.put(EncodeHintType.CHARACTER_SET, "utf-8");
         //设置纠错等级
         map.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M);
-        map.put(EncodeHintType.MARGIN, 2);
+        map.put(EncodeHintType.MARGIN, 0);
         try {
             //生成二维码
-            BitMatrix bitMatrix = new MultiFormatWriter().encode(content, BarcodeFormat.QR_CODE, width, width);
+            BitMatrix bitMatrix = new MultiFormatWriter().encode(content, BarcodeFormat.QR_CODE, width, width,map);
             System.out.println("宽度："+bitMatrix.getWidth());
             BufferedImage bufferedImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
             ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();

@@ -10,7 +10,7 @@ import java.util.Date;
  * 
  * @author jy
  * @email 1992lcg@163.com
- * @date 2018-08-31 09:44:20
+ * @date 2018-12-12 16:02:18
  */
 public class QrcodeDO implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -19,8 +19,10 @@ public class QrcodeDO implements Serializable {
 	private String id;
 	//
 	private Integer customerId;
-	//
-	private Integer deskId;
+	//码标记
+	private String desc;
+	//二维码模板id
+	private String templateId;
 	//
 	private Date createTime;
 	//
@@ -51,16 +53,28 @@ public class QrcodeDO implements Serializable {
 		return customerId;
 	}
 	/**
-	 * 设置：
+	 * 设置：码标记
 	 */
-	public void setDeskId(Integer deskId) {
-		this.deskId = deskId;
+	public void setDesc(String desc) {
+		this.desc = desc;
 	}
 	/**
-	 * 获取：
+	 * 获取：码标记
 	 */
-	public Integer getDeskId() {
-		return deskId;
+	public String getDesc() {
+		return desc;
+	}
+	/**
+	 * 设置：二维码模板id
+	 */
+	public void setTemplateId(String templateId) {
+		this.templateId = templateId;
+	}
+	/**
+	 * 获取：二维码模板id
+	 */
+	public String getTemplateId() {
+		return templateId;
 	}
 	/**
 	 * 设置：

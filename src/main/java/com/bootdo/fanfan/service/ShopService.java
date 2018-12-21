@@ -31,6 +31,13 @@ public interface ShopService {
 	 * @return
 	 */
 	String getNameByCustomerId(Integer customerId);
+
+	/**
+	 * 查询商家电话
+	 * @param customerId
+	 * @return
+	 */
+	String getTelephoneByCustomerId(Integer customerId);
 	
 	List<ShopDO> list(Map<String, Object> map);
 	

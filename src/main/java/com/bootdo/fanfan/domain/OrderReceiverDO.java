@@ -10,7 +10,7 @@ import java.util.Date;
  * 
  * @author jy
  * @email 1992lcg@163.com
- * @date 2018-04-05 14:05:17
+ * @date 2018-12-12 16:02:18
  */
 public class OrderReceiverDO implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -31,32 +31,14 @@ public class OrderReceiverDO implements Serializable {
 	private String lat;
 	//纬度
 	private String lng;
+	//配送距离
+	private Double deliveryRange;
 	//配送人
-	private Integer deliveryId;
-	//配送方式
-	private String  deliveryType;
-
-	public Integer getDeliveryId() {
-		return deliveryId;
-	}
-
-	/**
-	 * 配送人
-	 */
-	public void setDeliveryId(Integer deliveryId) {
-		this.deliveryId = deliveryId;
-	}
-
-	/**
-	 * 配送类型
-	 */
-	public String getDeliveryType() {
-		return deliveryType;
-	}
-
-	public void setDeliveryType(String deliveryType) {
-		this.deliveryType = deliveryType;
-	}
+	private String deliveryName;
+	//配送人电话
+	private String deliveryTel;
+	//修改时间
+	private Date updateTime;
 
 	/**
 	 * 设置：订单主键
@@ -153,5 +135,53 @@ public class OrderReceiverDO implements Serializable {
 	 */
 	public String getLng() {
 		return lng;
+	}
+	/**
+	 * 设置：配送距离
+	 */
+	public void setDeliveryRange(Double deliveryRange) {
+		this.deliveryRange = deliveryRange;
+	}
+	/**
+	 * 获取：配送距离
+	 */
+	public Double getDeliveryRange() {
+		return deliveryRange;
+	}
+	/**
+	 * 设置：配送人
+	 */
+	public void setDeliveryName(String deliveryName) {
+		this.deliveryName = deliveryName;
+	}
+	/**
+	 * 获取：配送人
+	 */
+	public String getDeliveryName() {
+		return deliveryName;
+	}
+	/**
+	 * 设置：配送人电话
+	 */
+	public void setDeliveryTel(String deliveryTel) {
+		this.deliveryTel = deliveryTel;
+	}
+	/**
+	 * 获取：配送人电话
+	 */
+	public String getDeliveryTel() {
+		return deliveryTel;
+	}
+	/**
+	 * 设置：修改时间
+	 */
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+	/**
+	 * 获取：修改时间
+	 */
+	public Date getUpdateTime() {
+		return updateTime;
 	}
 }

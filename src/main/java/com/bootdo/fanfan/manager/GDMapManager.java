@@ -22,24 +22,31 @@ public class GDMapManager {
      * 查询地理位置
      * @param keyWord
      * @param lat
-     * @param log
+     * @param lng
      * @return
      */
-    public List<APIGDMapTipVO> queryAddr(String keyWord, String lat, String log){
+    public List<APIGDMapTipVO> queryAddr(String keyWord, String lat, String lng,String adcode){
 
         Map<String,String> params = new HashMap<>();
 
         params.put("key",apiKey);
         params.put("keywords",keyWord);
-        if(StringUtils.isNotEmpty(lat) && StringUtils.isNotEmpty(log))
-            params.put("location",lat+","+log);
+        if(StringUtils.isNotEmpty(lat) && StringUtils.isNotEmpty(lng)) {
+            params.put("location", lng + "," +lat);
+        }
+        //城市位置
+        if(StringUtils.isNotEmpty(adcode)) {
+            params.put("citylimit", "true");
+            params.put("adcode", adcode);
+        }
 
         String response = HttpClientUtils.doGet(serverUrl,params);
 
         APIGDMapVO mapVO = JSON.parseObject(response,APIGDMapVO.class);
 
-        if(mapVO.getTips().size()>5)
-            return mapVO.getTips().subList(0,5);
+        if(mapVO.getTips().size()>5) {
+            return mapVO.getTips().subList(0, 5);
+        }
         return mapVO.getTips();
     }
 

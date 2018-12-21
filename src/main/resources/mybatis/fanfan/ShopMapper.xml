@@ -4,11 +4,11 @@
 <mapper namespace="com.bootdo.fanfan.dao.ShopDao">
 
 	<select id="get" resultType="com.bootdo.fanfan.domain.ShopDO">
-		select `id`,`name`,`business_start`,`business_end`,`logo`,`state`,`min_order_price`,`address`,`alipay`,`wechat`,`offline`,`create_time`,`modify_time`,`customer_id` from ff_shop where id = #{value}
+		select `id`,`name`,`business_start`,`business_end`,`logo`,`state`,`min_order_price`,`address`,`alipay`,`wechat`,`offline`,`lat`,`lng`,`telephone`,`takeout`,`delivery_range`,`delivery_cost`,`create_time`,`modify_time`,`customer_id` from ff_shop where id = #{value}
 	</select>
 
 	<select id="list" resultType="com.bootdo.fanfan.domain.ShopDO">
-		select `id`,`name`,`business_start`,`business_end`,`logo`,`state`,`min_order_price`,`address`,`alipay`,`wechat`,`offline`,`create_time`,`modify_time`,`customer_id` from ff_shop
+		select `id`,`name`,`business_start`,`business_end`,`logo`,`state`,`min_order_price`,`address`,`alipay`,`wechat`,`offline`,`lat`,`lng`,`telephone`,`takeout`,`delivery_range`,`delivery_cost`,`create_time`,`modify_time`,`customer_id` from ff_shop
         <where>  
 		  		  <if test="id != null and id != ''"> and id = #{id} </if>
 		  		  <if test="name != null and name != ''"> and name = #{name} </if>
@@ -21,6 +21,12 @@
 		  		  <if test="alipay != null and alipay != ''"> and alipay = #{alipay} </if>
 		  		  <if test="wechat != null and wechat != ''"> and wechat = #{wechat} </if>
 		  		  <if test="offline != null and offline != ''"> and offline = #{offline} </if>
+		  		  <if test="lat != null and lat != ''"> and lat = #{lat} </if>
+		  		  <if test="lng != null and lng != ''"> and lng = #{lng} </if>
+		  		  <if test="telephone != null and telephone != ''"> and telephone = #{telephone} </if>
+		  		  <if test="takeout != null and takeout != ''"> and takeout = #{takeout} </if>
+		  		  <if test="deliveryRange != null and deliveryRange != ''"> and delivery_range = #{deliveryRange} </if>
+		  		  <if test="deliveryCost != null and deliveryCost != ''"> and delivery_cost = #{deliveryCost} </if>
 		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
 		  		  <if test="modifyTime != null and modifyTime != ''"> and modify_time = #{modifyTime} </if>
 		  		  <if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
@@ -52,6 +58,12 @@
 		  		  <if test="alipay != null and alipay != ''"> and alipay = #{alipay} </if>
 		  		  <if test="wechat != null and wechat != ''"> and wechat = #{wechat} </if>
 		  		  <if test="offline != null and offline != ''"> and offline = #{offline} </if>
+		  		  <if test="lat != null and lat != ''"> and lat = #{lat} </if>
+		  		  <if test="lng != null and lng != ''"> and lng = #{lng} </if>
+		  		  <if test="telephone != null and telephone != ''"> and telephone = #{telephone} </if>
+		  		  <if test="takeout != null and takeout != ''"> and takeout = #{takeout} </if>
+		  		  <if test="deliveryRange != null and deliveryRange != ''"> and delivery_range = #{deliveryRange} </if>
+		  		  <if test="deliveryCost != null and deliveryCost != ''"> and delivery_cost = #{deliveryCost} </if>
 		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
 		  		  <if test="modifyTime != null and modifyTime != ''"> and modify_time = #{modifyTime} </if>
 		  		  <if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
@@ -71,6 +83,12 @@
 			`alipay`, 
 			`wechat`, 
 			`offline`, 
+			`lat`, 
+			`lng`, 
+			`telephone`, 
+			`takeout`, 
+			`delivery_range`, 
+			`delivery_cost`, 
 			`create_time`, 
 			`modify_time`, 
 			`customer_id`
@@ -87,6 +105,12 @@
 			#{alipay}, 
 			#{wechat}, 
 			#{offline}, 
+			#{lat}, 
+			#{lng}, 
+			#{telephone}, 
+			#{takeout}, 
+			#{deliveryRange}, 
+			#{deliveryCost}, 
 			#{createTime}, 
 			#{modifyTime}, 
 			#{customerId}
@@ -106,6 +130,12 @@
 			<if test="alipay != null">`alipay` = #{alipay}, </if>
 			<if test="wechat != null">`wechat` = #{wechat}, </if>
 			<if test="offline != null">`offline` = #{offline}, </if>
+			<if test="lat != null">`lat` = #{lat}, </if>
+			<if test="lng != null">`lng` = #{lng}, </if>
+			<if test="telephone != null">`telephone` = #{telephone}, </if>
+			<if test="takeout != null">`takeout` = #{takeout}, </if>
+			<if test="deliveryRange != null">`delivery_range` = #{deliveryRange}, </if>
+			<if test="deliveryCost != null">`delivery_cost` = #{deliveryCost}, </if>
 			<if test="createTime != null">`create_time` = #{createTime}, </if>
 			<if test="modifyTime != null">`modify_time` = #{modifyTime}, </if>
 			<if test="customerId != null">`customer_id` = #{customerId}</if>

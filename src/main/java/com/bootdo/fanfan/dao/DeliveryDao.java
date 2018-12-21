@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 /**
  * 
@@ -29,4 +31,7 @@ public interface DeliveryDao {
 	int remove(Integer id);
 	
 	int batchRemove(Integer[] ids);
+
+	@Update("update ff_delivery set is_default = (case when `id` = ${id} then 1 else 0 end) where is_default=1 or id=${id}")
+	int setDefault(@Param("id")Integer id);
 }

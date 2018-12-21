@@ -1,5 +1,6 @@
 package com.bootdo.fanfan.dao;
 
+import com.bootdo.fanfan.domain.DeliveryDO;
 import com.bootdo.fanfan.domain.OrderReceiverDO;
 
 import java.util.List;
@@ -37,4 +38,12 @@ public interface OrderReceiverDao {
 
 	@Select("select * from ff_order_receiver where id=#{id}")
 	OrderReceiverDO queryById(@Param("id") Integer id);
+
+	/**
+	 * 根据订单Id查询集合
+	 * @param idArray
+	 * @return
+	 */
+	List<OrderReceiverDO> getByIdArray(@Param("idArray") List<Integer> idArray);
+
 }

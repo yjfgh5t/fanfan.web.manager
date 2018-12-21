@@ -25,6 +25,12 @@ public interface DeliveryService {
 	int update(DeliveryDO delivery);
 	
 	int remove(Integer id);
-	
+
+	int setDefault(Integer id);
+
+	List<DeliveryDO> getByCustomerId(Integer customerId);
+
+	DeliveryDO getDefaultByCustomerId(Integer customerId);
+
 	int batchRemove(Integer[] ids);
 }

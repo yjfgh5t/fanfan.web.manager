@@ -27,8 +27,11 @@ public enum OrderDetailType {
     /**
      * 餐盒
      */
-    Package(6)
-    ;
+    Package(6),
+    /**
+     * 配送费
+     */
+    Delivery(7);
 
     private Integer id;
     OrderDetailType(Integer id){

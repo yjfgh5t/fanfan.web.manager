@@ -2,14 +2,12 @@ package com.bootdo.fanfan.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
 import com.bootdo.fanfan.dao.OrderReceiverDao;
 import com.bootdo.fanfan.domain.OrderReceiverDO;
 import com.bootdo.fanfan.service.OrderReceiverService;
-
 
 
 @Service
@@ -34,10 +32,12 @@ public class OrderReceiverServiceImpl implements OrderReceiverService {
 	
 	@Override
 	public int save(OrderReceiverDO orderReceiver) {
-		if (orderReceiverDao.hasSave(orderReceiver.getId())==0)
+		orderReceiver.setUpdateTime(new Date());
+		if (orderReceiverDao.hasSave(orderReceiver.getId())==0) {
 			return orderReceiverDao.save(orderReceiver);
-		else
+		}else {
 			return orderReceiverDao.update(orderReceiver);
+		}
 	}
 
 	@Override
@@ -55,7 +55,14 @@ public class OrderReceiverServiceImpl implements OrderReceiverService {
 		return orderReceiverDao.batchRemove(ids);
 	}
 
+	@Override
 	public OrderReceiverDO queryById(Integer id){
 		return orderReceiverDao.queryById(id);
+	}
+
+	@Override
+	public List<OrderReceiverDO> getByOrderIdArray(List<Integer> idArray){
+		List<OrderReceiverDO> deliveryList = orderReceiverDao.getByIdArray(idArray);
+		return deliveryList;
 	}
 }

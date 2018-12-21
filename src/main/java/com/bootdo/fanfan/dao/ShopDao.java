@@ -2,10 +2,12 @@ package com.bootdo.fanfan.dao;
 
 import com.bootdo.fanfan.domain.ShopDO;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -33,11 +35,14 @@ public interface ShopDao {
 	int batchRemove(Integer[] ids);
 
 	@Select("select * from ff_shop where customer_id =#{customerId}")
-	ShopDO getByCustomerId(@PathVariable("customerId") Integer customerId);
+	ShopDO getByCustomerId(@Param("customerId") Integer customerId);
 
 	@Select("select name from ff_shop where customer_id =#{customerId}")
-	String getNameByCustomerId(@PathVariable("customerId") Integer customerId);
+	String getNameByCustomerId(@Param("customerId") Integer customerId);
 
-	@Select("select alipay,wechat,offline from ff_shop where id=#{id}")
-	ShopDO getPayType(@PathVariable("id") Integer id);
+	@Select("select telephone from ff_shop where customer_id =#{customerId}")
+	String getTelByCustomerId(@Param("customerId") Integer customerId);
+
+	@Select("select alipay,wechat,offline,takeout from ff_shop where id=#{id}")
+	ShopDO getPayType(@Param("id") Integer id);
 }

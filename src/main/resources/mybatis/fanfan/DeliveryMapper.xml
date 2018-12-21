@@ -4,17 +4,18 @@
 <mapper namespace="com.bootdo.fanfan.dao.DeliveryDao">
 
 	<select id="get" resultType="com.bootdo.fanfan.domain.DeliveryDO">
-		select `id`,`name`,`tel`,`delete`,`create_id` from ff_delivery where id = #{value}
+		select `id`,`name`,`tel`,`is_default`,`delete`,`customer_id` from ff_delivery where id = #{value}
 	</select>
 
 	<select id="list" resultType="com.bootdo.fanfan.domain.DeliveryDO">
-		select `id`,`name`,`tel`,`delete`,`create_id` from ff_delivery
+		select `id`,`name`,`tel`,`is_default`,`delete`,`customer_id` from ff_delivery
         <where>  
 		  		  <if test="id != null and id != ''"> and id = #{id} </if>
-		  		  <if test="name != null "> and `name` = #{name} </if>
-		  		  <if test="tel != null "> and tel = #{tel} </if>
-		  		  <if test="delete != null "> and `delete` = #{delete} </if>
-		  		  <if test="customerId != null and customerId != ''"> and create_id = #{customerId} </if>
+		  		  <if test="name != null and name != ''"> and name = #{name} </if>
+		  		  <if test="tel != null and tel != ''"> and tel = #{tel} </if>
+		  		  <if test="isDefault != null and isDefault != ''"> and is_default = #{isDefault} </if>
+		  		  <if test="delete != null and delete != ''"> and `delete` = #{delete} </if>
+		  		  <if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
 		  		</where>
         <choose>
             <when test="sort != null and sort.trim() != ''">
@@ -33,27 +34,28 @@
 		select count(*) from ff_delivery
 		 <where>  
 		  		  <if test="id != null and id != ''"> and id = #{id} </if>
-		  		  <if test="name != null "> and `name` = #{name} </if>
-		  		  <if test="tel != null "> and tel = #{tel} </if>
-		  		  <if test="delete != null "> and `delete` = #{delete} </if>
-		  		  <if test="customerId != null and customerId != ''"> and create_id = #{customerId} </if>
+		  		  <if test="name != null and name != ''"> and name = #{name} </if>
+		  		  <if test="tel != null and tel != ''"> and tel = #{tel} </if>
+		  		  <if test="isDefault != null and isDefault != ''"> and is_default = #{isDefault} </if>
+		  		  <if test="delete != null and delete != ''"> and `delete` = #{delete} </if>
+		  		  <if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
 		  		</where>
 	</select>
 	 
-	<insert id="save" parameterType="com.bootdo.fanfan.domain.DeliveryDO">
+	<insert id="save" parameterType="com.bootdo.fanfan.domain.DeliveryDO" useGeneratedKeys="true" keyProperty="id">
 		insert into ff_delivery
 		(
-			`id`, 
 			`name`, 
 			`tel`, 
+			`is_default`, 
 			`delete`, 
-			`create_id`
+			`customer_id`
 		)
 		values
 		(
-			#{id}, 
 			#{name}, 
 			#{tel}, 
+			#{isDefault}, 
 			#{delete}, 
 			#{customerId}
 		)
@@ -64,8 +66,9 @@
 		<set>
 			<if test="name != null">`name` = #{name}, </if>
 			<if test="tel != null">`tel` = #{tel}, </if>
+			<if test="isDefault != null">`is_default` = #{isDefault}, </if>
 			<if test="delete != null">`delete` = #{delete}, </if>
-			<if test="customerId != null">`create_id` = #{customerId}</if>
+			<if test="customerId != null">`customer_id` = #{customerId}</if>
 		</set>
 		where id = #{id}
 	</update>

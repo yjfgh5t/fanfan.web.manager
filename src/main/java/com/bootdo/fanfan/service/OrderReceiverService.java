@@ -1,5 +1,6 @@
 package com.bootdo.fanfan.service;
 
+import com.bootdo.fanfan.domain.DeliveryDO;
 import com.bootdo.fanfan.domain.OrderReceiverDO;
 
 import java.util.List;
@@ -29,4 +30,6 @@ public interface OrderReceiverService {
 	int batchRemove(Integer[] ids);
 
 	OrderReceiverDO queryById(Integer id);
+
+	List<OrderReceiverDO> getByOrderIdArray(List<Integer> idArray);
 }

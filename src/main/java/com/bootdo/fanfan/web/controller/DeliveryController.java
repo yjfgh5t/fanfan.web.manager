@@ -76,9 +76,7 @@ public class DeliveryController extends BaseController {
 	@PostMapping("/save")
 	@RequiresPermissions("fanfan:delivery:add")
 	public R save( DeliveryDO delivery){
-		//创建人
-		delivery.setCreateId(getUserId().intValue());
-
+		delivery.setCustomerId(getUserId().intValue());
 		if(deliveryService.save(delivery)>0){
 			return R.ok();
 		}

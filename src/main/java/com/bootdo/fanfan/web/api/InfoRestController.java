@@ -34,7 +34,6 @@ import java.net.URLEncoder;
 import java.util.*;
 
 @RestController
-@CacheConfig(cacheNames = "api_info")
 @RequestMapping("/api/info")
 public class InfoRestController extends ApiBaseRestController {
 
@@ -189,6 +188,7 @@ public class InfoRestController extends ApiBaseRestController {
     }
 
     @RequestMapping("/qrCodeImg")
+    @CrossOrigin(origins = "*",maxAge = 3600)
     public void getQRCode(String context,Integer width, HttpServletResponse response) throws IOException {
         int redirectIndex = context.indexOf("redirect_uri");
         //编码

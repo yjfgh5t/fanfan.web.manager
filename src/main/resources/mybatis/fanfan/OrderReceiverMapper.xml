@@ -4,11 +4,11 @@
 <mapper namespace="com.bootdo.fanfan.dao.OrderReceiverDao">
 
 	<select id="get" resultType="com.bootdo.fanfan.domain.OrderReceiverDO">
-		select `id`,`tel`,`name`,`sex`,`addr`,`addr_detail`,`lat`,`lng` from ff_order_receiver where id = #{value}
+		select `id`,`tel`,`name`,`sex`,`addr`,`addr_detail`,`lat`,`lng`,`delivery_range`,`delivery_name`,`delivery_tel`,`update_time` from ff_order_receiver where id = #{value}
 	</select>
 
 	<select id="list" resultType="com.bootdo.fanfan.domain.OrderReceiverDO">
-		select `id`,`tel`,`name`,`sex`,`addr`,`addr_detail`,`lat`,`lng` from ff_order_receiver
+		select `id`,`tel`,`name`,`sex`,`addr`,`addr_detail`,`lat`,`lng`,`delivery_range`,`delivery_name`,`delivery_tel`,`update_time` from ff_order_receiver
         <where>  
 		  		  <if test="id != null and id != ''"> and id = #{id} </if>
 		  		  <if test="tel != null and tel != ''"> and tel = #{tel} </if>
@@ -18,6 +18,10 @@
 		  		  <if test="addrDetail != null and addrDetail != ''"> and addr_detail = #{addrDetail} </if>
 		  		  <if test="lat != null and lat != ''"> and lat = #{lat} </if>
 		  		  <if test="lng != null and lng != ''"> and lng = #{lng} </if>
+		  		  <if test="deliveryRange != null and deliveryRange != ''"> and delivery_range = #{deliveryRange} </if>
+		  		  <if test="deliveryName != null and deliveryName != ''"> and delivery_name = #{deliveryName} </if>
+		  		  <if test="deliveryTel != null and deliveryTel != ''"> and delivery_tel = #{deliveryTel} </if>
+		  		  <if test="updateTime != null and updateTime != ''"> and update_time = #{updateTime} </if>
 		  		</where>
         <choose>
             <when test="sort != null and sort.trim() != ''">
@@ -43,6 +47,10 @@
 		  		  <if test="addrDetail != null and addrDetail != ''"> and addr_detail = #{addrDetail} </if>
 		  		  <if test="lat != null and lat != ''"> and lat = #{lat} </if>
 		  		  <if test="lng != null and lng != ''"> and lng = #{lng} </if>
+		  		  <if test="deliveryRange != null and deliveryRange != ''"> and delivery_range = #{deliveryRange} </if>
+		  		  <if test="deliveryName != null and deliveryName != ''"> and delivery_name = #{deliveryName} </if>
+		  		  <if test="deliveryTel != null and deliveryTel != ''"> and delivery_tel = #{deliveryTel} </if>
+		  		  <if test="updateTime != null and updateTime != ''"> and update_time = #{updateTime} </if>
 		  		</where>
 	</select>
 	 
@@ -56,7 +64,11 @@
 			`addr`, 
 			`addr_detail`, 
 			`lat`, 
-			`lng`
+			`lng`, 
+			`delivery_range`, 
+			`delivery_name`, 
+			`delivery_tel`, 
+			`update_time`
 		)
 		values
 		(
@@ -67,7 +79,11 @@
 			#{addr}, 
 			#{addrDetail}, 
 			#{lat}, 
-			#{lng}
+			#{lng}, 
+			#{deliveryRange}, 
+			#{deliveryName}, 
+			#{deliveryTel}, 
+			#{updateTime}
 		)
 	</insert>
 	 
@@ -80,7 +96,11 @@
 			<if test="addr != null">`addr` = #{addr}, </if>
 			<if test="addrDetail != null">`addr_detail` = #{addrDetail}, </if>
 			<if test="lat != null">`lat` = #{lat}, </if>
-			<if test="lng != null">`lng` = #{lng}</if>
+			<if test="lng != null">`lng` = #{lng}, </if>
+			<if test="deliveryRange != null">`delivery_range` = #{deliveryRange}, </if>
+			<if test="deliveryName != null">`delivery_name` = #{deliveryName}, </if>
+			<if test="deliveryTel != null">`delivery_tel` = #{deliveryTel}, </if>
+			<if test="updateTime != null">`update_time` = #{updateTime}</if>
 		</set>
 		where id = #{id}
 	</update>
@@ -95,5 +115,13 @@
 			#{id}
 		</foreach>
 	</delete>
+
+	<select id="getByIdArray" resultType="com.bootdo.fanfan.domain.OrderReceiverDO">
+		select `id`,`tel`,`name`,`sex`,`addr`,`addr_detail`,`lat`,`lng`,`delivery_range`,`delivery_name`,`delivery_tel` FROM ff_order_receiver
+		WHERE id IN
+		<foreach collection="idArray" open="(" close=")" separator="," item="item">
+			#{item}
+		</foreach>
+	</select>
 
 </mapper>

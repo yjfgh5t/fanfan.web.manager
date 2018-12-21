@@ -28,8 +28,6 @@ public class Test {
         System.out.println(1000+new Random().nextInt(999)+"");
 
         System.out.println(MD5Utils.simpleEncrypt("123"));
-
-
     }
 
 

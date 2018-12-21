@@ -78,6 +78,9 @@ public class OrderServiceImpl implements OrderService {
 	@Autowired
 	AlipayConfig alipayConfig;
 
+	@Autowired
+	DeliveryService deliveryService;
+
 	//region 默认方法
 	@Override
 	public OrderDO get(Integer id){
@@ -157,8 +160,14 @@ public class OrderServiceImpl implements OrderService {
 		//保存订单状态
 		orderStateService.save(new OrderStateDO(orderDO.getId(),orderDO.getOrderState(),orderDO.getCustomerId()),orderDO.getOrderNum());
 
-		//保存订单收货人信息
-		if(orderReceiverDO!=null && !StringUtils.isEmpty(orderReceiverDO.getAddr())) {
+		//外卖.保存订单收货人信息
+		if(OrderTypeEnum.TakeOut.getVal().equals(orderDO.getOrderType())) {
+			//查询默认配送人
+			DeliveryDO deliveryDO = deliveryService.getDefaultByCustomerId(orderDO.getCustomerId());
+			if(deliveryDO!=null){
+				orderReceiverDO.setDeliveryName(deliveryDO.getName());
+				orderReceiverDO.setDeliveryTel(deliveryDO.getTel());
+			}
 			orderReceiverDO.setId(orderDO.getId());
 			orderReceiverService.save(orderReceiverDO);
 		}
@@ -184,6 +193,7 @@ public class OrderServiceImpl implements OrderService {
                         //更新订单状态
                         updateOrderState(orderDO);
                     break;
+				default: break;
             }
         }
 		return orderDO.getId();
@@ -277,20 +287,41 @@ public class OrderServiceImpl implements OrderService {
 			}
 		}
 
-		//添加堂吃 打包费用
-		if(OrderTypeEnum.Pack.getVal().equals(orderRequVO.getOrderType()) && zeroDecimal.compareTo(packageTotal)!=0){
-			APIOrderDetailVO packageModel = new APIOrderDetailVO();
-			packageModel.setOutTitle("餐盒");
-			packageModel.setOutPrice(packageTotal);
-			packageModel.setCommodityId(0);
-			packageModel.setOutId(0);
-			packageModel.setOutSize(0);
-			packageModel.setOutType(OrderDetailType.Package.getId());
-			//去除已经包含的餐盒费
-			orderRequVO.getDetailList().removeIf(item -> OrderDetailType.Package.getId().equals(item.getOutType()));
-			orderRequVO.getDetailList().add(packageModel);
-			//添加餐盒费用
-			orderTotal = orderTotal.add(packageTotal);
+		//打包费用
+		if(zeroDecimal.compareTo(packageTotal)!=0){
+			//外卖、打包增加打包费
+			if(OrderTypeEnum.TakeOut.getVal().equals(orderRequVO.getOrderType()) || OrderTypeEnum.Pack.getVal().equals(orderRequVO.getOrderType())) {
+				APIOrderDetailVO packageModel = new APIOrderDetailVO();
+				packageModel.setOutTitle("餐盒");
+				packageModel.setOutPrice(packageTotal);
+				packageModel.setCommodityId(0);
+				packageModel.setOutId(0);
+				packageModel.setOutSize(0);
+				packageModel.setOutType(OrderDetailType.Package.getId());
+				//去除已经包含的餐盒费
+				orderRequVO.getDetailList().removeIf(item -> OrderDetailType.Package.getId().equals(item.getOutType()));
+				orderRequVO.getDetailList().add(packageModel);
+				//添加餐盒费用
+				orderTotal = orderTotal.add(packageTotal);
+			}
+		}
+
+		//外卖配送费
+		if(OrderTypeEnum.TakeOut.getVal().equals(orderRequVO.getOrderType())){
+			ShopDO shopDO = shopService.getByCustomerId(orderRequVO.getCustomerId());
+			BigDecimal deliveryCost = shopDO.getDeliveryCost();
+			APIOrderDetailVO deliveryModel = new APIOrderDetailVO();
+			deliveryModel.setOutTitle("配送费");
+			deliveryModel.setOutPrice(deliveryCost);
+			deliveryModel.setCommodityId(0);
+			deliveryModel.setOutId(0);
+			deliveryModel.setOutSize(0);
+			deliveryModel.setOutType(OrderDetailType.Delivery.getId());
+			//去除已经包含的配送费
+			orderRequVO.getDetailList().removeIf(item -> OrderDetailType.Delivery.getId().equals(item.getOutType()));
+			orderRequVO.getDetailList().add(deliveryModel);
+			//添加配送费用
+			orderTotal = orderTotal.add(deliveryCost);
 		}
 
 
@@ -352,7 +383,6 @@ public class OrderServiceImpl implements OrderService {
 
 		return  apiOrderRequVO;
 	}
-
 
 	/**
 	 * 修改订单状态
@@ -500,6 +530,16 @@ public class OrderServiceImpl implements OrderService {
 			//查询订单商品
 			List<OrderDetailDO> detialDOList = orderDetialService.queryByOrderIdArray(idArray);
 
+			//查询外卖配送信息
+			idArray = list.stream().filter(f-> OrderTypeEnum.TakeOut.getVal().equals(f.getOrderType())).map(APIOrderListCustomerVO::getId).collect(Collectors.toList());
+			List<OrderReceiverDO> receiverDOList;
+			if(idArray!=null && idArray.size()>0) {
+				receiverDOList = orderReceiverService.getByOrderIdArray(idArray);
+			}else{
+				receiverDOList = null;
+			}
+
+
 			//遍历
 			if(detialDOList!=null && detialDOList.size()>0){
 				//遍历订单
@@ -513,6 +553,12 @@ public class OrderServiceImpl implements OrderService {
 						//设置商品数量
 						Integer commoditySize = (int)temList.stream().filter((commodity) -> OrderDetailEnum.Commodity.getVal().equals(commodity.getOutType())).count();
 						item.setCommoditySize(commoditySize);
+					}
+
+					//设置配送信息
+					if(receiverDOList!=null && OrderTypeEnum.TakeOut.getVal().equals(item.getOrderType())){
+						OrderReceiverDO tempReceiver =  receiverDOList.stream().filter(f->f.getId().equals(item.getId())).findFirst().get();
+						item.setReceiver(eMapper.map(tempReceiver,APIOrderReceiverVO.class));
 					}
 
 					//设置状态文本

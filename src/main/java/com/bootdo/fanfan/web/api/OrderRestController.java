@@ -17,6 +17,7 @@ import com.bootdo.fanfan.manager.XGPushManager;
 import com.bootdo.fanfan.service.AlipayRecordService;
 import com.bootdo.fanfan.service.OrderService;
 import com.bootdo.fanfan.service.OrderStateService;
+import com.bootdo.fanfan.service.ShopService;
 import com.bootdo.fanfan.vo.*;
 import com.bootdo.fanfan.vo.enums.APIAuthorityEnum;
 import com.bootdo.fanfan.vo.model.XGPushModel;
@@ -51,6 +52,9 @@ public class OrderRestController extends ApiBaseRestController {
     @Autowired
     XGPushManager xgPushManager;
 
+    @Autowired
+    private ShopService shopService;
+
     /**
      * 创建订单
      * @return
@@ -75,9 +79,9 @@ public class OrderRestController extends ApiBaseRestController {
      */
     @PostMapping("/calculate")
     public R calculateOrder(@RequestBody APIOrderRequVO orderModel){
+        orderModel.setCustomerId(getBaseModel().getCustomerId());
         //计算订单价格
         orderModel = orderService.calculateOrder(orderModel);
-
         return R.ok().put("data",orderModel);
     }
 
@@ -129,7 +133,6 @@ public class OrderRestController extends ApiBaseRestController {
 
     /**
      * 查询当日订单
-     *
      * @param date 日期
      * @return
      */
@@ -244,12 +247,17 @@ public class OrderRestController extends ApiBaseRestController {
         //查询订单
         APIOrderRequVO requVO = orderService.queryOrder(orderId);
 
-        if (requVO == null)
+        if (requVO == null) {
             return R.error("订单不存在");
+        }
 
         //设置状态文本
         requVO.setOrderStateText(OrderStateEnum.get(requVO.getOrderState()).getText());
         requVO.setOrderTypeText(OrderTypeEnum.get(requVO.getOrderType()).getText());
+
+        //查询商家电话
+        String customerTel = shopService.getTelephoneByCustomerId(requVO.getCustomerId());
+        requVO.setCustomerTel(customerTel);
 
         return R.ok().put("data", requVO);
     }

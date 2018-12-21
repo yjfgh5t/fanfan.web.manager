@@ -99,4 +99,9 @@ public class APIOrderListCustomerVO {
      * 商品数量
      */
     private Integer commoditySize;
+
+    /**
+     * 配送信息
+     */
+    private APIOrderReceiverVO receiver;
 }

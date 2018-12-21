@@ -10,7 +10,7 @@ import java.util.Date;
  * 
  * @author jy
  * @email 1992lcg@163.com
- * @date 2018-05-22 22:03:11
+ * @date 2018-12-12 16:04:29
  */
 public class DeliveryDO implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -21,10 +21,12 @@ public class DeliveryDO implements Serializable {
 	private String name;
 	//配送人电话
 	private String tel;
+	//默认配送员
+	private Integer isDefault;
 	//是否删除
 	private Integer delete;
-	//创建人
-	private Integer createId;
+	//sys_user用户主键-商户id
+	private Integer customerId;
 
 	/**
 	 * 设置：主键
@@ -63,6 +65,18 @@ public class DeliveryDO implements Serializable {
 		return tel;
 	}
 	/**
+	 * 设置：默认配送员
+	 */
+	public void setIsDefault(Integer isDefault) {
+		this.isDefault = isDefault;
+	}
+	/**
+	 * 获取：默认配送员
+	 */
+	public Integer getIsDefault() {
+		return isDefault;
+	}
+	/**
 	 * 设置：是否删除
 	 */
 	public void setDelete(Integer delete) {
@@ -75,15 +89,15 @@ public class DeliveryDO implements Serializable {
 		return delete;
 	}
 	/**
-	 * 设置：创建人
+	 * 设置：sys_user用户主键-商户id
 	 */
-	public void setCreateId(Integer createId) {
-		this.createId = createId;
+	public void setCustomerId(Integer customerId) {
+		this.customerId = customerId;
 	}
 	/**
-	 * 获取：创建人
+	 * 获取：sys_user用户主键-商户id
 	 */
-	public Integer getCreateId() {
-		return createId;
+	public Integer getCustomerId() {
+		return customerId;
 	}
 }

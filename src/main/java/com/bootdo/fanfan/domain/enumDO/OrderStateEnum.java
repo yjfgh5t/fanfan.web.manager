@@ -18,7 +18,11 @@ public enum  OrderStateEnum {
     businessPending(200,"商家确认中"),
     businessConfirm(201,"商家已确认"),
     businessCancel(202,"商家已取消"),
-    businessDelivery(203,"正在派单"),
+
+    //商家确认15分钟后 自动设为 待骑手配送
+    waitDelivery(301,"待骑手配送"),
+    delivering(302,"骑手配送中"),
+    companyDelivery(303,"已配送完成"),
 
     orderSuccess(999,"订单完成");
     private Integer val;
