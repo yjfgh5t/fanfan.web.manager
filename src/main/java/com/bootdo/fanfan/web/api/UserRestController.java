@@ -6,15 +6,13 @@ import com.bootdo.common.utils.R;
 import com.bootdo.common.utils.RedisUtils;
 import com.bootdo.common.utils.StringUtils;
 import com.bootdo.fanfan.constant.RedisConstant;
-import com.bootdo.fanfan.constant.SessionConstant;
-import com.bootdo.fanfan.domain.TpUserDO;
-import com.bootdo.fanfan.domain.UserDO;
+import com.bootdo.fanfan.domain.*;
+import com.bootdo.fanfan.domain.enumDO.BooleanEnum;
 import com.bootdo.fanfan.domain.enumDO.PlatformEnum;
 import com.bootdo.fanfan.manager.AlismsManager;
 import com.bootdo.fanfan.manager.WechatManager;
 import com.bootdo.fanfan.manager.model.wechat.WXJSCodeModel;
-import com.bootdo.fanfan.service.ShopService;
-import com.bootdo.fanfan.service.TpUserService;
+import com.bootdo.fanfan.service.*;
 import com.bootdo.fanfan.vo.APICustomerVO;
 import com.bootdo.fanfan.vo.APICustomerRegisterVO;
 import com.bootdo.fanfan.vo.APIUserVO;
@@ -22,8 +20,6 @@ import com.bootdo.fanfan.vo.enums.APIAuthorityEnum;
 import com.bootdo.fanfan.vo.request.APIUserReq;
 import com.bootdo.fanfan.web.interceptor.Login;
 import com.bootdo.system.service.UserService;
-import org.apache.shiro.session.Session;
-import org.apache.shiro.web.session.HttpServletSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.validation.BindingResult;
@@ -34,11 +30,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 
 @RestController
@@ -59,6 +54,15 @@ public class UserRestController extends ApiBaseRestController {
 
     @Autowired
     ShopService shopService;
+
+    @Autowired
+    CommodityCategoryService categoryService;
+
+    @Autowired
+    CommodityService commodityService;
+
+    @Autowired
+    QrcodeService qrcodeService;
 
     @Autowired
     RedisUtils redisUtils;
@@ -285,13 +289,52 @@ public class UserRestController extends ApiBaseRestController {
         checkError(result);
 
         //手机验证码
-        if(!alismsManager.checkCode(registerVO.getMobile(),registerVO.getCode())){
+        if(!alismsManager.checkCode(registerVO.getMobile(),registerVO.getImgCode())){
             return R.error("验证码输入不正确");
         }
 
         com.bootdo.system.domain.UserDO userDO = eMapper.map(registerVO, com.bootdo.system.domain.UserDO.class);
 
         if(userService.simpleSave(userDO)>0){
+
+            //1.插入店铺信息
+            ShopDO shopDO = new ShopDO();
+            shopDO.setCustomerId(userDO.getUserId().intValue());
+            shopDO.setName(registerVO.getShopName());
+            shopDO.setState(1);
+            shopDO.setBusinessStart("00:00");
+            shopDO.setBusinessEnd("23:59");
+            shopService.save(shopDO);
+
+            //2.插入默认商品分类
+            CommodityCategoryDO categoryDO = new CommodityCategoryDO();
+            categoryDO.setCustomerId(userDO.getUserId().intValue());
+            categoryDO.setName("默认分类");
+            categoryDO.setOrder(1);
+            categoryService.save(categoryDO);
+
+            //3.插入默认商品
+            CommodityDO commodityDO = new CommodityDO();
+            commodityDO.setCategoryId(categoryDO.getId());
+            commodityDO.setCommodityPrice(new BigDecimal(0));
+            commodityDO.setCommoditySalePrice(new BigDecimal(0.01));
+            commodityDO.setOrder(1);
+            commodityDO.setCommodityTitle("体验商品");
+            commodityDO.setCustomerId(userDO.getUserId().intValue());
+            commodityDO.setCommodityPackagePrice(new BigDecimal(0));
+            commodityDO.setCommodityType(1);
+            commodityDO.setStatus(1);
+            commodityDO.setCommodityUnit("份");
+            commodityDO.setCommodityFiexNum(999);
+            commodityDO.setCommodityRemark("");
+            commodityService.save(commodityDO);
+
+            //4.插入默认点单码
+            QrcodeDO qrcodeDO = new QrcodeDO();
+            qrcodeDO.setCustomerId(userDO.getUserId().intValue());
+            qrcodeDO.setDesc("01");
+            qrcodeService.save(qrcodeDO);
+
 
             //如果是支付宝小程序注册成功 向商户发送下载Apk
             if(getBaseModel().getClientEnumType() == PlatformEnum.AlipayMiniprogram){

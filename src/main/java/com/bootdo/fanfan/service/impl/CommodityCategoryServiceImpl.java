@@ -1,5 +1,6 @@
 package com.bootdo.fanfan.service.impl;
 
+import com.bootdo.fanfan.domain.enumDO.BooleanEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,6 +48,7 @@ public class CommodityCategoryServiceImpl implements CommodityCategoryService {
 	public int save(CommodityCategoryDO commoditCategory){
 		//设置当前时间
 		commoditCategory.setCreateTime(Calendar.getInstance().getTime());
+		commoditCategory.setDelete(BooleanEnum.False.getVal());
 		return commodityCategoryDao.save(commoditCategory);
 	}
 	

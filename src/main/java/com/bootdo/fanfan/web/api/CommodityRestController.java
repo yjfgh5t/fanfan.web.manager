@@ -203,6 +203,17 @@ public class CommodityRestController extends ApiBaseRestController {
     }
 
     /**
+     * 删除商品
+     * @param id
+     * @return
+     */
+    @PostMapping("/remove")
+    public R removeItem(Integer id){
+        commodityService.remove(id);
+        return R.ok().put("data",true);
+    }
+
+    /**
      * 获取推荐商品
      * @return
      */

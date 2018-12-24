@@ -62,9 +62,9 @@ public class ShopServiceImpl implements ShopService {
 		shop.setAlipay(0);
 		shop.setWechat(0);
 		shop.setOffline(1);
-		int count = shopDao.save(shop);
+		shopDao.save(shop);
 		//保存成功 返回Id
-		return count;
+		return shop.getId();
 	}
 	
 	@Override

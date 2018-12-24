@@ -44,6 +44,8 @@ public class APICustomerVO {
     /**
      * 店铺名称
      */
+    @NotNull(message = "店铺名称不能为空")
+    @Size(min =2,max = 16,message = "店铺名称长度2-20个字符之间")
     private String shopName;
 
     /**

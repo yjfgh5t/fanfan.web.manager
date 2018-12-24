@@ -50,6 +50,8 @@ public class DeliveryServiceImpl implements DeliveryService {
 		Map<String,Object> params = new HashMap<>();
 		params.put("delete","0");
 		params.put("customerId",customerId);
+		params.put("sort","id");
+		params.put("order","asc");
 
 		return list(params);
 	}

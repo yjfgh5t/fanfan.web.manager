@@ -24,10 +24,7 @@ import java.util.Random;
 public class Test {
 
     public static void main(String[] args) throws Throwable {
-
-        System.out.println(1000+new Random().nextInt(999)+"");
-
-        System.out.println(MD5Utils.simpleEncrypt("123"));
+        System.out.println(MD5Utils.encrypt("15821243531", "111111"));
     }
 
 

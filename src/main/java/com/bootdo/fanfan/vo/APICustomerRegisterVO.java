@@ -17,5 +17,5 @@ public class APICustomerRegisterVO extends APICustomerVO {
      */
     @NotNull(message = "手机验证码不能为空")
     @Size(min = 4,max = 4,message = "手机验证码输入不正确")
-    private String code;
+    private String imgCode;
 }
