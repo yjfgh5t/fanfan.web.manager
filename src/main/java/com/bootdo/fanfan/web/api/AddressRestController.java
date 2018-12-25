@@ -1,10 +1,12 @@
 package com.bootdo.fanfan.web.api;
 
+import com.alibaba.druid.util.StringUtils;
 import com.bootdo.common.extend.EMapper;
 import com.bootdo.common.utils.AMapUtils;
 import com.bootdo.common.utils.R;
 import com.bootdo.fanfan.domain.ReceiverDO;
 import com.bootdo.fanfan.domain.ShopDO;
+import com.bootdo.fanfan.domain.enumDO.PlatformEnum;
 import com.bootdo.fanfan.manager.GDMapManager;
 import com.bootdo.fanfan.service.ReceiverService;
 import com.bootdo.fanfan.service.ShopService;
@@ -13,6 +15,7 @@ import com.bootdo.fanfan.vo.APIGDMapTipVO;
 import com.bootdo.fanfan.vo.APIReceiverVO;
 import com.bootdo.fanfan.vo.enums.APIAuthorityEnum;
 import com.bootdo.fanfan.web.interceptor.Login;
+import org.jsoup.helper.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,9 +47,10 @@ public class AddressRestController extends ApiBaseRestController {
      * @return
      */
     @GetMapping("/search")
-    public R querAddress(String keyWord,String lat,String log,String adcode){
+    public R querAddress(String keyWord,String lat,String lng,String adcode){
+        String location= lng+","+lat;
         //地址列表
-        List<APIGDMapTipVO> list = gdMapManager.queryAddr(keyWord,lat,log,adcode);
+        List<APIGDMapTipVO> list = gdMapManager.queryAddr(keyWord,location,adcode);
 
         return R.ok().put("data",eMapper.mapArray(list,APIAddressVO.class));
     }
@@ -58,6 +62,16 @@ public class AddressRestController extends ApiBaseRestController {
      */
     @PostMapping("/")
     public R save(@RequestBody APIReceiverVO receiverModel){
+
+        //微信小程序地址需转换
+        if(getBaseModel().getClientEnumType() == PlatformEnum.WechatMiniprogram ){
+            String location = gdMapManager.convertLocation(receiverModel.getLat(), receiverModel.getLng(), "gps");
+            if(!StringUtils.isEmpty(location)){
+                String [] latlng =  location.split(",");
+                receiverModel.setLat(latlng[1]);
+                receiverModel.setLng(latlng[0]);
+            }
+        }
 
         ReceiverDO receiverDO  = eMapper.map(receiverModel,ReceiverDO.class);
 
