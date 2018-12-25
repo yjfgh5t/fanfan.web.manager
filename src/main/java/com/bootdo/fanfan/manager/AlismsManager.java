@@ -64,7 +64,7 @@ public class AlismsManager {
             //请求失败这里会抛ClientException异常
             //执行发送
             SendSmsResponse sendSmsResponse =null;
-            if(1==1){
+            if(1==2){
                 sendSmsResponse = new SendSmsResponse();
                 sendSmsResponse.setCode("OK");
             }else{
