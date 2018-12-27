@@ -21,6 +21,7 @@ import com.bootdo.fanfan.vo.enums.APIAuthorityEnum;
 import com.bootdo.fanfan.vo.request.APIUserReq;
 import com.bootdo.fanfan.web.interceptor.Login;
 import com.bootdo.system.service.UserService;
+import org.jsoup.helper.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.validation.BindingResult;
@@ -136,8 +137,8 @@ public class UserRestController extends ApiBaseRestController {
             Map<String, Object> resultParams = new HashMap<>();
             APIUserVO userModel = eMapper.map(tpUserDO, APIUserVO.class);
             //微信用户头像代理
-            if(getBaseModel().getClientEnumType() == PlatformEnum.WechatMiniprogram) {
-                userModel.getTpIcon().replace("https://wx.qlogo.cn", bootdoConfig.getStaticUrl());
+            if(getBaseModel().getClientEnumType() == PlatformEnum.WechatMiniprogram && StringUtils.isNotEmpty(userModel.getTpIcon())) {
+                userModel.setTpIcon(userModel.getTpIcon().replace("https://wx.qlogo.cn", bootdoConfig.getStaticUrl()));
             }
             //保存登录信息
             String token = saveLogin(userModel);
