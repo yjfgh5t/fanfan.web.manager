@@ -1,5 +1,6 @@
 package com.bootdo.fanfan.web.api;
 
+import com.bootdo.common.config.BootdoConfig;
 import com.bootdo.common.extend.EMapper;
 import com.bootdo.common.utils.MD5Utils;
 import com.bootdo.common.utils.R;
@@ -68,6 +69,9 @@ public class UserRestController extends ApiBaseRestController {
     RedisUtils redisUtils;
 
     @Autowired
+    BootdoConfig bootdoConfig;
+
+    @Autowired
     EMapper eMapper;
 
     private final static Long maxTime = 3*60*1000L;
@@ -131,6 +135,10 @@ public class UserRestController extends ApiBaseRestController {
         if (tpUserDO != null) {
             Map<String, Object> resultParams = new HashMap<>();
             APIUserVO userModel = eMapper.map(tpUserDO, APIUserVO.class);
+            //微信用户头像代理
+            if(getBaseModel().getClientEnumType() == PlatformEnum.WechatMiniprogram) {
+                userModel.getTpIcon().replace("https://wx.qlogo.cn", bootdoConfig.getStaticUrl());
+            }
             //保存登录信息
             String token = saveLogin(userModel);
             resultParams.put("token", token);
